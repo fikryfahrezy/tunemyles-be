@@ -36,7 +36,7 @@ function app(opts: FastifyServerOptions = {}): FastifyInstance {
     exposeRoute: true,
     mode: "static",
     specification: {
-      path: "./docs/v2docs.yaml",
+      path: "./docs/v2docs-3.yaml",
       postProcessor: function (swaggerObject) {
         return swaggerObject;
       },
@@ -50,7 +50,7 @@ function app(opts: FastifyServerOptions = {}): FastifyInstance {
   app.register(fastifyMultipart, {
     throwFileSizeLimit: true,
     addToBody: true,
-    sharedSchemaId: "#mySharedSchema",
+    sharedSchemaId: "#multiPartSchema",
   });
   app.register(helloWorld);
 
