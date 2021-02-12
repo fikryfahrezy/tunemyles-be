@@ -1,0 +1,9 @@
+[Fastify Helmet bug with security policy]
+
+Address content security policy for documentation route #294
+https://github.com/fastify/fastify-swagger/issues/294
+
+Example not working with TS project because of swagger-schema-official types bug #269
+https://github.com/fastify/fastify-swagger/issues/269
+
+[Others]

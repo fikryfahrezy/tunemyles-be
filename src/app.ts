@@ -21,7 +21,16 @@ function app(opts: FastifyServerOptions = {}): FastifyInstance {
 
   app.register(middie);
   app.register(fastifyCors);
-  app.register(fastifyHelmet);
+  app.register(fastifyHelmet, {
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: [`'self'`],
+        styleSrc: [`'self'`, `'unsafe-inline'`],
+        imgSrc: [`'self'`, "data:", "validator.swagger.io"],
+        scriptSrc: [`'self'`, `https: 'unsafe-inline'`],
+      },
+    },
+  });
   app.register(fastifySwagger, {
     routePrefix: "/documentation",
     exposeRoute: true,
@@ -31,7 +40,7 @@ function app(opts: FastifyServerOptions = {}): FastifyInstance {
       postProcessor: function (swaggerObject) {
         return swaggerObject;
       },
-      baseDir: "/",
+      baseDir: "",
     },
   });
   app.register(fastifyStatic, {

@@ -1,6 +1,6 @@
-require('make-promises-safe');
-import dotenv from 'dotenv';
-import app from './app';
+require("make-promises-safe");
+import dotenv from "dotenv";
+import app from "./app";
 
 dotenv.config();
 
@@ -11,9 +11,9 @@ const server = app({
 
 const start = async () => {
   try {
-    await server.listen({ port: Number(PORT), host: '::' });
+    await server.listen({ port: Number(PORT), host: "::" });
     const address = server.server.address();
-    const port = typeof address === 'string' ? address : address?.port;
+    const port = typeof address === "string" ? address : address?.port;
     console.log(address, port);
   } catch (err) {
     server.log.error(err);
