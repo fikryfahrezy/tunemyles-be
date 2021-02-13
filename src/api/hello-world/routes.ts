@@ -4,7 +4,6 @@ import {
   HookHandlerDoneFunction,
 } from "fastify";
 import { helloWorld } from "./controllers";
-import ApiResponse from "../../schemas/responses/api-response.json";
 
 async function routes(
   fastify: FastifyInstance,
