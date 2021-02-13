@@ -1,0 +1,10 @@
+{
+  "required": ["balance_request", "balance_transfer", "id_m_banks"],
+  "type": "object",
+  "properties": {
+    "id_m_banks": { "type": "integer" },
+    "balance_request": { "type": "integer" },
+    "balance_transfer": { "type": "integer" }
+  },
+  "additionalProperties": false
+}

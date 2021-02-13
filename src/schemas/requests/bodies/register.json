@@ -1,0 +1,12 @@
+{
+  "required": ["address", "full_name", "password", "phone_number", "username"],
+  "type": "object",
+  "properties": {
+    "full_name": { "type": "string" },
+    "username": { "type": "string" },
+    "password": { "type": "string" },
+    "phone_number": { "type": "string" },
+    "address": { "type": "string" }
+  },
+  "additionalProperties": false
+}

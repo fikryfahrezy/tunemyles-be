@@ -1,0 +1,6 @@
+{
+  "required": ["id_category"],
+  "type": "object",
+  "properties": { "id_category": { "type": "integer" } },
+  "additionalProperties": false
+}

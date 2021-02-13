@@ -1,0 +1,9 @@
+{
+  "required": ["rating", "review"],
+  "type": "object",
+  "properties": {
+    "rating": { "type": "integer" },
+    "review": { "type": "string" }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,54 @@
+{
+  "type": "object",
+  "properties": {
+    "ApiResponse": {
+      "$ref": "#ApiResponse"
+    },
+    "data": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "allOf": [
+          { "$ref": "#GetTopUp" },
+          {
+            "type": "object",
+            "properties": {
+              "UserBank": {
+                "type": "object",
+                "allOf": [
+                  {
+                    "$ref": "#GetBankUser"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "Bank": {
+                        "type": "object",
+                        "allOf": [
+                          {
+                            "$ref": "#GetBank"
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "Utilities": {
+                                "type": "array",
+                                "items": {
+                                  "$ref": "#GetBankUtility"
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "ApiResponse": {
+      "$ref": "#ApiResponse"
+    },
+    "data": {
+      "type": "object",
+      "allOf": [
+        { "$ref": "#GetOrder" },
+        {
+          "type": "object",
+          "properties": {
+            "products": {
+              "type": "array",
+              "items": {
+                "$ref": "#GetProductOrder"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

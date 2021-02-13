@@ -1,0 +1,51 @@
+{
+  "type": "object",
+  "properties": {
+    "ApiResponse": {
+      "$ref": "#ApiResponse"
+    },
+    "data": {
+      "type": "object",
+      "allOf": [
+        { "$ref": "#GetProfile" },
+        {
+          "type": "object",
+          "properties": {
+            "wallets": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "allOf": [
+                  {
+                    "$ref": "#GetProfileUtility"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "Wallet": {
+                        "type": "object",
+                        "allOf": [
+                          {
+                            "$ref": "#GetWallet"
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "Logo": {
+                                "$ref": "#GetMedia"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

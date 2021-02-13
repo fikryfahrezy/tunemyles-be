@@ -1,0 +1,5 @@
+{
+  "type": "object",
+  "properties": { "market_close_time": { "type": "string" } },
+  "additionalProperties": false
+}

@@ -1,0 +1,4807 @@
+{
+  "info": {
+    "_postman_id": "321038cc-53ab-4446-8ae3-3af834ceb176",
+    "name": "Tunemyles",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "auth",
+      "item": [
+        {
+          "name": "Regiter",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [""],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "description": "JSON Type",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"full_name\": \"Name\",\r\n    \"username\": \"username\",\r\n    \"password\": \"password\",\r\n    \"phone_number\": \"1234567890\",\r\n    \"address\": \"address\"\r\n}"
+            },
+            "url": {
+              "raw": "{{URL}}/api/v1/auth/register",
+              "host": ["{{URL}}"],
+              "path": ["api", "v1", "auth", "register"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.environment.set('TOKEN', pm.response.json().data.token)"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "description": "JSON Type",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\": \"username\",\r\n    \"password\": \"password\"\r\n}"
+            },
+            "url": {
+              "raw": "{{URL}}/api/v1/auth/login",
+              "host": ["{{URL}}"],
+              "path": ["api", "v1", "auth", "login"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Profile",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "authorization",
+                  "type": "string"
+                },
+                {
+                  "key": "in",
+                  "value": "header",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{URL}}/api/v1/auth/me",
+              "host": ["{{URL}}"],
+              "path": ["api", "v1", "auth", "me"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Forgot Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "description": "JSON Type",
+                "key": "Content-Type",
+                "type": "text",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"phone_number\": \"1234567890\"\r\n}"
+            },
+            "url": {
+              "raw": "{{URL}}/api/v1/auth/forgot-password",
+              "host": ["{{URL}}"],
+              "path": ["api", "v1", "auth", "forgot-password"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Verify Token",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{URL}}/api/v1/auth/verify-token/:token",
+              "host": ["{{URL}}"],
+              "path": ["api", "v1", "auth", "verify-token", ":token"],
+              "variable": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjU0NTUzNTg0OGJjZmE5NDdlODMwMzY3YzRiNDZmNDAxIiwiaWF0IjoxNjAwMDAzNTMyLCJleHAiOjE2MDAwMDcxMzJ9.Q1nFS_ZIC-YHjZr_oHuCD7mJOw28Y-czD8rcljDaHnI",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Reset Password",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "description": "JSON Type",
+                "key": "Content-Type",
+                "type": "text",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"new_password\": \"newpassword\"\r\n}"
+            },
+            "url": {
+              "raw": "{{URL}}/api/v1/auth/reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjU0NTUzNTg0OGJjZmE5NDdlODMwMzY3YzRiNDZmNDAxIiwiaWF0IjoxNjAwMDAzNTMyLCJleHAiOjE2MDAwMDcxMzJ9.Q1nFS_ZIC-YHjZr_oHuCD7mJOw28Y-czD8rcljDaHnI",
+              "host": ["{{URL}}"],
+              "path": ["api", "v1", "auth", "reset-password"],
+              "query": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjU0NTUzNTg0OGJjZmE5NDdlODMwMzY3YzRiNDZmNDAxIiwiaWF0IjoxNjAwMDAzNTMyLCJleHAiOjE2MDAwMDcxMzJ9.Q1nFS_ZIC-YHjZr_oHuCD7mJOw28Y-czD8rcljDaHnI"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Profile",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [""],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "authorization",
+                  "type": "string"
+                },
+                {
+                  "key": "in",
+                  "value": "header",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "multipart/form-data",
+                "description": "Multipart",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "avatar",
+                  "type": "file",
+                  "src": "/C:/Users/ACER/Desktop/Wallpaper/luca-bravo-VowIFDxogG4-unsplash.jpg"
+                },
+                {
+                  "key": "full_name",
+                  "value": "Allosfdsfasfasdf",
+                  "type": "text"
+                },
+                {
+                  "key": "address",
+                  "value": "allo-allo",
+                  "type": "text"
+                },
+                {
+                  "key": "phone_number",
+                  "value": "123142135423",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{URL}}/api/v1/auth/update-profile",
+              "host": ["{{URL}}"],
+              "path": ["api", "v1", "auth", "update-profile"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "merchant",
+      "item": [
+        {
+          "name": "product",
+          "item": [
+            {
+              "name": "List Products",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "value",
+                      "value": "{{TOKEN}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "key",
+                      "value": "authorization",
+                      "type": "string"
+                    },
+                    {
+                      "key": "in",
+                      "value": "header",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{URL}}/api/v1/merchants/products",
+                  "host": ["{{URL}}"],
+                  "path": ["api", "v1", "merchants", "products"],
+                  "query": [
+                    {
+                      "key": "orderDirection",
+                      "value": "",
+                      "description": "Available values: ASC, DESC",
+                      "disabled": true
+                    },
+                    {
+                      "key": "orderBy",
+                      "value": "",
+                      "description": "Available Fields: created_at,  product_name, market_name, market_address",
+                      "disabled": true
+                    },
+                    {
+                      "key": "search",
+                      "value": "",
+                      "description": "Available Fields: product_name, market_name, market_address",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": null,
+                      "description": "Available values: 0...n",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Add Product",
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "value",
+                      "value": "{{TOKEN}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "key",
+                      "value": "authorization",
+                      "type": "string"
+                    },
+                    {
+                      "key": "in",
+                      "value": "header",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "multipart/form-data",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "product_name",
+                      "value": "name",
+                      "type": "text"
+                    },
+                    {
+                      "key": "description",
+                      "value": "description",
+                      "type": "text"
+                    },
+                    {
+                      "key": "cover",
+                      "type": "file",
+                      "src": "/C:/Users/ACER/Desktop/Space Wallpaper/29924.jpg"
+                    },
+                    {
+                      "key": "price_default",
+                      "value": "1",
+                      "type": "text"
+                    },
+                    {
+                      "key": "price_selling",
+                      "value": "1",
+                      "type": "text"
+                    },
+                    {
+                      "key": "qty",
+                      "value": "1",
+                      "type": "text"
+                    },
+                    {
+                      "key": "discount",
+                      "value": "1",
+                      "type": "text"
+                    },
+                    {
+                      "key": "is_visible",
+                      "value": "1",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{URL}}/api/v1/merchants/products",
+                  "host": ["{{URL}}"],
+                  "path": ["api", "v1", "merchants", "products"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Product",
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "value",
+                      "value": "{{TOKEN}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "key",
+                      "value": "authorization",
+                      "type": "string"
+                    },
+                    {
+                      "key": "in",
+                      "value": "header",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [
+                  {
+                    "description": "JSON Type",
+                    "key": "Content-Type",
+                    "type": "text",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"product_name\": \"new name\",\r\n    \"description\": \"new descs\",\r\n    \"price_default\": 2,\r\n    \"price_selling\": 2,\r\n    \"qty\": 2,\r\n    \"discount\": 2,\r\n    \"is_visible\": 2\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{URL}}/api/v1/merchants/products/:id",
+                  "host": ["{{URL}}"],
+                  "path": ["api", "v1", "merchants", "products", ":id"],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "1",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Product",
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "value",
+                      "value": "{{TOKEN}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "key",
+                      "value": "authorization",
+                      "type": "string"
+                    },
+                    {
+                      "key": "in",
+                      "value": "header",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{URL}}/api/v1/merchants/products/:id",
+                  "host": ["{{URL}}"],
+                  "path": ["api", "v1", "merchants", "products", ":id"],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "1",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Change Cover",
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "value",
+                      "value": "{{TOKEN}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "key",
+                      "value": "authorization",
+                      "type": "string"
+                    },
+                    {
+                      "key": "in",
+                      "value": "header",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "multipart/form-data",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "cover",
+                      "type": "file",
+                      "src": "/C:/Users/ACER/Desktop/Space Wallpaper/29924.jpg"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{URL}}/api/v1/merchants/products/:id/cover",
+                  "host": ["{{URL}}"],
+                  "path": [
+                    "api",
+                    "v1",
+                    "merchants",
+                    "products",
+                    ":id",
+                    "cover"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "1",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Change Status",
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "value",
+                      "value": "{{TOKEN}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "key",
+                      "value": "authorization",
+                      "type": "string"
+                    },
+                    {
+                      "key": "in",
+                      "value": "header",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": "JSON Type",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"is_visible\": 1\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{URL}}/api/v1/merchants/products/:id/status",
+                  "host": ["{{URL}}"],
+                  "path": [
+                    "api",
+                    "v1",
+                    "merchants",
+                    "products",
+                    ":id",
+                    "status"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "1",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Bind Product Category",
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "value",
+                      "value": "{{TOKEN}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "key",
+                      "value": "authorization",
+                      "type": "string"
+                    },
+                    {
+                      "key": "in",
+                      "value": "header",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": "JSON Type",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"id_category\": 1\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{URL}}/api/v1/merchants/products/:id/categories",
+                  "host": ["{{URL}}"],
+                  "path": [
+                    "api",
+                    "v1",
+                    "merchants",
+                    "products",
+                    ":id",
+                    "categories"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "1",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Product Category",
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "value",
+                      "value": "{{TOKEN}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "key",
+                      "value": "authorization",
+                      "type": "string"
+                    },
+                    {
+                      "key": "in",
+                      "value": "header",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{URL}}/api/v1/merchants/products/:productId/categories/:categoryId",
+                  "host": ["{{URL}}"],
+                  "path": [
+                    "api",
+                    "v1",
+                    "merchants",
+                    "products",
+                    ":productId",
+                    "categories",
+                    ":categoryId"
+                  ],
+                  "variable": [
+                    {
+                      "key": "productId",
+                      "value": "1",
+                      "type": "string"
+                    },
+                    {
+                      "key": "categoryId",
+                      "value": "69",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Product Image",
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "value",
+                      "value": "{{TOKEN}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "key",
+                      "value": "authorization",
+                      "type": "string"
+                    },
+                    {
+                      "key": "in",
+                      "value": "header",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "multipart/form-data",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "image",
+                      "type": "file",
+                      "src": "/C:/Users/ACER/Desktop/Space Wallpaper/29924.jpg"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{URL}}/api/v1/merchants/products/:id/image",
+                  "host": ["{{URL}}"],
+                  "path": [
+                    "api",
+                    "v1",
+                    "merchants",
+                    "products",
+                    ":id",
+                    "image"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "1",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Remove Product Image",
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "value",
+                      "value": "{{TOKEN}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "key",
+                      "value": "authorization",
+                      "type": "string"
+                    },
+                    {
+                      "key": "in",
+                      "value": "header",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": []
+                },
+                "url": {
+                  "raw": "{{URL}}/api/v1/merchants/products/image/:id",
+                  "host": ["{{URL}}"],
+                  "path": [
+                    "api",
+                    "v1",
+                    "merchants",
+                    "products",
+                    "image",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "1",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "order",
+          "item": [
+            {
+              "name": "List Merchant Orders",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "value",
+                      "value": "{{TOKEN}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "key",
+                      "value": "authorization",
+                      "type": "string"
+                    },
+                    {
+                      "key": "in",
+                      "value": "header",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{URL}}/api/v1/merchants/orders",
+                  "host": ["{{URL}}"],
+                  "path": ["api", "v1", "merchants", "orders"],
+                  "query": [
+                    {
+                      "key": "orderDirection",
+                      "value": "",
+                      "description": "Available values: ASC, DESC",
+                      "disabled": true
+                    },
+                    {
+                      "key": "orderBy",
+                      "value": "",
+                      "description": "Available Fields: created_at,  full_name, phone_number, address",
+                      "disabled": true
+                    },
+                    {
+                      "key": "search",
+                      "value": "",
+                      "description": "Available Fields: full_name, phone_number, address",
+                      "disabled": true
+                    },
+                    {
+                      "key": "status",
+                      "value": "",
+                      "description": "Available values: 0, 1, 2",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": null,
+                      "description": "Available values: 1, 2, ....",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get List Order Product",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "value",
+                      "value": "{{TOKEN}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "key",
+                      "value": "authorization",
+                      "type": "string"
+                    },
+                    {
+                      "key": "in",
+                      "value": "header",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{URL}}/api/v1/merchants/orders/:id",
+                  "host": ["{{URL}}"],
+                  "path": ["api", "v1", "merchants", "orders", ":id"],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "1",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Order Product Status",
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "value",
+                      "value": "{{TOKEN}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "key",
+                      "value": "authorization",
+                      "type": "string"
+                    },
+                    {
+                      "key": "in",
+                      "value": "header",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": "JSON Type",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"status\": 2\r\n}"
+                },
+                "url": {
+                  "raw": "{{URL}}/api/v1/merchants/orders/:id",
+                  "host": ["{{URL}}"],
+                  "path": ["api", "v1", "merchants", "orders", ":id"],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "1",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "list",
+          "item": [
+            {
+              "name": "Get Merchant List",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "value",
+                      "value": "{{TOKEN}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "key",
+                      "value": "authorization",
+                      "type": "string"
+                    },
+                    {
+                      "key": "in",
+                      "value": "header",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{URL}}/api/v1/merchants/list",
+                  "host": ["{{URL}}"],
+                  "path": ["api", "v1", "merchants", "list"],
+                  "query": [
+                    {
+                      "key": "orderDirection",
+                      "value": "",
+                      "description": "Available values: ASC, DESC",
+                      "disabled": true
+                    },
+                    {
+                      "key": "orderBy",
+                      "value": "",
+                      "description": "Available Fields: created_at,  full_name, phone_number, market_name, market_address",
+                      "disabled": true
+                    },
+                    {
+                      "key": "search",
+                      "value": "",
+                      "description": "Available Fields: full_name, phone_number, market_name, market_address",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": null,
+                      "description": "Available values: 0...n",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Merchant Product List",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "value",
+                      "value": "{{TOKEN}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "key",
+                      "value": "authorization",
+                      "type": "string"
+                    },
+                    {
+                      "key": "in",
+                      "value": "header",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{URL}}/api/v1/merchants/list/:id",
+                  "host": ["{{URL}}"],
+                  "path": ["api", "v1", "merchants", "list", ":id"],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "1",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Random Merchants",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "value",
+                      "value": "{{TOKEN}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "key",
+                      "value": "authorization",
+                      "type": "string"
+                    },
+                    {
+                      "key": "in",
+                      "value": "header",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{URL}}/api/v1/merchants/random",
+                  "host": ["{{URL}}"],
+                  "path": ["api", "v1", "merchants", "random"],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "",
+                      "description": "Available values: 0...n",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "transaction",
+          "item": [
+            {
+              "name": "Get Merchant Transaction Histories",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "value",
+                      "value": "{{TOKEN}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "key",
+                      "value": "authorization",
+                      "type": "string"
+                    },
+                    {
+                      "key": "in",
+                      "value": "header",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{URL}}/api/v1/merchants/transactions",
+                  "host": ["{{URL}}"],
+                  "path": ["api", "v1", "merchants", "transactions"],
+                  "query": [
+                    {
+                      "key": "date",
+                      "value": "",
+                      "description": "Available values: year-month-date",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Merchant Incomes",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "value",
+                      "value": "{{TOKEN}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "key",
+                      "value": "authorization",
+                      "type": "string"
+                    },
+                    {
+                      "key": "in",
+                      "value": "header",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{URL}}/api/v1/merchants/incomes",
+                  "host": ["{{URL}}"],
+                  "path": ["api", "v1", "merchants", "incomes"],
+                  "query": [
+                    {
+                      "key": "year",
+                      "value": "",
+                      "description": "Available values: year",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "merchant",
+          "item": [
+            {
+              "name": "Create Merchant",
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "value",
+                      "value": "{{TOKEN}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "key",
+                      "value": "authorization",
+                      "type": "string"
+                    },
+                    {
+                      "key": "in",
+                      "value": "header",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "multipart/form-data",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "no_identity",
+                      "value": "432871024147219",
+                      "type": "text"
+                    },
+                    {
+                      "key": "identity_photo",
+                      "type": "file",
+                      "src": "/C:/Users/ACER/Desktop/Space Wallpaper/29929.jpg"
+                    },
+                    {
+                      "key": "market_photo",
+                      "type": "file",
+                      "src": "/C:/Users/ACER/Desktop/Space Wallpaper/29924.jpg"
+                    },
+                    {
+                      "key": "market_name",
+                      "value": "name",
+                      "type": "text"
+                    },
+                    {
+                      "key": "market_address",
+                      "value": "address",
+                      "type": "text"
+                    },
+                    {
+                      "key": "market_lat",
+                      "value": "-6.213131231",
+                      "type": "text"
+                    },
+                    {
+                      "key": "market_lon",
+                      "value": "-6.213131231",
+                      "type": "text"
+                    },
+                    {
+                      "key": "market_close_time",
+                      "value": "21:00",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{URL}}/api/v1/merchants/activate",
+                  "host": ["{{URL}}"],
+                  "path": ["api", "v1", "merchants", "activate"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Merchant Close time",
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "value",
+                      "value": "{{TOKEN}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "key",
+                      "value": "authorization",
+                      "type": "string"
+                    },
+                    {
+                      "key": "in",
+                      "value": "header",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": "JSON Type",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"market_close_time\": \"22:00\"\r\n}"
+                },
+                "url": {
+                  "raw": "{{URL}}/api/v1/merchants/operation-time",
+                  "host": ["{{URL}}"],
+                  "path": ["api", "v1", "merchants", "operation-time"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Single Product",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "value",
+                      "value": "{{TOKEN}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "key",
+                      "value": "authorization",
+                      "type": "string"
+                    },
+                    {
+                      "key": "in",
+                      "value": "header",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{URL}}/api/v1/merchants/products/:id",
+                  "host": ["{{URL}}"],
+                  "path": ["api", "v1", "merchants", "products", ":id"],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "1",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Single Merchant",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "value",
+                      "value": "{{TOKEN}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "key",
+                      "value": "authorization",
+                      "type": "string"
+                    },
+                    {
+                      "key": "in",
+                      "value": "header",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{URL}}/api/v1/merchants",
+                  "host": ["{{URL}}"],
+                  "path": ["api", "v1", "merchants"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Merchant",
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "value",
+                      "value": "{{TOKEN}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "key",
+                      "value": "authorization",
+                      "type": "string"
+                    },
+                    {
+                      "key": "in",
+                      "value": "header",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "multipart/form-data",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "market_photo",
+                      "type": "file",
+                      "src": "/C:/Users/ACER/Desktop/Wallpaper/luca-bravo-VowIFDxogG4-unsplash.jpg"
+                    },
+                    {
+                      "key": "no_identity",
+                      "value": "34212421414",
+                      "type": "text"
+                    },
+                    {
+                      "key": "market_name",
+                      "value": "New Market Name",
+                      "type": "text"
+                    },
+                    {
+                      "key": "market_address",
+                      "value": "New Market Address",
+                      "type": "text"
+                    },
+                    {
+                      "key": "market_lat",
+                      "value": "13.321",
+                      "type": "text"
+                    },
+                    {
+                      "key": "market_lon",
+                      "value": "122.31",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{URL}}/api/v1/merchants",
+                  "host": ["{{URL}}"],
+                  "path": ["api", "v1", "merchants"]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "cart",
+      "item": [
+        {
+          "name": "Add To Cart",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [""],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "authorization",
+                  "type": "string"
+                },
+                {
+                  "key": "in",
+                  "value": "header",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "description": "JSON Type",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"qty\": 1,\r\n    \"id_merchant\": 3,\r\n    \"id_m_products\": 2\r\n}"
+            },
+            "url": {
+              "raw": "{{URL}}/api/v1/carts",
+              "host": ["{{URL}}"],
+              "path": ["api", "v1", "carts"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Cart List",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [""],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "authorization",
+                  "type": "string"
+                },
+                {
+                  "key": "in",
+                  "value": "header",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": []
+            },
+            "url": {
+              "raw": "{{URL}}/api/v1/carts",
+              "host": ["{{URL}}"],
+              "path": ["api", "v1", "carts"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Cart Qty",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [""],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "authorization",
+                  "type": "string"
+                },
+                {
+                  "key": "in",
+                  "value": "header",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "description": "JSON Type",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"qty\": 1\r\n}"
+            },
+            "url": {
+              "raw": "{{URL}}/api/v1/carts/:id",
+              "host": ["{{URL}}"],
+              "path": ["api", "v1", "carts", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Cart Item",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [""],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "authorization",
+                  "type": "string"
+                },
+                {
+                  "key": "in",
+                  "value": "header",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": []
+            },
+            "url": {
+              "raw": "{{URL}}/api/v1/carts/:id",
+              "host": ["{{URL}}"],
+              "path": ["api", "v1", "carts", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Checkout",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [""],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "authorization",
+                  "type": "string"
+                },
+                {
+                  "key": "in",
+                  "value": "header",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "description": "JSON Type",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"price_total\": 1000\r\n}"
+            },
+            "url": {
+              "raw": "{{URL}}/api/v1/carts/checkout",
+              "host": ["{{URL}}"],
+              "path": ["api", "v1", "carts", "checkout"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "transaction",
+      "item": [
+        {
+          "name": "Get All User Processed Transactions",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [""],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "authorization",
+                  "type": "string"
+                },
+                {
+                  "key": "in",
+                  "value": "header",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": []
+            },
+            "url": {
+              "raw": "{{URL}}/api/v1/transactions",
+              "host": ["{{URL}}"],
+              "path": ["api", "v1", "transactions"],
+              "query": [
+                {
+                  "key": "orderDirection",
+                  "value": "",
+                  "description": "Available values: ASC, DESC",
+                  "disabled": true
+                },
+                {
+                  "key": "orderBy",
+                  "value": "",
+                  "description": "Available Fields: created_at, full_name, phone_number, address",
+                  "disabled": true
+                },
+                {
+                  "key": "search",
+                  "value": "",
+                  "description": "Available Fields: full_name, phone_number, address",
+                  "disabled": true
+                },
+                {
+                  "key": "status",
+                  "value": "",
+                  "description": "Available values: 0, 1, 2, 3",
+                  "disabled": true
+                },
+                {
+                  "key": "page",
+                  "value": null,
+                  "description": "Available values: 0...n",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Singe User Transactions",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [""],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "authorization",
+                  "type": "string"
+                },
+                {
+                  "key": "in",
+                  "value": "header",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": []
+            },
+            "url": {
+              "raw": "{{URL}}/api/v1/transactions/:id",
+              "host": ["{{URL}}"],
+              "path": ["api", "v1", "transactions", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Finish Transaction",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [""],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "authorization",
+                  "type": "string"
+                },
+                {
+                  "key": "in",
+                  "value": "header",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": []
+            },
+            "url": {
+              "raw": "{{URL}}/api/v1/transactions/:id",
+              "host": ["{{URL}}"],
+              "path": ["api", "v1", "transactions", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Review Transaction",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [""],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "authorization",
+                  "type": "string"
+                },
+                {
+                  "key": "in",
+                  "value": "header",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "description": "JSON Type",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"rating\": 5,\r\n    \"review\": \"Mantap\"\r\n}"
+            },
+            "url": {
+              "raw": "{{URL}}/api/v1/transactions/:id",
+              "host": ["{{URL}}"],
+              "path": ["api", "v1", "transactions", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "master",
+      "item": [
+        {
+          "name": "media",
+          "item": [
+            {
+              "name": "Add Media",
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "value",
+                      "value": "{{TOKEN}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "key",
+                      "value": "authorization",
+                      "type": "string"
+                    },
+                    {
+                      "key": "in",
+                      "value": "header",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "multipart/form-data",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "image",
+                      "type": "file",
+                      "src": "/C:/Users/ACER/Desktop/Space Wallpaper/29929.jpg"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{URL}}/api/v1/masters/medias",
+                  "host": ["{{URL}}"],
+                  "path": ["api", "v1", "masters", "medias"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get All Media",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "value",
+                      "value": "{{TOKEN}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "key",
+                      "value": "authorization",
+                      "type": "string"
+                    },
+                    {
+                      "key": "in",
+                      "value": "header",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": []
+                },
+                "url": {
+                  "raw": "{{URL}}/api/v1/masters/medias",
+                  "host": ["{{URL}}"],
+                  "path": ["api", "v1", "masters", "medias"],
+                  "query": [
+                    {
+                      "key": "orderDirection",
+                      "value": "",
+                      "description": "Available values: ASC, DESC",
+                      "disabled": true
+                    },
+                    {
+                      "key": "orderBy",
+                      "value": "",
+                      "description": "Available Fields: created_at, label",
+                      "disabled": true
+                    },
+                    {
+                      "key": "search",
+                      "value": "",
+                      "description": "Available Fields: label",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": null,
+                      "description": "Available values: 0...n",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Media",
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "value",
+                      "value": "{{TOKEN}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "key",
+                      "value": "authorization",
+                      "type": "string"
+                    },
+                    {
+                      "key": "in",
+                      "value": "header",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "multipart/form-data",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "image",
+                      "type": "file",
+                      "src": "/C:/Users/ACER/Desktop/Space Wallpaper/29929.jpg"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{URL}}/api/v1/masters/medias/:id",
+                  "host": ["{{URL}}"],
+                  "path": ["api", "v1", "masters", "medias", ":id"],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "4",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Media",
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "value",
+                      "value": "{{TOKEN}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "key",
+                      "value": "authorization",
+                      "type": "string"
+                    },
+                    {
+                      "key": "in",
+                      "value": "header",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": []
+                },
+                "url": {
+                  "raw": "{{URL}}/api/v1/masters/medias/:id",
+                  "host": ["{{URL}}"],
+                  "path": ["api", "v1", "masters", "medias", ":id"],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "63",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "wallet",
+          "item": [
+            {
+              "name": "Get All Wallet",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "value",
+                      "value": "{{TOKEN}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "key",
+                      "value": "authorization",
+                      "type": "string"
+                    },
+                    {
+                      "key": "in",
+                      "value": "header",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": []
+                },
+                "url": {
+                  "raw": "{{URL}}/api/v1/masters/wallets",
+                  "host": ["{{URL}}"],
+                  "path": ["api", "v1", "masters", "wallets"],
+                  "query": [
+                    {
+                      "key": "orderDirection",
+                      "value": "",
+                      "description": "Available values: ASC, DESC",
+                      "disabled": true
+                    },
+                    {
+                      "key": "orderBy",
+                      "value": "",
+                      "description": "Available Fields: created_at, wallet_name, wallet_description",
+                      "disabled": true
+                    },
+                    {
+                      "key": "search",
+                      "value": "",
+                      "description": "Available Fields: wallet_name, wallet_description",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": null,
+                      "description": "Available values: 0...n",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Add Wallet",
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "value",
+                      "value": "{{TOKEN}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "key",
+                      "value": "authorization",
+                      "type": "string"
+                    },
+                    {
+                      "key": "in",
+                      "value": "header",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "multipart/form-data",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "logo",
+                      "type": "file",
+                      "src": "/C:/Users/ACER/Desktop/Space Wallpaper/29929.jpg"
+                    },
+                    {
+                      "key": "wallet_name",
+                      "value": "test",
+                      "type": "text"
+                    },
+                    {
+                      "key": "wallet_description",
+                      "value": "test",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{URL}}/api/v1/masters/wallets",
+                  "host": ["{{URL}}"],
+                  "path": ["api", "v1", "masters", "wallets"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Wallet",
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "value",
+                      "value": "{{TOKEN}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "key",
+                      "value": "authorization",
+                      "type": "string"
+                    },
+                    {
+                      "key": "in",
+                      "value": "header",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": "JSON Type",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"wallet_name\": \"new wallet name\",\r\n    \"wallet_description\": \"new wallet description\",\r\n    \"is_visible\": 2\r\n}"
+                },
+                "url": {
+                  "raw": "{{URL}}/api/v1/masters/wallets/:id",
+                  "host": ["{{URL}}"],
+                  "path": ["api", "v1", "masters", "wallets", ":id"],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "1",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Change Wallet Logo",
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "value",
+                      "value": "{{TOKEN}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "key",
+                      "value": "authorization",
+                      "type": "string"
+                    },
+                    {
+                      "key": "in",
+                      "value": "header",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "multipart/form-data",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "logo",
+                      "type": "file",
+                      "src": "/C:/Users/ACER/Desktop/Space Wallpaper/29929.jpg"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{URL}}/api/v1/masters/wallets/:id/logo",
+                  "host": ["{{URL}}"],
+                  "path": ["api", "v1", "masters", "wallets", ":id", "logo"],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "3",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Wallet",
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "value",
+                      "value": "{{TOKEN}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "key",
+                      "value": "authorization",
+                      "type": "string"
+                    },
+                    {
+                      "key": "in",
+                      "value": "header",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{URL}}/api/v1/masters/wallets/:id",
+                  "host": ["{{URL}}"],
+                  "path": ["api", "v1", "masters", "wallets", ":id"],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "3",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "bank",
+          "item": [
+            {
+              "name": "Add Bank",
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "value",
+                      "value": "{{TOKEN}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "key",
+                      "value": "authorization",
+                      "type": "string"
+                    },
+                    {
+                      "key": "in",
+                      "value": "header",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "multipart/form-data",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "logo",
+                      "type": "file",
+                      "src": "/C:/Users/ACER/Desktop/Space Wallpaper/29929.jpg"
+                    },
+                    {
+                      "key": "bank_name",
+                      "value": "test",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{URL}}/api/v1/masters/banks",
+                  "host": ["{{URL}}"],
+                  "path": ["api", "v1", "masters", "banks"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Bank Data",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "value",
+                      "value": "{{TOKEN}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "key",
+                      "value": "authorization",
+                      "type": "string"
+                    },
+                    {
+                      "key": "in",
+                      "value": "header",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": []
+                },
+                "url": {
+                  "raw": "{{URL}}/api/v1/masters/banks",
+                  "host": ["{{URL}}"],
+                  "path": ["api", "v1", "masters", "banks"],
+                  "query": [
+                    {
+                      "key": "orderDirection",
+                      "value": "",
+                      "description": "Available values: ASC, DESC",
+                      "disabled": true
+                    },
+                    {
+                      "key": "orderBy",
+                      "value": "",
+                      "description": "Available Fields: created_at, bank_name",
+                      "disabled": true
+                    },
+                    {
+                      "key": "search",
+                      "value": "new bank name",
+                      "description": "Available Fields: bank_name",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": null,
+                      "description": "Available values: 0...n",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Bank Data",
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "value",
+                      "value": "{{TOKEN}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "key",
+                      "value": "authorization",
+                      "type": "string"
+                    },
+                    {
+                      "key": "in",
+                      "value": "header",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": "JSON Type",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"bank_name\": \"new bank name\",\r\n    \"is_visible\": 2\r\n}"
+                },
+                "url": {
+                  "raw": "{{URL}}/api/v1/masters/banks/:id",
+                  "host": ["{{URL}}"],
+                  "path": ["api", "v1", "masters", "banks", ":id"],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "2",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Bank Data",
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "value",
+                      "value": "{{TOKEN}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "key",
+                      "value": "authorization",
+                      "type": "string"
+                    },
+                    {
+                      "key": "in",
+                      "value": "header",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": "JSON Type",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"bank_name\": \"new bank name\",\r\n    \"is_visible\": 2\r\n}"
+                },
+                "url": {
+                  "raw": "{{URL}}/api/v1/masters/banks/:id",
+                  "host": ["{{URL}}"],
+                  "path": ["api", "v1", "masters", "banks", ":id"],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "2",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Bank Data Logo",
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "value",
+                      "value": "{{TOKEN}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "key",
+                      "value": "authorization",
+                      "type": "string"
+                    },
+                    {
+                      "key": "in",
+                      "value": "header",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "multipart/form-data",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "logo",
+                      "type": "file",
+                      "src": "/C:/Users/ACER/Desktop/Space Wallpaper/29924.jpg"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{URL}}/api/v1/masters/banks/:id/logo",
+                  "host": ["{{URL}}"],
+                  "path": ["api", "v1", "masters", "banks", ":id", "logo"],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "2",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Bank Data Detail",
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "value",
+                      "value": "{{TOKEN}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "key",
+                      "value": "authorization",
+                      "type": "string"
+                    },
+                    {
+                      "key": "in",
+                      "value": "header",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": "JSON Type",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"account_number\": \"0123421421\",\r\n    \"account_name\": \"update name\"\r\n}"
+                },
+                "url": {
+                  "raw": "{{URL}}/api/v1/masters/banks/:id/detail",
+                  "host": ["{{URL}}"],
+                  "path": ["api", "v1", "masters", "banks", ":id", "detail"],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "8",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Bank Data Detail",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "value",
+                      "value": "{{TOKEN}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "key",
+                      "value": "authorization",
+                      "type": "string"
+                    },
+                    {
+                      "key": "in",
+                      "value": "header",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": []
+                },
+                "url": {
+                  "raw": "{{URL}}/api/v1/masters/banks/:id",
+                  "host": ["{{URL}}"],
+                  "path": ["api", "v1", "masters", "banks", ":id"],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "2",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Add Bank Data Step",
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "value",
+                      "value": "{{TOKEN}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "key",
+                      "value": "authorization",
+                      "type": "string"
+                    },
+                    {
+                      "key": "in",
+                      "value": "header",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": "JSON Type",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"step\": \"test\"\r\n}"
+                },
+                "url": {
+                  "raw": "{{URL}}/api/v1/masters/banks/:id/steps",
+                  "host": ["{{URL}}"],
+                  "path": ["api", "v1", "masters", "banks", ":id", "steps"],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "8",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Bank Data Step",
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "value",
+                      "value": "{{TOKEN}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "key",
+                      "value": "authorization",
+                      "type": "string"
+                    },
+                    {
+                      "key": "in",
+                      "value": "header",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": "JSON Type",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"step\": \"test\"\r\n}"
+                },
+                "url": {
+                  "raw": "{{URL}}/api/v1/masters/banks/steps/:id",
+                  "host": ["{{URL}}"],
+                  "path": ["api", "v1", "masters", "banks", "steps", ":id"],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "2",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "category",
+          "item": [
+            {
+              "name": "Get All Categories",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "value",
+                      "value": "{{TOKEN}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "key",
+                      "value": "authorization",
+                      "type": "string"
+                    },
+                    {
+                      "key": "in",
+                      "value": "header",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": []
+                },
+                "url": {
+                  "raw": "{{URL}}/api/v1/masters/categories",
+                  "host": ["{{URL}}"],
+                  "path": ["api", "v1", "masters", "categories"],
+                  "query": [
+                    {
+                      "key": "orderDirection",
+                      "value": "",
+                      "description": "Available values: ASC, DESC",
+                      "disabled": true
+                    },
+                    {
+                      "key": "orderBy",
+                      "value": "",
+                      "description": "Available Fields: created_at, category, description",
+                      "disabled": true
+                    },
+                    {
+                      "key": "search",
+                      "value": "",
+                      "description": "Available Fields: category, description",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": null,
+                      "description": "Available values: 0...n",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Add Category",
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "value",
+                      "value": "{{TOKEN}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "key",
+                      "value": "authorization",
+                      "type": "string"
+                    },
+                    {
+                      "key": "in",
+                      "value": "header",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "multipart/form-data",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "icon",
+                      "type": "file",
+                      "src": "/C:/Users/ACER/Desktop/Space Wallpaper/29929.jpg"
+                    },
+                    {
+                      "key": "category",
+                      "value": "test",
+                      "type": "text"
+                    },
+                    {
+                      "key": "slug",
+                      "value": "test",
+                      "type": "text"
+                    },
+                    {
+                      "key": "description",
+                      "value": "test",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{URL}}/api/v1/masters/categories",
+                  "host": ["{{URL}}"],
+                  "path": ["api", "v1", "masters", "categories"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Category",
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "value",
+                      "value": "{{TOKEN}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "key",
+                      "value": "authorization",
+                      "type": "string"
+                    },
+                    {
+                      "key": "in",
+                      "value": "header",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": "JSON Type",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"category\": \"new category\",\r\n    \"slug\": \"new category slug\",\r\n    \"description\": \"new category description\",\r\n    \"is_visible\": 2\r\n}"
+                },
+                "url": {
+                  "raw": "{{URL}}/api/v1/masters/categories/:id",
+                  "host": ["{{URL}}"],
+                  "path": ["api", "v1", "masters", "categories", ":id"],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "77",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Change Category Icon",
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "value",
+                      "value": "{{TOKEN}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "key",
+                      "value": "authorization",
+                      "type": "string"
+                    },
+                    {
+                      "key": "in",
+                      "value": "header",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "multipart/form-data",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "icon",
+                      "type": "file",
+                      "src": "/C:/Users/ACER/Desktop/Space Wallpaper/29929.jpg"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{URL}}/api/v1/masters/categories/:id/icon",
+                  "host": ["{{URL}}"],
+                  "path": ["api", "v1", "masters", "categories", ":id", "icon"],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "3",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Category",
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "value",
+                      "value": "{{TOKEN}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "key",
+                      "value": "authorization",
+                      "type": "string"
+                    },
+                    {
+                      "key": "in",
+                      "value": "header",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{URL}}/api/v1/masters/categories/:id",
+                  "host": ["{{URL}}"],
+                  "path": ["api", "v1", "masters", "categories", ":id"],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "3",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "faq",
+          "item": [
+            {
+              "name": "Get All Master Faqs Data",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{URL}}/api/v1/masters/faqs",
+                  "host": ["{{URL}}"],
+                  "path": ["api", "v1", "masters", "faqs"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Add Master Faq Data",
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "value",
+                      "value": "{{TOKEN}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "key",
+                      "value": "authorization",
+                      "type": "string"
+                    },
+                    {
+                      "key": "in",
+                      "value": "header",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": "JSON Type",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"question\": \"Hai?\",\r\n    \"answer\": \"Hello\"\r\n}"
+                },
+                "url": {
+                  "raw": "{{URL}}/api/v1/masters/faqs",
+                  "host": ["{{URL}}"],
+                  "path": ["api", "v1", "masters", "faqs"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Master Faq Data",
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "value",
+                      "value": "{{TOKEN}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "key",
+                      "value": "authorization",
+                      "type": "string"
+                    },
+                    {
+                      "key": "in",
+                      "value": "header",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": "JSON Type",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"question\": \"Hello?\",\r\n    \"answer\": \"Hi\"\r\n}"
+                },
+                "url": {
+                  "raw": "{{URL}}/api/v1/masters/faqs/:id",
+                  "host": ["{{URL}}"],
+                  "path": ["api", "v1", "masters", "faqs", ":id"],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "1",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Master Faq Data",
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "value",
+                      "value": "{{TOKEN}}",
+                      "type": "string"
+                    },
+                    {
+                      "key": "key",
+                      "value": "authorization",
+                      "type": "string"
+                    },
+                    {
+                      "key": "in",
+                      "value": "header",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{URL}}/api/v1/masters/faqs/:id",
+                  "host": ["{{URL}}"],
+                  "path": ["api", "v1", "masters", "faqs", ":id"],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "1",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "bank",
+      "item": [
+        {
+          "name": "Get All Bank Data",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "authorization",
+                  "type": "string"
+                },
+                {
+                  "key": "in",
+                  "value": "header",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": []
+            },
+            "url": {
+              "raw": "{{URL}}/api/v1/banks",
+              "host": ["{{URL}}"],
+              "path": ["api", "v1", "banks"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Single Bank Data",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "authorization",
+                  "type": "string"
+                },
+                {
+                  "key": "in",
+                  "value": "header",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": []
+            },
+            "url": {
+              "raw": "{{URL}}/api/v1/banks/:id",
+              "host": ["{{URL}}"],
+              "path": ["api", "v1", "banks", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "2",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Add Bank User",
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "authorization",
+                  "type": "string"
+                },
+                {
+                  "key": "in",
+                  "value": "header",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "description": "JSON Type",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"id_m_banks\": 1,\r\n    \"account_number\": \"49218470\",\r\n    \"account_name\": \"hfkdshflas\"\r\n}"
+            },
+            "url": {
+              "raw": "{{URL}}/api/v1/banks/users",
+              "host": ["{{URL}}"],
+              "path": ["api", "v1", "banks", "users"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get User Bank",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "authorization",
+                  "type": "string"
+                },
+                {
+                  "key": "in",
+                  "value": "header",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{URL}}/api/v1/banks/users/get",
+              "host": ["{{URL}}"],
+              "path": ["api", "v1", "banks", "users", "get"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Bank User",
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "authorization",
+                  "type": "string"
+                },
+                {
+                  "key": "in",
+                  "value": "header",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "description": "JSON Type",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"id_m_banks\": 1,\r\n    \"account_number\": \"49218470\",\r\n    \"account_name\": \"hfkdshflas\"\r\n}"
+            },
+            "url": {
+              "raw": "{{URL}}/api/v1/banks/users/:id",
+              "host": ["{{URL}}"],
+              "path": ["api", "v1", "banks", "users", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "3",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Bank User",
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "authorization",
+                  "type": "string"
+                },
+                {
+                  "key": "in",
+                  "value": "header",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{URL}}/api/v1/banks/users/:id",
+              "host": ["{{URL}}"],
+              "path": ["api", "v1", "banks", "users", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "3",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "wallet",
+      "item": [
+        {
+          "name": "Top Up",
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "authorization",
+                  "type": "string"
+                },
+                {
+                  "key": "in",
+                  "value": "header",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "description": "JSON Type",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"id_m_banks\": 1,\r\n    \"balance_request\": 43221,\r\n    \"balance_transfer\": 46382912\r\n}"
+            },
+            "url": {
+              "raw": "{{URL}}/api/v1/wallets/topup",
+              "host": ["{{URL}}"],
+              "path": ["api", "v1", "wallets", "topup"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Upload Proof of Top Up",
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "authorization",
+                  "type": "string"
+                },
+                {
+                  "key": "in",
+                  "value": "header",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "multipart/form-data",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "image",
+                  "type": "file",
+                  "src": "/C:/Users/ACER/Desktop/Space Wallpaper/29924.jpg"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{URL}}/api/v1/wallets/topup/:id/image",
+              "host": ["{{URL}}"],
+              "path": ["api", "v1", "wallets", "topup", ":id", "image"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Withdraw",
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "authorization",
+                  "type": "string"
+                },
+                {
+                  "key": "in",
+                  "value": "header",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "description": "JSON Type",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"id_u_user_bank_account\": 2,\r\n    \"balance_request\": 43221\r\n}"
+            },
+            "url": {
+              "raw": "{{URL}}/api/v1/wallets/withdraw",
+              "host": ["{{URL}}"],
+              "path": ["api", "v1", "wallets", "withdraw"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get User Wallet",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "authorization",
+                  "type": "string"
+                },
+                {
+                  "key": "in",
+                  "value": "header",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{URL}}/api/v1/wallets",
+              "host": ["{{URL}}"],
+              "path": ["api", "v1", "wallets"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get User Top Up Histories",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "authorization",
+                  "type": "string"
+                },
+                {
+                  "key": "in",
+                  "value": "header",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{URL}}/api/v1/wallets/topup/histories",
+              "host": ["{{URL}}"],
+              "path": ["api", "v1", "wallets", "topup", "histories"],
+              "query": [
+                {
+                  "key": "orderDirection",
+                  "value": "",
+                  "description": "Available values: ASC, DESC",
+                  "disabled": true
+                },
+                {
+                  "key": "orderBy",
+                  "value": "",
+                  "description": "Available Fields: created_at, balance_request, balance_transfer",
+                  "disabled": true
+                },
+                {
+                  "key": "search",
+                  "value": "",
+                  "description": "Available Fields: balance_request, balance_transfer",
+                  "disabled": true
+                },
+                {
+                  "key": "page",
+                  "value": "",
+                  "description": "Available values: 1...n",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get User Withdraw Histories",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "authorization",
+                  "type": "string"
+                },
+                {
+                  "key": "in",
+                  "value": "header",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{URL}}/api/v1/wallets/withdraw/histories",
+              "host": ["{{URL}}"],
+              "path": ["api", "v1", "wallets", "withdraw", "histories"],
+              "query": [
+                {
+                  "key": "orderDirection",
+                  "value": "",
+                  "description": "Available values: ASC, DESC",
+                  "disabled": true
+                },
+                {
+                  "key": "orderBy",
+                  "value": "",
+                  "description": "Available Fields: created_at, balance_request",
+                  "disabled": true
+                },
+                {
+                  "key": "search",
+                  "value": "",
+                  "description": "Available Fields: balance_request",
+                  "disabled": true
+                },
+                {
+                  "key": "page",
+                  "value": "",
+                  "description": "Available values: 1...n",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Top Up Detail",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "authorization",
+                  "type": "string"
+                },
+                {
+                  "key": "in",
+                  "value": "header",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{URL}}/api/v1/wallets/topup/:id",
+              "host": ["{{URL}}"],
+              "path": ["api", "v1", "wallets", "topup", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Withdraw Detail",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "authorization",
+                  "type": "string"
+                },
+                {
+                  "key": "in",
+                  "value": "header",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{URL}}/api/v1/wallets/withdraw/:id",
+              "host": ["{{URL}}"],
+              "path": ["api", "v1", "wallets", "withdraw", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Withdraw Status",
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "authorization",
+                  "type": "string"
+                },
+                {
+                  "key": "in",
+                  "value": "header",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "description": "JSON Type",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"status\": 1\r\n}"
+            },
+            "url": {
+              "raw": "{{URL}}/api/v1/wallets/withdraw/:id/status",
+              "host": ["{{URL}}"],
+              "path": ["api", "v1", "wallets", "withdraw", ":id", "status"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "6",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update TopUp Status",
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "authorization",
+                  "type": "string"
+                },
+                {
+                  "key": "in",
+                  "value": "header",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "description": "JSON Type",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"status\": 1\r\n}"
+            },
+            "url": {
+              "raw": "{{URL}}/api/v1/wallets/topup/:id/status",
+              "host": ["{{URL}}"],
+              "path": ["api", "v1", "wallets", "topup", ":id", "status"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "2",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All User Top Up",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "authorization",
+                  "type": "string"
+                },
+                {
+                  "key": "in",
+                  "value": "header",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{URL}}/api/v1/wallets/topup/users/all",
+              "host": ["{{URL}}"],
+              "path": ["api", "v1", "wallets", "topup", "users", "all"],
+              "query": [
+                {
+                  "key": "orderDirection",
+                  "value": "",
+                  "description": "Available values: ASC, DESC",
+                  "disabled": true
+                },
+                {
+                  "key": "orderBy",
+                  "value": "",
+                  "description": "Available Fields: created_at, balance_request, balance_transfer",
+                  "disabled": true
+                },
+                {
+                  "key": "search",
+                  "value": "",
+                  "description": "Available Fields: balance_request, balance_transfer",
+                  "disabled": true
+                },
+                {
+                  "key": "status",
+                  "value": "",
+                  "description": "Available values: 0, 1, 2",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All User Withdraw",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "authorization",
+                  "type": "string"
+                },
+                {
+                  "key": "in",
+                  "value": "header",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{URL}}/api/v1/wallets/withdraw/users/all",
+              "host": ["{{URL}}"],
+              "path": ["api", "v1", "wallets", "withdraw", "users", "all"],
+              "query": [
+                {
+                  "key": "orderDirection",
+                  "value": "",
+                  "description": "Available values: ASC, DESC",
+                  "disabled": true
+                },
+                {
+                  "key": "orderBy",
+                  "value": "",
+                  "description": "Available Fields: created_at, balance_request, balance_transfer",
+                  "disabled": true
+                },
+                {
+                  "key": "search",
+                  "value": "",
+                  "description": "Available Fields: balance_request, balance_transfer",
+                  "disabled": true
+                },
+                {
+                  "key": "status",
+                  "value": "",
+                  "description": "Available values: 0, 1, 2",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "chat",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "description": "JSON Type",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\": \"adminadmin\",\r\n    \"password\": \"password\"\r\n}"
+            },
+            "url": {
+              "raw": "{{URL}}/chat/login",
+              "host": ["{{URL}}"],
+              "path": ["chat", "login"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Chat Users",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL}}/chat/users",
+              "host": ["{{URL}}"],
+              "path": ["chat", "users"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Chat Users",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "description": "JSON Type",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"id_m_users\": 3,\r\n    \"id_cs\": 4\r\n}"
+            },
+            "url": {
+              "raw": "{{URL}}/chat/users",
+              "host": ["{{URL}}"],
+              "path": ["chat", "users"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Chat Messages",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL}}/chat/messages",
+              "host": ["{{URL}}"],
+              "path": ["chat", "messages"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Chat Messages",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "description": "JSON Type",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}\r\n"
+            },
+            "url": {
+              "raw": "{{URL}}/chat/messages",
+              "host": ["{{URL}}"],
+              "path": ["chat", "messages"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "products",
+      "item": [
+        {
+          "name": "Get All Products",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "authorization",
+                  "type": "string"
+                },
+                {
+                  "key": "in",
+                  "value": "header",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{URL}}/api/v1/products",
+              "host": ["{{URL}}"],
+              "path": ["api", "v1", "products"],
+              "query": [
+                {
+                  "key": "search",
+                  "value": null,
+                  "description": "Available Fields: product_name, market_name, market_address",
+                  "disabled": true
+                },
+                {
+                  "key": "orderBy",
+                  "value": null,
+                  "description": "Available Fields: created_at,  product_name, market_name, market_address",
+                  "disabled": true
+                },
+                {
+                  "key": "orderDirection",
+                  "value": null,
+                  "description": "Available values: ASC, DESC",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "",
+                  "description": "Available values: 0.....n",
+                  "disabled": true
+                },
+                {
+                  "key": "page",
+                  "value": "",
+                  "description": "Available values: 0...n",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Products by Category",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "authorization",
+                  "type": "string"
+                },
+                {
+                  "key": "in",
+                  "value": "header",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{URL}}/api/v1/products/categories/:categoryId",
+              "host": ["{{URL}}"],
+              "path": ["api", "v1", "products", "categories", ":categoryId"],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "",
+                  "description": "Available values: 0...n",
+                  "disabled": true
+                },
+                {
+                  "key": "orderBy",
+                  "value": "",
+                  "description": "Available Fields: created_at,  product_name, market_name, market_address",
+                  "disabled": true
+                },
+                {
+                  "key": "orderDirection",
+                  "value": "",
+                  "description": "Available values: ASC, DESC",
+                  "disabled": true
+                },
+                {
+                  "key": "page",
+                  "value": "",
+                  "description": "Available values: 0...n",
+                  "disabled": true
+                }
+              ],
+              "variable": [
+                {
+                  "key": "categoryId",
+                  "value": "1",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Test Server",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const { Request } = require('postman-collection')\r",
+              "\r",
+              "const sendRequest = new Request({\r",
+              "    method: 'GET',\r",
+              "    url: pm.environment.replaceIn(\"{{URL}}:5000/hello-world\")\r",
+              "})\r",
+              "pm.sendRequest(sendRequest, (_, response) => {\r",
+              "    pm.test('test server is live', () => {\r",
+              "        pm.expect(response.code).to.eql(200);\r",
+              "        pm.expect(response.headers.toObject()['content-type']).to.eql('text/plain; charset=utf-8');\r",
+              "        pm.expect(response.text()).to.eql('hello world');\r",
+              "    })\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{URL}}:5000/hello-world",
+          "host": ["{{URL}}"],
+          "port": "5000",
+          "path": ["hello-world"]
+        }
+      },
+      "response": []
+    }
+  ]
+}

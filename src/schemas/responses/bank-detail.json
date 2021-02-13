@@ -1,0 +1,37 @@
+{
+  "type": "object",
+  "properties": {
+    "ApiResponse": {
+      "$ref": "#ApiResponse"
+    },
+    "data": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "allOf": [
+          { "$ref": "#GetBank" },
+          {
+            "type": "object",
+            "properties": {
+              "Logo": {
+                "$ref": "#GetMedia"
+              },
+              "Accounts": {
+                "type": "array",
+                "items": {
+                  "$ref": "#GetBankUser"
+                }
+              },
+              "Utilities": {
+                "type": "array",
+                "items": {
+                  "$ref": "#GetBankUtility"
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

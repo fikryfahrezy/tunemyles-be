@@ -1,0 +1,8 @@
+{
+  "type": "object",
+  "properties": {
+    "bank_name": { "type": "string" },
+    "is_visible": { "type": "integer" }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,10 @@
+{
+  "required": ["id_m_products", "id_merchant", "qty"],
+  "type": "object",
+  "properties": {
+    "qty": { "type": "integer" },
+    "id_merchant": { "type": "integer" },
+    "id_m_products": { "type": "integer" }
+  },
+  "additionalProperties": false
+}
