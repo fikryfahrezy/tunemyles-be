@@ -79,6 +79,7 @@
     "pino-pretty": "4.5.0",
     "pump": "3.0.0",
     "sequelize": "6.5.0",
-    "slugify": "1.4.6"
+    "slugify": "1.4.6",
+    "sonic-boom": "1.3.2"
   }
 }
