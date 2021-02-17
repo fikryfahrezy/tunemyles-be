@@ -14,7 +14,22 @@
             {
               "listen": "test",
               "script": {
-                "exec": [""],
+                "exec": [
+                  "const { Request } = require('postman-collection')\r",
+                  "\r",
+                  "const sendRequestOne = new Request({\r",
+                  "    method: pm.request.method,\r",
+                  "    url: pm.request.url.toString(),\r",
+                  "    body: pm.request.body\r",
+                  "})\r",
+                  "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                  "    pm.test('test success', () => {\r",
+                  "        pm.expect(response.code).to.eql(200);\r",
+                  "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(true);\r",
+                  "    })\r",
+                  "});"
+                ],
                 "type": "text/javascript"
               }
             }
@@ -34,9 +49,9 @@
               "raw": "{\r\n    \"full_name\": \"Name\",\r\n    \"username\": \"username\",\r\n    \"password\": \"password\",\r\n    \"phone_number\": \"1234567890\",\r\n    \"address\": \"address\"\r\n}"
             },
             "url": {
-              "raw": "{{URL}}/api/v1/auth/register",
+              "raw": "{{URL}}/auth/register",
               "host": ["{{URL}}"],
-              "path": ["api", "v1", "auth", "register"]
+              "path": ["auth", "register"]
             }
           },
           "response": []
@@ -48,7 +63,24 @@
               "listen": "test",
               "script": {
                 "exec": [
-                  "pm.environment.set('TOKEN', pm.response.json().data.token)"
+                  "const { Request } = require('postman-collection')\r",
+                  "\r",
+                  "const token = pm.response.json().data.token\r",
+                  "if (token) pm.environment.set('TOKEN', token)\r",
+                  "\r",
+                  "const sendRequestOne = new Request({\r",
+                  "    method: pm.request.method,\r",
+                  "    url: pm.request.url.toString(),\r",
+                  "    body: pm.request.body\r",
+                  "})\r",
+                  "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                  "    pm.test('test success', () => {\r",
+                  "        pm.expect(response.code).to.eql(200);\r",
+                  "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(true);\r",
+                  "    })\r",
+                  "\r",
+                  "});"
                 ],
                 "type": "text/javascript"
               }
@@ -78,6 +110,29 @@
         },
         {
           "name": "Get Profile",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const { Request } = require('postman-collection')\r",
+                  "\r",
+                  "const sendRequestOne = new Request({\r",
+                  "    method: pm.request.method,\r",
+                  "    url: pm.request.url.toString()\r",
+                  "})\r",
+                  "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                  "    pm.test('test success', () => {\r",
+                  "        pm.expect(response.code).to.eql(200);\r",
+                  "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(true);\r",
+                  "    })\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "protocolProfileBehavior": {
             "disableBodyPruning": true
           },
@@ -109,15 +164,39 @@
               "raw": ""
             },
             "url": {
-              "raw": "{{URL}}/api/v1/auth/me",
+              "raw": "{{URL}}/auth/me",
               "host": ["{{URL}}"],
-              "path": ["api", "v1", "auth", "me"]
+              "path": ["auth", "me"]
             }
           },
           "response": []
         },
         {
           "name": "Forgot Password",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const { Request } = require('postman-collection')\r",
+                  "\r",
+                  "const sendRequestOne = new Request({\r",
+                  "    method: pm.request.method,\r",
+                  "    url: pm.request.url.toString(),\r",
+                  "    body: pm.request.body\r",
+                  "})\r",
+                  "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                  "    pm.test('test success', () => {\r",
+                  "        pm.expect(response.code).to.eql(200);\r",
+                  "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(true);\r",
+                  "    })\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [
@@ -133,15 +212,38 @@
               "raw": "{\r\n    \"phone_number\": \"1234567890\"\r\n}"
             },
             "url": {
-              "raw": "{{URL}}/api/v1/auth/forgot-password",
+              "raw": "{{URL}}/auth/forgot-password",
               "host": ["{{URL}}"],
-              "path": ["api", "v1", "auth", "forgot-password"]
+              "path": ["auth", "forgot-password"]
             }
           },
           "response": []
         },
         {
           "name": "Verify Token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const { Request } = require('postman-collection')\r",
+                  "\r",
+                  "const sendRequestOne = new Request({\r",
+                  "    method: pm.request.method,\r",
+                  "    url: pm.request.url.toString()\r",
+                  "})\r",
+                  "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                  "    pm.test('test success', () => {\r",
+                  "        pm.expect(response.code).to.eql(200);\r",
+                  "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(true);\r",
+                  "    })\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "protocolProfileBehavior": {
             "disableBodyPruning": true
           },
@@ -153,9 +255,9 @@
               "raw": ""
             },
             "url": {
-              "raw": "{{URL}}/api/v1/auth/verify-token/:token",
+              "raw": "{{URL}}/auth/verify-token/:token",
               "host": ["{{URL}}"],
-              "path": ["api", "v1", "auth", "verify-token", ":token"],
+              "path": ["auth", "verify-token", ":token"],
               "variable": [
                 {
                   "key": "token",
@@ -169,6 +271,30 @@
         },
         {
           "name": "Reset Password",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const { Request } = require('postman-collection')\r",
+                  "\r",
+                  "const sendRequestOne = new Request({\r",
+                  "    method: pm.request.method,\r",
+                  "    url: pm.request.url.toString(),\r",
+                  "    body: pm.request.body\r",
+                  "})\r",
+                  "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                  "    pm.test('test success', () => {\r",
+                  "        pm.expect(response.code).to.eql(200);\r",
+                  "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(true);\r",
+                  "    })\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "method": "PUT",
             "header": [
@@ -184,9 +310,9 @@
               "raw": "{\r\n    \"new_password\": \"newpassword\"\r\n}"
             },
             "url": {
-              "raw": "{{URL}}/api/v1/auth/reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjU0NTUzNTg0OGJjZmE5NDdlODMwMzY3YzRiNDZmNDAxIiwiaWF0IjoxNjAwMDAzNTMyLCJleHAiOjE2MDAwMDcxMzJ9.Q1nFS_ZIC-YHjZr_oHuCD7mJOw28Y-czD8rcljDaHnI",
+              "raw": "{{URL}}/auth/reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjU0NTUzNTg0OGJjZmE5NDdlODMwMzY3YzRiNDZmNDAxIiwiaWF0IjoxNjAwMDAzNTMyLCJleHAiOjE2MDAwMDcxMzJ9.Q1nFS_ZIC-YHjZr_oHuCD7mJOw28Y-czD8rcljDaHnI",
               "host": ["{{URL}}"],
-              "path": ["api", "v1", "auth", "reset-password"],
+              "path": ["auth", "reset-password"],
               "query": [
                 {
                   "key": "token",
@@ -204,6 +330,19 @@
               "listen": "test",
               "script": {
                 "exec": [""],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "pm.test('test success', () => {\r",
+                  "    pm.expect(response.code).to.eql(200);\r",
+                  "    pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "    pm.expect(response.json().success).to.eql(true);\r",
+                  "});"
+                ],
                 "type": "text/javascript"
               }
             }
@@ -264,9 +403,9 @@
               ]
             },
             "url": {
-              "raw": "{{URL}}/api/v1/auth/update-profile",
+              "raw": "{{URL}}/auth/update-profile",
               "host": ["{{URL}}"],
-              "path": ["api", "v1", "auth", "update-profile"]
+              "path": ["auth", "update-profile"]
             }
           },
           "response": []
@@ -281,6 +420,29 @@
           "item": [
             {
               "name": "List Products",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const { Request } = require('postman-collection')\r",
+                      "\r",
+                      "const sendRequestOne = new Request({\r",
+                      "    method: pm.request.method,\r",
+                      "    url: pm.request.url.toString()\r",
+                      "})\r",
+                      "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                      "    pm.test('test success', () => {\r",
+                      "        pm.expect(response.code).to.eql(200);\r",
+                      "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "        pm.expect(response.json().success).to.eql(true);\r",
+                      "    })\r",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
               "protocolProfileBehavior": {
                 "disableBodyPruning": true
               },
@@ -312,9 +474,9 @@
                   "raw": ""
                 },
                 "url": {
-                  "raw": "{{URL}}/api/v1/merchants/products",
+                  "raw": "{{URL}}/merchants/products",
                   "host": ["{{URL}}"],
-                  "path": ["api", "v1", "merchants", "products"],
+                  "path": ["merchants", "products"],
                   "query": [
                     {
                       "key": "orderDirection",
@@ -347,6 +509,21 @@
             },
             {
               "name": "Add Product",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('test success', () => {\r",
+                      "    pm.expect(response.code).to.eql(200);\r",
+                      "    pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "    pm.expect(response.json().success).to.eql(true);\r",
+                      "})"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
               "request": {
                 "auth": {
                   "type": "apikey",
@@ -422,15 +599,39 @@
                   ]
                 },
                 "url": {
-                  "raw": "{{URL}}/api/v1/merchants/products",
+                  "raw": "{{URL}}/merchants/products",
                   "host": ["{{URL}}"],
-                  "path": ["api", "v1", "merchants", "products"]
+                  "path": ["merchants", "products"]
                 }
               },
               "response": []
             },
             {
               "name": "Update Product",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const { Request } = require('postman-collection')\r",
+                      "\r",
+                      "const sendRequestOne = new Request({\r",
+                      "    method: pm.request.method,\r",
+                      "    url: pm.request.url.toString(),\r",
+                      "    body: pm.request.body\r",
+                      "})\r",
+                      "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                      "    pm.test('test success', () => {\r",
+                      "        pm.expect(response.code).to.eql(200);\r",
+                      "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "        pm.expect(response.json().success).to.eql(true);\r",
+                      "    })\r",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
               "request": {
                 "auth": {
                   "type": "apikey",
@@ -471,9 +672,9 @@
                   }
                 },
                 "url": {
-                  "raw": "{{URL}}/api/v1/merchants/products/:id",
+                  "raw": "{{URL}}/merchants/products/:id",
                   "host": ["{{URL}}"],
-                  "path": ["api", "v1", "merchants", "products", ":id"],
+                  "path": ["merchants", "products", ":id"],
                   "variable": [
                     {
                       "key": "id",
@@ -487,6 +688,29 @@
             },
             {
               "name": "Delete Product",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const { Request } = require('postman-collection')\r",
+                      "\r",
+                      "const sendRequestOne = new Request({\r",
+                      "    method: pm.request.method,\r",
+                      "    url: pm.request.url.toString()\r",
+                      "})\r",
+                      "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                      "    pm.test('test success', () => {\r",
+                      "        pm.expect(response.code).to.eql(200);\r",
+                      "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "        pm.expect(response.json().success).to.eql(true);\r",
+                      "    })\r",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
               "request": {
                 "auth": {
                   "type": "apikey",
@@ -520,9 +744,9 @@
                   }
                 },
                 "url": {
-                  "raw": "{{URL}}/api/v1/merchants/products/:id",
+                  "raw": "{{URL}}/merchants/products/:id",
                   "host": ["{{URL}}"],
-                  "path": ["api", "v1", "merchants", "products", ":id"],
+                  "path": ["merchants", "products", ":id"],
                   "variable": [
                     {
                       "key": "id",
@@ -536,6 +760,21 @@
             },
             {
               "name": "Change Cover",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('test success', () => {\r",
+                      "    pm.expect(response.code).to.eql(200);\r",
+                      "    pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "    pm.expect(response.json().success).to.eql(true);\r",
+                      "})"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
               "request": {
                 "auth": {
                   "type": "apikey",
@@ -576,16 +815,9 @@
                   ]
                 },
                 "url": {
-                  "raw": "{{URL}}/api/v1/merchants/products/:id/cover",
+                  "raw": "{{URL}}/merchants/products/:id/cover",
                   "host": ["{{URL}}"],
-                  "path": [
-                    "api",
-                    "v1",
-                    "merchants",
-                    "products",
-                    ":id",
-                    "cover"
-                  ],
+                  "path": ["merchants", "products", ":id", "cover"],
                   "variable": [
                     {
                       "key": "id",
@@ -599,6 +831,30 @@
             },
             {
               "name": "Change Status",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const { Request } = require('postman-collection')\r",
+                      "\r",
+                      "const sendRequestOne = new Request({\r",
+                      "    method: pm.request.method,\r",
+                      "    url: pm.request.url.toString(),\r",
+                      "    body: pm.request.body\r",
+                      "})\r",
+                      "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                      "    pm.test('test success', () => {\r",
+                      "        pm.expect(response.code).to.eql(200);\r",
+                      "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "        pm.expect(response.json().success).to.eql(true);\r",
+                      "    })\r",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
               "request": {
                 "auth": {
                   "type": "apikey",
@@ -639,16 +895,9 @@
                   }
                 },
                 "url": {
-                  "raw": "{{URL}}/api/v1/merchants/products/:id/status",
+                  "raw": "{{URL}}/merchants/products/:id/status",
                   "host": ["{{URL}}"],
-                  "path": [
-                    "api",
-                    "v1",
-                    "merchants",
-                    "products",
-                    ":id",
-                    "status"
-                  ],
+                  "path": ["merchants", "products", ":id", "status"],
                   "variable": [
                     {
                       "key": "id",
@@ -662,6 +911,30 @@
             },
             {
               "name": "Bind Product Category",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const { Request } = require('postman-collection')\r",
+                      "\r",
+                      "const sendRequestOne = new Request({\r",
+                      "    method: pm.request.method,\r",
+                      "    url: pm.request.url.toString(),\r",
+                      "    body: pm.request.body\r",
+                      "})\r",
+                      "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                      "    pm.test('test success', () => {\r",
+                      "        pm.expect(response.code).to.eql(200);\r",
+                      "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "        pm.expect(response.json().success).to.eql(true);\r",
+                      "    })\r",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
               "request": {
                 "auth": {
                   "type": "apikey",
@@ -702,16 +975,9 @@
                   }
                 },
                 "url": {
-                  "raw": "{{URL}}/api/v1/merchants/products/:id/categories",
+                  "raw": "{{URL}}/merchants/products/:id/categories",
                   "host": ["{{URL}}"],
-                  "path": [
-                    "api",
-                    "v1",
-                    "merchants",
-                    "products",
-                    ":id",
-                    "categories"
-                  ],
+                  "path": ["merchants", "products", ":id", "categories"],
                   "variable": [
                     {
                       "key": "id",
@@ -725,6 +991,29 @@
             },
             {
               "name": "Delete Product Category",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const { Request } = require('postman-collection')\r",
+                      "\r",
+                      "const sendRequestOne = new Request({\r",
+                      "    method: pm.request.method,\r",
+                      "    url: pm.request.url.toString()\r",
+                      "})\r",
+                      "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                      "    pm.test('test success', () => {\r",
+                      "        pm.expect(response.code).to.eql(200);\r",
+                      "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "        pm.expect(response.json().success).to.eql(true);\r",
+                      "    })\r",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
               "request": {
                 "auth": {
                   "type": "apikey",
@@ -753,11 +1042,9 @@
                   "raw": ""
                 },
                 "url": {
-                  "raw": "{{URL}}/api/v1/merchants/products/:productId/categories/:categoryId",
+                  "raw": "{{URL}}/merchants/products/:productId/categories/:categoryId",
                   "host": ["{{URL}}"],
                   "path": [
-                    "api",
-                    "v1",
                     "merchants",
                     "products",
                     ":productId",
@@ -782,6 +1069,21 @@
             },
             {
               "name": "Product Image",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('test success', () => {\r",
+                      "    pm.expect(response.code).to.eql(200);\r",
+                      "    pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "    pm.expect(response.json().success).to.eql(true);\r",
+                      "})"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
               "request": {
                 "auth": {
                   "type": "apikey",
@@ -822,16 +1124,9 @@
                   ]
                 },
                 "url": {
-                  "raw": "{{URL}}/api/v1/merchants/products/:id/image",
+                  "raw": "{{URL}}/merchants/products/:id/image",
                   "host": ["{{URL}}"],
-                  "path": [
-                    "api",
-                    "v1",
-                    "merchants",
-                    "products",
-                    ":id",
-                    "image"
-                  ],
+                  "path": ["merchants", "products", ":id", "image"],
                   "variable": [
                     {
                       "key": "id",
@@ -845,6 +1140,29 @@
             },
             {
               "name": "Remove Product Image",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const { Request } = require('postman-collection')\r",
+                      "\r",
+                      "const sendRequestOne = new Request({\r",
+                      "    method: pm.request.method,\r",
+                      "    url: pm.request.url.toString()\r",
+                      "})\r",
+                      "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                      "    pm.test('test success', () => {\r",
+                      "        pm.expect(response.code).to.eql(200);\r",
+                      "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "        pm.expect(response.json().success).to.eql(true);\r",
+                      "    })\r",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
               "request": {
                 "auth": {
                   "type": "apikey",
@@ -873,16 +1191,9 @@
                   "formdata": []
                 },
                 "url": {
-                  "raw": "{{URL}}/api/v1/merchants/products/image/:id",
+                  "raw": "{{URL}}/merchants/products/image/:id",
                   "host": ["{{URL}}"],
-                  "path": [
-                    "api",
-                    "v1",
-                    "merchants",
-                    "products",
-                    "image",
-                    ":id"
-                  ],
+                  "path": ["merchants", "products", "image", ":id"],
                   "variable": [
                     {
                       "key": "id",
@@ -901,6 +1212,29 @@
           "item": [
             {
               "name": "List Merchant Orders",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const { Request } = require('postman-collection')\r",
+                      "\r",
+                      "const sendRequestOne = new Request({\r",
+                      "    method: pm.request.method,\r",
+                      "    url: pm.request.url.toString()\r",
+                      "})\r",
+                      "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                      "    pm.test('test success', () => {\r",
+                      "        pm.expect(response.code).to.eql(200);\r",
+                      "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "        pm.expect(response.json().success).to.eql(true);\r",
+                      "    })\r",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
               "protocolProfileBehavior": {
                 "disableBodyPruning": true
               },
@@ -932,9 +1266,9 @@
                   "raw": ""
                 },
                 "url": {
-                  "raw": "{{URL}}/api/v1/merchants/orders",
+                  "raw": "{{URL}}/merchants/orders",
                   "host": ["{{URL}}"],
-                  "path": ["api", "v1", "merchants", "orders"],
+                  "path": ["merchants", "orders"],
                   "query": [
                     {
                       "key": "orderDirection",
@@ -973,6 +1307,29 @@
             },
             {
               "name": "Get List Order Product",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const { Request } = require('postman-collection')\r",
+                      "\r",
+                      "const sendRequestOne = new Request({\r",
+                      "    method: pm.request.method,\r",
+                      "    url: pm.request.url.toString()\r",
+                      "})\r",
+                      "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                      "    pm.test('test success', () => {\r",
+                      "        pm.expect(response.code).to.eql(200);\r",
+                      "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "        pm.expect(response.json().success).to.eql(true);\r",
+                      "    })\r",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
               "protocolProfileBehavior": {
                 "disableBodyPruning": true
               },
@@ -1004,9 +1361,9 @@
                   "raw": ""
                 },
                 "url": {
-                  "raw": "{{URL}}/api/v1/merchants/orders/:id",
+                  "raw": "{{URL}}/merchants/orders/:id",
                   "host": ["{{URL}}"],
-                  "path": ["api", "v1", "merchants", "orders", ":id"],
+                  "path": ["merchants", "orders", ":id"],
                   "variable": [
                     {
                       "key": "id",
@@ -1020,6 +1377,30 @@
             },
             {
               "name": "Update Order Product Status",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const { Request } = require('postman-collection')\r",
+                      "\r",
+                      "const sendRequestOne = new Request({\r",
+                      "    method: pm.request.method,\r",
+                      "    url: pm.request.url.toString(),\r",
+                      "    body: pm.request.body\r",
+                      "})\r",
+                      "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                      "    pm.test('test success', () => {\r",
+                      "        pm.expect(response.code).to.eql(200);\r",
+                      "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "        pm.expect(response.json().success).to.eql(true);\r",
+                      "    })\r",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
               "request": {
                 "auth": {
                   "type": "apikey",
@@ -1055,9 +1436,9 @@
                   "raw": "{\r\n    \"status\": 2\r\n}"
                 },
                 "url": {
-                  "raw": "{{URL}}/api/v1/merchants/orders/:id",
+                  "raw": "{{URL}}/merchants/orders/:id",
                   "host": ["{{URL}}"],
-                  "path": ["api", "v1", "merchants", "orders", ":id"],
+                  "path": ["merchants", "orders", ":id"],
                   "variable": [
                     {
                       "key": "id",
@@ -1076,6 +1457,29 @@
           "item": [
             {
               "name": "Get Merchant List",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const { Request } = require('postman-collection')\r",
+                      "\r",
+                      "const sendRequestOne = new Request({\r",
+                      "    method: pm.request.method,\r",
+                      "    url: pm.request.url.toString()\r",
+                      "})\r",
+                      "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                      "    pm.test('test success', () => {\r",
+                      "        pm.expect(response.code).to.eql(200);\r",
+                      "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "        pm.expect(response.json().success).to.eql(true);\r",
+                      "    })\r",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
               "protocolProfileBehavior": {
                 "disableBodyPruning": true
               },
@@ -1107,9 +1511,9 @@
                   "raw": ""
                 },
                 "url": {
-                  "raw": "{{URL}}/api/v1/merchants/list",
+                  "raw": "{{URL}}/merchants/list",
                   "host": ["{{URL}}"],
-                  "path": ["api", "v1", "merchants", "list"],
+                  "path": ["merchants", "list"],
                   "query": [
                     {
                       "key": "orderDirection",
@@ -1142,6 +1546,29 @@
             },
             {
               "name": "Get Merchant Product List",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const { Request } = require('postman-collection')\r",
+                      "\r",
+                      "const sendRequestOne = new Request({\r",
+                      "    method: pm.request.method,\r",
+                      "    url: pm.request.url.toString()\r",
+                      "})\r",
+                      "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                      "    pm.test('test success', () => {\r",
+                      "        pm.expect(response.code).to.eql(200);\r",
+                      "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "        pm.expect(response.json().success).to.eql(true);\r",
+                      "    })\r",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
               "protocolProfileBehavior": {
                 "disableBodyPruning": true
               },
@@ -1173,9 +1600,9 @@
                   "raw": ""
                 },
                 "url": {
-                  "raw": "{{URL}}/api/v1/merchants/list/:id",
+                  "raw": "{{URL}}/merchants/list/:id",
                   "host": ["{{URL}}"],
-                  "path": ["api", "v1", "merchants", "list", ":id"],
+                  "path": ["merchants", "list", ":id"],
                   "variable": [
                     {
                       "key": "id",
@@ -1189,6 +1616,29 @@
             },
             {
               "name": "Get Random Merchants",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const { Request } = require('postman-collection')\r",
+                      "\r",
+                      "const sendRequestOne = new Request({\r",
+                      "    method: pm.request.method,\r",
+                      "    url: pm.request.url.toString()\r",
+                      "})\r",
+                      "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                      "    pm.test('test success', () => {\r",
+                      "        pm.expect(response.code).to.eql(200);\r",
+                      "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "        pm.expect(response.json().success).to.eql(true);\r",
+                      "    })\r",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
               "protocolProfileBehavior": {
                 "disableBodyPruning": true
               },
@@ -1220,9 +1670,9 @@
                   "raw": ""
                 },
                 "url": {
-                  "raw": "{{URL}}/api/v1/merchants/random",
+                  "raw": "{{URL}}/merchants/random",
                   "host": ["{{URL}}"],
-                  "path": ["api", "v1", "merchants", "random"],
+                  "path": ["merchants", "random"],
                   "query": [
                     {
                       "key": "limit",
@@ -1242,6 +1692,29 @@
           "item": [
             {
               "name": "Get Merchant Transaction Histories",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const { Request } = require('postman-collection')\r",
+                      "\r",
+                      "const sendRequestOne = new Request({\r",
+                      "    method: pm.request.method,\r",
+                      "    url: pm.request.url.toString()\r",
+                      "})\r",
+                      "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                      "    pm.test('test success', () => {\r",
+                      "        pm.expect(response.code).to.eql(200);\r",
+                      "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "        pm.expect(response.json().success).to.eql(true);\r",
+                      "    })\r",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
               "protocolProfileBehavior": {
                 "disableBodyPruning": true
               },
@@ -1273,9 +1746,9 @@
                   "raw": ""
                 },
                 "url": {
-                  "raw": "{{URL}}/api/v1/merchants/transactions",
+                  "raw": "{{URL}}/merchants/transactions",
                   "host": ["{{URL}}"],
-                  "path": ["api", "v1", "merchants", "transactions"],
+                  "path": ["merchants", "transactions"],
                   "query": [
                     {
                       "key": "date",
@@ -1290,6 +1763,29 @@
             },
             {
               "name": "Get Merchant Incomes",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const { Request } = require('postman-collection')\r",
+                      "\r",
+                      "const sendRequestOne = new Request({\r",
+                      "    method: pm.request.method,\r",
+                      "    url: pm.request.url.toString()\r",
+                      "})\r",
+                      "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                      "    pm.test('test success', () => {\r",
+                      "        pm.expect(response.code).to.eql(200);\r",
+                      "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "        pm.expect(response.json().success).to.eql(true);\r",
+                      "    })\r",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
               "protocolProfileBehavior": {
                 "disableBodyPruning": true
               },
@@ -1321,9 +1817,9 @@
                   "raw": ""
                 },
                 "url": {
-                  "raw": "{{URL}}/api/v1/merchants/incomes",
+                  "raw": "{{URL}}/merchants/incomes",
                   "host": ["{{URL}}"],
-                  "path": ["api", "v1", "merchants", "incomes"],
+                  "path": ["merchants", "incomes"],
                   "query": [
                     {
                       "key": "year",
@@ -1343,6 +1839,21 @@
           "item": [
             {
               "name": "Create Merchant",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('test success', () => {\r",
+                      "    pm.expect(response.code).to.eql(200);\r",
+                      "    pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "    pm.expect(response.json().success).to.eql(true);\r",
+                      "})"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
               "request": {
                 "auth": {
                   "type": "apikey",
@@ -1418,15 +1929,39 @@
                   ]
                 },
                 "url": {
-                  "raw": "{{URL}}/api/v1/merchants/activate",
+                  "raw": "{{URL}}/merchants/activate",
                   "host": ["{{URL}}"],
-                  "path": ["api", "v1", "merchants", "activate"]
+                  "path": ["merchants", "activate"]
                 }
               },
               "response": []
             },
             {
               "name": "Update Merchant Close time",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const { Request } = require('postman-collection')\r",
+                      "\r",
+                      "const sendRequestOne = new Request({\r",
+                      "    method: pm.request.method,\r",
+                      "    url: pm.request.url.toString(),\r",
+                      "    body: pm.request.body\r",
+                      "})\r",
+                      "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                      "    pm.test('test success', () => {\r",
+                      "        pm.expect(response.code).to.eql(200);\r",
+                      "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "        pm.expect(response.json().success).to.eql(true);\r",
+                      "    })\r",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
               "request": {
                 "auth": {
                   "type": "apikey",
@@ -1462,15 +1997,38 @@
                   "raw": "{\r\n    \"market_close_time\": \"22:00\"\r\n}"
                 },
                 "url": {
-                  "raw": "{{URL}}/api/v1/merchants/operation-time",
+                  "raw": "{{URL}}/merchants/operation-time",
                   "host": ["{{URL}}"],
-                  "path": ["api", "v1", "merchants", "operation-time"]
+                  "path": ["merchants", "operation-time"]
                 }
               },
               "response": []
             },
             {
               "name": "Get Single Product",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const { Request } = require('postman-collection')\r",
+                      "\r",
+                      "const sendRequestOne = new Request({\r",
+                      "    method: pm.request.method,\r",
+                      "    url: pm.request.url.toString()\r",
+                      "})\r",
+                      "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                      "    pm.test('test success', () => {\r",
+                      "        pm.expect(response.code).to.eql(200);\r",
+                      "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "        pm.expect(response.json().success).to.eql(true);\r",
+                      "    })\r",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
               "protocolProfileBehavior": {
                 "disableBodyPruning": true
               },
@@ -1502,9 +2060,9 @@
                   "raw": ""
                 },
                 "url": {
-                  "raw": "{{URL}}/api/v1/merchants/products/:id",
+                  "raw": "{{URL}}/merchants/products/:id",
                   "host": ["{{URL}}"],
-                  "path": ["api", "v1", "merchants", "products", ":id"],
+                  "path": ["merchants", "products", ":id"],
                   "variable": [
                     {
                       "key": "id",
@@ -1518,6 +2076,29 @@
             },
             {
               "name": "Get Single Merchant",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const { Request } = require('postman-collection')\r",
+                      "\r",
+                      "const sendRequestOne = new Request({\r",
+                      "    method: pm.request.method,\r",
+                      "    url: pm.request.url.toString()\r",
+                      "})\r",
+                      "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                      "    pm.test('test success', () => {\r",
+                      "        pm.expect(response.code).to.eql(200);\r",
+                      "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "        pm.expect(response.json().success).to.eql(true);\r",
+                      "    })\r",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
               "protocolProfileBehavior": {
                 "disableBodyPruning": true
               },
@@ -1549,15 +2130,30 @@
                   "raw": ""
                 },
                 "url": {
-                  "raw": "{{URL}}/api/v1/merchants",
+                  "raw": "{{URL}}/merchants",
                   "host": ["{{URL}}"],
-                  "path": ["api", "v1", "merchants"]
+                  "path": ["merchants"]
                 }
               },
               "response": []
             },
             {
               "name": "Update Merchant",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('test success', () => {\r",
+                      "    pm.expect(response.code).to.eql(200);\r",
+                      "    pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "    pm.expect(response.json().success).to.eql(true);\r",
+                      "})"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
               "request": {
                 "auth": {
                   "type": "apikey",
@@ -1623,9 +2219,9 @@
                   ]
                 },
                 "url": {
-                  "raw": "{{URL}}/api/v1/merchants",
+                  "raw": "{{URL}}/merchants",
                   "host": ["{{URL}}"],
-                  "path": ["api", "v1", "merchants"]
+                  "path": ["merchants"]
                 }
               },
               "response": []
@@ -1643,7 +2239,22 @@
             {
               "listen": "test",
               "script": {
-                "exec": [""],
+                "exec": [
+                  "const { Request } = require('postman-collection')\r",
+                  "\r",
+                  "const sendRequestOne = new Request({\r",
+                  "    method: pm.request.method,\r",
+                  "    url: pm.request.url.toString(),\r",
+                  "    body: pm.request.body\r",
+                  "})\r",
+                  "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                  "    pm.test('test success', () => {\r",
+                  "        pm.expect(response.code).to.eql(200);\r",
+                  "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(true);\r",
+                  "    })\r",
+                  "});"
+                ],
                 "type": "text/javascript"
               }
             }
@@ -1683,9 +2294,9 @@
               "raw": "{\r\n    \"qty\": 1,\r\n    \"id_merchant\": 3,\r\n    \"id_m_products\": 2\r\n}"
             },
             "url": {
-              "raw": "{{URL}}/api/v1/carts",
+              "raw": "{{URL}}/carts",
               "host": ["{{URL}}"],
-              "path": ["api", "v1", "carts"]
+              "path": ["carts"]
             }
           },
           "response": []
@@ -1696,7 +2307,21 @@
             {
               "listen": "test",
               "script": {
-                "exec": [""],
+                "exec": [
+                  "const { Request } = require('postman-collection')\r",
+                  "\r",
+                  "const sendRequestOne = new Request({\r",
+                  "    method: pm.request.method,\r",
+                  "    url: pm.request.url.toString()\r",
+                  "})\r",
+                  "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                  "    pm.test('test success', () => {\r",
+                  "        pm.expect(response.code).to.eql(200);\r",
+                  "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(true);\r",
+                  "    })\r",
+                  "});"
+                ],
                 "type": "text/javascript"
               }
             }
@@ -1732,9 +2357,9 @@
               "urlencoded": []
             },
             "url": {
-              "raw": "{{URL}}/api/v1/carts",
+              "raw": "{{URL}}/carts",
               "host": ["{{URL}}"],
-              "path": ["api", "v1", "carts"]
+              "path": ["carts"]
             }
           },
           "response": []
@@ -1745,7 +2370,22 @@
             {
               "listen": "test",
               "script": {
-                "exec": [""],
+                "exec": [
+                  "const { Request } = require('postman-collection')\r",
+                  "\r",
+                  "const sendRequestOne = new Request({\r",
+                  "    method: pm.request.method,\r",
+                  "    url: pm.request.url.toString(),\r",
+                  "    body: pm.request.body\r",
+                  "})\r",
+                  "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                  "    pm.test('test success', () => {\r",
+                  "        pm.expect(response.code).to.eql(200);\r",
+                  "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(true);\r",
+                  "    })\r",
+                  "});"
+                ],
                 "type": "text/javascript"
               }
             }
@@ -1785,9 +2425,9 @@
               "raw": "{\r\n    \"qty\": 1\r\n}"
             },
             "url": {
-              "raw": "{{URL}}/api/v1/carts/:id",
+              "raw": "{{URL}}/carts/:id",
               "host": ["{{URL}}"],
-              "path": ["api", "v1", "carts", ":id"],
+              "path": ["carts", ":id"],
               "variable": [
                 {
                   "key": "id",
@@ -1805,7 +2445,21 @@
             {
               "listen": "test",
               "script": {
-                "exec": [""],
+                "exec": [
+                  "const { Request } = require('postman-collection')\r",
+                  "\r",
+                  "const sendRequestOne = new Request({\r",
+                  "    method: pm.request.method,\r",
+                  "    url: pm.request.url.toString()\r",
+                  "})\r",
+                  "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                  "    pm.test('test success', () => {\r",
+                  "        pm.expect(response.code).to.eql(200);\r",
+                  "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(true);\r",
+                  "    })\r",
+                  "});"
+                ],
                 "type": "text/javascript"
               }
             }
@@ -1838,9 +2492,9 @@
               "urlencoded": []
             },
             "url": {
-              "raw": "{{URL}}/api/v1/carts/:id",
+              "raw": "{{URL}}/carts/:id",
               "host": ["{{URL}}"],
-              "path": ["api", "v1", "carts", ":id"],
+              "path": ["carts", ":id"],
               "variable": [
                 {
                   "key": "id",
@@ -1858,7 +2512,22 @@
             {
               "listen": "test",
               "script": {
-                "exec": [""],
+                "exec": [
+                  "const { Request } = require('postman-collection')\r",
+                  "\r",
+                  "const sendRequestOne = new Request({\r",
+                  "    method: pm.request.method,\r",
+                  "    url: pm.request.url.toString(),\r",
+                  "    body: pm.request.body\r",
+                  "})\r",
+                  "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                  "    pm.test('test success', () => {\r",
+                  "        pm.expect(response.code).to.eql(200);\r",
+                  "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(true);\r",
+                  "    })\r",
+                  "});"
+                ],
                 "type": "text/javascript"
               }
             }
@@ -1898,9 +2567,9 @@
               "raw": "{\r\n    \"price_total\": 1000\r\n}"
             },
             "url": {
-              "raw": "{{URL}}/api/v1/carts/checkout",
+              "raw": "{{URL}}/carts/checkout",
               "host": ["{{URL}}"],
-              "path": ["api", "v1", "carts", "checkout"]
+              "path": ["carts", "checkout"]
             }
           },
           "response": []
@@ -1916,7 +2585,21 @@
             {
               "listen": "test",
               "script": {
-                "exec": [""],
+                "exec": [
+                  "const { Request } = require('postman-collection')\r",
+                  "\r",
+                  "const sendRequestOne = new Request({\r",
+                  "    method: pm.request.method,\r",
+                  "    url: pm.request.url.toString()\r",
+                  "})\r",
+                  "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                  "    pm.test('test success', () => {\r",
+                  "        pm.expect(response.code).to.eql(200);\r",
+                  "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(true);\r",
+                  "    })\r",
+                  "});"
+                ],
                 "type": "text/javascript"
               }
             }
@@ -1952,9 +2635,9 @@
               "urlencoded": []
             },
             "url": {
-              "raw": "{{URL}}/api/v1/transactions",
+              "raw": "{{URL}}/transactions",
               "host": ["{{URL}}"],
-              "path": ["api", "v1", "transactions"],
+              "path": ["transactions"],
               "query": [
                 {
                   "key": "orderDirection",
@@ -1997,7 +2680,21 @@
             {
               "listen": "test",
               "script": {
-                "exec": [""],
+                "exec": [
+                  "const { Request } = require('postman-collection')\r",
+                  "\r",
+                  "const sendRequestOne = new Request({\r",
+                  "    method: pm.request.method,\r",
+                  "    url: pm.request.url.toString()\r",
+                  "})\r",
+                  "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                  "    pm.test('test success', () => {\r",
+                  "        pm.expect(response.code).to.eql(200);\r",
+                  "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(true);\r",
+                  "    })\r",
+                  "});"
+                ],
                 "type": "text/javascript"
               }
             }
@@ -2033,9 +2730,9 @@
               "urlencoded": []
             },
             "url": {
-              "raw": "{{URL}}/api/v1/transactions/:id",
+              "raw": "{{URL}}/transactions/:id",
               "host": ["{{URL}}"],
-              "path": ["api", "v1", "transactions", ":id"],
+              "path": ["transactions", ":id"],
               "variable": [
                 {
                   "key": "id",
@@ -2053,7 +2750,21 @@
             {
               "listen": "test",
               "script": {
-                "exec": [""],
+                "exec": [
+                  "const { Request } = require('postman-collection')\r",
+                  "\r",
+                  "const sendRequestOne = new Request({\r",
+                  "    method: pm.request.method,\r",
+                  "    url: pm.request.url.toString()\r",
+                  "})\r",
+                  "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                  "    pm.test('test success', () => {\r",
+                  "        pm.expect(response.code).to.eql(200);\r",
+                  "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(true);\r",
+                  "    })\r",
+                  "});"
+                ],
                 "type": "text/javascript"
               }
             }
@@ -2086,9 +2797,9 @@
               "urlencoded": []
             },
             "url": {
-              "raw": "{{URL}}/api/v1/transactions/:id",
+              "raw": "{{URL}}/transactions/:id",
               "host": ["{{URL}}"],
-              "path": ["api", "v1", "transactions", ":id"],
+              "path": ["transactions", ":id"],
               "variable": [
                 {
                   "key": "id",
@@ -2106,7 +2817,22 @@
             {
               "listen": "test",
               "script": {
-                "exec": [""],
+                "exec": [
+                  "const { Request } = require('postman-collection')\r",
+                  "\r",
+                  "const sendRequestOne = new Request({\r",
+                  "    method: pm.request.method,\r",
+                  "    url: pm.request.url.toString(),\r",
+                  "    body: pm.request.body\r",
+                  "})\r",
+                  "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                  "    pm.test('test success', () => {\r",
+                  "        pm.expect(response.code).to.eql(200);\r",
+                  "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(true);\r",
+                  "    })\r",
+                  "});"
+                ],
                 "type": "text/javascript"
               }
             }
@@ -2146,9 +2872,9 @@
               "raw": "{\r\n    \"rating\": 5,\r\n    \"review\": \"Mantap\"\r\n}"
             },
             "url": {
-              "raw": "{{URL}}/api/v1/transactions/:id",
+              "raw": "{{URL}}/transactions/:id",
               "host": ["{{URL}}"],
-              "path": ["api", "v1", "transactions", ":id"],
+              "path": ["transactions", ":id"],
               "variable": [
                 {
                   "key": "id",
@@ -2170,6 +2896,21 @@
           "item": [
             {
               "name": "Add Media",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('test success', () => {\r",
+                      "    pm.expect(response.code).to.eql(200);\r",
+                      "    pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "    pm.expect(response.json().success).to.eql(true);\r",
+                      "})"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
               "request": {
                 "auth": {
                   "type": "apikey",
@@ -2210,15 +2951,38 @@
                   ]
                 },
                 "url": {
-                  "raw": "{{URL}}/api/v1/masters/medias",
+                  "raw": "{{URL}}/masters/medias",
                   "host": ["{{URL}}"],
-                  "path": ["api", "v1", "masters", "medias"]
+                  "path": ["masters", "medias"]
                 }
               },
               "response": []
             },
             {
               "name": "Get All Media",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const { Request } = require('postman-collection')\r",
+                      "\r",
+                      "const sendRequestOne = new Request({\r",
+                      "    method: pm.request.method,\r",
+                      "    url: pm.request.url.toString()\r",
+                      "})\r",
+                      "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                      "    pm.test('test success', () => {\r",
+                      "        pm.expect(response.code).to.eql(200);\r",
+                      "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "        pm.expect(response.json().success).to.eql(true);\r",
+                      "    })\r",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
               "protocolProfileBehavior": {
                 "disableBodyPruning": true
               },
@@ -2250,9 +3014,9 @@
                   "formdata": []
                 },
                 "url": {
-                  "raw": "{{URL}}/api/v1/masters/medias",
+                  "raw": "{{URL}}/masters/medias",
                   "host": ["{{URL}}"],
-                  "path": ["api", "v1", "masters", "medias"],
+                  "path": ["masters", "medias"],
                   "query": [
                     {
                       "key": "orderDirection",
@@ -2285,6 +3049,21 @@
             },
             {
               "name": "Update Media",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('test success', () => {\r",
+                      "    pm.expect(response.code).to.eql(200);\r",
+                      "    pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "    pm.expect(response.json().success).to.eql(true);\r",
+                      "})"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
               "request": {
                 "auth": {
                   "type": "apikey",
@@ -2325,9 +3104,9 @@
                   ]
                 },
                 "url": {
-                  "raw": "{{URL}}/api/v1/masters/medias/:id",
+                  "raw": "{{URL}}/masters/medias/:id",
                   "host": ["{{URL}}"],
-                  "path": ["api", "v1", "masters", "medias", ":id"],
+                  "path": ["masters", "medias", ":id"],
                   "variable": [
                     {
                       "key": "id",
@@ -2341,6 +3120,29 @@
             },
             {
               "name": "Delete Media",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const { Request } = require('postman-collection')\r",
+                      "\r",
+                      "const sendRequestOne = new Request({\r",
+                      "    method: pm.request.method,\r",
+                      "    url: pm.request.url.toString()\r",
+                      "})\r",
+                      "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                      "    pm.test('test success', () => {\r",
+                      "        pm.expect(response.code).to.eql(200);\r",
+                      "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "        pm.expect(response.json().success).to.eql(true);\r",
+                      "    })\r",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
               "request": {
                 "auth": {
                   "type": "apikey",
@@ -2369,9 +3171,9 @@
                   "formdata": []
                 },
                 "url": {
-                  "raw": "{{URL}}/api/v1/masters/medias/:id",
+                  "raw": "{{URL}}/masters/medias/:id",
                   "host": ["{{URL}}"],
-                  "path": ["api", "v1", "masters", "medias", ":id"],
+                  "path": ["masters", "medias", ":id"],
                   "variable": [
                     {
                       "key": "id",
@@ -2390,6 +3192,50 @@
           "item": [
             {
               "name": "Get All Wallet",
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      "const { Request } = require('postman-collection')\r",
+                      "\r",
+                      "const sendRequestOne = new Request({\r",
+                      "    method: pm.request.method,\r",
+                      "    url: pm.request.url.toString()\r",
+                      "})\r",
+                      "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                      "    pm.test('test success', () => {\r",
+                      "        pm.expect(response.code).to.eql(200);\r",
+                      "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "        pm.expect(response.json().success).to.eql(true);\r",
+                      "    })\r",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                },
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const { Request } = require('postman-collection')\r",
+                      "\r",
+                      "const sendRequestOne = new Request({\r",
+                      "    method: pm.request.method,\r",
+                      "    url: pm.request.url.toString()\r",
+                      "})\r",
+                      "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                      "    pm.test('test success', () => {\r",
+                      "        pm.expect(response.code).to.eql(200);\r",
+                      "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "        pm.expect(response.json().success).to.eql(true);\r",
+                      "    })\r",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
               "protocolProfileBehavior": {
                 "disableBodyPruning": true
               },
@@ -2421,9 +3267,9 @@
                   "formdata": []
                 },
                 "url": {
-                  "raw": "{{URL}}/api/v1/masters/wallets",
+                  "raw": "{{URL}}/masters/wallets",
                   "host": ["{{URL}}"],
-                  "path": ["api", "v1", "masters", "wallets"],
+                  "path": ["masters", "wallets"],
                   "query": [
                     {
                       "key": "orderDirection",
@@ -2456,6 +3302,21 @@
             },
             {
               "name": "Add Wallet",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('test success', () => {\r",
+                      "    pm.expect(response.code).to.eql(200);\r",
+                      "    pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "    pm.expect(response.json().success).to.eql(true);\r",
+                      "})"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
               "request": {
                 "auth": {
                   "type": "apikey",
@@ -2506,9 +3367,9 @@
                   ]
                 },
                 "url": {
-                  "raw": "{{URL}}/api/v1/masters/wallets",
+                  "raw": "{{URL}}/masters/wallets",
                   "host": ["{{URL}}"],
-                  "path": ["api", "v1", "masters", "wallets"]
+                  "path": ["masters", "wallets"]
                 }
               },
               "response": []
@@ -2550,9 +3411,9 @@
                   "raw": "{\r\n    \"wallet_name\": \"new wallet name\",\r\n    \"wallet_description\": \"new wallet description\",\r\n    \"is_visible\": 2\r\n}"
                 },
                 "url": {
-                  "raw": "{{URL}}/api/v1/masters/wallets/:id",
+                  "raw": "{{URL}}/masters/wallets/:id",
                   "host": ["{{URL}}"],
-                  "path": ["api", "v1", "masters", "wallets", ":id"],
+                  "path": ["masters", "wallets", ":id"],
                   "variable": [
                     {
                       "key": "id",
@@ -2566,6 +3427,21 @@
             },
             {
               "name": "Change Wallet Logo",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('test success', () => {\r",
+                      "    pm.expect(response.code).to.eql(200);\r",
+                      "    pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "    pm.expect(response.json().success).to.eql(true);\r",
+                      "})"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
               "request": {
                 "auth": {
                   "type": "apikey",
@@ -2606,9 +3482,9 @@
                   ]
                 },
                 "url": {
-                  "raw": "{{URL}}/api/v1/masters/wallets/:id/logo",
+                  "raw": "{{URL}}/masters/wallets/:id/logo",
                   "host": ["{{URL}}"],
-                  "path": ["api", "v1", "masters", "wallets", ":id", "logo"],
+                  "path": ["masters", "wallets", ":id", "logo"],
                   "variable": [
                     {
                       "key": "id",
@@ -2622,6 +3498,29 @@
             },
             {
               "name": "Delete Wallet",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const { Request } = require('postman-collection')\r",
+                      "\r",
+                      "const sendRequestOne = new Request({\r",
+                      "    method: pm.request.method,\r",
+                      "    url: pm.request.url.toString()\r",
+                      "})\r",
+                      "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                      "    pm.test('test success', () => {\r",
+                      "        pm.expect(response.code).to.eql(200);\r",
+                      "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "        pm.expect(response.json().success).to.eql(true);\r",
+                      "    })\r",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
               "request": {
                 "auth": {
                   "type": "apikey",
@@ -2650,9 +3549,9 @@
                   "raw": ""
                 },
                 "url": {
-                  "raw": "{{URL}}/api/v1/masters/wallets/:id",
+                  "raw": "{{URL}}/masters/wallets/:id",
                   "host": ["{{URL}}"],
-                  "path": ["api", "v1", "masters", "wallets", ":id"],
+                  "path": ["masters", "wallets", ":id"],
                   "variable": [
                     {
                       "key": "id",
@@ -2671,6 +3570,21 @@
           "item": [
             {
               "name": "Add Bank",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('test success', () => {\r",
+                      "    pm.expect(response.code).to.eql(200);\r",
+                      "    pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "    pm.expect(response.json().success).to.eql(true);\r",
+                      "})"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
               "request": {
                 "auth": {
                   "type": "apikey",
@@ -2716,15 +3630,38 @@
                   ]
                 },
                 "url": {
-                  "raw": "{{URL}}/api/v1/masters/banks",
+                  "raw": "{{URL}}/masters/banks",
                   "host": ["{{URL}}"],
-                  "path": ["api", "v1", "masters", "banks"]
+                  "path": ["masters", "banks"]
                 }
               },
               "response": []
             },
             {
               "name": "Get Bank Data",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const { Request } = require('postman-collection')\r",
+                      "\r",
+                      "const sendRequestOne = new Request({\r",
+                      "    method: pm.request.method,\r",
+                      "    url: pm.request.url.toString()\r",
+                      "})\r",
+                      "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                      "    pm.test('test success', () => {\r",
+                      "        pm.expect(response.code).to.eql(200);\r",
+                      "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "        pm.expect(response.json().success).to.eql(true);\r",
+                      "    })\r",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
               "protocolProfileBehavior": {
                 "disableBodyPruning": true
               },
@@ -2756,9 +3693,9 @@
                   "formdata": []
                 },
                 "url": {
-                  "raw": "{{URL}}/api/v1/masters/banks",
+                  "raw": "{{URL}}/masters/banks",
                   "host": ["{{URL}}"],
-                  "path": ["api", "v1", "masters", "banks"],
+                  "path": ["masters", "banks"],
                   "query": [
                     {
                       "key": "orderDirection",
@@ -2791,6 +3728,30 @@
             },
             {
               "name": "Update Bank Data",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const { Request } = require('postman-collection')\r",
+                      "\r",
+                      "const sendRequestOne = new Request({\r",
+                      "    method: pm.request.method,\r",
+                      "    url: pm.request.url.toString(),\r",
+                      "    body: pm.request.body\r",
+                      "})\r",
+                      "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                      "    pm.test('test success', () => {\r",
+                      "        pm.expect(response.code).to.eql(200);\r",
+                      "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "        pm.expect(response.json().success).to.eql(true);\r",
+                      "    })\r",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
               "request": {
                 "auth": {
                   "type": "apikey",
@@ -2826,9 +3787,9 @@
                   "raw": "{\r\n    \"bank_name\": \"new bank name\",\r\n    \"is_visible\": 2\r\n}"
                 },
                 "url": {
-                  "raw": "{{URL}}/api/v1/masters/banks/:id",
+                  "raw": "{{URL}}/masters/banks/:id",
                   "host": ["{{URL}}"],
-                  "path": ["api", "v1", "masters", "banks", ":id"],
+                  "path": ["masters", "banks", ":id"],
                   "variable": [
                     {
                       "key": "id",
@@ -2842,6 +3803,29 @@
             },
             {
               "name": "Delete Bank Data",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const { Request } = require('postman-collection')\r",
+                      "\r",
+                      "const sendRequestOne = new Request({\r",
+                      "    method: pm.request.method,\r",
+                      "    url: pm.request.url.toString()\r",
+                      "})\r",
+                      "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                      "    pm.test('test success', () => {\r",
+                      "        pm.expect(response.code).to.eql(200);\r",
+                      "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "        pm.expect(response.json().success).to.eql(true);\r",
+                      "    })\r",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
               "request": {
                 "auth": {
                   "type": "apikey",
@@ -2877,9 +3861,9 @@
                   "raw": "{\r\n    \"bank_name\": \"new bank name\",\r\n    \"is_visible\": 2\r\n}"
                 },
                 "url": {
-                  "raw": "{{URL}}/api/v1/masters/banks/:id",
+                  "raw": "{{URL}}/masters/banks/:id",
                   "host": ["{{URL}}"],
-                  "path": ["api", "v1", "masters", "banks", ":id"],
+                  "path": ["masters", "banks", ":id"],
                   "variable": [
                     {
                       "key": "id",
@@ -2893,6 +3877,21 @@
             },
             {
               "name": "Update Bank Data Logo",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('test success', () => {\r",
+                      "    pm.expect(response.code).to.eql(200);\r",
+                      "    pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "    pm.expect(response.json().success).to.eql(true);\r",
+                      "})"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
               "request": {
                 "auth": {
                   "type": "apikey",
@@ -2933,9 +3932,9 @@
                   ]
                 },
                 "url": {
-                  "raw": "{{URL}}/api/v1/masters/banks/:id/logo",
+                  "raw": "{{URL}}/masters/banks/:id/logo",
                   "host": ["{{URL}}"],
-                  "path": ["api", "v1", "masters", "banks", ":id", "logo"],
+                  "path": ["masters", "banks", ":id", "logo"],
                   "variable": [
                     {
                       "key": "id",
@@ -2949,6 +3948,30 @@
             },
             {
               "name": "Update Bank Data Detail",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const { Request } = require('postman-collection')\r",
+                      "\r",
+                      "const sendRequestOne = new Request({\r",
+                      "    method: pm.request.method,\r",
+                      "    url: pm.request.url.toString(),\r",
+                      "    body: pm.request.body\r",
+                      "})\r",
+                      "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                      "    pm.test('test success', () => {\r",
+                      "        pm.expect(response.code).to.eql(200);\r",
+                      "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "        pm.expect(response.json().success).to.eql(true);\r",
+                      "    })\r",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
               "request": {
                 "auth": {
                   "type": "apikey",
@@ -3000,6 +4023,29 @@
             },
             {
               "name": "Get Bank Data Detail",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const { Request } = require('postman-collection')\r",
+                      "\r",
+                      "const sendRequestOne = new Request({\r",
+                      "    method: pm.request.method,\r",
+                      "    url: pm.request.url.toString()\r",
+                      "})\r",
+                      "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                      "    pm.test('test success', () => {\r",
+                      "        pm.expect(response.code).to.eql(200);\r",
+                      "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "        pm.expect(response.json().success).to.eql(true);\r",
+                      "    })\r",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
               "protocolProfileBehavior": {
                 "disableBodyPruning": true
               },
@@ -3031,9 +4077,9 @@
                   "formdata": []
                 },
                 "url": {
-                  "raw": "{{URL}}/api/v1/masters/banks/:id",
+                  "raw": "{{URL}}/masters/banks/:id",
                   "host": ["{{URL}}"],
-                  "path": ["api", "v1", "masters", "banks", ":id"],
+                  "path": ["masters", "banks", ":id"],
                   "variable": [
                     {
                       "key": "id",
@@ -3047,6 +4093,30 @@
             },
             {
               "name": "Add Bank Data Step",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const { Request } = require('postman-collection')\r",
+                      "\r",
+                      "const sendRequestOne = new Request({\r",
+                      "    method: pm.request.method,\r",
+                      "    url: pm.request.url.toString(),\r",
+                      "    body: pm.request.body\r",
+                      "})\r",
+                      "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                      "    pm.test('test success', () => {\r",
+                      "        pm.expect(response.code).to.eql(200);\r",
+                      "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "        pm.expect(response.json().success).to.eql(true);\r",
+                      "    })\r",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
               "request": {
                 "auth": {
                   "type": "apikey",
@@ -3082,9 +4152,9 @@
                   "raw": "{\r\n    \"step\": \"test\"\r\n}"
                 },
                 "url": {
-                  "raw": "{{URL}}/api/v1/masters/banks/:id/steps",
+                  "raw": "{{URL}}/masters/banks/:id/steps",
                   "host": ["{{URL}}"],
-                  "path": ["api", "v1", "masters", "banks", ":id", "steps"],
+                  "path": ["masters", "banks", ":id", "steps"],
                   "variable": [
                     {
                       "key": "id",
@@ -3098,6 +4168,29 @@
             },
             {
               "name": "Delete Bank Data Step",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const { Request } = require('postman-collection')\r",
+                      "\r",
+                      "const sendRequestOne = new Request({\r",
+                      "    method: pm.request.method,\r",
+                      "    url: pm.request.url.toString()\r",
+                      "})\r",
+                      "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                      "    pm.test('test success', () => {\r",
+                      "        pm.expect(response.code).to.eql(200);\r",
+                      "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "        pm.expect(response.json().success).to.eql(true);\r",
+                      "    })\r",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
               "request": {
                 "auth": {
                   "type": "apikey",
@@ -3120,22 +4213,15 @@
                   ]
                 },
                 "method": "DELETE",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json",
-                    "description": "JSON Type",
-                    "type": "text"
-                  }
-                ],
+                "header": [],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\r\n    \"step\": \"test\"\r\n}"
+                  "raw": ""
                 },
                 "url": {
-                  "raw": "{{URL}}/api/v1/masters/banks/steps/:id",
+                  "raw": "{{URL}}/masters/banks/steps/:id",
                   "host": ["{{URL}}"],
-                  "path": ["api", "v1", "masters", "banks", "steps", ":id"],
+                  "path": ["masters", "banks", "steps", ":id"],
                   "variable": [
                     {
                       "key": "id",
@@ -3154,6 +4240,29 @@
           "item": [
             {
               "name": "Get All Categories",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const { Request } = require('postman-collection')\r",
+                      "\r",
+                      "const sendRequestOne = new Request({\r",
+                      "    method: pm.request.method,\r",
+                      "    url: pm.request.url.toString()\r",
+                      "})\r",
+                      "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                      "    pm.test('test success', () => {\r",
+                      "        pm.expect(response.code).to.eql(200);\r",
+                      "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "        pm.expect(response.json().success).to.eql(true);\r",
+                      "    })\r",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
               "protocolProfileBehavior": {
                 "disableBodyPruning": true
               },
@@ -3185,9 +4294,9 @@
                   "formdata": []
                 },
                 "url": {
-                  "raw": "{{URL}}/api/v1/masters/categories",
+                  "raw": "{{URL}}/masters/categories",
                   "host": ["{{URL}}"],
-                  "path": ["api", "v1", "masters", "categories"],
+                  "path": ["masters", "categories"],
                   "query": [
                     {
                       "key": "orderDirection",
@@ -3220,6 +4329,21 @@
             },
             {
               "name": "Add Category",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('test success', () => {\r",
+                      "    pm.expect(response.code).to.eql(200);\r",
+                      "    pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "    pm.expect(response.json().success).to.eql(true);\r",
+                      "})"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
               "request": {
                 "auth": {
                   "type": "apikey",
@@ -3275,15 +4399,39 @@
                   ]
                 },
                 "url": {
-                  "raw": "{{URL}}/api/v1/masters/categories",
+                  "raw": "{{URL}}/masters/categories",
                   "host": ["{{URL}}"],
-                  "path": ["api", "v1", "masters", "categories"]
+                  "path": ["masters", "categories"]
                 }
               },
               "response": []
             },
             {
               "name": "Update Category",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const { Request } = require('postman-collection')\r",
+                      "\r",
+                      "const sendRequestOne = new Request({\r",
+                      "    method: pm.request.method,\r",
+                      "    url: pm.request.url.toString(),\r",
+                      "    body: pm.request.body\r",
+                      "})\r",
+                      "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                      "    pm.test('test success', () => {\r",
+                      "        pm.expect(response.code).to.eql(200);\r",
+                      "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "        pm.expect(response.json().success).to.eql(true);\r",
+                      "    })\r",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
               "request": {
                 "auth": {
                   "type": "apikey",
@@ -3319,9 +4467,9 @@
                   "raw": "{\r\n    \"category\": \"new category\",\r\n    \"slug\": \"new category slug\",\r\n    \"description\": \"new category description\",\r\n    \"is_visible\": 2\r\n}"
                 },
                 "url": {
-                  "raw": "{{URL}}/api/v1/masters/categories/:id",
+                  "raw": "{{URL}}/masters/categories/:id",
                   "host": ["{{URL}}"],
-                  "path": ["api", "v1", "masters", "categories", ":id"],
+                  "path": ["masters", "categories", ":id"],
                   "variable": [
                     {
                       "key": "id",
@@ -3335,6 +4483,21 @@
             },
             {
               "name": "Change Category Icon",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('test success', () => {\r",
+                      "    pm.expect(response.code).to.eql(200);\r",
+                      "    pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "    pm.expect(response.json().success).to.eql(true);\r",
+                      "})"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
               "request": {
                 "auth": {
                   "type": "apikey",
@@ -3375,9 +4538,9 @@
                   ]
                 },
                 "url": {
-                  "raw": "{{URL}}/api/v1/masters/categories/:id/icon",
+                  "raw": "{{URL}}/masters/categories/:id/icon",
                   "host": ["{{URL}}"],
-                  "path": ["api", "v1", "masters", "categories", ":id", "icon"],
+                  "path": ["masters", "categories", ":id", "icon"],
                   "variable": [
                     {
                       "key": "id",
@@ -3391,6 +4554,29 @@
             },
             {
               "name": "Delete Category",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const { Request } = require('postman-collection')\r",
+                      "\r",
+                      "const sendRequestOne = new Request({\r",
+                      "    method: pm.request.method,\r",
+                      "    url: pm.request.url.toString()\r",
+                      "})\r",
+                      "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                      "    pm.test('test success', () => {\r",
+                      "        pm.expect(response.code).to.eql(200);\r",
+                      "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "        pm.expect(response.json().success).to.eql(true);\r",
+                      "    })\r",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
               "request": {
                 "auth": {
                   "type": "apikey",
@@ -3419,9 +4605,9 @@
                   "raw": ""
                 },
                 "url": {
-                  "raw": "{{URL}}/api/v1/masters/categories/:id",
+                  "raw": "{{URL}}/masters/categories/:id",
                   "host": ["{{URL}}"],
-                  "path": ["api", "v1", "masters", "categories", ":id"],
+                  "path": ["masters", "categories", ":id"],
                   "variable": [
                     {
                       "key": "id",
@@ -3440,6 +4626,29 @@
           "item": [
             {
               "name": "Get All Master Faqs Data",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const { Request } = require('postman-collection')\r",
+                      "\r",
+                      "const sendRequestOne = new Request({\r",
+                      "    method: pm.request.method,\r",
+                      "    url: pm.request.url.toString()\r",
+                      "})\r",
+                      "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                      "    pm.test('test success', () => {\r",
+                      "        pm.expect(response.code).to.eql(200);\r",
+                      "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "        pm.expect(response.json().success).to.eql(true);\r",
+                      "    })\r",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
               "request": {
                 "auth": {
                   "type": "noauth"
@@ -3447,15 +4656,39 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{URL}}/api/v1/masters/faqs",
+                  "raw": "{{URL}}/masters/faqs",
                   "host": ["{{URL}}"],
-                  "path": ["api", "v1", "masters", "faqs"]
+                  "path": ["masters", "faqs"]
                 }
               },
               "response": []
             },
             {
               "name": "Add Master Faq Data",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const { Request } = require('postman-collection')\r",
+                      "\r",
+                      "const sendRequestOne = new Request({\r",
+                      "    method: pm.request.method,\r",
+                      "    url: pm.request.url.toString(),\r",
+                      "    body: pm.request.body\r",
+                      "})\r",
+                      "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                      "    pm.test('test success', () => {\r",
+                      "        pm.expect(response.code).to.eql(200);\r",
+                      "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "        pm.expect(response.json().success).to.eql(true);\r",
+                      "    })\r",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
               "request": {
                 "auth": {
                   "type": "apikey",
@@ -3491,15 +4724,39 @@
                   "raw": "{\r\n    \"question\": \"Hai?\",\r\n    \"answer\": \"Hello\"\r\n}"
                 },
                 "url": {
-                  "raw": "{{URL}}/api/v1/masters/faqs",
+                  "raw": "{{URL}}/masters/faqs",
                   "host": ["{{URL}}"],
-                  "path": ["api", "v1", "masters", "faqs"]
+                  "path": ["masters", "faqs"]
                 }
               },
               "response": []
             },
             {
               "name": "Update Master Faq Data",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const { Request } = require('postman-collection')\r",
+                      "\r",
+                      "const sendRequestOne = new Request({\r",
+                      "    method: pm.request.method,\r",
+                      "    url: pm.request.url.toString(),\r",
+                      "    body: pm.request.body\r",
+                      "})\r",
+                      "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                      "    pm.test('test success', () => {\r",
+                      "        pm.expect(response.code).to.eql(200);\r",
+                      "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "        pm.expect(response.json().success).to.eql(true);\r",
+                      "    })\r",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
               "request": {
                 "auth": {
                   "type": "apikey",
@@ -3535,9 +4792,9 @@
                   "raw": "{\r\n    \"question\": \"Hello?\",\r\n    \"answer\": \"Hi\"\r\n}"
                 },
                 "url": {
-                  "raw": "{{URL}}/api/v1/masters/faqs/:id",
+                  "raw": "{{URL}}/masters/faqs/:id",
                   "host": ["{{URL}}"],
-                  "path": ["api", "v1", "masters", "faqs", ":id"],
+                  "path": ["masters", "faqs", ":id"],
                   "variable": [
                     {
                       "key": "id",
@@ -3551,6 +4808,29 @@
             },
             {
               "name": "Delete Master Faq Data",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const { Request } = require('postman-collection')\r",
+                      "\r",
+                      "const sendRequestOne = new Request({\r",
+                      "    method: pm.request.method,\r",
+                      "    url: pm.request.url.toString()\r",
+                      "})\r",
+                      "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                      "    pm.test('test success', () => {\r",
+                      "        pm.expect(response.code).to.eql(200);\r",
+                      "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "        pm.expect(response.json().success).to.eql(true);\r",
+                      "    })\r",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
               "request": {
                 "auth": {
                   "type": "apikey",
@@ -3575,9 +4855,9 @@
                 "method": "DELETE",
                 "header": [],
                 "url": {
-                  "raw": "{{URL}}/api/v1/masters/faqs/:id",
+                  "raw": "{{URL}}/masters/faqs/:id",
                   "host": ["{{URL}}"],
-                  "path": ["api", "v1", "masters", "faqs", ":id"],
+                  "path": ["masters", "faqs", ":id"],
                   "variable": [
                     {
                       "key": "id",
@@ -3598,6 +4878,29 @@
       "item": [
         {
           "name": "Get All Bank Data",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const { Request } = require('postman-collection')\r",
+                  "\r",
+                  "const sendRequestOne = new Request({\r",
+                  "    method: pm.request.method,\r",
+                  "    url: pm.request.url.toString()\r",
+                  "})\r",
+                  "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                  "    pm.test('test success', () => {\r",
+                  "        pm.expect(response.code).to.eql(200);\r",
+                  "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(true);\r",
+                  "    })\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "protocolProfileBehavior": {
             "disableBodyPruning": true
           },
@@ -3629,15 +4932,38 @@
               "formdata": []
             },
             "url": {
-              "raw": "{{URL}}/api/v1/banks",
+              "raw": "{{URL}}/banks",
               "host": ["{{URL}}"],
-              "path": ["api", "v1", "banks"]
+              "path": ["banks"]
             }
           },
           "response": []
         },
         {
           "name": "Get Single Bank Data",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const { Request } = require('postman-collection')\r",
+                  "\r",
+                  "const sendRequestOne = new Request({\r",
+                  "    method: pm.request.method,\r",
+                  "    url: pm.request.url.toString()\r",
+                  "})\r",
+                  "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                  "    pm.test('test success', () => {\r",
+                  "        pm.expect(response.code).to.eql(200);\r",
+                  "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(true);\r",
+                  "    })\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "protocolProfileBehavior": {
             "disableBodyPruning": true
           },
@@ -3669,9 +4995,9 @@
               "formdata": []
             },
             "url": {
-              "raw": "{{URL}}/api/v1/banks/:id",
+              "raw": "{{URL}}/banks/:id",
               "host": ["{{URL}}"],
-              "path": ["api", "v1", "banks", ":id"],
+              "path": ["banks", ":id"],
               "variable": [
                 {
                   "key": "id",
@@ -3685,6 +5011,30 @@
         },
         {
           "name": "Add Bank User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const { Request } = require('postman-collection')\r",
+                  "\r",
+                  "const sendRequestOne = new Request({\r",
+                  "    method: pm.request.method,\r",
+                  "    url: pm.request.url.toString(),\r",
+                  "    body: pm.request.body\r",
+                  "})\r",
+                  "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                  "    pm.test('test success', () => {\r",
+                  "        pm.expect(response.code).to.eql(200);\r",
+                  "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(true);\r",
+                  "    })\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "auth": {
               "type": "apikey",
@@ -3720,15 +5070,38 @@
               "raw": "{\r\n    \"id_m_banks\": 1,\r\n    \"account_number\": \"49218470\",\r\n    \"account_name\": \"hfkdshflas\"\r\n}"
             },
             "url": {
-              "raw": "{{URL}}/api/v1/banks/users",
+              "raw": "{{URL}}/banks/users",
               "host": ["{{URL}}"],
-              "path": ["api", "v1", "banks", "users"]
+              "path": ["banks", "users"]
             }
           },
           "response": []
         },
         {
           "name": "Get User Bank",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const { Request } = require('postman-collection')\r",
+                  "\r",
+                  "const sendRequestOne = new Request({\r",
+                  "    method: pm.request.method,\r",
+                  "    url: pm.request.url.toString()\r",
+                  "})\r",
+                  "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                  "    pm.test('test success', () => {\r",
+                  "        pm.expect(response.code).to.eql(200);\r",
+                  "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(true);\r",
+                  "    })\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "protocolProfileBehavior": {
             "disableBodyPruning": true
           },
@@ -3760,15 +5133,39 @@
               "raw": ""
             },
             "url": {
-              "raw": "{{URL}}/api/v1/banks/users/get",
+              "raw": "{{URL}}/banks/users/get",
               "host": ["{{URL}}"],
-              "path": ["api", "v1", "banks", "users", "get"]
+              "path": ["banks", "users", "get"]
             }
           },
           "response": []
         },
         {
           "name": "Update Bank User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const { Request } = require('postman-collection')\r",
+                  "\r",
+                  "const sendRequestOne = new Request({\r",
+                  "    method: pm.request.method,\r",
+                  "    url: pm.request.url.toString(),\r",
+                  "    body: pm.request.body,\r",
+                  "})\r",
+                  "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                  "    pm.test('test success', () => {\r",
+                  "        pm.expect(response.code).to.eql(200);\r",
+                  "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(true);\r",
+                  "    })\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "auth": {
               "type": "apikey",
@@ -3804,9 +5201,9 @@
               "raw": "{\r\n    \"id_m_banks\": 1,\r\n    \"account_number\": \"49218470\",\r\n    \"account_name\": \"hfkdshflas\"\r\n}"
             },
             "url": {
-              "raw": "{{URL}}/api/v1/banks/users/:id",
+              "raw": "{{URL}}/banks/users/:id",
               "host": ["{{URL}}"],
-              "path": ["api", "v1", "banks", "users", ":id"],
+              "path": ["banks", "users", ":id"],
               "variable": [
                 {
                   "key": "id",
@@ -3820,6 +5217,29 @@
         },
         {
           "name": "Delete Bank User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const { Request } = require('postman-collection')\r",
+                  "\r",
+                  "const sendRequestOne = new Request({\r",
+                  "    method: pm.request.method,\r",
+                  "    url: pm.request.url.toString()\r",
+                  "})\r",
+                  "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                  "    pm.test('test success', () => {\r",
+                  "        pm.expect(response.code).to.eql(200);\r",
+                  "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(true);\r",
+                  "    })\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "auth": {
               "type": "apikey",
@@ -3848,9 +5268,9 @@
               "raw": ""
             },
             "url": {
-              "raw": "{{URL}}/api/v1/banks/users/:id",
+              "raw": "{{URL}}/banks/users/:id",
               "host": ["{{URL}}"],
-              "path": ["api", "v1", "banks", "users", ":id"],
+              "path": ["banks", "users", ":id"],
               "variable": [
                 {
                   "key": "id",
@@ -3869,6 +5289,30 @@
       "item": [
         {
           "name": "Top Up",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const { Request } = require('postman-collection')\r",
+                  "\r",
+                  "const sendRequestOne = new Request({\r",
+                  "    method: pm.request.method,\r",
+                  "    url: pm.request.url.toString(),\r",
+                  "    body: pm.request.body\r",
+                  "})\r",
+                  "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                  "    pm.test('test success', () => {\r",
+                  "        pm.expect(response.code).to.eql(200);\r",
+                  "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(true);\r",
+                  "    })\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "auth": {
               "type": "apikey",
@@ -3904,15 +5348,31 @@
               "raw": "{\r\n    \"id_m_banks\": 1,\r\n    \"balance_request\": 43221,\r\n    \"balance_transfer\": 46382912\r\n}"
             },
             "url": {
-              "raw": "{{URL}}/api/v1/wallets/topup",
+              "raw": "{{URL}}/wallets/top-up",
               "host": ["{{URL}}"],
-              "path": ["api", "v1", "wallets", "topup"]
+              "path": ["wallets", "top-up"]
             }
           },
           "response": []
         },
         {
           "name": "Upload Proof of Top Up",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "\r",
+                  "pm.test('test success', () => {\r",
+                  "    pm.expect(response.code).to.eql(200);\r",
+                  "    pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "    pm.expect(response.json().success).to.eql(true);\r",
+                  "})"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "auth": {
               "type": "apikey",
@@ -3953,9 +5413,9 @@
               ]
             },
             "url": {
-              "raw": "{{URL}}/api/v1/wallets/topup/:id/image",
+              "raw": "{{URL}}/wallets/topup/:id/image",
               "host": ["{{URL}}"],
-              "path": ["api", "v1", "wallets", "topup", ":id", "image"],
+              "path": ["wallets", "topup", ":id", "image"],
               "variable": [
                 {
                   "key": "id",
@@ -3969,6 +5429,30 @@
         },
         {
           "name": "Withdraw",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const { Request } = require('postman-collection')\r",
+                  "\r",
+                  "const sendRequestOne = new Request({\r",
+                  "    method: pm.request.method,\r",
+                  "    url: pm.request.url.toString(),\r",
+                  "    body: pm.request.body\r",
+                  "})\r",
+                  "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                  "    pm.test('test success', () => {\r",
+                  "        pm.expect(response.code).to.eql(200);\r",
+                  "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(true);\r",
+                  "    })\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "auth": {
               "type": "apikey",
@@ -4004,15 +5488,45 @@
               "raw": "{\r\n    \"id_u_user_bank_account\": 2,\r\n    \"balance_request\": 43221\r\n}"
             },
             "url": {
-              "raw": "{{URL}}/api/v1/wallets/withdraw",
+              "raw": "{{URL}}/wallets/withdraw",
               "host": ["{{URL}}"],
-              "path": ["api", "v1", "wallets", "withdraw"]
+              "path": ["wallets", "withdraw"]
             }
           },
           "response": []
         },
         {
           "name": "Get User Wallet",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [""],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const { Request } = require('postman-collection')\r",
+                  "\r",
+                  "const sendRequestOne = new Request({\r",
+                  "    method: pm.request.method,\r",
+                  "    url: pm.request.url.toString()\r",
+                  "})\r",
+                  "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                  "    pm.test('test success', () => {\r",
+                  "        pm.expect(response.code).to.eql(200);\r",
+                  "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(true);\r",
+                  "    })\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "protocolProfileBehavior": {
             "disableBodyPruning": true
           },
@@ -4044,15 +5558,38 @@
               "raw": ""
             },
             "url": {
-              "raw": "{{URL}}/api/v1/wallets",
+              "raw": "{{URL}}/wallets",
               "host": ["{{URL}}"],
-              "path": ["api", "v1", "wallets"]
+              "path": ["wallets"]
             }
           },
           "response": []
         },
         {
           "name": "Get User Top Up Histories",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const { Request } = require('postman-collection')\r",
+                  "\r",
+                  "const sendRequestOne = new Request({\r",
+                  "    method: pm.request.method,\r",
+                  "    url: pm.request.url.toString()\r",
+                  "})\r",
+                  "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                  "    pm.test('test success', () => {\r",
+                  "        pm.expect(response.code).to.eql(200);\r",
+                  "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(true);\r",
+                  "    })\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "protocolProfileBehavior": {
             "disableBodyPruning": true
           },
@@ -4084,9 +5621,9 @@
               "raw": ""
             },
             "url": {
-              "raw": "{{URL}}/api/v1/wallets/topup/histories",
+              "raw": "{{URL}}/wallets/topup/histories",
               "host": ["{{URL}}"],
-              "path": ["api", "v1", "wallets", "topup", "histories"],
+              "path": ["wallets", "topup", "histories"],
               "query": [
                 {
                   "key": "orderDirection",
@@ -4119,6 +5656,29 @@
         },
         {
           "name": "Get User Withdraw Histories",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const { Request } = require('postman-collection')\r",
+                  "\r",
+                  "const sendRequestOne = new Request({\r",
+                  "    method: pm.request.method,\r",
+                  "    url: pm.request.url.toString()\r",
+                  "})\r",
+                  "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                  "    pm.test('test success', () => {\r",
+                  "        pm.expect(response.code).to.eql(200);\r",
+                  "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(true);\r",
+                  "    })\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "protocolProfileBehavior": {
             "disableBodyPruning": true
           },
@@ -4150,9 +5710,9 @@
               "raw": ""
             },
             "url": {
-              "raw": "{{URL}}/api/v1/wallets/withdraw/histories",
+              "raw": "{{URL}}/wallets/withdraw/histories",
               "host": ["{{URL}}"],
-              "path": ["api", "v1", "wallets", "withdraw", "histories"],
+              "path": ["wallets", "withdraw", "histories"],
               "query": [
                 {
                   "key": "orderDirection",
@@ -4185,6 +5745,29 @@
         },
         {
           "name": "Get Top Up Detail",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const { Request } = require('postman-collection')\r",
+                  "\r",
+                  "const sendRequestOne = new Request({\r",
+                  "    method: pm.request.method,\r",
+                  "    url: pm.request.url.toString()\r",
+                  "})\r",
+                  "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                  "    pm.test('test success', () => {\r",
+                  "        pm.expect(response.code).to.eql(200);\r",
+                  "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(true);\r",
+                  "    })\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "protocolProfileBehavior": {
             "disableBodyPruning": true
           },
@@ -4216,9 +5799,9 @@
               "raw": ""
             },
             "url": {
-              "raw": "{{URL}}/api/v1/wallets/topup/:id",
+              "raw": "{{URL}}/wallets/topup/:id",
               "host": ["{{URL}}"],
-              "path": ["api", "v1", "wallets", "topup", ":id"],
+              "path": ["wallets", "topup", ":id"],
               "variable": [
                 {
                   "key": "id",
@@ -4232,6 +5815,29 @@
         },
         {
           "name": "Get Withdraw Detail",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const { Request } = require('postman-collection')\r",
+                  "\r",
+                  "const sendRequestOne = new Request({\r",
+                  "    method: pm.request.method,\r",
+                  "    url: pm.request.url.toString()\r",
+                  "})\r",
+                  "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                  "    pm.test('test success', () => {\r",
+                  "        pm.expect(response.code).to.eql(200);\r",
+                  "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(true);\r",
+                  "    })\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "protocolProfileBehavior": {
             "disableBodyPruning": true
           },
@@ -4263,9 +5869,9 @@
               "raw": ""
             },
             "url": {
-              "raw": "{{URL}}/api/v1/wallets/withdraw/:id",
+              "raw": "{{URL}}/wallets/withdraw/:id",
               "host": ["{{URL}}"],
-              "path": ["api", "v1", "wallets", "withdraw", ":id"],
+              "path": ["wallets", "withdraw", ":id"],
               "variable": [
                 {
                   "key": "id",
@@ -4279,6 +5885,30 @@
         },
         {
           "name": "Update Withdraw Status",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const { Request } = require('postman-collection')\r",
+                  "\r",
+                  "const sendRequestOne = new Request({\r",
+                  "    method: pm.request.method,\r",
+                  "    url: pm.request.url.toString(),\r",
+                  "    body: pm.request.body\r",
+                  "})\r",
+                  "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                  "    pm.test('test success', () => {\r",
+                  "        pm.expect(response.code).to.eql(200);\r",
+                  "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(true);\r",
+                  "    })\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "auth": {
               "type": "apikey",
@@ -4314,9 +5944,9 @@
               "raw": "{\r\n    \"status\": 1\r\n}"
             },
             "url": {
-              "raw": "{{URL}}/api/v1/wallets/withdraw/:id/status",
+              "raw": "{{URL}}/wallets/withdraw/:id/status",
               "host": ["{{URL}}"],
-              "path": ["api", "v1", "wallets", "withdraw", ":id", "status"],
+              "path": ["wallets", "withdraw", ":id", "status"],
               "variable": [
                 {
                   "key": "id",
@@ -4330,6 +5960,30 @@
         },
         {
           "name": "Update TopUp Status",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const { Request } = require('postman-collection')\r",
+                  "\r",
+                  "const sendRequestOne = new Request({\r",
+                  "    method: pm.request.method,\r",
+                  "    url: pm.request.url.toString(),\r",
+                  "    body: pm.request.body\r",
+                  "})\r",
+                  "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                  "    pm.test('test success', () => {\r",
+                  "        pm.expect(response.code).to.eql(200);\r",
+                  "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(true);\r",
+                  "    })\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "auth": {
               "type": "apikey",
@@ -4365,9 +6019,9 @@
               "raw": "{\r\n    \"status\": 1\r\n}"
             },
             "url": {
-              "raw": "{{URL}}/api/v1/wallets/topup/:id/status",
+              "raw": "{{URL}}/wallets/topup/:id/status",
               "host": ["{{URL}}"],
-              "path": ["api", "v1", "wallets", "topup", ":id", "status"],
+              "path": ["wallets", "topup", ":id", "status"],
               "variable": [
                 {
                   "key": "id",
@@ -4381,6 +6035,29 @@
         },
         {
           "name": "Get All User Top Up",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const { Request } = require('postman-collection')\r",
+                  "\r",
+                  "const sendRequestOne = new Request({\r",
+                  "    method: pm.request.method,\r",
+                  "    url: pm.request.url.toString()\r",
+                  "})\r",
+                  "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                  "    pm.test('test success', () => {\r",
+                  "        pm.expect(response.code).to.eql(200);\r",
+                  "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(true);\r",
+                  "    })\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "protocolProfileBehavior": {
             "disableBodyPruning": true
           },
@@ -4412,9 +6089,9 @@
               "raw": ""
             },
             "url": {
-              "raw": "{{URL}}/api/v1/wallets/topup/users/all",
+              "raw": "{{URL}}/wallets/topup/users/all",
               "host": ["{{URL}}"],
-              "path": ["api", "v1", "wallets", "topup", "users", "all"],
+              "path": ["wallets", "topup", "users", "all"],
               "query": [
                 {
                   "key": "orderDirection",
@@ -4447,6 +6124,29 @@
         },
         {
           "name": "Get All User Withdraw",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const { Request } = require('postman-collection')\r",
+                  "\r",
+                  "const sendRequestOne = new Request({\r",
+                  "    method: pm.request.method,\r",
+                  "    url: pm.request.url.toString()\r",
+                  "})\r",
+                  "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                  "    pm.test('test success', () => {\r",
+                  "        pm.expect(response.code).to.eql(200);\r",
+                  "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(true);\r",
+                  "    })\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "protocolProfileBehavior": {
             "disableBodyPruning": true
           },
@@ -4478,9 +6178,9 @@
               "raw": ""
             },
             "url": {
-              "raw": "{{URL}}/api/v1/wallets/withdraw/users/all",
+              "raw": "{{URL}}/wallets/withdraw/users/all",
               "host": ["{{URL}}"],
-              "path": ["api", "v1", "wallets", "withdraw", "users", "all"],
+              "path": ["wallets", "withdraw", "users", "all"],
               "query": [
                 {
                   "key": "orderDirection",
@@ -4514,113 +6214,33 @@
       ]
     },
     {
-      "name": "chat",
-      "item": [
-        {
-          "name": "Login",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json",
-                "description": "JSON Type",
-                "type": "text"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"username\": \"adminadmin\",\r\n    \"password\": \"password\"\r\n}"
-            },
-            "url": {
-              "raw": "{{URL}}/chat/login",
-              "host": ["{{URL}}"],
-              "path": ["chat", "login"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Chat Users",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{URL}}/chat/users",
-              "host": ["{{URL}}"],
-              "path": ["chat", "users"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Chat Users",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json",
-                "description": "JSON Type",
-                "type": "text"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"id_m_users\": 3,\r\n    \"id_cs\": 4\r\n}"
-            },
-            "url": {
-              "raw": "{{URL}}/chat/users",
-              "host": ["{{URL}}"],
-              "path": ["chat", "users"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Chat Messages",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{URL}}/chat/messages",
-              "host": ["{{URL}}"],
-              "path": ["chat", "messages"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Chat Messages",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json",
-                "description": "JSON Type",
-                "type": "text"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{}\r\n"
-            },
-            "url": {
-              "raw": "{{URL}}/chat/messages",
-              "host": ["{{URL}}"],
-              "path": ["chat", "messages"]
-            }
-          },
-          "response": []
-        }
-      ]
-    },
-    {
       "name": "products",
       "item": [
         {
           "name": "Get All Products",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const { Request } = require('postman-collection')\r",
+                  "\r",
+                  "const sendRequestOne = new Request({\r",
+                  "    method: pm.request.method,\r",
+                  "    url: pm.request.url.toString()\r",
+                  "})\r",
+                  "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                  "    pm.test('test success', () => {\r",
+                  "        pm.expect(response.code).to.eql(200);\r",
+                  "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(true);\r",
+                  "    })\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "protocolProfileBehavior": {
             "disableBodyPruning": true
           },
@@ -4652,9 +6272,9 @@
               "raw": ""
             },
             "url": {
-              "raw": "{{URL}}/api/v1/products",
+              "raw": "{{URL}}/products",
               "host": ["{{URL}}"],
-              "path": ["api", "v1", "products"],
+              "path": ["products"],
               "query": [
                 {
                   "key": "search",
@@ -4693,6 +6313,29 @@
         },
         {
           "name": "Get Products by Category",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const { Request } = require('postman-collection')\r",
+                  "\r",
+                  "const sendRequestOne = new Request({\r",
+                  "    method: pm.request.method,\r",
+                  "    url: pm.request.url.toString()\r",
+                  "})\r",
+                  "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                  "    pm.test('test success', () => {\r",
+                  "        pm.expect(response.code).to.eql(200);\r",
+                  "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(true);\r",
+                  "    })\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "protocolProfileBehavior": {
             "disableBodyPruning": true
           },
@@ -4724,9 +6367,9 @@
               "raw": ""
             },
             "url": {
-              "raw": "{{URL}}/api/v1/products/categories/:categoryId",
+              "raw": "{{URL}}/products/categories/:categoryId",
               "host": ["{{URL}}"],
-              "path": ["api", "v1", "products", "categories", ":categoryId"],
+              "path": ["products", "categories", ":categoryId"],
               "query": [
                 {
                   "key": "limit",
@@ -4775,15 +6418,27 @@
             "exec": [
               "const { Request } = require('postman-collection')\r",
               "\r",
-              "const sendRequest = new Request({\r",
-              "    method: 'GET',\r",
-              "    url: pm.environment.replaceIn(\"{{URL}}:5000/hello-world\")\r",
+              "const sendRequestOne = new Request({\r",
+              "    method: pm.request.method,\r",
+              "    url: pm.request.url.toString()\r",
               "})\r",
-              "pm.sendRequest(sendRequest, (_, response) => {\r",
+              "pm.sendRequest(sendRequestOne, (_, response) => {\r",
               "    pm.test('test server is live', () => {\r",
               "        pm.expect(response.code).to.eql(200);\r",
               "        pm.expect(response.headers.toObject()['content-type']).to.eql('text/plain; charset=utf-8');\r",
               "        pm.expect(response.text()).to.eql('hello world');\r",
+              "    })\r",
+              "});\r",
+              "\r",
+              "const sendRequestTwo = new Request({\r",
+              "    method: pm.request.method,\r",
+              "    url: pm.environment.replaceIn(\"{{URL}}/not-exist\")\r",
+              "})\r",
+              "pm.sendRequest(sendRequestTwo, (_, response) => {\r",
+              "    pm.test('test url no exist', () => {\r",
+              "        pm.expect(response.code).to.eql(404);\r",
+              "        pm.expect(response.headers.toObject()['content-type']).to.eql('text/plain; charset=utf-8');\r",
+              "        pm.expect(response.text()).to.eql('hi');\r",
               "    })\r",
               "});"
             ],
@@ -4795,10 +6450,8 @@
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "{{URL}}:5000/hello-world",
-          "host": ["{{URL}}"],
-          "port": "5000",
-          "path": ["hello-world"]
+          "raw": "{{URL}}",
+          "host": ["{{URL}}"]
         }
       },
       "response": []

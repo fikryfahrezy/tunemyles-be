@@ -5,4 +5,4 @@ public/image/**
 .env
 .eslintcache
 logs/**
-testLab.ts
+src/test-lab

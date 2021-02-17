@@ -15,7 +15,7 @@ afterEach(() => {
 test("test server is live", async () => {
   const response = await server.inject({
     method: "GET",
-    url: "/v2",
+    url: "/api/v2",
   });
 
   expect(response.statusCode).toBe(200);

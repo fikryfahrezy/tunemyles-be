@@ -14,7 +14,7 @@
     "dev": "concurrently \"npm run nodemon\" \"npm run prettier-watch\"",
     "nodemon": "nodemon src/index.ts",
     "prettier-watch": "onchange \"**/*\" -- prettier --write --ignore-unknown {{changed}}",
-    "test": "jest",
+    "test": "jest ./__test__",
     "lint": "eslint src",
     "prettier": "prettier --write",
     "lint-staged": "lint-staged",

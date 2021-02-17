@@ -7,7 +7,7 @@ import fastifySwagger from "fastify-swagger";
 import path from "path";
 import middie from "middie";
 import { components } from "./schemas/definitions.json";
-import helloWorld from "./api/hello-world/routes";
+import api from "./api";
 
 function app(opts: FastifyServerOptions = {}): FastifyInstance {
   const app = fastify(opts);
@@ -63,7 +63,7 @@ function app(opts: FastifyServerOptions = {}): FastifyInstance {
     addToBody: true,
     sharedSchemaId: "#multiPartSchema",
   });
-  app.register(helloWorld);
+  app.register(api, { prefix: "/api" });
 
   return app;
 }

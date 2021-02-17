@@ -11,7 +11,7 @@ async function routes(
   done: HookHandlerDoneFunction
 ): Promise<void> {
   fastify.get(
-    "/v2",
+    "/",
     {
       schema: {
         response: {
