@@ -16,8 +16,10 @@ externalDocs:
   description: Find out more about Swagger
   url: "http://swagger.io"
 servers:
-  - url: "http://localhost:5000/api/v2"
-    description: Development Server
+  - url: "http://172.24.160.214:5000"
+    description: Development Server Base
+  - url: "http://172.24.160.214:5000/api/v2"
+    description: Development Server Api v2
 tags:
   - name: check
     description: Checking Server
@@ -49,13 +51,10 @@ paths:
         "200":
           description: OK
           content: {}
-        "400":
+        "4XX":
           description: Request Error
           content: {}
-        "404":
-          description: Not Found
-          content: {}
-        "500":
+        "5XX":
           description: Sever Error
           content: {}
   /auth/login:
@@ -90,19 +89,13 @@ paths:
                           type:
                             type: integer
                       - $ref: "#/components/schemas/GetToken"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -141,19 +134,13 @@ paths:
                           type:
                             type: integer
                       - $ref: "#/components/schemas/GetToken"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -199,19 +186,13 @@ paths:
                                           properties:
                                             Logo:
                                               $ref: "#/components/schemas/GetMedia"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -247,19 +228,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -288,19 +263,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -332,19 +301,13 @@ paths:
                     $ref: "#/components/schemas/ApiResponse"
                   data:
                     $ref: "#/components/schemas/GetToken"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -377,19 +340,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -415,19 +372,13 @@ paths:
                     $ref: "#/components/schemas/ApiResponse"
                   data:
                     $ref: "#/components/schemas/GetMerchant"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -475,19 +426,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -542,19 +487,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -612,19 +551,13 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/GetProduct"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -687,19 +620,13 @@ paths:
                     $ref: "#/components/schemas/ApiResponse"
                   data:
                     $ref: "#/components/schemas/GetProductId"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -732,19 +659,13 @@ paths:
                     $ref: "#/components/schemas/ApiResponse"
                   data:
                     $ref: "#/components/schemas/GetSingleProduct"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -778,19 +699,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -818,19 +733,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -879,19 +788,13 @@ paths:
                         type: string
                       cover_label:
                         type: string
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -933,19 +836,13 @@ paths:
                     properties:
                       is_visible:
                         type: integer
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -985,19 +882,13 @@ paths:
                     $ref: "#/components/schemas/ApiResponse"
                   data:
                     $ref: "#/components/schemas/GetProductCategory"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -1031,19 +922,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -1082,19 +967,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/GetProductPhoto"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -1122,19 +1001,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -1201,19 +1074,13 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/GetOrder"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -1248,19 +1115,13 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/GetProductOrder"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -1298,19 +1159,13 @@ paths:
                     $ref: "#/components/schemas/ApiResponse"
                   data:
                     $ref: "#/components/schemas/GetProductOrder"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -1372,19 +1227,13 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/GetMerchant"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -1417,19 +1266,13 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/GetMerchant"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -1462,19 +1305,13 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/GetProduct"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -1507,19 +1344,13 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/GetUserTransaction"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -1554,19 +1385,13 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/GetMerchantIncomes"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -1594,19 +1419,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -1636,19 +1455,13 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/GetCart"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -1675,19 +1488,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -1722,19 +1529,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -1762,19 +1563,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -1802,19 +1597,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -1883,19 +1672,13 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/GetOrder"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -1936,19 +1719,13 @@ paths:
                             type: array
                             items:
                               $ref: "#/components/schemas/GetProductOrder"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -1975,19 +1752,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -2020,19 +1791,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -2089,19 +1854,13 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/GetMedia"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -2133,19 +1892,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -2184,19 +1937,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -2223,19 +1970,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -2292,19 +2033,13 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/GetWallet"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -2341,19 +2076,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -2387,19 +2116,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -2427,19 +2150,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -2478,19 +2195,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -2552,19 +2263,13 @@ paths:
                           properties:
                             Logo:
                               $ref: "#/components/schemas/GetMedia"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -2598,19 +2303,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -2659,19 +2358,13 @@ paths:
                               type: array
                               items:
                                 $ref: "#/components/schemas/GetBankUtility"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -2704,19 +2397,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -2744,19 +2431,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -2795,19 +2476,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -2841,19 +2516,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -2888,19 +2557,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -2929,19 +2592,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -2998,19 +2655,13 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/GetCategory"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -3050,19 +2701,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -3096,19 +2741,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -3136,19 +2775,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -3187,19 +2820,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -3228,19 +2855,13 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/GetFaq"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -3265,19 +2886,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -3312,19 +2927,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -3352,19 +2961,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -3403,19 +3006,13 @@ paths:
                               type: array
                               items:
                                 $ref: "#/components/schemas/GetBankUser"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -3460,19 +3057,13 @@ paths:
                               type: array
                               items:
                                 $ref: "#/components/schemas/GetBankUtility"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -3513,19 +3104,13 @@ paths:
                                   properties:
                                     Logo:
                                       $ref: "#/components/schemas/GetMedia"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -3553,19 +3138,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -3600,19 +3179,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -3640,19 +3213,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -3679,19 +3246,13 @@ paths:
                     $ref: "#/components/schemas/ApiResponse"
                   data:
                     $ref: "#/components/schemas/GetUserWallet"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -3720,19 +3281,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -3772,19 +3327,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -3813,19 +3362,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -3883,19 +3426,13 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/GetTopUp"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -3963,19 +3500,13 @@ paths:
                                   properties:
                                     Bank:
                                       $ref: "#/components/schemas/GetBank"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -4045,19 +3576,13 @@ paths:
                                       properties:
                                         full_name:
                                           type: string
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -4112,19 +3637,13 @@ paths:
                                               type: array
                                               items:
                                                 $ref: "#/components/schemas/GetBankUtility"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -4159,19 +3678,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -4207,19 +3720,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -4281,19 +3788,13 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/GetTopUp"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -4353,19 +3854,13 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/GetWithdraw"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -4428,19 +3923,13 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/GetProduct"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -4501,19 +3990,13 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/GetProduct"
-        "400":
+        "4XX":
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApiResponse"
-        "500":
+        "5XX":
           description: Sever Error
           content:
             application/json:
@@ -5449,9 +4932,7 @@ components:
         success:
           type: boolean
         messages:
-          type: array
-          items:
-            type: string
+          type: string
   securitySchemes:
     APIKeyHeader:
       type: apiKey

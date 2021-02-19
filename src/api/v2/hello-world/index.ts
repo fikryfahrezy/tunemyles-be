@@ -15,7 +15,9 @@ async function routes(
     {
       schema: {
         response: {
-          200: { type: "string" },
+          "200": { $ref: "#ApiResponse" },
+          "4xx": { $ref: "#ApiResponse" },
+          "5xx": { $ref: "#ApiResponse" },
         },
       },
     },

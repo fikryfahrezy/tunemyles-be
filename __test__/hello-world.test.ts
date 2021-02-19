@@ -19,8 +19,10 @@ test("test server is live", async () => {
   });
 
   expect(response.statusCode).toBe(200);
-  expect(response.headers["content-type"]).toBe("text/plain; charset=utf-8");
-  expect(response.body).toBe("hello world");
+  expect(response.headers["content-type"]).toBe(
+    "application/json; charset=utf-8"
+  );
+  expect(response.json().message).toBe("hello world");
 });
 
 test("test not found route", async () => {
@@ -30,6 +32,8 @@ test("test not found route", async () => {
   });
 
   expect(response.statusCode).toBe(200);
-  expect(response.headers["content-type"]).toBe("text/plain; charset=utf-8");
-  expect(response.body).toBe("hi");
+  expect(response.headers["content-type"]).toBe(
+    "application/json; charset=utf-8"
+  );
+  expect(response.json().message).toBe("not found");
 });

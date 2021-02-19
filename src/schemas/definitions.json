@@ -431,7 +431,7 @@
         "properties": {
           "code": { "type": "number" },
           "success": { "type": "boolean" },
-          "messages": { "type": "array", "items": { "type": "string" } }
+          "message": { "type": "string" }
         }
       }
     }

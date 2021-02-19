@@ -4,8 +4,13 @@ import fastifyHelmet from "fastify-helmet";
 import fastifyStatic from "fastify-static";
 import fastifyMultipart from "fastify-multipart";
 import fastifySwagger from "fastify-swagger";
+import fastifyRateLimit from "fastify-rate-limit";
+import { fastifyRequestContextPlugin } from "fastify-request-context";
+import fastifySensible from "fastify-sensible";
+import fastifyCookie from "fastify-cookie";
 import path from "path";
 import middie from "middie";
+import inputValidation from "openapi-validator-middleware";
 import { components } from "./schemas/definitions.json";
 import api from "./api";
 
@@ -14,23 +19,49 @@ function app(opts: FastifyServerOptions = {}): FastifyInstance {
   const ENV = process.env.NODE_ENV;
   const schemas = components.schemas as { [k: string]: unknown };
 
+  inputValidation.init("./docs/v2docs-3.yaml", {
+    framework: "fastify",
+  });
+
   for (const key in schemas) {
     if (Object.prototype.hasOwnProperty.call(schemas, key)) {
       const element = schemas[key];
       app.addSchema(element);
     }
   }
+
   app.setNotFoundHandler(function (_, reply) {
-    reply.header("Content-Type", "text/plain; charset=utf-8").send("hi");
+    const data = {
+      code: 404,
+      success: false,
+      message: "not found",
+    };
+    reply.header("Content-Type", "application/json; charset=utf-8").send(data);
   });
+
   app.setErrorHandler(function (error, _, reply) {
-    this.log.error(error.message);
-    reply.status(409).send({ ok: false });
+    const { message, statusCode } = error;
+    this.log.error(message);
+    const status = statusCode || 500;
+    const data = {
+      code: status,
+      success: false,
+      message: message,
+    };
+
+    reply.status(status).send(data);
   });
+
   app.addHook("onClose", (_, done) => {
     done();
   });
+
   app.register(middie);
+  app.register(fastifySensible, { errorHandler: false });
+  app.register(fastifyRateLimit, {
+    max: 100,
+    timeWindow: "1 minute",
+  });
   app.register(fastifyCors);
   app.register(fastifyHelmet, {
     contentSecurityPolicy: {
@@ -41,6 +72,9 @@ function app(opts: FastifyServerOptions = {}): FastifyInstance {
         scriptSrc: [`'self'`, `https: 'unsafe-inline'`],
       },
     },
+  });
+  app.register(fastifyCookie, {
+    secret: process.env.COOKIE_SECRET,
   });
   app.register(fastifySwagger, {
     routePrefix: "/documentation",
@@ -63,6 +97,13 @@ function app(opts: FastifyServerOptions = {}): FastifyInstance {
     addToBody: true,
     sharedSchemaId: "#multiPartSchema",
   });
+  app.register(inputValidation.validate({}));
+  app.register(fastifyRequestContextPlugin, {
+    defaultStoreValues: {
+      user: { id: "system" },
+    },
+  });
+
   app.register(api, { prefix: "/api" });
 
   return app;
