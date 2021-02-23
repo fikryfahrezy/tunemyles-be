@@ -4,17 +4,18 @@ import pino from "pino";
 dotenv.config();
 
 import app from "./app";
-import { sequelizeConnect } from "./config/mysqlDb";
+import { sequelizeConnect } from "./databases/sequelize";
 import logger, { dest } from "./utils/logger";
-import validateEnv from "./utils/validateEnv";
-
-const PORT = process.env.PORT;
-const server = app({ logger: true });
+import validateEnv from "./config/validateEnv";
 
 const start = async () => {
+  const server = app({ logger });
+
   try {
     const { error } = validateEnv(process.env);
     if (error) throw error;
+
+    const PORT = process.env.PORT;
 
     await sequelizeConnect();
     await server.listen({ port: Number(PORT), host: "::" });
@@ -42,10 +43,7 @@ const handler = pino.final(logger, (err, finalLogger, evt) => {
   process.exit(err ? 1 : 0);
 });
 
-process.on("SIGHUP", () => {
-  console.log("hi");
-  dest.reopen();
-});
+process.on("SIGHUP", () => dest.reopen());
 
 // catch all the ways node might exit
 process.on("beforeExit", () => handler(null, "beforeExit"));

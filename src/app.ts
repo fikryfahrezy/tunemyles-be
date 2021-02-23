@@ -8,20 +8,16 @@ import fastifyRateLimit from "fastify-rate-limit";
 import { fastifyRequestContextPlugin } from "fastify-request-context";
 import fastifySensible from "fastify-sensible";
 import fastifyCookie from "fastify-cookie";
+import fastifyAuth from "fastify-auth";
 import path from "path";
 import middie from "middie";
-import inputValidation from "openapi-validator-middleware";
-import { components } from "./schemas/definitions.json";
+import { components } from "./definitions/definitions.json";
 import api from "./api";
 
 function app(opts: FastifyServerOptions = {}): FastifyInstance {
   const app = fastify(opts);
   const ENV = process.env.NODE_ENV;
   const schemas = components.schemas as { [k: string]: unknown };
-
-  inputValidation.init("./docs/v2docs-3.yaml", {
-    framework: "fastify",
-  });
 
   for (const key in schemas) {
     if (Object.prototype.hasOwnProperty.call(schemas, key)) {
@@ -97,10 +93,11 @@ function app(opts: FastifyServerOptions = {}): FastifyInstance {
     addToBody: true,
     sharedSchemaId: "#multiPartSchema",
   });
-  app.register(inputValidation.validate({}));
+  app.register(fastifyAuth);
   app.register(fastifyRequestContextPlugin, {
     defaultStoreValues: {
-      user: { id: "system" },
+      user: null,
+      query: null,
     },
   });
 

@@ -21,7 +21,44 @@ Some responses for the `GET` method are restructured.
 ## [How this application structured?](#how-this-application-structured)
 
 ```
-NOT AVAILABLE NOW
+src                                 ->
+|_  api                             ->
+|   |_  middlewares                 ->
+|   |   |_  [files].ts              ->
+|   |_  models                      ->
+|   |   |_  sql                     ->
+|   |   |   |_ [files].ts           ->
+|   |_  schemas                     ->
+|   |   |_  request                 ->
+|   |   |   |_  body                ->
+|   |   |   |   |_ [files].json     ->
+|   |   |   |_ headers              ->
+|   |   |       |_ [files].json     ->
+|   |   |_  responses               ->
+|   |   |   |_ [files].json         ->
+|   |_  utils                       ->
+|   |   |_  [files].ts              ->
+|   |_  routes                      ->
+|   |   |_ v2                       ->
+|   |   |   |_  [routes]            ->
+|   |   |   |   |_  controller.ts   ->
+|   |   |   |   |_  index.ts        ->
+|   |   |   |   |_  model.ts        ->
+|   |   |   |   |_  service.ts      ->
+|   |   |   |_  index.ts            ->
+|   |_  index.ts                    ->
+|   |_  types.ts                    ->
+|_  config                          ->
+|   |_  validateEnv.ts              ->
+|_  databases                       ->
+|   |_  sequelize.ts                ->
+|_  definitions                     ->
+|   |_ definitions.json             ->
+|_  utils                           ->
+|   |_ logger.ts                    ->
+|_  app.ts                          ->
+|_  index.ts                        ->
+
 ```
 
 ## [How about the others?](#how-about-the-others)
@@ -55,3 +92,7 @@ Adopt the following check (for now):
 - [4.13 Test your middlewares in isolation](https://github.com/goldbergyoni/nodebestpractices#-413-test-your-middlewares-in-isolation)
 
 ### [jbuget / nodejs-clean-architecture-app](https://github.com/jbuget/nodejs-clean-architecture-app)
+
+### [The Clean Code Blog](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
+
+### [fastify / fastify-example-twitter](https://github.com/fastify/fastify-example-twitter)
