@@ -1,6 +1,0 @@
-{
-  "required": ["qty"],
-  "type": "object",
-  "properties": { "qty": { "type": "integer" } },
-  "additionalProperties": false
-}

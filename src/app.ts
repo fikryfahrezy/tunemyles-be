@@ -11,13 +11,13 @@ import fastifyCookie from "fastify-cookie";
 import fastifyAuth from "fastify-auth";
 import path from "path";
 import middie from "middie";
-import { components } from "./definitions/definitions.json";
+import definitions from "./definitions/definitions";
 import api from "./api";
 
 function app(opts: FastifyServerOptions = {}): FastifyInstance {
   const app = fastify(opts);
   const ENV = process.env.NODE_ENV;
-  const schemas = components.schemas as { [k: string]: unknown };
+  const schemas = definitions.components.schemas as { [k: string]: unknown };
 
   for (const key in schemas) {
     if (Object.prototype.hasOwnProperty.call(schemas, key)) {

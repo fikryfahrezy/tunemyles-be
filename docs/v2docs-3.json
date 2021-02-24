@@ -1999,7 +1999,7 @@
         "operationId": "updateMerchantOperation",
         "requestBody": {
           "content": {
-            "applicaiton/json": {
+            "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/UpdateMerchantOperation"
               }

@@ -1,6 +1,0 @@
-{
-  "required": ["step"],
-  "type": "object",
-  "properties": { "step": { "type": "string" } },
-  "additionalProperties": false
-}

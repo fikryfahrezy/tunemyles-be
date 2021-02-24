@@ -1,9 +1,0 @@
-{
-  "type": "object",
-  "properties": {
-    "ApiResponse": {
-      "$ref": "#ApiResponse"
-    },
-    "data": { "$ref": "#GetUserWallet" }
-  }
-}

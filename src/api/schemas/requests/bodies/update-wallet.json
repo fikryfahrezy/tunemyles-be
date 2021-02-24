@@ -1,9 +1,0 @@
-{
-  "type": "object",
-  "properties": {
-    "wallet_name": { "type": "string" },
-    "wallet_description": { "type": "string" },
-    "is_visible": { "type": "integer" }
-  },
-  "additionalProperties": false
-}

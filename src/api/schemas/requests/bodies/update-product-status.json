@@ -1,5 +1,0 @@
-{
-  "type": "object",
-  "properties": { "is_visible": { "type": "integer" } },
-  "additionalProperties": false
-}

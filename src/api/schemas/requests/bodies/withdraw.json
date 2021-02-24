@@ -1,9 +1,0 @@
-{
-  "required": ["balance_request", "id_u_user_bank_account"],
-  "type": "object",
-  "properties": {
-    "id_u_user_bank_account": { "type": "integer" },
-    "balance_request": { "type": "integer" }
-  },
-  "additionalProperties": false
-}

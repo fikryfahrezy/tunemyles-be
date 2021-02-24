@@ -1,6 +1,0 @@
-{
-  "required": ["price_total"],
-  "type": "object",
-  "properties": { "price_total": { "type": "integer" } },
-  "additionalProperties": false
-}

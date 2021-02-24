@@ -1,9 +1,0 @@
-{
-  "required": ["account_name", "account_number"],
-  "type": "object",
-  "properties": {
-    "account_number": { "type": "string" },
-    "account_name": { "type": "string" }
-  },
-  "additionalProperties": false
-}
