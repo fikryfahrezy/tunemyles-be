@@ -72,6 +72,7 @@ src                                 ->  Application main folder.
 - Preferred using `JSON-Schema` rather than using [Fluent Schema](https://www.fastify.io/docs/latest/Fluent-Schema/).
 - [Preferred async function](https://github.com/goldbergyoni/nodebestpractices#-311-use-async-await-avoid-callbacks) if possible.
 - Using [Ajv schema](https://www.fastify.io/docs/latest/Fluent-Schema/) validation for validate client request.
+- Using [ajv-errors](https://www.fastify.io/docs/latest/Validation-and-Serialization/#schemaerrorformatter) to add custom message for client request validation.
 - Preferred [using arrow function](https://github.com/goldbergyoni/nodebestpractices#-312-use-arrow-function-expressions-) if possible and doesn't need `this` keyword. Because in Fastify there is several function handler that more good with `normal function` because use `this` and there is more good using `arrow function`.
 - Preferred using `arrow function` for function handler on [Fastify Hooks](https://www.fastify.io/docs/latest/Hooks/.#preparsing)
 - Preferred using `normal function` for function handler on [Fastify Routes](https://www.fastify.io/docs/latest/Routes/).

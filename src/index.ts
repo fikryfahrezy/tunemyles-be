@@ -9,7 +9,15 @@ import logger, { dest } from "./utils/logger";
 import validateEnv from "./config/validateEnv";
 
 const start = async () => {
-  const server = app({ logger });
+  const server = app({
+    logger,
+    frameworkErrors: function (error, _, res) {
+      res
+        .code(500)
+        .header("Content-Type", "application/json; charset=utf-8")
+        .send({ code: 500, success: false, message: error });
+    },
+  });
 
   try {
     const { error } = validateEnv(process.env);

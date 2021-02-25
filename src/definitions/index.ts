@@ -10,6 +10,47 @@ export default {
         additionalProperties: false,
         required: ["authorization"],
       },
+      RequestToken: {
+        $id: "#RequestToken",
+        required: ["token"],
+        type: "object",
+        properties: {
+          token: { type: "string" },
+        },
+        additionalProperties: false,
+      },
+      RouteIdParam: {
+        $id: "#RouteIdParam",
+        required: ["id"],
+        type: "object",
+        properties: {
+          id: { type: "string" },
+        },
+      },
+      PageQuery: {
+        $id: "#PageQuery",
+        type: "string",
+        default: "1",
+      },
+      SearchQuery: {
+        $id: "#SearchQuery",
+        type: "string",
+        default: "",
+      },
+      OrderDirectionQuery: {
+        $id: "#OrderDirectionQuery",
+        type: "string",
+        default: "DESC",
+        enum: ["ASC", "DESC"],
+      },
+      LimitQuery: {
+        $id: "#LimitQuery",
+        limit: { type: "string", default: "10" },
+      },
+      DateQuery: {
+        $id: "#DateQuery",
+        type: "string",
+      },
       GetToken: {
         $id: "#GetToken",
         type: "object",

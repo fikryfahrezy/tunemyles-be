@@ -17,8 +17,12 @@
   },
   "servers": [
     {
-      "url": "http://localhost:5000/api/v2",
-      "description": "Development Server"
+      "url": "http://172.24.160.214:5000",
+      "description": "Development Server Base"
+    },
+    {
+      "url": "http://172.24.160.214:5000/api/v2",
+      "description": "Development Server Api v2"
     }
   ],
   "tags": [
@@ -41,9 +45,8 @@
         "operationId": "checkServer",
         "responses": {
           "200": { "description": "OK", "content": {} },
-          "400": { "description": "Request Error", "content": {} },
-          "404": { "description": "Not Found", "content": {} },
-          "500": { "description": "Sever Error", "content": {} }
+          "4XX": { "description": "Request Error", "content": {} },
+          "5XX": { "description": "Sever Error", "content": {} }
         }
       }
     },
@@ -88,7 +91,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -96,15 +99,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -157,7 +152,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -165,15 +160,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -250,7 +237,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -258,15 +245,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -307,7 +286,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -315,15 +294,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -359,7 +330,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -367,15 +338,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -418,7 +381,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -426,15 +389,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -477,7 +432,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -485,15 +440,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -528,7 +475,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -536,15 +483,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -594,7 +533,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -602,15 +541,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -666,7 +597,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -674,15 +605,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -756,7 +679,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -764,15 +687,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -840,7 +755,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -848,15 +763,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -899,7 +806,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -907,15 +814,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -957,7 +856,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -965,15 +864,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -1007,7 +898,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -1015,15 +906,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -1085,7 +968,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -1093,15 +976,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -1155,7 +1030,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -1163,15 +1038,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -1225,7 +1092,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -1233,15 +1100,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -1283,7 +1142,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -1291,15 +1150,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -1347,7 +1198,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -1355,15 +1206,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -1398,7 +1241,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -1406,15 +1249,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -1492,7 +1327,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -1500,15 +1335,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -1556,7 +1383,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -1564,15 +1391,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -1623,7 +1442,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -1631,15 +1450,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -1715,7 +1526,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -1723,15 +1534,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -1775,7 +1578,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -1783,15 +1586,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -1836,7 +1631,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -1844,15 +1639,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -1899,7 +1686,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -1907,15 +1694,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -1963,7 +1742,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -1971,15 +1750,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -2016,7 +1787,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -2024,15 +1795,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -2071,7 +1834,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -2079,15 +1842,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -2120,7 +1875,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -2128,15 +1883,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -2180,7 +1927,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -2188,15 +1935,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -2230,7 +1969,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -2238,15 +1977,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -2281,7 +2012,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -2289,15 +2020,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -2376,7 +2099,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -2384,15 +2107,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -2451,7 +2166,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -2459,15 +2174,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -2500,7 +2207,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -2508,15 +2215,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -2557,7 +2256,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -2565,15 +2264,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -2643,7 +2334,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -2651,15 +2342,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -2697,7 +2380,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -2705,15 +2388,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -2761,7 +2436,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -2769,15 +2444,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -2810,7 +2477,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -2818,15 +2485,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -2895,7 +2554,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -2903,15 +2562,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -2951,7 +2602,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -2959,15 +2610,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -3010,7 +2653,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -3018,15 +2661,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -3060,7 +2695,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -3068,15 +2703,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -3124,7 +2751,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -3132,15 +2759,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -3222,7 +2841,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -3230,15 +2849,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -3277,7 +2888,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -3285,15 +2896,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -3364,7 +2967,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -3372,15 +2975,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -3421,7 +3016,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -3429,15 +3024,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -3471,7 +3058,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -3479,15 +3066,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -3535,7 +3114,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -3543,15 +3122,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -3594,7 +3165,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -3602,15 +3173,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -3654,7 +3217,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -3662,15 +3225,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -3706,7 +3261,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -3714,15 +3269,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -3791,7 +3338,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -3799,15 +3346,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -3848,7 +3387,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -3856,15 +3395,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -3907,7 +3438,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -3915,15 +3446,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -3957,7 +3480,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -3965,15 +3488,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -4021,7 +3536,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -4029,15 +3544,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -4075,7 +3582,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -4083,15 +3590,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -4123,7 +3622,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -4131,15 +3630,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -4183,7 +3674,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -4191,15 +3682,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -4233,7 +3716,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -4241,15 +3724,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -4306,7 +3781,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -4314,15 +3789,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -4387,7 +3854,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -4395,15 +3862,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -4465,7 +3924,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -4473,15 +3932,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -4516,7 +3967,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -4524,15 +3975,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -4576,7 +4019,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -4584,15 +4027,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -4626,7 +4061,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -4634,15 +4069,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -4677,7 +4104,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -4685,15 +4112,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -4729,7 +4148,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -4737,15 +4156,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -4794,7 +4205,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -4802,15 +4213,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -4846,7 +4249,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -4854,15 +4257,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -4932,7 +4327,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -4940,15 +4335,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -5043,7 +4430,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -5051,15 +4438,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -5159,7 +4538,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -5167,15 +4546,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -5263,7 +4634,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -5271,15 +4642,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -5323,7 +4686,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -5331,15 +4694,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -5384,7 +4739,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -5392,15 +4747,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -5474,7 +4821,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -5482,15 +4829,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -5563,7 +4902,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -5571,15 +4910,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -5658,7 +4989,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -5666,15 +4997,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {
@@ -5752,7 +5075,7 @@
               }
             }
           },
-          "400": {
+          "4XX": {
             "description": "Request Error",
             "content": {
               "application/json": {
@@ -5760,15 +5083,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiResponse" }
-              }
-            }
-          },
-          "500": {
+          "5XX": {
             "description": "Sever Error",
             "content": {
               "application/json": {

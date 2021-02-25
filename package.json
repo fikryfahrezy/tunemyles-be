@@ -69,6 +69,8 @@
     "yamljs": "^0.3.0"
   },
   "dependencies": {
+    "ajv": "^7.1.1",
+    "ajv-errors": "^2.0.0",
     "bcrypt": "^5.0.0",
     "cls-hooked": "^4.2.2",
     "dotenv": "^8.2.0",

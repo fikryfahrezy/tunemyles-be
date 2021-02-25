@@ -1,5 +1,113 @@
-const requests = {
-  "update-product": {
+const requestParams = {
+  id: { $ref: "#RouteIdParam" },
+  productId: { $ref: "#RouteIdParam" },
+  categoryId: { $ref: "#RouteIdParam" },
+};
+
+const requestQuery = {
+  getProduct: {
+    type: "object",
+    properties: {
+      page: { $ref: "#PageQuery" },
+      search: { $ref: "#SearchQuery" },
+      orderBy: {
+        type: "string",
+        default: "created_at",
+        enum: ["created_at", "product_name", "market_name", "market_address"],
+      },
+      orderDirection: { $ref: "#OrderDirectionParam" },
+    },
+  },
+  getOrder: {
+    type: "object",
+    properties: {
+      page: { $ref: "#PageQuery" },
+      search: { $ref: "#SearchQuery" },
+      orderBy: {
+        type: "string",
+        default: "created_at",
+        enum: ["created_at", "full_name", "phone_number", "address"],
+      },
+      orderDirection: { $ref: "#OrderDirectionParam" },
+    },
+  },
+  merchantList: {
+    type: "object",
+    properties: {
+      page: { $ref: "#PageQuery" },
+      search: { $ref: "#SearchQuery" },
+      orderBy: {
+        type: "string",
+        default: "created_at",
+        enum: [
+          "created_at",
+          "full_name",
+          "phone_number",
+          "market_name",
+          "market_address",
+        ],
+      },
+      orderDirection: { $ref: "#OrderDirectionParam" },
+    },
+  },
+  limit: { $ref: "#LimitQuery" },
+  date: { $ref: "#DateQuery" },
+  year: { $ref: "#DateQuery" },
+};
+
+const requestBody = {
+  updateMerchant: {
+    type: "object",
+    properties: {
+      market_photo: { $ref: "#MultiPartSchema" },
+      no_identity: { type: "string" },
+      market_name: { type: "string" },
+      market_address: { type: "integer", format: "int32" },
+      market_lat: { type: "number" },
+      market_lon: { type: "number" },
+    },
+    additionalProperties: false,
+  },
+  activateMerchant: {
+    type: "object",
+    properties: {
+      no_identity: { type: "string" },
+      identity_photo: { $ref: "#MultiPartSchema" },
+      market_photo: { $ref: "#MultiPartSchema" },
+      market_name: { type: "string" },
+      market_address: { type: "string" },
+      market_lat: { type: "number" },
+      market_lon: { type: "number" },
+      market_close_time: { type: "string" },
+    },
+    additionalProperties: false,
+  },
+  postProduct: {
+    required: [
+      "description",
+      "discount",
+      "price_default",
+      "price_selling",
+      "product_name",
+      "qty",
+    ],
+    properties: {
+      product_name: { type: "string" },
+      description: { type: "string" },
+      cover: { $ref: "#MultiPartSchema" },
+      price_default: { type: "integer", format: "int32" },
+      price_selling: { type: "integer", format: "int32" },
+      qty: { type: "integer", format: "int32" },
+      discount: { type: "integer", format: "int32" },
+      is_visible: {
+        type: "integer",
+        format: "int32",
+        default: 1,
+      },
+    },
+    additionalProperties: false,
+  },
+  updateProduct: {
     type: "object",
     properties: {
       product_name: { type: "string" },
@@ -12,23 +120,36 @@ const requests = {
     },
     additionalProperties: false,
   },
-  "update-product-status": {
+  updateProductCover: {
+    required: ["cover"],
+    properties: {
+      cover: { $ref: "#MultiPartSchema" },
+    },
+  },
+  updateProductStatus: {
     type: "object",
     properties: { is_visible: { type: "integer" } },
     additionalProperties: false,
   },
-  "bind-product-category": {
+  bindProductCategory: {
     required: ["id_category"],
     type: "object",
     properties: { id_category: { type: "integer" } },
     additionalProperties: false,
   },
-  "update-product-order-status": {
+  addProductImage: {
+    type: "object",
+    required: ["image"],
+    properties: {
+      image: { $ref: "#MultiPartSchema" },
+    },
+  },
+  updateProductOrderStatus: {
     type: "object",
     properties: { is_visible: { type: "integer" } },
     additionalProperties: false,
   },
-  "update-merchant-operation": {
+  updateMerchantOperation: {
     type: "object",
     properties: { market_close_time: { type: "string" } },
     additionalProperties: false,
@@ -45,7 +166,7 @@ const responses = {
       data: { $ref: "#GetMerchant" },
     },
   },
-  "merchant-product": {
+  merchantProduct: {
     type: "object",
     properties: {
       ApiResponse: {
@@ -57,7 +178,16 @@ const responses = {
       },
     },
   },
-  "merchant-single-product": {
+  postedProduct: {
+    type: "object",
+    properties: {
+      ApiResponse: {
+        $ref: "#/components/schemas/ApiResponse",
+      },
+      data: { $ref: "#GetProductId" },
+    },
+  },
+  merchantSingleProduct: {
     type: "object",
     properties: {
       ApiResponse: {
@@ -66,7 +196,7 @@ const responses = {
       data: { $ref: "#GetSingleProduct" },
     },
   },
-  "merchant-order": {
+  merchantOrder: {
     type: "object",
     properties: {
       ApiResponse: {
@@ -78,7 +208,7 @@ const responses = {
       },
     },
   },
-  "merchant-order-detail": {
+  merchantOrderDetail: {
     type: "object",
     properties: {
       ApiResponse: {
@@ -92,7 +222,7 @@ const responses = {
       },
     },
   },
-  "merchant-list": {
+  merchantList: {
     type: "object",
     properties: {
       ApiResponse: {
@@ -104,7 +234,7 @@ const responses = {
       },
     },
   },
-  "merchant-transactions": {
+  merchantTransactions: {
     type: "object",
     properties: {
       ApiResponse: {
@@ -118,7 +248,7 @@ const responses = {
       },
     },
   },
-  "merchant-incomes": {
+  merchantIncomes: {
     type: "object",
     properties: {
       ApiResponse: {
@@ -134,4 +264,4 @@ const responses = {
   },
 };
 
-export default { requests, responses };
+export default { requestQuery, requestParams, requestBody, responses };

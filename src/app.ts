@@ -9,6 +9,8 @@ import { fastifyRequestContextPlugin } from "fastify-request-context";
 import fastifySensible from "fastify-sensible";
 import fastifyCookie from "fastify-cookie";
 import fastifyAuth from "fastify-auth";
+import Ajv from "ajv";
+import AjvErrors from "ajv-errors";
 import path from "path";
 import middie from "middie";
 import definitions from "./definitions";
@@ -16,6 +18,8 @@ import api from "./api";
 
 function app(opts: FastifyServerOptions = {}): FastifyInstance {
   const app = fastify(opts);
+  const ajv = new Ajv({ allErrors: true });
+  const ajvErrors = AjvErrors(ajv);
   const ENV = process.env.NODE_ENV;
   const schemas = definitions.components.schemas as { [k: string]: unknown };
 
@@ -25,6 +29,11 @@ function app(opts: FastifyServerOptions = {}): FastifyInstance {
       app.addSchema(element);
     }
   }
+
+  app.setValidatorCompiler(({ schema }) => {
+    const validate = ajvErrors.compile(schema);
+    return validate;
+  });
 
   app.setNotFoundHandler(function (_, reply) {
     const data = {
@@ -91,7 +100,7 @@ function app(opts: FastifyServerOptions = {}): FastifyInstance {
   app.register(fastifyMultipart, {
     throwFileSizeLimit: true,
     addToBody: true,
-    sharedSchemaId: "#multiPartSchema",
+    sharedSchemaId: "#MultiPartSchema",
   });
   app.register(fastifyAuth);
   app.register(fastifyRequestContextPlugin, {
