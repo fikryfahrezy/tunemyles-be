@@ -6,64 +6,79 @@ Version 2 of Tunemyles Back End (not sure if it's supposed to be v2 or not becau
 
 ## [What has changed?](#what-has-changed)
 
-### `Language`
+### [`Language`](#language)
 
 On this v2, the application uses `TypeScript`, while the v1 uses `JavaScript`.
 
-### `Framework`
+### [`Framework`](#framework)
 
 On this v2, the application uses [Fastify](https://www.fastify.io/), while the v1 uses [Koa](https://koajs.com/).
 
-### `REST API`
+### [`REST API`](#rest-api)
 
 Some responses for the `GET` method are restructured.
 
-## [How this application structured?](#how-this-application-structured)
+## [Design Pattern](#design-pattern)
+
+This application is designed with the implementation of the `TDD (Test-driven Development)` and `DDD (Domain-driven Design)`.
+
+## [Folder Structure](#folder-tructure)
 
 ```
-src                                 ->
-|_  api                             ->
-|   |_  middlewares                 ->
-|   |   |_  [files].ts              ->
-|   |_  models                      ->
-|   |   |_  sql                     ->
-|   |   |   |_ [files].ts           ->
-|   |_  schemas                     ->
-|   |   |_  request                 ->
-|   |   |   |_  body                ->
-|   |   |   |   |_ [files].json     ->
-|   |   |   |_ headers              ->
-|   |   |       |_ [files].json     ->
-|   |   |_  responses               ->
-|   |   |   |_ [files].json         ->
-|   |_  utils                       ->
-|   |   |_  [files].ts              ->
-|   |_  routes                      ->
-|   |   |_ v2                       ->
-|   |   |   |_  [routes]            ->
-|   |   |   |   |_  controller.ts   ->
-|   |   |   |   |_  index.ts        ->
-|   |   |   |   |_  model.ts        ->
-|   |   |   |   |_  service.ts      ->
-|   |   |   |_  index.ts            ->
-|   |_  index.ts                    ->
-|   |_  types.ts                    ->
-|_  config                          ->
-|   |_  validateEnv.ts              ->
-|_  databases                       ->
-|   |_  sequelize.ts                ->
-|_  definitions                     ->
-|   |_ definitions.json             ->
-|_  utils                           ->
-|   |_ logger.ts                    ->
-|_  app.ts                          ->
-|_  index.ts                        ->
+src                                 ->  Application main folder.
+|_  api                             ->  Server API folder.
+|   |_  middlewares                 ->  API route middleware folder.
+|   |   |_  [files].ts              ->  Middleware files.
+|   |_  models                      ->  Table or document models folder.
+|   |   |_  [databases]             ->  Specified database.
+|   |   |   |_ [files].ts           ->  Mapped related database table or document.
+|   |_  utils                       ->  API utilities folder.
+|   |   |_  [files].ts              ->  Utility files.
+|   |_  routes                      ->  API routes folder.
+|   |   |_ v2                       ->  API version folder.
+|   |   |   |_  [routes]            ->  Route name folder.
+|   |   |   |   |_  controller.ts   ->  Route controller. Handle client request and send feedback to client.
+|   |   |   |   |_  index.ts        ->  Router for controllers.
+|   |   |   |   |_  model.ts        ->  Bridge for service to interact with a database or other resources.
+|   |   |   |   |_  schemas.ts      ->  Route request and response schema.
+|   |   |   |   |_  service.ts      ->  Route handle logic and process.
+|   |   |   |_  index.ts            ->  Every API version entry point. Register API router for each version.
+|   |_  index.ts                    ->  API starting point. Register API version entry point.
+|   |_  types.ts                    ->  All defined TypeScript types used in API process.
+|_  config                          ->  Global or server configuration variables.
+|   |_  validateEnv.ts              ->  Validation for needed global variable in application.
+|   |_  [files].ts                  ->  Any config files.
+|_  databases                       ->  Databases loader folder.
+|   |_  [files].ts                  ->  Databases connection configuration.
+|_  definitions                     ->  Global JSON-Schema Definition for reusable.
+|   |_  index.ts                    ->  Defined structured JSON-Schemas definition to use as a responses route.
+|_  utils                           ->  Global (server) utility folder.
+|   |_  [files].ts                  ->  Utility config or utility process files.
+|_  app.ts                          ->  Server entry point. Fastify server, plugin registering process, global server hook and decorator, and schema definitions.
+|_  index.ts                        ->  Application starting point. Contain Fastify server startup and server options, global process exception, environment variable loader, and another loader such as database connection.
 
 ```
 
-## [How about the others?](#how-about-the-others)
+## [Application Code Style](#code-style)
 
-## Resources
+- Using `make-promise-safe` on the top of process, refer to [Fastify documentation](https://www.fastify.io/docs/latest/Getting-Started/#your-first-server).
+- Using asynchronous logger, with Pino logger, and handle [Log loss prevention](https://getpino.io/#/docs/asynchronous?id=log-loss-prevention) and [Reopening log files](https://getpino.io/#/docs/help?id=reopening-log-files).
+- Configure Fastify option on root `index.ts`, and other application loader.
+- Use [setNotFoundHandler](https://www.fastify.io/docs/latest/Server/#setnotfoundhandler) to give feedback to client if requested route not exist.
+- Use [setErrorHandler](https://www.fastify.io/docs/latest/Server/#seterrorhandler) to [centralize error handler](https://github.com/goldbergyoni/nodebestpractices#-24-handle-errors-centrally-not-within-a-middleware)
+- Could use [Encapsulation](https://www.fastify.io/docs/latest/Encapsulation/) if necessary, could set in global if all server needed or on the specified plugin or scope.
+- Always call `done()` function after registering [custom plugin](https://www.fastify.io/docs/latest/Plugins/).
+- Using schema (`JSON-Schema`) as recommended by Fastify on they [Core Features](https://www.fastify.io/).
+- Preferred using `JSON-Schema` rather than using [Fluent Schema](https://www.fastify.io/docs/latest/Fluent-Schema/).
+- [Preferred async function](https://github.com/goldbergyoni/nodebestpractices#-311-use-async-await-avoid-callbacks) if possible.
+- Using [Ajv schema](https://www.fastify.io/docs/latest/Fluent-Schema/) validation for validate client request.
+- Preferred [using arrow function](https://github.com/goldbergyoni/nodebestpractices#-312-use-arrow-function-expressions-) if possible and doesn't need `this` keyword. Because in Fastify there is several function handler that more good with `normal function` because use `this` and there is more good using `arrow function`.
+- Preferred using `arrow function` for function handler on [Fastify Hooks](https://www.fastify.io/docs/latest/Hooks/.#preparsing)
+- Preferred using `normal function` for function handler on [Fastify Routes](https://www.fastify.io/docs/latest/Routes/).
+- Authentication route level specified on [preValidation route option](https://www.fastify.io/docs/latest/Routes/).
+- Use `reply.send()` for [response](https://www.fastify.io/docs/latest/Routes/#async-await)
+
+## [Resources](#resources)
 
 This application structure, architecture, or style reference to this source:
 
@@ -84,6 +99,7 @@ Adopt the following check (for now):
 - [2.11 Fail fast, validate arguments using a dedicated library](https://github.com/goldbergyoni/nodebestpractices#-27-use-a-mature-logger-to-increase-error-visibility)
 - [2.12 Always await promises before returning to avoid a partial stacktrace](https://github.com/goldbergyoni/nodebestpractices#-27-use-a-mature-logger-to-increase-error-visibility)
 - [3.11 Use Async Await, avoid callbacks](https://github.com/goldbergyoni/nodebestpractices#-311-use-async-await-avoid-callbacks)
+- [3.12 Use arrow function expressions (=>)](https://github.com/goldbergyoni/nodebestpractices#-312-use-arrow-function-expressions-)
 - [4.1 At the very least, write API (component) testing](https://github.com/goldbergyoni/nodebestpractices#-41-at-the-very-least-write-api-component-testing)
 - [4.2 Include 3 parts in each test name](https://github.com/goldbergyoni/nodebestpractices#-42-include-3-parts-in-each-test-name)
 - [4.3 Structure tests by the AAA pattern](https://github.com/goldbergyoni/nodebestpractices#-43-structure-tests-by-the-aaa-pattern)

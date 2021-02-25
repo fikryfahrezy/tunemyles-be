@@ -11,7 +11,7 @@ import fastifyCookie from "fastify-cookie";
 import fastifyAuth from "fastify-auth";
 import path from "path";
 import middie from "middie";
-import definitions from "./definitions/definitions";
+import definitions from "./definitions";
 import api from "./api";
 
 function app(opts: FastifyServerOptions = {}): FastifyInstance {
