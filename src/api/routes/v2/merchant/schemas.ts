@@ -11,11 +11,19 @@ const requestQuery = {
       page: { $ref: "#PageQuery" },
       search: { $ref: "#SearchQuery" },
       orderBy: {
-        type: "string",
-        default: "created_at",
-        enum: ["created_at", "product_name", "market_name", "market_address"],
+        allOf: [
+          { $ref: "#OrderByQuery" },
+          {
+            enum: [
+              "created_at",
+              "product_name",
+              "market_name",
+              "market_address",
+            ],
+          },
+        ],
       },
-      orderDirection: { $ref: "#OrderDirectionParam" },
+      orderDirection: { $ref: "#OrderDirectionQuery" },
     },
   },
   getOrder: {
@@ -24,11 +32,12 @@ const requestQuery = {
       page: { $ref: "#PageQuery" },
       search: { $ref: "#SearchQuery" },
       orderBy: {
-        type: "string",
-        default: "created_at",
-        enum: ["created_at", "full_name", "phone_number", "address"],
+        allOf: [
+          { $ref: "#OrderByQuery" },
+          { enum: ["created_at", "full_name", "phone_number", "address"] },
+        ],
       },
-      orderDirection: { $ref: "#OrderDirectionParam" },
+      orderDirection: { $ref: "#OrderDirectionQuery" },
     },
   },
   merchantList: {
@@ -37,22 +46,34 @@ const requestQuery = {
       page: { $ref: "#PageQuery" },
       search: { $ref: "#SearchQuery" },
       orderBy: {
-        type: "string",
-        default: "created_at",
-        enum: [
-          "created_at",
-          "full_name",
-          "phone_number",
-          "market_name",
-          "market_address",
+        allOf: [
+          { $ref: "#OrderByQuery" },
+          {
+            enum: [
+              "created_at",
+              "full_name",
+              "phone_number",
+              "market_name",
+              "market_address",
+            ],
+          },
         ],
       },
-      orderDirection: { $ref: "#OrderDirectionParam" },
+      orderDirection: { $ref: "#OrderDirectionQuery" },
     },
   },
-  limit: { $ref: "#LimitQuery" },
-  date: { $ref: "#DateQuery" },
-  year: { $ref: "#DateQuery" },
+  merchantRandom: {
+    type: "object",
+    properties: { limit: { $ref: "#LimitQuery" } },
+  },
+  merchantTransactions: {
+    type: "object",
+    properties: { date: { $ref: "#DateQuery" } },
+  },
+  merchantIncomes: {
+    type: "object",
+    properties: { $ref: "#YearQuery" },
+  },
 };
 
 const requestBody = {

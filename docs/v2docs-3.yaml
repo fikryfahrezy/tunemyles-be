@@ -51,10 +51,10 @@ paths:
         "200":
           description: OK
           content: {}
-        "4XX":
+        4XX:
           description: Request Error
           content: {}
-        "5XX":
+        5XX:
           description: Sever Error
           content: {}
   /auth/login:
@@ -89,13 +89,13 @@ paths:
                           type:
                             type: integer
                       - $ref: "#/components/schemas/GetToken"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -134,13 +134,13 @@ paths:
                           type:
                             type: integer
                       - $ref: "#/components/schemas/GetToken"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -186,13 +186,13 @@ paths:
                                           properties:
                                             Logo:
                                               $ref: "#/components/schemas/GetMedia"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -228,13 +228,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -263,13 +263,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -301,13 +301,13 @@ paths:
                     $ref: "#/components/schemas/ApiResponse"
                   data:
                     $ref: "#/components/schemas/GetToken"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -340,13 +340,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -372,13 +372,13 @@ paths:
                     $ref: "#/components/schemas/ApiResponse"
                   data:
                     $ref: "#/components/schemas/GetMerchant"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -426,13 +426,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -487,13 +487,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -512,31 +512,26 @@ paths:
         - name: page
           in: query
           schema:
-            type: string
-            default: "1"
+            $ref: "#/components/schemas/PageQuery"
         - name: search
           in: query
           description: "Available search field product_name, market_name, market_address"
           schema:
-            type: string
+            $ref: "#/components/schemas/SearchQuery"
         - name: orderBy
           in: query
           schema:
-            type: string
-            default: created_at
-            enum:
-              - created_at
-              - product_name
-              - market_name
-              - market_address
+            allOf:
+              - $ref: "#/components/schemas/OrderByQuery"
+              - enum:
+                  - created_at
+                  - product_name
+                  - market_name
+                  - market_address
         - name: orderDirection
           in: query
           schema:
-            type: string
-            default: DESC
-            enum:
-              - ASC
-              - DESC
+            $ref: "#/components/schemas/OrderDirectionQuery"
       responses:
         "200":
           description: Request Success
@@ -551,13 +546,13 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/GetProduct"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -620,13 +615,13 @@ paths:
                     $ref: "#/components/schemas/ApiResponse"
                   data:
                     $ref: "#/components/schemas/GetProductId"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -659,13 +654,13 @@ paths:
                     $ref: "#/components/schemas/ApiResponse"
                   data:
                     $ref: "#/components/schemas/GetSingleProduct"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -699,13 +694,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -733,13 +728,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -788,13 +783,13 @@ paths:
                         type: string
                       cover_label:
                         type: string
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -836,13 +831,13 @@ paths:
                     properties:
                       is_visible:
                         type: integer
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -882,13 +877,13 @@ paths:
                     $ref: "#/components/schemas/ApiResponse"
                   data:
                     $ref: "#/components/schemas/GetProductCategory"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -922,13 +917,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -967,13 +962,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/GetProductPhoto"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -1001,13 +996,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -1026,40 +1021,35 @@ paths:
         - name: page
           in: query
           schema:
-            type: string
-            default: "1"
+            $ref: "#/components/schemas/PageQuery"
         - name: search
           in: query
           description: "Available search field full_name, phone_number, address"
           schema:
-            type: string
+            $ref: "#/components/schemas/SearchQuery"
         - name: orderBy
           in: query
           schema:
-            type: string
-            default: created_at
-            enum:
-              - created_at
-              - full_name
-              - phone_number
-              - address
+            allOf:
+              - $ref: "#/components/schemas/OrderByQuery"
+              - enum:
+                  - created_at
+                  - full_name
+                  - phone_number
+                  - address
         - name: orderDirection
           in: query
           schema:
-            type: string
-            default: DESC
-            enum:
-              - ASC
-              - DESC
+            $ref: "#/components/schemas/OrderDirectionQuery"
         - name: status
           in: query
           schema:
-            type: string
-            default: "0"
-            enum:
-              - "0"
-              - "1"
-              - "2"
+            allOf:
+              - $ref: "#/components/schemas/StatusQuery"
+              - enum:
+                  - "0"
+                  - "1"
+                  - "2"
       responses:
         "200":
           description: Request Success
@@ -1074,13 +1064,13 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/GetOrder"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -1115,13 +1105,13 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/GetProductOrder"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -1159,13 +1149,13 @@ paths:
                     $ref: "#/components/schemas/ApiResponse"
                   data:
                     $ref: "#/components/schemas/GetProductOrder"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -1185,34 +1175,29 @@ paths:
         - name: page
           in: query
           schema:
-            type: string
-            default: "1"
+            $ref: "#/components/schemas/PageQuery"
         - name: search
           in: query
           description: >-
             Available search field full_name, phone_number, market_name,
             market_address
           schema:
-            type: string
+            $ref: "#/components/schemas/SearchQuery"
         - name: orderBy
           in: query
           schema:
-            type: string
-            default: created_at
-            enum:
-              - created_at
-              - full_name
-              - phone_number
-              - market_name
-              - market_address
+            allOf:
+              - $ref: "#/components/schemas/OrderByQuery"
+              - enum:
+                  - created_at
+                  - full_name
+                  - phone_number
+                  - market_name
+                  - market_address
         - name: orderDirection
           in: query
           schema:
-            type: string
-            default: DESC
-            enum:
-              - ASC
-              - DESC
+            $ref: "#/components/schemas/OrderDirectionQuery"
       responses:
         "200":
           description: Request Success
@@ -1227,13 +1212,13 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/GetMerchant"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -1250,8 +1235,7 @@ paths:
         - name: limit
           in: query
           schema:
-            type: string
-            default: "10"
+            $ref: "#/components/schemas/LimitQuery"
       responses:
         "200":
           description: Request Success
@@ -1266,13 +1250,13 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/GetMerchant"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -1305,13 +1289,13 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/GetProduct"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -1329,7 +1313,7 @@ paths:
           in: query
           description: Available search year-month-date
           schema:
-            type: string
+            $ref: "#/components/schemas/DateQuery"
       responses:
         "200":
           description: Request Success
@@ -1344,13 +1328,13 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/GetUserTransaction"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -1370,7 +1354,7 @@ paths:
           in: query
           description: Available search year
           schema:
-            type: string
+            $ref: "#/components/schemas/YearQuery"
       responses:
         "200":
           description: Request Success
@@ -1385,13 +1369,13 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/GetMerchantIncomes"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -1419,13 +1403,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -1455,13 +1439,13 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/GetCart"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -1488,13 +1472,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -1529,13 +1513,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -1563,13 +1547,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -1597,13 +1581,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -1623,41 +1607,36 @@ paths:
         - name: page
           in: query
           schema:
-            type: string
-            default: "1"
+            $ref: "#/components/schemas/PageQuery"
         - name: search
           in: query
           description: "Available search full_name, phone_number, address"
           schema:
-            type: string
+            $ref: "#/components/schemas/SearchQuery"
         - name: orderBy
           in: query
           schema:
-            type: string
-            default: created_at
-            enum:
-              - created_at
-              - full_name
-              - phone_number
-              - address
+            allOf:
+              - $ref: "#/components/schemas/OrderByQuery"
+              - enum:
+                  - created_at
+                  - full_name
+                  - phone_number
+                  - address
         - name: orderDirection
           in: query
           schema:
-            type: string
-            default: DESC
-            enum:
-              - ASC
-              - DESC
+            $ref: "#/components/schemas/OrderDirectionQuery"
         - name: status
           in: query
           schema:
-            type: string
-            default: "0"
-            enum:
-              - "0"
-              - "1"
-              - "2"
-              - "3"
+            allOf:
+              - $ref: "#/components/schemas/StatusQuery"
+              - enum:
+                  - "0"
+                  - "1"
+                  - "2"
+                  - "3"
       responses:
         "200":
           description: Request Success
@@ -1672,13 +1651,13 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/GetOrder"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -1719,13 +1698,13 @@ paths:
                             type: array
                             items:
                               $ref: "#/components/schemas/GetProductOrder"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -1752,13 +1731,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -1791,13 +1770,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -1817,29 +1796,25 @@ paths:
         - name: page
           in: query
           schema:
-            type: string
-            default: "1"
+            $ref: "#/components/schemas/PageQuery"
         - name: search
           in: query
           description: Available search field label
           schema:
-            type: string
+            $ref: "#/components/schemas/SearchQuery"
         - name: orderBy
           in: query
           schema:
-            type: string
-            default: created_at
-            enum:
-              - created_at
-              - label
+            allOf:
+              - $ref: "#/components/schemas/OrderByQuery"
+              - enum:
+                  - created_at
+                  - label
         - name: orderDirection
           in: query
           schema:
-            type: string
-            default: DESC
-            enum:
-              - ASC
-              - DESC
+            allOf:
+              - $ref: "#/components/schemas/OrderDirectionQuery"
       responses:
         "200":
           description: Request Success
@@ -1854,13 +1829,13 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/GetMedia"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -1892,13 +1867,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -1937,13 +1912,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -1970,13 +1945,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -1995,30 +1970,25 @@ paths:
         - name: page
           in: query
           schema:
-            type: string
-            default: "1"
+            $ref: "#/components/schemas/PageQuery"
         - name: search
           in: query
           description: "Available search field wallet_name, wallet_description"
           schema:
-            type: string
+            $ref: "#/components/schemas/SearchQuery"
         - name: orderBy
           in: query
           schema:
-            type: string
-            default: created_at
-            enum:
-              - created_at
-              - wallet_name
-              - wallet_description
+            allOf:
+              - $ref: "#/components/schemas/OrderByQuery"
+              - enum:
+                  - created_at
+                  - wallet_name
+                  - wallet_description
         - name: orderDirection
           in: query
           schema:
-            type: string
-            default: DESC
-            enum:
-              - ASC
-              - DESC
+            $ref: "#/components/schemas/OrderDirectionQuery"
       responses:
         "200":
           description: Request Success
@@ -2033,13 +2003,13 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/GetWallet"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -2076,13 +2046,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -2116,13 +2086,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -2150,13 +2120,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -2195,13 +2165,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -2220,29 +2190,24 @@ paths:
         - name: page
           in: query
           schema:
-            type: string
-            default: "1"
+            $ref: "#/components/schemas/PageQuery"
         - name: search
           in: query
           description: Available search field bank_name
           schema:
-            type: string
+            $ref: "#/components/schemas/SearchQuery"
         - name: orderBy
           in: query
           schema:
-            type: string
-            default: created_at
-            enum:
-              - created_at
-              - bank_name
+            allOf:
+              - $ref: "#/components/schemas/OrderByQuery"
+              - enum:
+                  - created_at
+                  - bank_name
         - name: orderDirection
           in: query
           schema:
-            type: string
-            default: DESC
-            enum:
-              - ASC
-              - DESC
+            $ref: "#/components/schemas/OrderDirectionQuery"
       responses:
         "200":
           description: Request Success
@@ -2263,13 +2228,13 @@ paths:
                           properties:
                             Logo:
                               $ref: "#/components/schemas/GetMedia"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -2303,13 +2268,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -2358,13 +2323,13 @@ paths:
                               type: array
                               items:
                                 $ref: "#/components/schemas/GetBankUtility"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -2397,13 +2362,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -2431,13 +2396,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -2476,13 +2441,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -2516,13 +2481,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -2557,13 +2522,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -2592,13 +2557,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -2617,30 +2582,25 @@ paths:
         - name: page
           in: query
           schema:
-            type: string
-            default: "1"
+            $ref: "#/components/schemas/PageQuery"
         - name: search
           in: query
           description: "Available search field wallet_name, wallet_description"
           schema:
-            type: string
+            $ref: "#/components/schemas/SearchQuery"
         - name: orderBy
           in: query
           schema:
-            type: string
-            default: created_at
-            enum:
-              - created_at
-              - wallet_name
-              - wallet_description
+            allOf:
+              - $ref: "#/components/schemas/OrderByQuery"
+              - enum:
+                  - created_at
+                  - category
+                  - description
         - name: orderDirection
           in: query
           schema:
-            type: string
-            default: DESC
-            enum:
-              - ASC
-              - DESC
+            $ref: "#/components/schemas/OrderDirectionQuery"
       responses:
         "200":
           description: Request Success
@@ -2655,13 +2615,13 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/GetCategory"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -2701,13 +2661,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -2741,13 +2701,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -2775,13 +2735,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -2820,13 +2780,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -2855,13 +2815,13 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/GetFaq"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -2886,13 +2846,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -2927,13 +2887,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -2961,13 +2921,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -3006,13 +2966,13 @@ paths:
                               type: array
                               items:
                                 $ref: "#/components/schemas/GetBankUser"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -3057,13 +3017,13 @@ paths:
                               type: array
                               items:
                                 $ref: "#/components/schemas/GetBankUtility"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -3104,13 +3064,13 @@ paths:
                                   properties:
                                     Logo:
                                       $ref: "#/components/schemas/GetMedia"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -3138,13 +3098,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -3179,13 +3139,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -3213,13 +3173,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -3246,13 +3206,13 @@ paths:
                     $ref: "#/components/schemas/ApiResponse"
                   data:
                     $ref: "#/components/schemas/GetUserWallet"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -3281,13 +3241,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -3327,13 +3287,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -3362,13 +3322,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -3388,30 +3348,25 @@ paths:
         - name: page
           in: query
           schema:
-            type: string
-            default: "1"
+            $ref: "#/components/schemas/PageQuery"
         - name: search
           in: query
           description: "Available search field balance_request, balance_transfer"
           schema:
-            type: string
+            $ref: "#/components/schemas/SearchQuery"
         - name: orderBy
           in: query
           schema:
-            type: string
-            default: created_at
-            enum:
-              - created_at
-              - balance_request
-              - balance_transfer
+            allOf:
+              - $ref: "#/components/schemas/OrderByQuery"
+              - enum:
+                  - created_at
+                  - balance_request
+                  - balance_transfer
         - name: orderDirection
           in: query
           schema:
-            type: string
-            default: DESC
-            enum:
-              - ASC
-              - DESC
+            $ref: "#/components/schemas/OrderDirectionQuery"
       responses:
         "200":
           description: Request Success
@@ -3426,13 +3381,13 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/GetTopUp"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -3451,29 +3406,24 @@ paths:
         - name: page
           in: query
           schema:
-            type: string
-            default: "1"
+            $ref: "#/components/schemas/PageQuery"
         - name: search
           in: query
           description: Available search field balance_request
           schema:
-            type: string
+            $ref: "#/components/schemas/SearchQuery"
         - name: orderBy
           in: query
           schema:
-            type: string
-            default: created_at
-            enum:
-              - created_at
-              - balance_request
+            allOf:
+              - $ref: "#/components/schemas/OrderByQuery"
+              - enum:
+                  - created_at
+                  - balance_request
         - name: orderDirection
           in: query
           schema:
-            type: string
-            default: DESC
-            enum:
-              - ASC
-              - DESC
+            $ref: "#/components/schemas/OrderDirectionQuery"
       responses:
         "200":
           description: Request Success
@@ -3500,13 +3450,13 @@ paths:
                                   properties:
                                     Bank:
                                       $ref: "#/components/schemas/GetBank"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -3576,13 +3526,13 @@ paths:
                                       properties:
                                         full_name:
                                           type: string
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -3637,13 +3587,13 @@ paths:
                                               type: array
                                               items:
                                                 $ref: "#/components/schemas/GetBankUtility"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -3678,13 +3628,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -3720,13 +3670,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -3747,33 +3697,29 @@ paths:
           in: query
           description: "Available search field balance_request, balance_transfer"
           schema:
-            type: string
+            $ref: "#/components/schemas/SearchQuery"
         - name: orderBy
           in: query
           schema:
-            type: string
-            default: created_at
-            enum:
-              - created_at
-              - balance_request
-              - balance_transfer
+            allOf:
+              - $ref: "#/components/schemas/OrderByQuery"
+              - enum:
+                  - created_at
+                  - balance_request
+                  - balance_transfer
         - name: orderDirection
           in: query
           schema:
-            type: string
-            default: DESC
-            enum:
-              - ASC
-              - DESC
+            $ref: "#/components/schemas/OrderDirectionQuery"
         - name: status
           in: query
           schema:
-            type: string
-            default: "0"
-            enum:
-              - "0"
-              - "1"
-              - "2"
+            allOf:
+              - $ref: "#/components/schemas/StatusQuery"
+              - enum:
+                  - "0"
+                  - "1"
+                  - "2"
       responses:
         "200":
           description: Request Success
@@ -3788,13 +3734,13 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/GetTopUp"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -3814,32 +3760,28 @@ paths:
           in: query
           description: Available search field balance_request
           schema:
-            type: string
+            $ref: "#/components/schemas/SearchQuery"
         - name: orderBy
           in: query
           schema:
-            type: string
-            default: created_at
-            enum:
-              - created_at
-              - balance_request
+            allOf:
+              - $ref: "#/components/schemas/OrderByQuery"
+              - enum:
+                  - created_at
+                  - balance_request
         - name: orderDirection
           in: query
           schema:
-            type: string
-            default: DESC
-            enum:
-              - ASC
-              - DESC
+            $ref: "#/components/schemas/OrderDirectionQuery"
         - name: status
           in: query
           schema:
-            type: string
-            default: "0"
-            enum:
-              - "0"
-              - "1"
-              - "2"
+            allOf:
+              - $ref: "#/components/schemas/StatusQuery"
+              - enum:
+                  - "0"
+                  - "1"
+                  - "2"
       responses:
         "200":
           description: Request Success
@@ -3854,13 +3796,13 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/GetWithdraw"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -3879,8 +3821,7 @@ paths:
         - name: page
           in: query
           schema:
-            type: string
-            default: "1"
+            $ref: "#/components/schemas/PageQuery"
         - name: limit
           in: query
           schema:
@@ -3890,25 +3831,21 @@ paths:
           in: query
           description: "Available search field product_name, market_name, market_address"
           schema:
-            type: string
+            $ref: "#/components/schemas/SearchQuery"
         - name: orderBy
           in: query
           schema:
-            type: string
-            default: created_at
-            enum:
-              - created_at
-              - product_name
-              - market_name
-              - market_address
+            allOf:
+              - $ref: "#/components/schemas/OrderByQuery"
+              - enum:
+                  - created_at
+                  - product_name
+                  - market_name
+                  - market_address
         - name: orderDirection
           in: query
           schema:
-            type: string
-            default: DESC
-            enum:
-              - ASC
-              - DESC
+            $ref: "#/components/schemas/OrderDirectionQuery"
       responses:
         "200":
           description: Request Success
@@ -3923,13 +3860,13 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/GetProduct"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -3951,8 +3888,7 @@ paths:
         - name: page
           in: query
           schema:
-            type: string
-            default: "1"
+            $ref: "#/components/schemas/PageQuery"
         - name: limit
           in: query
           schema:
@@ -3961,21 +3897,17 @@ paths:
         - name: orderBy
           in: query
           schema:
-            type: string
-            default: created_at
-            enum:
-              - created_at
-              - product_name
-              - market_name
-              - market_address
+            allOf:
+              - $ref: "#/components/schemas/OrderByQuery"
+              - enum:
+                  - created_at
+                  - product_name
+                  - market_name
+                  - market_address
         - name: orderDirection
           in: query
           schema:
-            type: string
-            default: DESC
-            enum:
-              - ASC
-              - DESC
+            $ref: "#/components/schemas/OrderDirectionQuery"
       responses:
         "200":
           description: Request Success
@@ -3990,13 +3922,13 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/GetProduct"
-        "4XX":
+        4XX:
           description: Request Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiResponse"
-        "5XX":
+        5XX:
           description: Sever Error
           content:
             application/json:
@@ -4004,6 +3936,268 @@ paths:
                 $ref: "#/components/schemas/ApiResponse"
 components:
   schemas:
+    IdParam:
+      type: string
+    PageQuery:
+      type: string
+      default: "1"
+    SearchQuery:
+      type: string
+      default: ""
+    OrderByQuery:
+      type: string
+      default: created_at
+    OrderDirectionQuery:
+      type: string
+      default: DESC
+      enum:
+        - ASC
+        - DESC
+    LimitQuery:
+      type: string
+      default: "10"
+    DateQuery:
+      type: string
+    YearQuery:
+      type: string
+    StatusQuery:
+      type: string
+      default: "0"
+    PostLogin:
+      required:
+        - password
+        - username
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+    PostRegister:
+      required:
+        - address
+        - full_name
+        - password
+        - phone_number
+        - username
+      type: object
+      properties:
+        full_name:
+          type: string
+        username:
+          type: string
+        password:
+          type: string
+        phone_number:
+          type: string
+        address:
+          type: string
+    PostForgotPassword:
+      required:
+        - phone_number
+      type: object
+      properties:
+        phone_number:
+          type: string
+    PostAddToCart:
+      required:
+        - id_m_products
+        - id_merchant
+        - qty
+      type: object
+      properties:
+        qty:
+          type: integer
+        id_merchant:
+          type: integer
+        id_m_products:
+          type: integer
+    PostProductCategory:
+      required:
+        - id_category
+      type: object
+      properties:
+        id_category:
+          type: integer
+    PostReviewTransaction:
+      required:
+        - rating
+        - review
+      type: object
+      properties:
+        rating:
+          type: integer
+        review:
+          type: string
+    PostBankStep:
+      required:
+        - step
+      type: object
+      properties:
+        step:
+          type: string
+    PostBankUser:
+      required:
+        - account_name
+        - account_number
+        - id_m_banks
+      type: object
+      properties:
+        id_m_banks:
+          type: integer
+        account_number:
+          type: string
+        account_name:
+          type: string
+    PostTopUp:
+      required:
+        - balance_request
+        - balance_transfer
+        - id_m_banks
+      type: object
+      properties:
+        id_m_banks:
+          type: integer
+        balance_request:
+          type: integer
+        balance_transfer:
+          type: integer
+    PostWithdraw:
+      required:
+        - balance_request
+        - id_u_user_bank_account
+      type: object
+      properties:
+        id_u_user_bank_account:
+          type: integer
+        balance_request:
+          type: integer
+    PostCheckout:
+      required:
+        - price_total
+      type: object
+      properties:
+        price_total:
+          type: integer
+    PostFaq:
+      required:
+        - answer
+        - question
+      type: object
+      properties:
+        question:
+          type: string
+        answer:
+          type: string
+    UpdateResetPassword:
+      required:
+        - new_password
+      type: object
+      properties:
+        new_password:
+          type: string
+    UpdateProduct:
+      type: object
+      properties:
+        product_name:
+          type: string
+        description:
+          type: string
+        price_default:
+          type: integer
+        price_selling:
+          type: integer
+        qty:
+          type: integer
+        discount:
+          type: integer
+        is_visible:
+          type: integer
+    UpdateProductStatus:
+      type: object
+      properties:
+        is_visible:
+          type: integer
+    UpdateProductOrderStatus:
+      type: object
+      properties:
+        status:
+          type: integer
+    UpdateProductQty:
+      required:
+        - qty
+      type: object
+      properties:
+        qty:
+          type: integer
+    UpdateWallet:
+      type: object
+      properties:
+        wallet_name:
+          type: string
+        wallet_description:
+          type: string
+        is_visible:
+          type: integer
+    UpdateBank:
+      type: object
+      properties:
+        bank_name:
+          type: string
+        is_visible:
+          type: integer
+    UpdateBankDetail:
+      required:
+        - account_name
+        - account_number
+      type: object
+      properties:
+        account_number:
+          type: string
+        account_name:
+          type: string
+    UpdateCategory:
+      type: object
+      properties:
+        category:
+          type: string
+        slug:
+          type: string
+        description:
+          type: string
+        is_visible:
+          type: integer
+    UpdateBankUser:
+      type: object
+      properties:
+        id_m_banks:
+          type: integer
+        account_number:
+          type: string
+        account_name:
+          type: string
+    UpdateTopUpStatus:
+      type: object
+      properties:
+        status:
+          type: integer
+    UpdateWithdrawStatus:
+      type: object
+      properties:
+        status:
+          type: integer
+    UpdateMerchantOperation:
+      type: object
+      properties:
+        market_close_time:
+          type: string
+    UpdateFaq:
+      type: object
+      properties:
+        question:
+          type: string
+        answer:
+          type: string
     GetToken:
       type: object
       properties:
@@ -4689,241 +4883,6 @@ components:
       properties:
         product_id:
           type: integer
-    PostLogin:
-      required:
-        - password
-        - username
-      type: object
-      properties:
-        username:
-          type: string
-        password:
-          type: string
-    PostRegister:
-      required:
-        - address
-        - full_name
-        - password
-        - phone_number
-        - username
-      type: object
-      properties:
-        full_name:
-          type: string
-        username:
-          type: string
-        password:
-          type: string
-        phone_number:
-          type: string
-        address:
-          type: string
-    PostForgotPassword:
-      required:
-        - phone_number
-      type: object
-      properties:
-        phone_number:
-          type: string
-    PostAddToCart:
-      required:
-        - id_m_products
-        - id_merchant
-        - qty
-      type: object
-      properties:
-        qty:
-          type: integer
-        id_merchant:
-          type: integer
-        id_m_products:
-          type: integer
-    PostProductCategory:
-      required:
-        - id_category
-      type: object
-      properties:
-        id_category:
-          type: integer
-    PostReviewTransaction:
-      required:
-        - rating
-        - review
-      type: object
-      properties:
-        rating:
-          type: integer
-        review:
-          type: string
-    PostBankStep:
-      required:
-        - step
-      type: object
-      properties:
-        step:
-          type: string
-    PostBankUser:
-      required:
-        - account_name
-        - account_number
-        - id_m_banks
-      type: object
-      properties:
-        id_m_banks:
-          type: integer
-        account_number:
-          type: string
-        account_name:
-          type: string
-    PostTopUp:
-      required:
-        - balance_request
-        - balance_transfer
-        - id_m_banks
-      type: object
-      properties:
-        id_m_banks:
-          type: integer
-        balance_request:
-          type: integer
-        balance_transfer:
-          type: integer
-    PostWithdraw:
-      required:
-        - balance_request
-        - id_u_user_bank_account
-      type: object
-      properties:
-        id_u_user_bank_account:
-          type: integer
-        balance_request:
-          type: integer
-    PostCheckout:
-      required:
-        - price_total
-      type: object
-      properties:
-        price_total:
-          type: integer
-    PostFaq:
-      required:
-        - answer
-        - question
-      type: object
-      properties:
-        question:
-          type: string
-        answer:
-          type: string
-    UpdateResetPassword:
-      required:
-        - new_password
-      type: object
-      properties:
-        new_password:
-          type: string
-    UpdateProduct:
-      type: object
-      properties:
-        product_name:
-          type: string
-        description:
-          type: string
-        price_default:
-          type: integer
-        price_selling:
-          type: integer
-        qty:
-          type: integer
-        discount:
-          type: integer
-        is_visible:
-          type: integer
-    UpdateProductStatus:
-      type: object
-      properties:
-        is_visible:
-          type: integer
-    UpdateProductOrderStatus:
-      type: object
-      properties:
-        status:
-          type: integer
-    UpdateProductQty:
-      required:
-        - qty
-      type: object
-      properties:
-        qty:
-          type: integer
-    UpdateWallet:
-      type: object
-      properties:
-        wallet_name:
-          type: string
-        wallet_description:
-          type: string
-        is_visible:
-          type: integer
-    UpdateBank:
-      type: object
-      properties:
-        bank_name:
-          type: string
-        is_visible:
-          type: integer
-    UpdateBankDetail:
-      required:
-        - account_name
-        - account_number
-      type: object
-      properties:
-        account_number:
-          type: string
-        account_name:
-          type: string
-    UpdateCategory:
-      type: object
-      properties:
-        category:
-          type: string
-        slug:
-          type: string
-        description:
-          type: string
-        is_visible:
-          type: integer
-    UpdateBankUser:
-      type: object
-      properties:
-        id_m_banks:
-          type: integer
-        account_number:
-          type: string
-        account_name:
-          type: string
-    UpdateTopUpStatus:
-      type: object
-      properties:
-        status:
-          type: integer
-    UpdateWithdrawStatus:
-      type: object
-      properties:
-        status:
-          type: integer
-    UpdateMerchantOperation:
-      type: object
-      properties:
-        market_close_time:
-          type: string
-    UpdateFaq:
-      type: object
-      properties:
-        question:
-          type: string
-        answer:
-          type: string
     ApiResponse:
       type: object
       properties:

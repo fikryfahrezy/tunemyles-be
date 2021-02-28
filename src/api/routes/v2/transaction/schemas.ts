@@ -1,5 +1,29 @@
-const requests = {
-  "review-transaction": {
+const requestParams = {
+  id: { $ref: "#RouteIdParam" },
+};
+
+const requestQuery = {
+  getTransaction: {
+    type: "object",
+    properties: {
+      page: { $ref: "#PageQuery" },
+      search: { $ref: "#SearchQuery" },
+      orderBy: {
+        allOf: [
+          { $ref: "#OrderByQuery" },
+          { enum: ["created_at", "full_name", "phone_number", "address"] },
+        ],
+      },
+      orderDirection: { $ref: "#OrderDirectionQuery" },
+      status: {
+        allOf: [{ $ref: "#StatusQuery" }, { enum: ["0", "1", "2", "3"] }],
+      },
+    },
+  },
+};
+
+const requestBody = {
+  reviewTransaction: {
     required: ["rating", "review"],
     type: "object",
     properties: {
@@ -23,7 +47,7 @@ const responses = {
       },
     },
   },
-  "transaction-detail": {
+  transactionDetail: {
     type: "object",
     properties: {
       ApiResponse: {
@@ -50,4 +74,4 @@ const responses = {
   },
 };
 
-export default { requests, responses };
+export default { requestBody, requestQuery, requestParams, responses };

@@ -1,15 +1,6 @@
 export default {
   components: {
     schemas: {
-      ApiKey: {
-        $id: "#ApiKey",
-        type: "object",
-        properties: {
-          authorization: { type: "string" },
-        },
-        additionalProperties: false,
-        required: ["authorization"],
-      },
       RequestToken: {
         $id: "#RequestToken",
         required: ["token"],
@@ -18,6 +9,15 @@ export default {
           token: { type: "string" },
         },
         additionalProperties: false,
+      },
+      ApiKeyHeader: {
+        $id: "#ApiKeyHeader",
+        type: "object",
+        properties: {
+          authorization: { type: "string" },
+        },
+        additionalProperties: false,
+        required: ["authorization"],
       },
       RouteIdParam: {
         $id: "#RouteIdParam",
@@ -37,6 +37,11 @@ export default {
         type: "string",
         default: "",
       },
+      OrderByQuery: {
+        $id: "#OrderByQuery",
+        type: "string",
+        default: "created_at",
+      },
       OrderDirectionQuery: {
         $id: "#OrderDirectionQuery",
         type: "string",
@@ -50,6 +55,15 @@ export default {
       DateQuery: {
         $id: "#DateQuery",
         type: "string",
+      },
+      YearQuery: {
+        $id: "#YearQuery",
+        type: "string",
+      },
+      StatusQuery: {
+        $id: "#StatusQuery",
+        type: "string",
+        default: "0",
       },
       GetToken: {
         $id: "#GetToken",

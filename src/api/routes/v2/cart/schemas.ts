@@ -1,5 +1,9 @@
-const requests = {
-  "add-to-cart": {
+const requestParam = {
+  id: { $ref: "#RouteIdParam" },
+};
+
+const requestBody = {
+  addToCart: {
     required: ["id_m_products", "id_merchant", "qty"],
     type: "object",
     properties: {
@@ -9,7 +13,7 @@ const requests = {
     },
     additionalProperties: false,
   },
-  "update-product-qty": {
+  updateProductQty: {
     required: ["qty"],
     type: "object",
     properties: { qty: { type: "integer" } },
@@ -38,4 +42,4 @@ const responses = {
   },
 };
 
-export default { requests, responses };
+export default { requestParam, requestBody, responses };

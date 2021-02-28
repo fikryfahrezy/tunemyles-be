@@ -6,7 +6,7 @@ const requestQuery = {
   resetPassword: { $ref: "#RequestToken" },
 };
 
-const requestsBody = {
+const requestBody = {
   login: {
     required: ["password", "username"],
     type: "object",
@@ -132,4 +132,4 @@ const responses = {
   },
 };
 
-export default { requestParams, requestQuery, requestsBody, responses };
+export default { requestParams, requestQuery, requestBody, responses };

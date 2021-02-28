@@ -1,11 +1,56 @@
-const requests = {
-  "top-up": {
+const requestParams = {
+  id: { $ref: "#RouteIdParam" },
+};
+
+const requestQuery = {
+  topUp: {
+    type: "object",
+    properties: {
+      page: { $ref: "#PageQuery" },
+      search: { $ref: "#SearchQuery" },
+      orderBy: {
+        allOf: [
+          { $ref: "#OrderByQuery" },
+          { enum: ["created_at", "balance_request", "balance_transfer"] },
+        ],
+      },
+      orderDirection: { $ref: "#OrderDirectionQuery" },
+      status: { allOf: [{ $ref: "#StatusQuery" }, { enum: ["0", "1", "2"] }] },
+    },
+  },
+  withdraw: {
+    type: "object",
+    properties: {
+      page: { $ref: "#PageQuery" },
+      search: { $ref: "#SearchQuery" },
+      orderBy: {
+        allOf: [
+          { $ref: "#OrderByQuery" },
+          { enum: ["created_at", "balance_request"] },
+        ],
+      },
+      orderDirection: { $ref: "#OrderDirectionQuery" },
+      status: { allOf: [{ $ref: "#StatusQuery" }, { enum: ["0", "1", "2"] }] },
+    },
+  },
+};
+
+const requestBody = {
+  topUp: {
     required: ["balance_request", "balance_transfer", "id_m_banks"],
     type: "object",
     properties: {
       id_m_banks: { type: "integer" },
       balance_request: { type: "integer" },
       balance_transfer: { type: "integer" },
+    },
+    additionalProperties: false,
+  },
+  topUpImage: {
+    required: ["image"],
+    type: "object",
+    properties: {
+      image: { $ref: "#MultiPartSchema" },
     },
     additionalProperties: false,
   },
@@ -18,12 +63,12 @@ const requests = {
     },
     additionalProperties: false,
   },
-  "update-top-up-status": {
+  updateTopUpStatus: {
     type: "object",
     properties: { status: { type: "integer" } },
     additionalProperties: false,
   },
-  "update-withdraw-status": {
+  updateWithdrawStatus: {
     type: "object",
     properties: { status: { type: "integer" } },
     additionalProperties: false,
@@ -40,7 +85,7 @@ const responses = {
       data: { $ref: "#GetUserWallet" },
     },
   },
-  "top-up-histories": {
+  topUpHistories: {
     type: "object",
     properties: {
       ApiResponse: {
@@ -52,7 +97,7 @@ const responses = {
       },
     },
   },
-  "withdraw-histories": {
+  withdrawHistories: {
     type: "object",
     properties: {
       ApiResponse: {
@@ -90,7 +135,7 @@ const responses = {
       },
     },
   },
-  "withdraw-detail": {
+  topUpDetail: {
     type: "object",
     properties: {
       ApiResponse: {
@@ -156,7 +201,7 @@ const responses = {
       },
     },
   },
-  "withdraw-detail-test": {
+  withdrawDetail: {
     type: "object",
     properties: {
       ApiResponse: {
@@ -210,7 +255,7 @@ const responses = {
       },
     },
   },
-  "user-top-up": {
+  userTopUp: {
     type: "object",
     properties: {
       ApiResponse: {
@@ -222,7 +267,7 @@ const responses = {
       },
     },
   },
-  "user-withdraw": {
+  userWithdraw: {
     type: "object",
     properties: {
       ApiResponse: {
@@ -236,4 +281,4 @@ const responses = {
   },
 };
 
-export default { requests, responses };
+export default { requestBody, requestParams, requestQuery, responses };

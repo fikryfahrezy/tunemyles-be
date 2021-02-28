@@ -59,6 +59,8 @@ src                                 ->  Application main folder.
 
 ```
 
+The `API` folder is expected to change the most, so this folder will become a hot area, and getting hotter inside.
+
 ## [Application Code Style](#code-style)
 
 - Using `make-promise-safe` on the top of process, refer to [Fastify documentation](https://www.fastify.io/docs/latest/Getting-Started/#your-first-server).
@@ -70,6 +72,7 @@ src                                 ->  Application main folder.
 - Always call `done()` function after registering [custom plugin](https://www.fastify.io/docs/latest/Plugins/).
 - Using schema (`JSON-Schema`) as recommended by Fastify on they [Core Features](https://www.fastify.io/).
 - Preferred using `JSON-Schema` rather than using [Fluent Schema](https://www.fastify.io/docs/latest/Fluent-Schema/).
+- Write schema definition close to another same `schema definition` (schema grouping). For example, the `schema definition` that used for `Params` is written on the `top` of the definition. For example all keys for `<prefix>Param` on the top and all keys for `Get<postfix>` on the bottom, etc. Use key identifier for definition used where, `<prefix>Header` mean used for `header`, `<prefix>Query` used for `query`, `Get<postfix>` for `responses`, etc, and just `<key-name>` for shared definition which mean can used on `header`, `param`, etc.
 - [Preferred async function](https://github.com/goldbergyoni/nodebestpractices#-311-use-async-await-avoid-callbacks) if possible.
 - Using [Ajv schema](https://www.fastify.io/docs/latest/Fluent-Schema/) validation for validate client request.
 - Using [ajv-errors](https://www.fastify.io/docs/latest/Validation-and-Serialization/#schemaerrorformatter) to add custom message for client request validation.
