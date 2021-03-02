@@ -51,7 +51,7 @@ function app(opts: FastifyServerOptions = {}): FastifyInstance {
     const data = {
       code: status,
       success: false,
-      message: message,
+      message,
     };
 
     reply.status(status).send(data);

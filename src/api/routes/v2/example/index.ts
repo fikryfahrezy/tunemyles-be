@@ -3,7 +3,12 @@ import {
   FastifyPluginOptions,
   HookHandlerDoneFunction,
 } from "fastify";
-import { getExample, postExample } from "./controllers";
+import {
+  getExample,
+  postExample,
+  getIdExample,
+  postFileExample,
+} from "./controllers";
 
 async function routes(
   fastify: FastifyInstance,
@@ -36,6 +41,48 @@ async function routes(
       },
     },
     postExample
+  );
+
+  fastify.get(
+    "/example/:id",
+    {
+      schema: {
+        response: {
+          "200": { $ref: "#ApiResponse" },
+          "4xx": { $ref: "#ApiResponse" },
+          "5xx": { $ref: "#ApiResponse" },
+        },
+      },
+    },
+    getIdExample
+  );
+
+  fastify.post(
+    "/example/file",
+    {
+      schema: {
+        response: {
+          "200": { $ref: "#ApiResponse" },
+          "4xx": { $ref: "#ApiResponse" },
+          "5xx": { $ref: "#ApiResponse" },
+        },
+      },
+    },
+    postFileExample
+  );
+
+  fastify.get(
+    "/example/private",
+    {
+      schema: {
+        response: {
+          "200": { $ref: "#ApiResponse" },
+          "4xx": { $ref: "#ApiResponse" },
+          "5xx": { $ref: "#ApiResponse" },
+        },
+      },
+    },
+    getExample
   );
 
   done();
