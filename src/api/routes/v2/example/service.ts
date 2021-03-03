@@ -1,18 +1,19 @@
 import { exampleMultipleData, exampleSingleData } from "./model";
-// import ErrorResponse from '../../../utils/ErrorResponse'
+import type { DummyArrayDataType, DummyDataType } from "./model";
 
-export const getService = () => {
+export const getService: () => DummyArrayDataType = () => {
   const data = exampleMultipleData();
   return data;
 };
 
-export const postService = () => {
-  const isSuccess = true;
+export const postService = (text: string) => {
+  const isSuccess = typeof text === "string" && true;
   return isSuccess;
 };
 
-export const getIdService = (id: number) => {
+export const getIdService: (id: number) => DummyDataType | Error = (id) => {
   const data = exampleSingleData(id);
+  if (!data) return new Error("404");
   return data;
 };
 

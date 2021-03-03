@@ -1,6 +1,7 @@
 require("make-promises-safe");
 import dotenv from "dotenv";
 import pino from "pino";
+import ajvErrors from "ajv-errors";
 dotenv.config();
 
 import app from "./app";
@@ -11,11 +12,24 @@ import validateEnv from "./config/validateEnv";
 const start = async () => {
   const server = app({
     logger,
+    ajv: {
+      customOptions: {
+        allErrors: true,
+        jsonPointers: true,
+      },
+      plugins: [ajvErrors],
+    },
     frameworkErrors: function (error, _, res) {
+      const data = {
+        code: 500,
+        success: false,
+        message: error,
+      };
+
       res
         .code(500)
         .header("Content-Type", "application/json; charset=utf-8")
-        .send({ code: 500, success: false, message: error });
+        .send(data);
     },
   });
 

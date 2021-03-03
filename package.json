@@ -16,7 +16,7 @@
     "nodemon": "nodemon src/index.ts",
     "prettier-watch": "onchange \"**/*\" -- prettier --write --ignore-unknown {{changed}}",
     "test": "jest ./__test__",
-    "lint": "eslint src",
+    "lint": "eslint src --fix",
     "prettier": "prettier --write .",
     "lint-staged": "lint-staged",
     "compile-schemas": "json2ts -i src/schemas -o src/types",
@@ -38,6 +38,7 @@
     "@babel/preset-env": "^7.12.13",
     "@babel/preset-typescript": "^7.12.13",
     "@tsconfig/recommended": "^1.0.1",
+    "@types/ajv-errors": "^1.0.3",
     "@types/bcrypt": "^3.0.0",
     "@types/busboy": "^0.2.3",
     "@types/cls-hooked": "^4.3.3",
@@ -70,8 +71,7 @@
     "yamljs": "^0.3.0"
   },
   "dependencies": {
-    "ajv": "^7.1.1",
-    "ajv-errors": "^2.0.0",
+    "ajv-errors": "^1.0.1",
     "bcrypt": "^5.0.0",
     "cls-hooked": "^4.2.2",
     "dotenv": "^8.2.0",

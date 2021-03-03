@@ -1,5 +1,8 @@
 Address content security policy for documentation route #294
 https://github.com/fastify/fastify-swagger/issues/294
 
-`docker-compose up` fails in WSL 2 environment
+`docker-compose up` fails in WSL 2 environment #7495
 https://github.com/docker/compose/issues/7495
+
+Migrate types to v3 (RouteHandlerMethod) #199
+https://github.com/fastify/help/issues/199

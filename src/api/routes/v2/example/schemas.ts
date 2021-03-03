@@ -3,49 +3,88 @@ const requestHeader = {
     required: ["key"],
     type: "object",
     properties: {
-      key: { type: "number" },
+      key: { type: "string" },
     },
   },
 };
 
 const requestParams = {
   routeId: {
+    required: ["id"],
     type: "object",
     properties: {
-      id: { type: "number" },
+      id: { type: "string" },
     },
   },
 };
 
 const requestBody = {
+  postBody: {
+    required: ["name"],
+    type: "object",
+    properties: {
+      name: { type: "string" },
+    },
+    additionalProperties: false,
+    errorMessage: {
+      required: {
+        name: "name is required",
+      },
+      type: "data sould be an object",
+      properties: {
+        name: "name should be string",
+      },
+    },
+  },
   postFile: {
     required: ["file"],
     type: "object",
     properties: {
-      image: { $ref: "#MultiPartSchema" },
+      file: { type: "array", items: { $ref: "#MultiPartSchema" } },
     },
     additionalProperties: false,
   },
 };
 
 const responses = {
-  medias: {
+  datas: {
     type: "object",
-    properties: {
-      ApiResponse: {
-        $ref: "#ApiResponse",
-      },
-      data: {
-        type: "array",
-        items: {
-          type: "object",
-          properties: {
-            id: { type: "number" },
-            data: { type: "string" },
+    allOf: [
+      { $ref: "#ApiResponse" },
+      {
+        type: "object",
+        properties: {
+          data: {
+            type: "array",
+            items: {
+              type: "object",
+              properties: {
+                id: { type: "number" },
+                data: { type: "string" },
+              },
+            },
           },
         },
       },
-    },
+    ],
+  },
+  data: {
+    type: "object",
+    allOf: [
+      { $ref: "#ApiResponse" },
+      {
+        type: "object",
+        properties: {
+          data: {
+            type: "object",
+            properties: {
+              id: { type: "number" },
+              data: { type: "string" },
+            },
+          },
+        },
+      },
+    ],
   },
 };
 

@@ -9,8 +9,6 @@ import { fastifyRequestContextPlugin } from "fastify-request-context";
 import fastifySensible from "fastify-sensible";
 import fastifyCookie from "fastify-cookie";
 import fastifyAuth from "fastify-auth";
-import Ajv from "ajv";
-import AjvErrors from "ajv-errors";
 import path from "path";
 import middie from "middie";
 import definitions from "./definitions";
@@ -18,8 +16,6 @@ import api from "./api";
 
 function app(opts: FastifyServerOptions = {}): FastifyInstance {
   const app = fastify(opts);
-  const ajv = new Ajv({ allErrors: true });
-  const ajvErrors = AjvErrors(ajv);
   const ENV = process.env.NODE_ENV;
   const schemas = definitions.components.schemas as { [k: string]: unknown };
 
@@ -29,37 +25,6 @@ function app(opts: FastifyServerOptions = {}): FastifyInstance {
       app.addSchema(element);
     }
   }
-
-  app.setValidatorCompiler(({ schema }) => {
-    const validate = ajvErrors.compile(schema);
-    return validate;
-  });
-
-  app.setNotFoundHandler(function (_, reply) {
-    const data = {
-      code: 404,
-      success: false,
-      message: "not found",
-    };
-    reply.header("Content-Type", "application/json; charset=utf-8").send(data);
-  });
-
-  app.setErrorHandler(function (error, _, reply) {
-    const { message, statusCode } = error;
-    this.log.error(message);
-    const status = statusCode || 500;
-    const data = {
-      code: status,
-      success: false,
-      message,
-    };
-
-    reply.status(status).send(data);
-  });
-
-  app.addHook("onClose", (_, done) => {
-    done();
-  });
 
   app.register(middie);
   app.register(fastifySensible, { errorHandler: false });
@@ -108,6 +73,32 @@ function app(opts: FastifyServerOptions = {}): FastifyInstance {
       user: null,
       query: null,
     },
+  });
+
+  app.setNotFoundHandler(function (_, reply) {
+    const data = {
+      code: 404,
+      success: false,
+      message: "not found",
+    };
+    reply.header("Content-Type", "application/json; charset=utf-8").send(data);
+  });
+
+  app.setErrorHandler(function (error, _, reply) {
+    const { message, statusCode } = error;
+    this.log.error(message);
+    const status = statusCode || 500;
+    const data = {
+      code: status,
+      success: false,
+      message,
+    };
+
+    reply.status(status).send(data);
+  });
+
+  app.addHook("onClose", (_, done) => {
+    done();
   });
 
   app.register(api, { prefix: "/api" });

@@ -68,6 +68,12 @@ describe("Post Data", () => {
     const response = await server.inject({
       method: "POST",
       url: "/api/v2/example",
+      headers: {
+        "content-type": "application/json",
+      },
+      payload: {
+        name: "name",
+      },
     });
 
     const statusCode = response.statusCode;
@@ -96,12 +102,9 @@ describe("Post Data", () => {
 });
 
 describe("Post File", () => {
-  test("Post Success", async () => {
-    const myFile = fs.createReadStream("./__test__/image-test.png");
-    const form = formAutoContent({
-      myField: "file",
-      myFile,
-    });
+  test("Post File Success", async () => {
+    const file = fs.createReadStream("./__test__/image-test.png");
+    const form = formAutoContent({ file });
 
     const response = await server.inject({
       method: "POST",
@@ -146,7 +149,7 @@ describe("Get Private Data", () => {
     const contentType = response.headers["content-type"];
     const isSuccess = response.json().success;
 
-    expect(statusCode).toBe(403);
+    expect(statusCode).toBe(500);
     expect(contentType).toBe("application/json; charset=utf-8");
     expect(isSuccess).toBe(false);
   });

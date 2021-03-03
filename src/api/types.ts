@@ -1,4 +1,11 @@
-import { FastifyRequest, FastifyReply } from "fastify";
+import {
+  FastifyRequest,
+  FastifyReply,
+  RouteHandlerMethod,
+  RawServerDefault,
+  RawRequestDefaultExpression,
+  RawReplyDefaultExpression,
+} from "fastify";
 export interface ApiKeyHeader {
   authorization: string;
 }
@@ -156,3 +163,10 @@ export type FastifyFn = (
   req: FastifyRequest,
   reply: FastifyReply
 ) => Promise<void>;
+
+export type RequestHandler<Request> = RouteHandlerMethod<
+  RawServerDefault,
+  RawRequestDefaultExpression<RawServerDefault>,
+  RawReplyDefaultExpression<RawServerDefault>,
+  Request
+>;

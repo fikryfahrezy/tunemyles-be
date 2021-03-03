@@ -1,5 +1,5 @@
-type DummyDataType = { id: number; data: string };
-type DummyArrayDataType = DummyDataType[];
+export type DummyDataType = { id: number; data: string };
+export type DummyArrayDataType = DummyDataType[];
 type FnMultipleDataType = () => DummyArrayDataType;
 type FnSingleDataType = (id: number) => DummyDataType | undefined;
 

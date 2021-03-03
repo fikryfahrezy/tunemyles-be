@@ -1,10 +1,24 @@
-import { FastifyRequest, FastifyReply, RouteHandlerMethod } from "fastify";
+import {
+  FastifyRequest,
+  FastifyReply,
+  RouteHandlerMethod,
+  RequestGenericInterface,
+} from "fastify";
 import {
   getIdService,
   getService,
   postFileService,
   postService,
 } from "./service";
+import type { RequestHandler } from "../../../types";
+
+interface GetIdRequest extends RequestGenericInterface {
+  Params: { id: string };
+}
+
+interface PostRequest extends RequestGenericInterface {
+  Body: { name: string };
+}
 
 export const getExample = async function (
   _: FastifyRequest,
@@ -18,16 +32,17 @@ export const getExample = async function (
     .send({
       code: 200,
       success: true,
-      message: "hello world",
+      message: "get success",
       data,
     });
 };
 
-export const postExample: RouteHandlerMethod = async function (
-  _: FastifyRequest,
+export const postExample: RequestHandler<PostRequest> = async function (
+  request,
   reply: FastifyReply
 ): Promise<void> {
-  postService();
+  const { name } = request.body;
+  postService(name);
 
   reply
     .status(200)
@@ -39,11 +54,14 @@ export const postExample: RouteHandlerMethod = async function (
     });
 };
 
-export const getIdExample: RouteHandlerMethod = async function (
-  _: FastifyRequest,
+export const getIdExample: RequestHandler<GetIdRequest> = async function (
+  request,
   reply: FastifyReply
 ): Promise<void> {
-  const data = getIdService(1);
+  const { id } = request.params;
+  const paramId = Number(id);
+  const data = getIdService(paramId);
+  if (data instanceof Error && Number(data.message) === 404) reply.notFound();
 
   reply
     .status(200)
@@ -51,7 +69,7 @@ export const getIdExample: RouteHandlerMethod = async function (
     .send({
       code: 200,
       success: true,
-      message: "post success",
+      message: "get success",
       data,
     });
 };
