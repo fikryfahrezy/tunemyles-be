@@ -1,16 +1,11 @@
-import {
-  FastifyRequest,
-  FastifyReply,
-  RouteHandlerMethod,
-  RequestGenericInterface,
-} from "fastify";
+import { FastifyRequest, FastifyReply, RequestGenericInterface } from "fastify";
 import {
   getIdService,
   getService,
   postFileService,
   postService,
 } from "./service";
-import type { RequestHandler } from "../../../types";
+import type { RequestHandler, AddedFileBody } from "../../../types";
 
 interface GetIdRequest extends RequestGenericInterface {
   Params: { id: string };
@@ -18,6 +13,12 @@ interface GetIdRequest extends RequestGenericInterface {
 
 interface PostRequest extends RequestGenericInterface {
   Body: { name: string };
+}
+
+interface FileRequest extends RequestGenericInterface {
+  Body: {
+    file: AddedFileBody[];
+  };
 }
 
 export const getExample = async function (
@@ -74,11 +75,12 @@ export const getIdExample: RequestHandler<GetIdRequest> = async function (
     });
 };
 
-export const postFileExample: RouteHandlerMethod = async function (
-  _: FastifyRequest,
+export const postFileExample: RequestHandler<FileRequest> = async function (
+  request,
   reply: FastifyReply
 ): Promise<void> {
-  postFileService();
+  const { file } = request.body;
+  postFileService(file);
 
   reply
     .status(200)

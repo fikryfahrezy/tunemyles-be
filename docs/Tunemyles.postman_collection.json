@@ -6,6 +6,299 @@
   },
   "item": [
     {
+      "name": "example",
+      "item": [
+        {
+          "name": "GET Example",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const { Request } = require('postman-collection')\r",
+                  "\r",
+                  "const sendRequestOne = new Request({\r",
+                  "    method: pm.request.method,\r",
+                  "    url: pm.request.url.toString()\r",
+                  "})\r",
+                  "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                  "    console.log(response.json())\r",
+                  "    pm.test('test success', () => {\r",
+                  "        const statusCode = response.code\r",
+                  "        const contentType = response.headers.toObject()['content-type']\r",
+                  "        const isSuccess = response.json().success\r",
+                  "\r",
+                  "        pm.expect(statusCode).to.eql(200);\r",
+                  "        pm.expect(contentType).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(isSuccess).to.eql(true);\r",
+                  "    })\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL}}/example",
+              "host": ["{{URL}}"],
+              "path": ["example"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST Example",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const { Request } = require('postman-collection')\r",
+                  "\r",
+                  "const sendRequestOne = new Request({\r",
+                  "    method: pm.request.method,\r",
+                  "    url: pm.request.url.toString(),\r",
+                  "    header: pm.request.headers.toObject(),\r",
+                  "    body: pm.request.body\r",
+                  "})\r",
+                  "\r",
+                  "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                  "    pm.test('test success', () => {\r",
+                  "        const statusCode = response.code\r",
+                  "        const contentType = response.headers.toObject()['content-type']\r",
+                  "        const isSuccess = response.json().success\r",
+                  "\r",
+                  "        pm.expect(statusCode).to.eql(200);\r",
+                  "        pm.expect(contentType).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(isSuccess).to.eql(true);\r",
+                  "    })\r",
+                  "});\r",
+                  "\r",
+                  "const sendRequestTwo = new Request({\r",
+                  "    method: pm.request.method,\r",
+                  "    url: pm.request.url.toString(),\r",
+                  "    header: pm.request.headers.toObject(),\r",
+                  "    body: {\r",
+                  "        mode: 'raw',\r",
+                  "        raw: JSON.stringify({})\r",
+                  "    }\r",
+                  "})\r",
+                  "pm.sendRequest(sendRequestTwo, (_, response) => {\r",
+                  "    console.log(response.json())\r",
+                  "    pm.test('test failed', () => {\r",
+                  "        const statusCode = response.code\r",
+                  "        const contentType = response.headers.toObject()['content-type']\r",
+                  "        const isSuccess = response.json().success\r",
+                  "\r",
+                  "        pm.expect(statusCode).to.eql(500)\r",
+                  "        pm.expect(contentType).to.eql(\"application/json; charset=utf-8\");\r",
+                  "        pm.expect(isSuccess).to.eql(false);\r",
+                  "    })\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "description": "JSON Type",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"name\"\r\n}"
+            },
+            "url": {
+              "raw": "{{URL}}/example",
+              "host": ["{{URL}}"],
+              "path": ["example"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET Single Example",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const { Request } = require('postman-collection')\r",
+                  "\r",
+                  "const sendRequestOne = new Request({\r",
+                  "    method: pm.request.method,\r",
+                  "    url: pm.environment.replaceIn(\"{{URL}}/example/{{EXAMPLE_ID}}\")\r",
+                  "})\r",
+                  "\r",
+                  "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                  "    pm.test('test success', () => {\r",
+                  "        const statusCode = response.code\r",
+                  "        const contentType = response.headers.toObject()['content-type']\r",
+                  "        const isSuccess = response.json().success\r",
+                  "\r",
+                  "        pm.expect(statusCode).to.eql(200);\r",
+                  "        pm.expect(contentType).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(isSuccess).to.eql(true);\r",
+                  "    })\r",
+                  "});\r",
+                  "\r",
+                  "const sendRequestTwo = new Request({\r",
+                  "    method: pm.request.method,\r",
+                  "    url: pm.environment.replaceIn(\"{{URL}}/example/100\")\r",
+                  "})\r",
+                  "pm.sendRequest(sendRequestTwo, (_, response) => {\r",
+                  "    pm.test('test failed', () => {\r",
+                  "        const statusCode = response.code\r",
+                  "        const contentType = response.headers.toObject()['content-type']\r",
+                  "        const isSuccess = response.json().success\r",
+                  "\r",
+                  "        pm.expect(statusCode).to.eql(404)\r",
+                  "        pm.expect(contentType).to.eql(\"application/json; charset=utf-8\");\r",
+                  "        pm.expect(isSuccess).to.eql(false);\r",
+                  "    })\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL}}/example/100",
+              "host": ["{{URL}}"],
+              "path": ["example", "100"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST Example File",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "\r",
+                  "pm.test('test success', () => {\r",
+                  "    const statusCode = pm.response.code\r",
+                  "    const contentType = pm.response.headers.toObject()['content-type']\r",
+                  "    const isSuccess = pm.response.json().success\r",
+                  "\r",
+                  "    pm.expect(statusCode).to.eql(200);\r",
+                  "    pm.expect(contentType).to.eql('application/json; charset=utf-8');\r",
+                  "    pm.expect(isSuccess).to.eql(true);\r",
+                  "})"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "multipart/form-data",
+                "description": "Multipart",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": "Bliss.png"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{URL}}/example/file",
+              "host": ["{{URL}}"],
+              "path": ["example", "file"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET Private Example",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const { Request } = require('postman-collection')\r",
+                  "\r",
+                  "const sendRequestOne = new Request({\r",
+                  "    method: pm.request.method,\r",
+                  "    url: pm.request.url.toString(),\r",
+                  "    header: { key: \"1\" }\r",
+                  "})\r",
+                  "\r",
+                  "pm.sendRequest(sendRequestOne, (_, response) => {\r",
+                  "    pm.test('test success', () => {\r",
+                  "        const statusCode = response.code\r",
+                  "        const contentType = response.headers.toObject()['content-type']\r",
+                  "        const isSuccess = response.json().success\r",
+                  "\r",
+                  "        pm.expect(statusCode).to.eql(200);\r",
+                  "        pm.expect(contentType).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(isSuccess).to.eql(true);\r",
+                  "    })\r",
+                  "});\r",
+                  "\r",
+                  "const sendRequestTwo = new Request({\r",
+                  "    method: pm.request.method,\r",
+                  "    url: pm.request.url.toString()\r",
+                  "})\r",
+                  "pm.sendRequest(sendRequestTwo, (_, response) => {\r",
+                  "    pm.test('test failed', () => {\r",
+                  "        const statusCode = response.code\r",
+                  "        const contentType = response.headers.toObject()['content-type']\r",
+                  "        const isSuccess = response.json().success\r",
+                  "\r",
+                  "        pm.expect(statusCode).to.eql(500)\r",
+                  "        pm.expect(contentType).to.eql(\"application/json; charset=utf-8\");\r",
+                  "        pm.expect(isSuccess).to.eql(false);\r",
+                  "    })\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "key",
+                "value": "1",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{URL}}/example/private",
+              "host": ["{{URL}}"],
+              "path": ["example", "private"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
       "name": "auth",
       "item": [
         {
@@ -6402,270 +6695,6 @@
                   "type": "string"
                 }
               ]
-            }
-          },
-          "response": []
-        }
-      ]
-    },
-    {
-      "name": "example",
-      "item": [
-        {
-          "name": "GET Example",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "const { Request } = require('postman-collection')\r",
-                  "\r",
-                  "const sendRequestOne = new Request({\r",
-                  "    method: pm.request.method,\r",
-                  "    url: pm.request.url.toString()\r",
-                  "})\r",
-                  "pm.sendRequest(sendRequestOne, (_, response) => {\r",
-                  "    pm.test('test success', () => {\r",
-                  "        const statusCode = response.code\r",
-                  "        const contentType = response.headers.toObject()['content-type']\r",
-                  "        const isSuccess = response.json().success\r",
-                  "\r",
-                  "        pm.expect(statusCode).to.eql(200);\r",
-                  "        pm.expect(contentType).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(isSuccess).to.eql(true);\r",
-                  "    })\r",
-                  "});"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{URL}}/example",
-              "host": ["{{URL}}"],
-              "path": ["example"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "POST Example",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "const { Request } = require('postman-collection')\r",
-                  "\r",
-                  "const sendRequestOne = new Request({\r",
-                  "    method: pm.request.method,\r",
-                  "    url: pm.request.url.toString(),\r",
-                  "    body: pm.request.body\r",
-                  "})\r",
-                  "\r",
-                  "pm.sendRequest(sendRequestOne, (_, response) => {\r",
-                  "    pm.test('test success', () => {\r",
-                  "        const statusCode = resposne.code\r",
-                  "        const contentType = response.headers.toObject()['content-type']\r",
-                  "        const isSuccess = response.json().success\r",
-                  "\r",
-                  "        pm.expect(statusCode).to.eql(200);\r",
-                  "        pm.expect(contentType).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(isSuccess).to.eql(true);\r",
-                  "    })\r",
-                  "});\r",
-                  "\r",
-                  "const sendRequestTwo = new Request({\r",
-                  "    method: pm.request.method,\r",
-                  "    url: pm.request.url.toString(),\r",
-                  "    body: {}\r",
-                  "})\r",
-                  "pm.sendRequest(sendRequestTwo, (_, response) => {\r",
-                  "    pm.test('test failed', () => {\r",
-                  "        const statusCode = response.code\r",
-                  "        const contentType = response.headers.toObject()['content-type']\r",
-                  "        const isSuccess = response.json().success\r",
-                  "\r",
-                  "        pm.expect(statusCode).to.eql(404)\r",
-                  "        pm.expect(contentType).to.eql(\"application/json; charset=utf-8\");\r",
-                  "        pm.expect(isSuccess).to.eql(false);\r",
-                  "    })\r",
-                  "});"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "method": "POST",
-            "header": [],
-            "url": {
-              "raw": "{{URL}}/example",
-              "host": ["{{URL}}"],
-              "path": ["example"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "GET Single Example",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "const { Request } = require('postman-collection')\r",
-                  "\r",
-                  "const sendRequestOne = new Request({\r",
-                  "    method: pm.request.method,\r",
-                  "    url: pm.environment.replaceIn(\"{{URL}}/example/{{EXAMPLE_ID}}\")\r",
-                  "})\r",
-                  "\r",
-                  "pm.sendRequest(sendRequestOne, (_, response) => {\r",
-                  "    pm.test('test success', () => {\r",
-                  "        const statusCode = response.code\r",
-                  "        const contentType = response.headers.toObject()['content-type']\r",
-                  "        const isSuccess = response.json().success\r",
-                  "\r",
-                  "        pm.expect(statusCode).to.eql(200);\r",
-                  "        pm.expect(contentType).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(isSuccess).to.eql(true);\r",
-                  "    })\r",
-                  "});\r",
-                  "\r",
-                  "const sendRequestTwo = new Request({\r",
-                  "    method: pm.request.method,\r",
-                  "    url: pm.environment.replaceIn(\"{{URL}}/example/100\")\r",
-                  "})\r",
-                  "pm.sendRequest(sendRequestTwo, (_, response) => {\r",
-                  "    pm.test('test failed', () => {\r",
-                  "        const statusCode = response.code\r",
-                  "        const contentType = response.headers.toObject()['content-type']\r",
-                  "        const isSuccess = response.json().success\r",
-                  "\r",
-                  "        pm.expect(statusCode).to.eql(404)\r",
-                  "        pm.expect(contentType).to.eql(\"application/json; charset=utf-8\");\r",
-                  "        pm.expect(isSuccess).to.eql(false);\r",
-                  "    })\r",
-                  "});"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{URL}}/example/:id",
-              "host": ["{{URL}}"],
-              "path": ["example", ":id"],
-              "variable": [
-                {
-                  "key": "id",
-                  "value": "{{EXAMPLE_ID}}"
-                }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "POST Example File",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "\r",
-                  "pm.test('test success', () => {\r",
-                  "    const statusCode = response.code\r",
-                  "    const contentType = response.headers.toObject()['content-type']\r",
-                  "    const isSuccess = response.json().success\r",
-                  "\r",
-                  "    pm.expect(statusCode).to.eql(200);\r",
-                  "    pm.expect(contentType).to.eql('application/json; charset=utf-8');\r",
-                  "    pm.expect(isSuccess).to.eql(true);\r",
-                  "})"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "method": "POST",
-            "header": [],
-            "url": {
-              "raw": "{{URL}}/example/file",
-              "host": ["{{URL}}"],
-              "path": ["example", "file"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "GET Private Example",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "const { Request } = require('postman-collection')\r",
-                  "\r",
-                  "const sendRequestOne = new Request({\r",
-                  "    method: pm.request.method,\r",
-                  "    url: pm.request.url.toString(),\r",
-                  "    header: { key: 1 }\r",
-                  "})\r",
-                  "\r",
-                  "pm.sendRequest(sendRequestOne, (_, response) => {\r",
-                  "    pm.test('test success', () => {\r",
-                  "        const statusCode = response.code\r",
-                  "        const contentType = response.headers.toObject()['content-type']\r",
-                  "        const isSuccess = response.json().success\r",
-                  "\r",
-                  "        pm.expect(statusCode).to.eql(200);\r",
-                  "        pm.expect(contentType).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(isSuccess).to.eql(true);\r",
-                  "    })\r",
-                  "});\r",
-                  "\r",
-                  "const sendRequestTwo = new Request({\r",
-                  "    method: pm.request.method,\r",
-                  "    url: pm.request.url.toString()\r",
-                  "})\r",
-                  "pm.sendRequest(sendRequestTwo, (_, response) => {\r",
-                  "    pm.test('test failed', () => {\r",
-                  "        const statusCode = response.code\r",
-                  "        const contentType = response.headers.toObject()['content-type']\r",
-                  "        const isSuccess = response.json().success\r",
-                  "\r",
-                  "        pm.expect(statusCode).toBe(403)\r",
-                  "        pm.expect(contentType).toBe(\"application/json; charset=utf-8\");\r",
-                  "        pm.expect(isSuccess).toBe(false);\r",
-                  "    })\r",
-                  "});"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "key",
-                "value": "1",
-                "type": "text"
-              }
-            ],
-            "url": {
-              "raw": "{{URL}}/example/private",
-              "host": ["{{URL}}"],
-              "path": ["example", "private"]
             }
           },
           "response": []

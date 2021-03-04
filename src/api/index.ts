@@ -22,7 +22,7 @@ async function api(
   instance: FastifyInstance,
   _: FastifyPluginOptions,
   done: HookHandlerDoneFunction
-) {
+): Promise<void> {
   instance.decorate("userProtect", userProtect);
   instance.decorate("merchantProtect", merchantProtect);
   instance.decorate("adminProtect", adminProtect);

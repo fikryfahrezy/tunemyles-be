@@ -159,6 +159,14 @@ export type ModelQuery = {
   availableFields: string[];
 };
 
+export type AddedFileBody = {
+  data: Iterable<unknown> | AsyncIterable<unknown>;
+  encoding: string;
+  filename: string;
+  limit: boolean;
+  mimetype: string;
+};
+
 export type FastifyFn = (
   req: FastifyRequest,
   reply: FastifyReply
