@@ -5,89 +5,115 @@ import {
   postFileService,
   postService,
 } from "./service";
+import { errorHandler } from "../../../utils/error-handler";
 import type { RequestHandler, AddedFileBody } from "../../../types";
 
+type GetIdRequestParams = {
+  id: string;
+};
+
+type PostRequestBody = {
+  name: string;
+};
+
+type FileRequestBody = {
+  file: AddedFileBody[];
+};
+
 interface GetIdRequest extends RequestGenericInterface {
-  Params: { id: string };
+  Params: GetIdRequestParams;
 }
 
 interface PostRequest extends RequestGenericInterface {
-  Body: { name: string };
+  Body: PostRequestBody;
 }
 
 interface FileRequest extends RequestGenericInterface {
-  Body: {
-    file: AddedFileBody[];
-  };
+  Body: FileRequestBody;
 }
 
-export const getExample = async function (
+export const getExample: RequestHandler<RequestGenericInterface> = async function (
   _: FastifyRequest,
   reply: FastifyReply
 ): Promise<void> {
-  const data = getService();
+  try {
+    const data = getService();
 
-  reply
-    .status(200)
-    .header("Content-Type", "application/json; charset=utf-8")
-    .send({
-      code: 200,
-      success: true,
-      message: "get success",
-      data,
-    });
+    reply
+      .status(200)
+      .header("Content-Type", "application/json; charset=utf-8")
+      .send({
+        code: 200,
+        success: true,
+        message: "get success",
+        data,
+      });
+  } catch (error) {
+    errorHandler(error, reply);
+  }
 };
 
 export const postExample: RequestHandler<PostRequest> = async function (
-  request,
+  request: FastifyRequest<{ Body: PostRequestBody }>,
   reply: FastifyReply
 ): Promise<void> {
-  const { name } = request.body;
-  postService(name);
+  try {
+    const { name } = request.body;
+    postService(name);
 
-  reply
-    .status(200)
-    .header("Content-Type", "application/json; charset=utf-8")
-    .send({
-      code: 200,
-      success: true,
-      message: "post success",
-    });
+    reply
+      .status(200)
+      .header("Content-Type", "application/json; charset=utf-8")
+      .send({
+        code: 200,
+        success: true,
+        message: "post success",
+      });
+  } catch (error) {
+    errorHandler(error, reply);
+  }
 };
 
 export const getIdExample: RequestHandler<GetIdRequest> = async function (
-  request,
+  request: FastifyRequest<{ Params: GetIdRequestParams }>,
   reply: FastifyReply
 ): Promise<void> {
-  const { id } = request.params;
-  const paramId = Number(id);
-  const data = getIdService(paramId);
-  if (data instanceof Error && Number(data.message) === 404) reply.notFound();
+  try {
+    const { id } = request.params;
+    const paramId = Number(id);
+    const data = getIdService(paramId);
 
-  reply
-    .status(200)
-    .header("Content-Type", "application/json; charset=utf-8")
-    .send({
-      code: 200,
-      success: true,
-      message: "get success",
-      data,
-    });
+    reply
+      .status(200)
+      .header("Content-Type", "application/json; charset=utf-8")
+      .send({
+        code: 200,
+        success: true,
+        message: "get success",
+        data,
+      });
+  } catch (error) {
+    errorHandler(error, reply);
+  }
 };
 
 export const postFileExample: RequestHandler<FileRequest> = async function (
-  request,
+  request: FastifyRequest<{ Body: FileRequestBody }>,
   reply: FastifyReply
 ): Promise<void> {
-  const { file } = request.body;
-  postFileService(file);
+  try {
+    const { file } = request.body;
+    await postFileService(file);
 
-  reply
-    .status(200)
-    .header("Content-Type", "application/json; charset=utf-8")
-    .send({
-      code: 200,
-      success: true,
-      message: "post success",
-    });
+    reply
+      .status(200)
+      .header("Content-Type", "application/json; charset=utf-8")
+      .send({
+        code: 200,
+        success: true,
+        message: "post success",
+      });
+  } catch (error) {
+    errorHandler(error, reply);
+  }
 };

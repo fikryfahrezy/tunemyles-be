@@ -5,4 +5,5 @@ public/image/**
 .env
 .eslintcache
 logs/**
-src/test-lab
+test
+.vscode

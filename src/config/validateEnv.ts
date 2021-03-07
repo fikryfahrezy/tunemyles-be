@@ -1,6 +1,8 @@
 import Joi from "joi";
 
-const validateEnv = function (env: { [k: string]: unknown }) {
+const validateEnv = function (env: {
+  [k: string]: unknown;
+}): Joi.ValidationResult {
   const schema = Joi.object({
     NODE_ENV: Joi.string().required(),
     PORT: Joi.number().required(),

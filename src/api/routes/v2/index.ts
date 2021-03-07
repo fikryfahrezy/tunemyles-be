@@ -10,7 +10,7 @@ async function api(
   instance: FastifyInstance,
   _: FastifyPluginOptions,
   done: HookHandlerDoneFunction
-) {
+): Promise<void> {
   instance.register(helloWorld);
   instance.register(example);
   done();

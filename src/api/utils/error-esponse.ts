@@ -1,5 +1,5 @@
 class ErrorResponse extends Error {
-  private status: number;
+  status: number;
 
   constructor(message: string, status: number) {
     super(message);

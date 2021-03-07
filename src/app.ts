@@ -85,9 +85,15 @@ function app(opts: FastifyServerOptions = {}): FastifyInstance {
   });
 
   app.setErrorHandler(function (error, _, reply) {
-    const { message, statusCode } = error;
+    const { statusCode, validation } = error;
+    let message = error.message;
+    let status = statusCode || 500;
     this.log.error(message);
-    const status = statusCode || 500;
+    if (validation) {
+      const validationMessage = validation[0].message;
+      message = validationMessage;
+      if (validationMessage === "forbidden") status = 403;
+    }
     const data = {
       code: status,
       success: false,
