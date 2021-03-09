@@ -1,107 +1,123 @@
-import {
-    FastifyRequest,
-    FastifyReply,
-    RouteHandlerMethod,
-    RawServerDefault,
-    RawRequestDefaultExpression,
-    RawReplyDefaultExpression,
-} from "fastify";
-export interface ApiKeyHeader {
-    authorization: string;
-}
-export interface AddBankStepBody {
-    step: string;
-}
+export type GetIdRequestParams = {
+    id: string;
+};
 
-export interface AddBankUserBody {
+export type PostRequestBody = {
+    name: string;
+};
+
+export type FileRequestBody = {
+    file: AddedFileBody[];
+};
+
+export type GetIdRequest = {
+    Params: GetIdRequestParams;
+};
+
+export type PostRequest = {
+    Body: PostRequestBody;
+};
+
+export type FileRequest = {
+    Body: FileRequestBody;
+};
+
+export type ApiKeyHeader = {
+    authorization: string;
+};
+export type AddBankStepBody = {
+    step: string;
+};
+
+export type AddBankUserBody = {
     id_m_banks: number;
     account_number: string;
     account_name: string;
-}
+};
 
-export interface AddFaqBody {
+export type AddFaqBody = {
     question: string;
     answer: string;
-}
+};
 
-export interface AddToCartBody {
+export type AddToCartBody = {
     qty: number;
     id_merchant: number;
     id_m_products: number;
-}
-export interface BindProductCategoryBody {
+};
+export type BindProductCategoryBody = {
     id_category: number;
-}
+};
 
-export interface CheckoutBody {
+export type CheckoutBody = {
     price_total: number;
-}
+};
 
-export interface ForgotPasswordBody {
+export type ForgotPasswordBody = {
     phone_number: string;
-}
+};
 
-export interface LoginBody {
+export type LoginBody = {
     username: string;
     password: string;
-}
+};
 
-export interface RegisterBody {
+export type RegisterBody = {
     full_name: string;
     username: string;
     password: string;
     phone_number: string;
     address: string;
-}
+};
 
-export interface ResetPasswordBody {
+export type ResetPasswordBody = {
     new_password: string;
-}
+};
 
-export interface ReviewTransactionBody {
+export type ReviewTransactionBody = {
     rating: number;
     review: string;
-}
+};
 
-export interface TopUpBody {
+export type TopUpBody = {
     id_m_banks: number;
     balance_request: number;
     balance_transfer: number;
-}
+};
 
-export interface UpdateBankBody {
+export type UpdateBankBody = {
     bank_name?: string;
     is_visible?: number;
-}
+};
 
-export interface UpdateBankDetailBody {
+export type UpdateBankDetailBody = {
     account_number: string;
     account_name: string;
-}
+};
 
-export interface UpdateBankUserBody {
+export type UpdateBankUserBody = {
     id_m_banks?: number;
     account_number?: string;
     account_name?: string;
-}
+};
 
-export interface UpdateCategoryBody {
+export type UpdateCategoryBody = {
     category?: string;
     slug?: string;
     description?: string;
     is_visible?: number;
-}
+};
 
-export interface UpdateFaqBody {
+export type UpdateFaqBody = {
     question?: string;
     answer?: string;
-}
+};
 
-export interface UpdateMerchantOperation {
+export type UpdateMerchantOperation = {
     market_close_time?: string;
-}
+};
 
-export interface UpdateProductBody {
+export type UpdateProductBody = {
     product_name?: string;
     description?: string;
     price_default?: number;
@@ -109,38 +125,38 @@ export interface UpdateProductBody {
     qty?: number;
     discount?: number;
     is_visible?: number;
-}
+};
 
-export interface UpdateProductOrderStatusBody {
+export type UpdateProductOrderStatusBody = {
     status?: number;
-}
+};
 
-export interface UpdateProductQtyBody {
+export type UpdateProductQtyBody = {
     qty: number;
-}
+};
 
-export interface UpdateProductStatusBody {
+export type UpdateProductStatusBody = {
     is_visible?: number;
-}
+};
 
-export interface UpdateTopUpStatusBody {
+export type UpdateTopUpStatusBody = {
     status?: number;
-}
+};
 
-export interface UpdateWalletBody {
+export type UpdateWalletBody = {
     wallet_name?: string;
     wallet_description?: string;
     is_visible?: number;
-}
+};
 
-export interface UpdateWithdrawStatusBody {
+export type UpdateWithdrawStatusBody = {
     status?: number;
-}
+};
 
-export interface WithdrawBody {
+export type WithdrawBody = {
     id_u_user_bank_account: number;
     balance_request: number;
-}
+};
 
 export type UserUtility = {
     id: number;
@@ -166,15 +182,3 @@ export type AddedFileBody = {
     limit: boolean;
     mimetype: string;
 };
-
-export type FastifyFn = (
-    req: FastifyRequest,
-    reply: FastifyReply
-) => Promise<void>;
-
-export type RequestHandler<Request> = RouteHandlerMethod<
-    RawServerDefault,
-    RawRequestDefaultExpression<RawServerDefault>,
-    RawReplyDefaultExpression<RawServerDefault>,
-    Request
->;

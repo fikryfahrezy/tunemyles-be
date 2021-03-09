@@ -89,13 +89,17 @@ describe("Post Data", () => {
         const response = await server.inject({
             method: "POST",
             url: "/api/v2/example",
+            headers: {
+                "content-type": "application/json",
+            },
+            payload: {},
         });
 
         const statusCode = response.statusCode;
         const contenType = response.headers["content-type"];
         const isSuccess = response.json().success;
 
-        expect(statusCode).toBe(500);
+        expect(statusCode).toBe(422);
         expect(contenType).toBe("application/json; charset=utf-8");
         expect(isSuccess).toBe(false);
     });
@@ -139,7 +143,7 @@ describe("Get Private Data", () => {
         expect(isSuccess).toBe(true);
     });
 
-    test("Get Private Data Fail", async () => {
+    test("Get Private Data Fail, Header Key Not Given", async () => {
         const response = await server.inject({
             method: "GET",
             url: "/api/v2/example/private",
@@ -149,7 +153,23 @@ describe("Get Private Data", () => {
         const contentType = response.headers["content-type"];
         const isSuccess = response.json().success;
 
-        expect(statusCode).toBe(500);
+        expect(statusCode).toBe(403);
+        expect(contentType).toBe("application/json; charset=utf-8");
+        expect(isSuccess).toBe(false);
+    });
+
+    test("Get Private Data Fail, Wrong Header Key", async () => {
+        const response = await server.inject({
+            method: "GET",
+            url: "/api/v2/example/private",
+            headers: { key: 2 },
+        });
+
+        const statusCode = response.statusCode;
+        const contentType = response.headers["content-type"];
+        const isSuccess = response.json().success;
+
+        expect(statusCode).toBe(403);
         expect(contentType).toBe("application/json; charset=utf-8");
         expect(isSuccess).toBe(false);
     });

@@ -35,14 +35,13 @@ src                                 ->  Application main folder.
 |   |_  utils                       ->  API utilities folder.
 |   |   |_  [files].ts              ->  Utility files.
 |   |_  routes                      ->  API routes folder.
-|   |   |_ v2                       ->  API version folder.
-|   |   |   |_  [routes]            ->  Route name folder.
-|   |   |   |   |_  controller.ts   ->  Route controller. Handle client request and send feedback to client.
-|   |   |   |   |_  index.ts        ->  Router for controllers.
-|   |   |   |   |_  model.ts        ->  Bridge for service to interact with a database or other resources.
-|   |   |   |   |_  schemas.ts      ->  Route request and response schema.
-|   |   |   |   |_  service.ts      ->  Route handle logic and process.
-|   |   |   |_  index.ts            ->  Every API version entry point. Register API router for each version.
+|   |   |_  [routes-name]           ->  Route name folder.
+|   |   |   |_  controller.ts       ->  Route controller. Handle client request and send feedback to client.
+|   |   |   |_  index.ts            ->  Router for controllers.
+|   |   |   |_  model.ts            ->  Bridge for service to interact with a database or other resources.
+|   |   |   |_  schemas.ts          ->  Route request and response schema.
+|   |   |   |_  service.ts          ->  Route handle logic and process.
+|   |   |_  index.ts                ->  Every API version entry point. Register API router for each version.
 |   |_  index.ts                    ->  API starting point. Register API version entry point.
 |   |_  types.ts                    ->  All defined TypeScript types used in API process.
 |_  config                          ->  Global or server configuration variables.

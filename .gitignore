@@ -7,3 +7,4 @@ public/image/**
 logs/**
 test
 .vscode
+.idea

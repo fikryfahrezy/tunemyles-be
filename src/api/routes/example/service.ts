@@ -1,11 +1,11 @@
+import type { DummyArrayDataType, DummyDataType } from "./model";
+import type { AddedFileBody } from "../../types/schema";
 import pmp from "pump";
 import stream from "stream";
 import util from "util";
 import fs from "fs";
 import { exampleMultipleData, exampleSingleData } from "./model";
-import ErrorResponse from "../../../utils/error-esponse";
-import type { DummyArrayDataType, DummyDataType } from "./model";
-import type { AddedFileBody } from "../../../types";
+import { ErrorResponse } from "../../utils/error-handler";
 
 const pump = util.promisify(pmp) as (
     ...streams: Array<pmp.Stream | pmp.Callback>
@@ -27,9 +27,9 @@ export const getIdService: (id: number) => DummyDataType | Error = (id) => {
     return data;
 };
 
-export const postFileService: (files: AddedFileBody[]) => void = async (
+export const postFileService: (
     files: AddedFileBody[]
-) => {
+) => Promise<void> = async (files: AddedFileBody[]) => {
     await Promise.all(
         files.map(({ filename, data }) => {
             const destFile = `./public/image/${filename}`;

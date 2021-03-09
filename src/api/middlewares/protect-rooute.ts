@@ -1,8 +1,23 @@
+import type {
+    FastifyReply,
+    FastifyRequest,
+    HookHandlerDoneFunction,
+} from "fastify";
+import type { FastifyFn } from "../types/fn";
 // const UserUtility = require("../models/UserUtility");
 // const ErrorResponse = require("../utils/ErrorResponse");
-import { FastifyRequest, FastifyReply } from "fastify";
 
-export const userProtect = async (req: FastifyRequest, reply: FastifyReply) => {
+export const exampleProtect = function (
+    req: FastifyRequest<{ Body: Record<string, unknown> }>,
+    res: FastifyReply,
+    done: HookHandlerDoneFunction
+) {
+    if (req.headers.key === "2") res.forbidden();
+    done();
+};
+
+export const userProtect: FastifyFn = async (req, res) => {
+    console.log("hi");
     //   const { authorization } = ctx.header;
     //   if (!authorization) throw new ErrorResponse("forbidden", 403);
     //   const user = await UserUtility.findOne({
@@ -16,10 +31,8 @@ export const userProtect = async (req: FastifyRequest, reply: FastifyReply) => {
     //   await next();
 };
 
-export const adminProtect = async (
-    req: FastifyRequest,
-    reply: FastifyReply
-) => {
+export const adminProtect: FastifyFn = async (req, res) => {
+    console.log("hi");
     //   const { authorization } = ctx.header;
     //   if (!authorization) throw new ErrorResponse("forbidden", 403);
     //   const user = await UserUtility.findOne({
@@ -34,10 +47,8 @@ export const adminProtect = async (
     //   await next();
 };
 
-export const merchantProtect = async (
-    req: FastifyRequest,
-    reply: FastifyReply
-) => {
+export const merchantProtect: FastifyFn = async (req, res) => {
+    console.log("hi");
     //   const { authorization } = ctx.header;
     //   if (!authorization) throw new ErrorResponse("forbidden", 403);
     //   const user = await UserUtility.findOne({

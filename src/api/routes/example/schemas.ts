@@ -5,11 +5,6 @@ const requestHeader = {
         properties: {
             key: { type: "string" },
         },
-        errorMessage: {
-            required: {
-                key: "forbidden",
-            },
-        },
     },
 };
 

@@ -13,11 +13,12 @@ import path from "path";
 import middie from "middie";
 import definitions from "./definitions";
 import api from "./api";
+import { sequelize } from "./databases/sequelize";
 
 function app(opts: FastifyServerOptions = {}): FastifyInstance {
     const app = fastify(opts);
     const ENV = process.env.NODE_ENV;
-    const schemas = definitions.components.schemas as { [k: string]: unknown };
+    const schemas = definitions.components.schemas as Record<string, unknown>;
 
     for (const key in schemas) {
         if (Object.prototype.hasOwnProperty.call(schemas, key)) {
@@ -86,16 +87,9 @@ function app(opts: FastifyServerOptions = {}): FastifyInstance {
             .send(data);
     });
 
-    app.setErrorHandler(function (error, _, reply) {
-        const { statusCode, validation } = error;
-        let message = error.message;
-        let status = statusCode || 500;
+    app.setErrorHandler(function ({ statusCode, message }, _, reply) {
+        const status = statusCode || 500;
         this.log.error(message);
-        if (validation) {
-            const validationMessage = validation[0].message;
-            message = validationMessage;
-            if (validationMessage === "forbidden") status = 403;
-        }
         const data = {
             code: status,
             success: false,
@@ -105,8 +99,8 @@ function app(opts: FastifyServerOptions = {}): FastifyInstance {
         reply.status(status).send(data);
     });
 
-    app.addHook("onClose", (_, done) => {
-        done();
+    app.addHook("onClose", async () => {
+        await sequelize.close();
     });
 
     app.register(api, { prefix: "/api" });

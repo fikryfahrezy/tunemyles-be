@@ -6,7 +6,7 @@ import {
 import helloWorld from "./hello-world";
 import example from "./example";
 
-async function api(
+export async function routeV2(
     instance: FastifyInstance,
     _: FastifyPluginOptions,
     done: HookHandlerDoneFunction
@@ -15,4 +15,3 @@ async function api(
     instance.register(example);
     done();
 }
-export default api;
