@@ -1,6 +1,6 @@
 import Sequelize, { DataTypes, Model, Optional } from "sequelize";
 import type { m_banks, m_banksId } from "./m_banks";
-import type { m_users, m_usersId } from "./m_users";
+import type { User, UserId } from "./User";
 import type {
     u_user_wallet_withdraw,
     u_user_wallet_withdrawId,
@@ -48,13 +48,10 @@ export class u_user_bank_account
     >;
     createId_m_banks_m_bank!: Sequelize.BelongsToCreateAssociationMixin<m_banks>;
     // u_user_bank_account belongsTo m_users via id_m_users
-    id_m_users_m_user!: m_users;
-    getId_m_users_m_user!: Sequelize.BelongsToGetAssociationMixin<m_users>;
-    setId_m_users_m_user!: Sequelize.BelongsToSetAssociationMixin<
-        m_users,
-        m_usersId
-    >;
-    createId_m_users_m_user!: Sequelize.BelongsToCreateAssociationMixin<m_users>;
+    id_m_users_m_user!: User;
+    getId_m_users_m_user!: Sequelize.BelongsToGetAssociationMixin<User>;
+    setId_m_users_m_user!: Sequelize.BelongsToSetAssociationMixin<User, UserId>;
+    createId_m_users_m_user!: Sequelize.BelongsToCreateAssociationMixin<User>;
     // u_user_bank_account hasMany u_user_wallet_withdraw via id_u_user_bank_account
     u_user_wallet_withdraws!: u_user_wallet_withdraw[];
     getU_user_wallet_withdraws!: Sequelize.HasManyGetAssociationsMixin<u_user_wallet_withdraw>;

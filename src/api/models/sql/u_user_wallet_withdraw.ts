@@ -3,7 +3,7 @@ import type {
     u_user_bank_account,
     u_user_bank_accountId,
 } from "./u_user_bank_account";
-import type { u_user_wallet, u_user_walletId } from "./u_user_wallet";
+import type { UserWallet, UserWalletId } from "./UserWallet";
 
 export interface u_user_wallet_withdrawAttributes {
     id: number;
@@ -45,13 +45,13 @@ export class u_user_wallet_withdraw
     >;
     createId_u_user_bank_account_u_user_bank_account!: Sequelize.BelongsToCreateAssociationMixin<u_user_bank_account>;
     // u_user_wallet_withdraw belongsTo u_user_wallet via id_u_user_wallet
-    id_u_user_wallet_u_user_wallet!: u_user_wallet;
-    getId_u_user_wallet_u_user_wallet!: Sequelize.BelongsToGetAssociationMixin<u_user_wallet>;
+    id_u_user_wallet_u_user_wallet!: UserWallet;
+    getId_u_user_wallet_u_user_wallet!: Sequelize.BelongsToGetAssociationMixin<UserWallet>;
     setId_u_user_wallet_u_user_wallet!: Sequelize.BelongsToSetAssociationMixin<
-        u_user_wallet,
-        u_user_walletId
+        UserWallet,
+        UserWalletId
     >;
-    createId_u_user_wallet_u_user_wallet!: Sequelize.BelongsToCreateAssociationMixin<u_user_wallet>;
+    createId_u_user_wallet_u_user_wallet!: Sequelize.BelongsToCreateAssociationMixin<UserWallet>;
 
     static initModel(
         sequelize: Sequelize.Sequelize

@@ -1,7 +1,7 @@
 import Sequelize, { DataTypes, Model, Optional } from "sequelize";
 import type { m_banks, m_banksId } from "./m_banks";
 import type { m_medias, m_mediasId } from "./m_medias";
-import type { u_user_wallet, u_user_walletId } from "./u_user_wallet";
+import type { UserWallet, UserWalletId } from "./UserWallet";
 
 export interface u_user_wallet_top_upAttributes {
     id: number;
@@ -52,13 +52,13 @@ export class u_user_wallet_top_up
     setProof!: Sequelize.BelongsToSetAssociationMixin<m_medias, m_mediasId>;
     createProof!: Sequelize.BelongsToCreateAssociationMixin<m_medias>;
     // u_user_wallet_top_up belongsTo u_user_wallet via id_u_user_wallet
-    id_u_user_wallet_u_user_wallet!: u_user_wallet;
-    getId_u_user_wallet_u_user_wallet!: Sequelize.BelongsToGetAssociationMixin<u_user_wallet>;
+    id_u_user_wallet_u_user_wallet!: UserWallet;
+    getId_u_user_wallet_u_user_wallet!: Sequelize.BelongsToGetAssociationMixin<UserWallet>;
     setId_u_user_wallet_u_user_wallet!: Sequelize.BelongsToSetAssociationMixin<
-        u_user_wallet,
-        u_user_walletId
+        UserWallet,
+        UserWalletId
     >;
-    createId_u_user_wallet_u_user_wallet!: Sequelize.BelongsToCreateAssociationMixin<u_user_wallet>;
+    createId_u_user_wallet_u_user_wallet!: Sequelize.BelongsToCreateAssociationMixin<UserWallet>;
 
     static initModel(
         sequelize: Sequelize.Sequelize
@@ -117,9 +117,7 @@ export class u_user_wallet_top_up
                         },
                         customValidator(value: number) {
                             if (value < 0 || value > 2)
-                                throw new Error(
-                                    "please input proper visibility"
-                                );
+                                throw new Error("please input proper status");
                         },
                     },
                 },

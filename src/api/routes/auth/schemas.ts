@@ -60,21 +60,24 @@ const requestBody = {
 const responses = {
     authenticated: {
         type: "object",
-        properties: {
-            ApiResponse: {
-                $ref: "#ApiResponse",
-            },
-            data: {
+        allOf: [
+            { $ref: "#ApiResponse" },
+            {
                 type: "object",
-                allOf: [
-                    {
+                properties: {
+                    data: {
                         type: "object",
-                        properties: { type: { type: "integer" } },
+                        allOf: [
+                            {
+                                type: "object",
+                                properties: { type: { type: "integer" } },
+                            },
+                            { $ref: "#GetToken" },
+                        ],
                     },
-                    { $ref: "#GetToken" },
-                ],
+                },
             },
-        },
+        ],
     },
     me: {
         type: "object",

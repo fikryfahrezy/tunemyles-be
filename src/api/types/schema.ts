@@ -10,21 +10,10 @@ export type FileRequestBody = {
     file: AddedFileBody[];
 };
 
-export type GetIdRequest = {
-    Params: GetIdRequestParams;
-};
-
-export type PostRequest = {
-    Body: PostRequestBody;
-};
-
-export type FileRequest = {
-    Body: FileRequestBody;
-};
-
 export type ApiKeyHeader = {
     authorization: string;
 };
+
 export type AddBankStepBody = {
     step: string;
 };

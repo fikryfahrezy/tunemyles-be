@@ -1,6 +1,6 @@
 import Sequelize, { DataTypes, Model, Optional } from "sequelize";
 import type { m_medias, m_mediasId } from "./m_medias";
-import type { u_user, u_userId } from "./u_user";
+import type { UserUtility, UserUtilityId } from "./UserUtility";
 
 export interface u_user_is_merchantAttributes {
     id: number;
@@ -62,13 +62,13 @@ export class u_user_is_merchant
     >;
     createId_market_photo_m_media!: Sequelize.BelongsToCreateAssociationMixin<m_medias>;
     // u_user_is_merchant belongsTo u_user via id_u_user
-    id_u_user_u_user!: u_user;
-    getId_u_user_u_user!: Sequelize.BelongsToGetAssociationMixin<u_user>;
+    id_u_user_u_user!: UserUtility;
+    getId_u_user_u_user!: Sequelize.BelongsToGetAssociationMixin<UserUtility>;
     setId_u_user_u_user!: Sequelize.BelongsToSetAssociationMixin<
-        u_user,
-        u_userId
+        UserUtility,
+        UserUtilityId
     >;
-    createId_u_user_u_user!: Sequelize.BelongsToCreateAssociationMixin<u_user>;
+    createId_u_user_u_user!: Sequelize.BelongsToCreateAssociationMixin<UserUtility>;
 
     static initModel(
         sequelize: Sequelize.Sequelize

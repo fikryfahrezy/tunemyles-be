@@ -1,10 +1,7 @@
-require("make-promises-safe");
-import dotenv from "dotenv";
+import "make-promises-safe";
 import pino from "pino";
-dotenv.config();
-
 import app from "./app";
-import { sequelizeConnect } from "./databases/sequelize";
+import { sequelize } from "./databases/sequelize";
 import logger, { dest } from "./utils/logger";
 import validateEnv from "./config/validateEnv";
 
@@ -29,7 +26,7 @@ const start = async () => {
 
         const PORT = process.env.PORT;
 
-        await sequelizeConnect();
+        await sequelize.authenticate();
         await server.listen({ port: Number(PORT), host: "::" });
         const address = server.server.address();
         const port = typeof address === "string" ? address : address?.port;

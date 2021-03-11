@@ -1,6 +1,6 @@
 import Sequelize, { DataTypes, Model, Optional } from "sequelize";
 import type { m_medias, m_mediasId } from "./m_medias";
-import type { u_user_wallet, u_user_walletId } from "./u_user_wallet";
+import type { UserWallet, UserWalletId } from "./UserWallet";
 
 export interface m_walletsAttributes {
     id: number;
@@ -39,36 +39,36 @@ export class m_wallets
     >;
     createId_logo_m_media!: Sequelize.BelongsToCreateAssociationMixin<m_medias>;
     // m_wallets hasMany u_user_wallet via id_m_wallets
-    u_user_wallets!: u_user_wallet[];
-    getU_user_wallets!: Sequelize.HasManyGetAssociationsMixin<u_user_wallet>;
+    u_user_wallets!: UserWallet[];
+    getU_user_wallets!: Sequelize.HasManyGetAssociationsMixin<UserWallet>;
     setU_user_wallets!: Sequelize.HasManySetAssociationsMixin<
-        u_user_wallet,
-        u_user_walletId
+        UserWallet,
+        UserWalletId
     >;
     addU_user_wallet!: Sequelize.HasManyAddAssociationMixin<
-        u_user_wallet,
-        u_user_walletId
+        UserWallet,
+        UserWalletId
     >;
     addU_user_wallets!: Sequelize.HasManyAddAssociationsMixin<
-        u_user_wallet,
-        u_user_walletId
+        UserWallet,
+        UserWalletId
     >;
-    createU_user_wallet!: Sequelize.HasManyCreateAssociationMixin<u_user_wallet>;
+    createU_user_wallet!: Sequelize.HasManyCreateAssociationMixin<UserWallet>;
     removeU_user_wallet!: Sequelize.HasManyRemoveAssociationMixin<
-        u_user_wallet,
-        u_user_walletId
+        UserWallet,
+        UserWalletId
     >;
     removeU_user_wallets!: Sequelize.HasManyRemoveAssociationsMixin<
-        u_user_wallet,
-        u_user_walletId
+        UserWallet,
+        UserWalletId
     >;
     hasU_user_wallet!: Sequelize.HasManyHasAssociationMixin<
-        u_user_wallet,
-        u_user_walletId
+        UserWallet,
+        UserWalletId
     >;
     hasU_user_wallets!: Sequelize.HasManyHasAssociationsMixin<
-        u_user_wallet,
-        u_user_walletId
+        UserWallet,
+        UserWalletId
     >;
     countU_user_wallets!: Sequelize.HasManyCountAssociationsMixin;
 

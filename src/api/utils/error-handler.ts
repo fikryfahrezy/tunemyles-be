@@ -1,4 +1,5 @@
 import type { FastifyReply } from "fastify";
+import { UniqueConstraintError, ValidationError } from "sequelize";
 import type { Validation } from "../types/util";
 
 export class ErrorResponse extends Error {
@@ -21,6 +22,13 @@ export const errorHandler: (
         if (status === 404) {
             res.notFound(message);
         }
+    } else if (err instanceof UniqueConstraintError) {
+        const errValue = err.errors[0].value;
+        const errMsg = errValue + " already used";
+        res.badRequest(errMsg);
+    } else if (err instanceof ValidationError) {
+        const errMsg = err.errors[0].message;
+        res.unprocessableEntity(errMsg);
     } else throw new Error("...");
 };
 

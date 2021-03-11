@@ -10,7 +10,8 @@
     "scripts": {
         "postinstall": "husky install",
         "build": "tsc -p tsconfig.json",
-        "start": "node",
+        "start": "node -r dotenv/config",
+        "ts-node": "ts-node -r dotenv/config",
         "dev": "nodemon",
         "pretty-dev": "concurrently \"npm run nodemon\" \"npm run prettier-watch\"",
         "nodemon": "nodemon src/index.ts",

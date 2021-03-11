@@ -1,4 +1,4 @@
-import Sequelize, { DataTypes, Model, Optional } from "sequelize";
+import Sequelize, { DataTypes, Model } from "sequelize";
 
 export interface u_user_is_merchant_locationAttributes {
     id_u_user_is_merchant: number;

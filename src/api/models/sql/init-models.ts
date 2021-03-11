@@ -1,4 +1,4 @@
-import type { Sequelize, Model } from "sequelize";
+import type { Sequelize } from "sequelize";
 import { m_banks } from "./m_banks";
 import type { m_banksAttributes, m_banksCreationAttributes } from "./m_banks";
 import { m_categories } from "./m_categories";
@@ -18,8 +18,8 @@ import type {
     m_productsAttributes,
     m_productsCreationAttributes,
 } from "./m_products";
-import { m_users } from "./m_users";
-import type { m_usersAttributes, m_usersCreationAttributes } from "./m_users";
+import { User } from "./User";
+import type { UserAttributes, UserCreationAttributes } from "./User";
 import { m_wallets } from "./m_wallets";
 import type {
     m_walletsAttributes,
@@ -47,8 +47,11 @@ import type {
     u_product_photosAttributes,
     u_product_photosCreationAttributes,
 } from "./u_product_photos";
-import { u_user } from "./u_user";
-import type { u_userAttributes, u_userCreationAttributes } from "./u_user";
+import { UserUtility } from "./UserUtility";
+import type {
+    UserUtilityAttributes,
+    UserUtilityCreationAttributes,
+} from "./UserUtility";
 import { u_user_bank_account } from "./u_user_bank_account";
 import type {
     u_user_bank_accountAttributes,
@@ -99,11 +102,11 @@ import type {
     u_user_transaction_productsAttributes,
     u_user_transaction_productsCreationAttributes,
 } from "./u_user_transaction_products";
-import { u_user_wallet } from "./u_user_wallet";
+import { UserWallet } from "./UserWallet";
 import type {
-    u_user_walletAttributes,
-    u_user_walletCreationAttributes,
-} from "./u_user_wallet";
+    UserWalletAttributes,
+    UserWalletCreationAttributes,
+} from "./UserWallet";
 import { u_user_wallet_top_up } from "./u_user_wallet_top_up";
 import type {
     u_user_wallet_top_upAttributes,
@@ -121,14 +124,14 @@ export {
     m_faq,
     m_medias,
     m_products,
-    m_users,
+    User,
     m_wallets,
     u_bank,
     u_bank_account,
     u_product,
     u_product_categories,
     u_product_photos,
-    u_user,
+    UserUtility,
     u_user_bank_account,
     u_user_cart,
     u_user_chat,
@@ -139,7 +142,7 @@ export {
     u_user_transaction,
     u_user_transaction_product_reviews,
     u_user_transaction_products,
-    u_user_wallet,
+    UserWallet,
     u_user_wallet_top_up,
     u_user_wallet_withdraw,
 };
@@ -155,8 +158,8 @@ export type {
     m_mediasCreationAttributes,
     m_productsAttributes,
     m_productsCreationAttributes,
-    m_usersAttributes,
-    m_usersCreationAttributes,
+    UserAttributes,
+    UserCreationAttributes,
     m_walletsAttributes,
     m_walletsCreationAttributes,
     u_bankAttributes,
@@ -169,8 +172,8 @@ export type {
     u_product_categoriesCreationAttributes,
     u_product_photosAttributes,
     u_product_photosCreationAttributes,
-    u_userAttributes,
-    u_userCreationAttributes,
+    UserUtilityAttributes,
+    UserUtilityCreationAttributes,
     u_user_bank_accountAttributes,
     u_user_bank_accountCreationAttributes,
     u_user_cartAttributes,
@@ -191,28 +194,57 @@ export type {
     u_user_transaction_product_reviewsCreationAttributes,
     u_user_transaction_productsAttributes,
     u_user_transaction_productsCreationAttributes,
-    u_user_walletAttributes,
-    u_user_walletCreationAttributes,
+    UserWalletAttributes,
+    UserWalletCreationAttributes,
     u_user_wallet_top_upAttributes,
     u_user_wallet_top_upCreationAttributes,
     u_user_wallet_withdrawAttributes,
     u_user_wallet_withdrawCreationAttributes,
 };
 
-export function initModels(sequelize: Sequelize) {
+type Model = {
+    Bank: typeof m_banks;
+    Category: typeof m_categories;
+    Faq: typeof m_faq;
+    Media: typeof m_medias;
+    Product: typeof m_products;
+    User: typeof User;
+    Wallet: typeof m_wallets;
+    BankUtility: typeof u_bank;
+    BankAccount: typeof u_bank_account;
+    ProductUtility: typeof u_product;
+    ProductCategory: typeof u_product_categories;
+    ProductPhoto: typeof u_product_photos;
+    UserUtility: typeof UserUtility;
+    BankUser: typeof u_user_bank_account;
+    UserCart: typeof u_user_cart;
+    UserChat: typeof u_user_chat;
+    UserChatDetail: typeof u_user_chat_detail;
+    UserMerchant: typeof u_user_is_merchant;
+    MerchantLocation: typeof u_user_is_merchant_location;
+    UserLostPassword: typeof u_user_lost_password;
+    UserTransaction: typeof u_user_transaction;
+    ProductReview: typeof u_user_transaction_product_reviews;
+    UserTransactionProduct: typeof u_user_transaction_products;
+    UserWallet: typeof UserWallet;
+    UserTopUp: typeof u_user_wallet_top_up;
+    UserWithdraw: typeof u_user_wallet_withdraw;
+};
+
+export function initModels(sequelize: Sequelize): Model {
     m_banks.initModel(sequelize);
     m_categories.initModel(sequelize);
     m_faq.initModel(sequelize);
     m_medias.initModel(sequelize);
     m_products.initModel(sequelize);
-    m_users.initModel(sequelize);
+    User.initModel(sequelize);
     m_wallets.initModel(sequelize);
     u_bank.initModel(sequelize);
     u_bank_account.initModel(sequelize);
     u_product.initModel(sequelize);
     u_product_categories.initModel(sequelize);
     u_product_photos.initModel(sequelize);
-    u_user.initModel(sequelize);
+    UserUtility.initModel(sequelize);
     u_user_bank_account.initModel(sequelize);
     u_user_cart.initModel(sequelize);
     u_user_chat.initModel(sequelize);
@@ -223,7 +255,7 @@ export function initModels(sequelize: Sequelize) {
     u_user_transaction.initModel(sequelize);
     u_user_transaction_product_reviews.initModel(sequelize);
     u_user_transaction_products.initModel(sequelize);
-    u_user_wallet.initModel(sequelize);
+    UserWallet.initModel(sequelize);
     u_user_wallet_top_up.initModel(sequelize);
     u_user_wallet_withdraw.initModel(sequelize);
 
@@ -282,11 +314,11 @@ export function initModels(sequelize: Sequelize) {
         foreignKey: "id_cover",
     });
     m_medias.hasMany(m_products, { as: "m_products", foreignKey: "id_cover" });
-    m_users.belongsTo(m_medias, {
+    User.belongsTo(m_medias, {
         as: "id_photo_m_media",
         foreignKey: "id_photo",
     });
-    m_medias.hasMany(m_users, { as: "m_users", foreignKey: "id_photo" });
+    m_medias.hasMany(User, { as: "m_users", foreignKey: "id_photo" });
     m_wallets.belongsTo(m_medias, {
         as: "id_logo_m_media",
         foreignKey: "id_logo",
@@ -348,79 +380,79 @@ export function initModels(sequelize: Sequelize) {
         as: "u_user_transaction_products",
         foreignKey: "id_m_products",
     });
-    m_products.belongsTo(m_users, {
+    m_products.belongsTo(User, {
         as: "id_m_users_m_user",
         foreignKey: "id_m_users",
     });
-    m_users.hasMany(m_products, { as: "m_products", foreignKey: "id_m_users" });
-    u_user.belongsTo(m_users, {
+    User.hasMany(m_products, { as: "m_products", foreignKey: "id_m_users" });
+    UserUtility.belongsTo(User, {
         as: "id_m_users_m_user",
         foreignKey: "id_m_users",
     });
-    m_users.hasMany(u_user, { as: "u_users", foreignKey: "id_m_users" });
-    u_user_bank_account.belongsTo(m_users, {
+    User.hasMany(UserUtility, { as: "u_users", foreignKey: "id_m_users" });
+    u_user_bank_account.belongsTo(User, {
         as: "id_m_users_m_user",
         foreignKey: "id_m_users",
     });
-    m_users.hasMany(u_user_bank_account, {
+    User.hasMany(u_user_bank_account, {
         as: "u_user_bank_accounts",
         foreignKey: "id_m_users",
     });
-    u_user_cart.belongsTo(m_users, {
+    u_user_cart.belongsTo(User, {
         as: "id_m_users_m_user",
         foreignKey: "id_m_users",
     });
-    m_users.hasMany(u_user_cart, {
+    User.hasMany(u_user_cart, {
         as: "u_user_carts",
         foreignKey: "id_m_users",
     });
-    u_user_cart.belongsTo(m_users, {
+    u_user_cart.belongsTo(User, {
         as: "id_merchant_m_user",
         foreignKey: "id_merchant",
     });
-    m_users.hasMany(u_user_cart, {
+    User.hasMany(u_user_cart, {
         as: "id_merchant_u_user_carts",
         foreignKey: "id_merchant",
     });
-    u_user_chat.belongsTo(m_users, { as: "id_cs_m_user", foreignKey: "id_cs" });
-    m_users.hasMany(u_user_chat, { as: "u_user_chats", foreignKey: "id_cs" });
-    u_user_chat.belongsTo(m_users, {
+    u_user_chat.belongsTo(User, { as: "id_cs_m_user", foreignKey: "id_cs" });
+    User.hasMany(u_user_chat, { as: "u_user_chats", foreignKey: "id_cs" });
+    u_user_chat.belongsTo(User, {
         as: "id_m_users_m_user",
         foreignKey: "id_m_users",
     });
-    m_users.hasMany(u_user_chat, {
+    User.hasMany(u_user_chat, {
         as: "id_m_users_u_user_chats",
         foreignKey: "id_m_users",
     });
-    u_user_chat_detail.belongsTo(m_users, {
+    u_user_chat_detail.belongsTo(User, {
         as: "id_m_users_m_user",
         foreignKey: "id_m_users",
     });
-    m_users.hasMany(u_user_chat_detail, {
+    User.hasMany(u_user_chat_detail, {
         as: "u_user_chat_details",
         foreignKey: "id_m_users",
     });
-    u_user_transaction.belongsTo(m_users, {
+    u_user_transaction.belongsTo(User, {
         as: "id_m_users_m_user",
         foreignKey: "id_m_users",
     });
-    m_users.hasMany(u_user_transaction, {
+    User.hasMany(u_user_transaction, {
         as: "u_user_transactions",
         foreignKey: "id_m_users",
     });
-    u_user_transaction.belongsTo(m_users, {
+    u_user_transaction.belongsTo(User, {
         as: "id_merchant_m_user",
         foreignKey: "id_merchant",
     });
-    m_users.hasMany(u_user_transaction, {
+    User.hasMany(u_user_transaction, {
         as: "id_merchant_u_user_transactions",
         foreignKey: "id_merchant",
     });
-    u_user_wallet.belongsTo(m_wallets, {
+    UserWallet.belongsTo(m_wallets, {
         as: "id_m_wallets_m_wallet",
         foreignKey: "id_m_wallets",
     });
-    m_wallets.hasMany(u_user_wallet, {
+    m_wallets.hasMany(UserWallet, {
         as: "u_user_wallets",
         foreignKey: "id_m_wallets",
     });
@@ -440,27 +472,27 @@ export function initModels(sequelize: Sequelize) {
         as: "u_product_photos",
         foreignKey: "id_u_product",
     });
-    u_user_is_merchant.belongsTo(u_user, {
+    u_user_is_merchant.belongsTo(UserUtility, {
         as: "id_u_user_u_user",
         foreignKey: "id_u_user",
     });
-    u_user.hasMany(u_user_is_merchant, {
+    UserUtility.hasMany(u_user_is_merchant, {
         as: "u_user_is_merchants",
         foreignKey: "id_u_user",
     });
-    u_user_lost_password.belongsTo(u_user, {
+    u_user_lost_password.belongsTo(UserUtility, {
         as: "id_u_user_u_user",
         foreignKey: "id_u_user",
     });
-    u_user.hasMany(u_user_lost_password, {
+    UserUtility.hasMany(u_user_lost_password, {
         as: "u_user_lost_passwords",
         foreignKey: "id_u_user",
     });
-    u_user_wallet.belongsTo(u_user, {
+    UserWallet.belongsTo(UserUtility, {
         as: "id_u_user_u_user",
         foreignKey: "id_u_user",
     });
-    u_user.hasMany(u_user_wallet, {
+    UserUtility.hasMany(UserWallet, {
         as: "u_user_wallets",
         foreignKey: "id_u_user",
     });
@@ -496,49 +528,49 @@ export function initModels(sequelize: Sequelize) {
         as: "u_user_transaction_product_reviews",
         foreignKey: "id_u_user_transaction_products",
     });
-    u_user_wallet_top_up.belongsTo(u_user_wallet, {
+    u_user_wallet_top_up.belongsTo(UserWallet, {
         as: "id_u_user_wallet_u_user_wallet",
         foreignKey: "id_u_user_wallet",
     });
-    u_user_wallet.hasMany(u_user_wallet_top_up, {
+    UserWallet.hasMany(u_user_wallet_top_up, {
         as: "u_user_wallet_top_ups",
         foreignKey: "id_u_user_wallet",
     });
-    u_user_wallet_withdraw.belongsTo(u_user_wallet, {
+    u_user_wallet_withdraw.belongsTo(UserWallet, {
         as: "id_u_user_wallet_u_user_wallet",
         foreignKey: "id_u_user_wallet",
     });
-    u_user_wallet.hasMany(u_user_wallet_withdraw, {
+    UserWallet.hasMany(u_user_wallet_withdraw, {
         as: "u_user_wallet_withdraws",
         foreignKey: "id_u_user_wallet",
     });
 
     return {
-        m_banks: m_banks,
-        m_categories: m_categories,
-        m_faq: m_faq,
-        m_medias: m_medias,
-        m_products: m_products,
-        m_users: m_users,
-        m_wallets: m_wallets,
-        u_bank: u_bank,
-        u_bank_account: u_bank_account,
-        u_product: u_product,
-        u_product_categories: u_product_categories,
-        u_product_photos: u_product_photos,
-        u_user: u_user,
-        u_user_bank_account: u_user_bank_account,
-        u_user_cart: u_user_cart,
-        u_user_chat: u_user_chat,
-        u_user_chat_detail: u_user_chat_detail,
-        u_user_is_merchant: u_user_is_merchant,
-        u_user_is_merchant_location: u_user_is_merchant_location,
-        u_user_lost_password: u_user_lost_password,
-        u_user_transaction: u_user_transaction,
-        u_user_transaction_product_reviews: u_user_transaction_product_reviews,
-        u_user_transaction_products: u_user_transaction_products,
-        u_user_wallet: u_user_wallet,
-        u_user_wallet_top_up: u_user_wallet_top_up,
-        u_user_wallet_withdraw: u_user_wallet_withdraw,
+        Bank: m_banks,
+        Category: m_categories,
+        Faq: m_faq,
+        Media: m_medias,
+        Product: m_products,
+        User: User,
+        Wallet: m_wallets,
+        BankUtility: u_bank,
+        BankAccount: u_bank_account,
+        ProductUtility: u_product,
+        ProductCategory: u_product_categories,
+        ProductPhoto: u_product_photos,
+        UserUtility: UserUtility,
+        BankUser: u_user_bank_account,
+        UserCart: u_user_cart,
+        UserChat: u_user_chat,
+        UserChatDetail: u_user_chat_detail,
+        UserMerchant: u_user_is_merchant,
+        MerchantLocation: u_user_is_merchant_location,
+        UserLostPassword: u_user_lost_password,
+        UserTransaction: u_user_transaction,
+        ProductReview: u_user_transaction_product_reviews,
+        UserTransactionProduct: u_user_transaction_products,
+        UserWallet: UserWallet,
+        UserTopUp: u_user_wallet_top_up,
+        UserWithdraw: u_user_wallet_withdraw,
     };
 }

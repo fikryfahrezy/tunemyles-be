@@ -1,9 +1,11 @@
-import type { SyncHookFn } from "../../types/fn";
-import {
+import type {
+    FastifyRequest,
     FastifyInstance,
     FastifyPluginOptions,
     HookHandlerDoneFunction,
 } from "fastify";
+import type { SyncHookFn } from "../../types/fasitify";
+import type { PostRequestBody } from "../../types/schema";
 import {
     getExample,
     postExample,
@@ -11,7 +13,7 @@ import {
     postFileExample,
 } from "./controllers";
 import schemas from "./schemas";
-import { handlerWrapper } from "../../utils/controller-wrapper";
+import { controllerWrapper } from "../../utils/controller-wrapper";
 import { schemaValidationError } from "../../utils/error-handler";
 
 declare module "fastify" {
@@ -38,7 +40,7 @@ async function routes(
                 },
             },
         },
-        handlerWrapper(getExample)
+        controllerWrapper(getExample)
     );
 
     fastify.post(
@@ -53,13 +55,17 @@ async function routes(
                     "5xx": { $ref: "#ApiResponse" },
                 },
             },
-            preHandler: (req, res, done) => {
+            preHandler: (
+                req: FastifyRequest<{ Body: PostRequestBody }>,
+                res,
+                done
+            ) => {
                 const validation = req.validationError;
                 if (validation) schemaValidationError(validation, res);
                 done();
             },
         },
-        postExample
+        controllerWrapper(postExample)
     );
 
     fastify.get(
@@ -74,7 +80,7 @@ async function routes(
                 },
             },
         },
-        handlerWrapper(getIdExample)
+        controllerWrapper(getIdExample)
     );
 
     fastify.post(
@@ -89,7 +95,7 @@ async function routes(
                 },
             },
         },
-        postFileExample
+        controllerWrapper(postFileExample)
     );
 
     fastify.get(
@@ -116,7 +122,7 @@ async function routes(
                 { run: "all" }
             ),
         },
-        getExample
+        controllerWrapper(getExample)
     );
 
     done();

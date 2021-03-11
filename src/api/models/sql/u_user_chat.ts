@@ -1,5 +1,5 @@
 import Sequelize, { DataTypes, Model, Optional } from "sequelize";
-import type { m_users, m_usersId } from "./m_users";
+import type { User, UserId } from "./User";
 import type {
     u_user_chat_detail,
     u_user_chat_detailId,
@@ -32,21 +32,15 @@ export class u_user_chat
     updated_at?: Date;
 
     // u_user_chat belongsTo m_users via id_cs
-    id_cs_m_user!: m_users;
-    getId_cs_m_user!: Sequelize.BelongsToGetAssociationMixin<m_users>;
-    setId_cs_m_user!: Sequelize.BelongsToSetAssociationMixin<
-        m_users,
-        m_usersId
-    >;
-    createId_cs_m_user!: Sequelize.BelongsToCreateAssociationMixin<m_users>;
+    id_cs_m_user!: User;
+    getId_cs_m_user!: Sequelize.BelongsToGetAssociationMixin<User>;
+    setId_cs_m_user!: Sequelize.BelongsToSetAssociationMixin<User, UserId>;
+    createId_cs_m_user!: Sequelize.BelongsToCreateAssociationMixin<User>;
     // u_user_chat belongsTo m_users via id_m_users
-    id_m_users_m_user!: m_users;
-    getId_m_users_m_user!: Sequelize.BelongsToGetAssociationMixin<m_users>;
-    setId_m_users_m_user!: Sequelize.BelongsToSetAssociationMixin<
-        m_users,
-        m_usersId
-    >;
-    createId_m_users_m_user!: Sequelize.BelongsToCreateAssociationMixin<m_users>;
+    id_m_users_m_user!: User;
+    getId_m_users_m_user!: Sequelize.BelongsToGetAssociationMixin<User>;
+    setId_m_users_m_user!: Sequelize.BelongsToSetAssociationMixin<User, UserId>;
+    createId_m_users_m_user!: Sequelize.BelongsToCreateAssociationMixin<User>;
     // u_user_chat hasMany u_user_chat_detail via id_u_user_chat
     u_user_chat_details!: u_user_chat_detail[];
     getU_user_chat_details!: Sequelize.HasManyGetAssociationsMixin<u_user_chat_detail>;

@@ -1,6 +1,6 @@
 import Sequelize, { DataTypes, Model, Optional } from "sequelize";
 import type { m_medias, m_mediasId } from "./m_medias";
-import type { m_users, m_usersId } from "./m_users";
+import type { User, UserId } from "./User";
 import type { u_product, u_productId } from "./u_product";
 import type { u_user_cart, u_user_cartId } from "./u_user_cart";
 import type {
@@ -140,13 +140,10 @@ export class m_products
     >;
     countU_user_transaction_products!: Sequelize.HasManyCountAssociationsMixin;
     // m_products belongsTo m_users via id_m_users
-    id_m_users_m_user!: m_users;
-    getId_m_users_m_user!: Sequelize.BelongsToGetAssociationMixin<m_users>;
-    setId_m_users_m_user!: Sequelize.BelongsToSetAssociationMixin<
-        m_users,
-        m_usersId
-    >;
-    createId_m_users_m_user!: Sequelize.BelongsToCreateAssociationMixin<m_users>;
+    id_m_users_m_user!: User;
+    getId_m_users_m_user!: Sequelize.BelongsToGetAssociationMixin<User>;
+    setId_m_users_m_user!: Sequelize.BelongsToSetAssociationMixin<User, UserId>;
+    createId_m_users_m_user!: Sequelize.BelongsToCreateAssociationMixin<User>;
 
     static initModel(sequelize: Sequelize.Sequelize): typeof m_products {
         m_products.init(

@@ -3,7 +3,7 @@ import type {
     FastifyRequest,
     HookHandlerDoneFunction,
 } from "fastify";
-import type { FastifyFn } from "../types/fn";
+import type { FastifyFn } from "../types/fasitify";
 // const UserUtility = require("../models/UserUtility");
 // const ErrorResponse = require("../utils/ErrorResponse");
 

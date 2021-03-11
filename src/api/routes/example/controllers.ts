@@ -4,14 +4,11 @@ import type {
     RequestGenericInterface,
 } from "fastify";
 import type {
-    PostRequest,
     PostRequestBody,
-    GetIdRequest,
     GetIdRequestParams,
-    FileRequest,
     FileRequestBody,
 } from "../../types/schema";
-import type { RequestHandler } from "../../types/fn";
+import type { Request, RequestHandler } from "../../types/fasitify";
 import {
     getIdService,
     getService,
@@ -35,7 +32,9 @@ export const getExample: RequestHandler<RequestGenericInterface> = async functio
         });
 };
 
-export const postExample: RequestHandler<PostRequest> = async function (
+export const postExample: RequestHandler<
+    Request<PostRequestBody>
+> = async function (
     req: FastifyRequest<{ Body: PostRequestBody }>,
     res: FastifyReply
 ): Promise<void> {
@@ -51,7 +50,9 @@ export const postExample: RequestHandler<PostRequest> = async function (
         });
 };
 
-export const getIdExample: RequestHandler<GetIdRequest> = async function (
+export const getIdExample: RequestHandler<
+    Request<unknown, unknown, GetIdRequestParams>
+> = async function (
     req: FastifyRequest<{ Params: GetIdRequestParams }>,
     res: FastifyReply
 ): Promise<void> {
@@ -69,7 +70,9 @@ export const getIdExample: RequestHandler<GetIdRequest> = async function (
         });
 };
 
-export const postFileExample: RequestHandler<FileRequest> = async function (
+export const postFileExample: RequestHandler<
+    Request<FileRequestBody>
+> = async function (
     req: FastifyRequest<{ Body: FileRequestBody }>,
     res: FastifyReply
 ): Promise<void> {

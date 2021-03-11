@@ -8,7 +8,7 @@ import {
     adminProtect,
     userProtect,
     merchantProtect,
-} from "./middlewares/protect-rooute";
+} from "./middlewares/protect-route";
 import { sequelizeQuerying } from "./middlewares/db-querying";
 import { routeV2 } from "./routes";
 

@@ -3,12 +3,12 @@ import app from "../src/app";
 
 let server: null | FastifyInstance = null;
 
-beforeEach(() => {
+beforeAll(() => {
     server = app();
     return server.ready();
 });
 
-afterEach(() => {
+afterAll(() => {
     return server.close();
 });
 

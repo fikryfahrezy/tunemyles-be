@@ -1,6 +1,6 @@
 import Sequelize, { DataTypes, Model, Optional } from "sequelize";
 import type { m_wallets, m_walletsId } from "./m_wallets";
-import type { u_user, u_userId } from "./u_user";
+import type { UserUtility, UserUtilityId } from "./UserUtility";
 import type {
     u_user_wallet_top_up,
     u_user_wallet_top_upId,
@@ -10,7 +10,7 @@ import type {
     u_user_wallet_withdrawId,
 } from "./u_user_wallet_withdraw";
 
-export interface u_user_walletAttributes {
+export interface UserWalletAttributes {
     id: number;
     id_u_user: number;
     id_m_wallets?: number;
@@ -20,16 +20,16 @@ export interface u_user_walletAttributes {
     updated_at?: Date;
 }
 
-export type u_user_walletPk = "id";
-export type u_user_walletId = u_user_wallet[u_user_walletPk];
-export type u_user_walletCreationAttributes = Optional<
-    u_user_walletAttributes,
-    u_user_walletPk
+export type UserWalletPk = "id";
+export type UserWalletId = UserWallet[UserWalletPk];
+export type UserWalletCreationAttributes = Optional<
+    UserWalletAttributes,
+    UserWalletPk
 >;
 
-export class u_user_wallet
-    extends Model<u_user_walletAttributes, u_user_walletCreationAttributes>
-    implements u_user_walletAttributes {
+export class UserWallet
+    extends Model<UserWalletAttributes, UserWalletCreationAttributes>
+    implements UserWalletAttributes {
     id!: number;
     id_u_user!: number;
     id_m_wallets?: number;
@@ -39,90 +39,90 @@ export class u_user_wallet
     updated_at?: Date;
 
     // u_user_wallet belongsTo m_wallets via id_m_wallets
-    id_m_wallets_m_wallet!: m_wallets;
-    getId_m_wallets_m_wallet!: Sequelize.BelongsToGetAssociationMixin<m_wallets>;
-    setId_m_wallets_m_wallet!: Sequelize.BelongsToSetAssociationMixin<
-        m_wallets,
-        m_walletsId
-    >;
-    createId_m_wallets_m_wallet!: Sequelize.BelongsToCreateAssociationMixin<m_wallets>;
-    // u_user_wallet belongsTo u_user via id_u_user
-    id_u_user_u_user!: u_user;
-    getId_u_user_u_user!: Sequelize.BelongsToGetAssociationMixin<u_user>;
-    setId_u_user_u_user!: Sequelize.BelongsToSetAssociationMixin<
-        u_user,
-        u_userId
-    >;
-    createId_u_user_u_user!: Sequelize.BelongsToCreateAssociationMixin<u_user>;
-    // u_user_wallet hasMany u_user_wallet_top_up via id_u_user_wallet
-    u_user_wallet_top_ups!: u_user_wallet_top_up[];
-    getU_user_wallet_top_ups!: Sequelize.HasManyGetAssociationsMixin<u_user_wallet_top_up>;
-    setU_user_wallet_top_ups!: Sequelize.HasManySetAssociationsMixin<
-        u_user_wallet_top_up,
-        u_user_wallet_top_upId
-    >;
-    addU_user_wallet_top_up!: Sequelize.HasManyAddAssociationMixin<
-        u_user_wallet_top_up,
-        u_user_wallet_top_upId
-    >;
-    addU_user_wallet_top_ups!: Sequelize.HasManyAddAssociationsMixin<
-        u_user_wallet_top_up,
-        u_user_wallet_top_upId
-    >;
-    createU_user_wallet_top_up!: Sequelize.HasManyCreateAssociationMixin<u_user_wallet_top_up>;
-    removeU_user_wallet_top_up!: Sequelize.HasManyRemoveAssociationMixin<
-        u_user_wallet_top_up,
-        u_user_wallet_top_upId
-    >;
-    removeU_user_wallet_top_ups!: Sequelize.HasManyRemoveAssociationsMixin<
-        u_user_wallet_top_up,
-        u_user_wallet_top_upId
-    >;
-    hasU_user_wallet_top_up!: Sequelize.HasManyHasAssociationMixin<
-        u_user_wallet_top_up,
-        u_user_wallet_top_upId
-    >;
-    hasU_user_wallet_top_ups!: Sequelize.HasManyHasAssociationsMixin<
-        u_user_wallet_top_up,
-        u_user_wallet_top_upId
-    >;
-    countU_user_wallet_top_ups!: Sequelize.HasManyCountAssociationsMixin;
-    // u_user_wallet hasMany u_user_wallet_withdraw via id_u_user_wallet
-    u_user_wallet_withdraws!: u_user_wallet_withdraw[];
-    getU_user_wallet_withdraws!: Sequelize.HasManyGetAssociationsMixin<u_user_wallet_withdraw>;
-    setU_user_wallet_withdraws!: Sequelize.HasManySetAssociationsMixin<
-        u_user_wallet_withdraw,
-        u_user_wallet_withdrawId
-    >;
-    addU_user_wallet_withdraw!: Sequelize.HasManyAddAssociationMixin<
-        u_user_wallet_withdraw,
-        u_user_wallet_withdrawId
-    >;
-    addU_user_wallet_withdraws!: Sequelize.HasManyAddAssociationsMixin<
-        u_user_wallet_withdraw,
-        u_user_wallet_withdrawId
-    >;
-    createU_user_wallet_withdraw!: Sequelize.HasManyCreateAssociationMixin<u_user_wallet_withdraw>;
-    removeU_user_wallet_withdraw!: Sequelize.HasManyRemoveAssociationMixin<
-        u_user_wallet_withdraw,
-        u_user_wallet_withdrawId
-    >;
-    removeU_user_wallet_withdraws!: Sequelize.HasManyRemoveAssociationsMixin<
-        u_user_wallet_withdraw,
-        u_user_wallet_withdrawId
-    >;
-    hasU_user_wallet_withdraw!: Sequelize.HasManyHasAssociationMixin<
-        u_user_wallet_withdraw,
-        u_user_wallet_withdrawId
-    >;
-    hasU_user_wallet_withdraws!: Sequelize.HasManyHasAssociationsMixin<
-        u_user_wallet_withdraw,
-        u_user_wallet_withdrawId
-    >;
-    countU_user_wallet_withdraws!: Sequelize.HasManyCountAssociationsMixin;
+    Wallet!: m_wallets;
+    getWallet!: Sequelize.BelongsToGetAssociationMixin<m_wallets>;
+    setWallet!: Sequelize.BelongsToSetAssociationMixin<m_wallets, m_walletsId>;
+    createWallet!: Sequelize.BelongsToCreateAssociationMixin<m_wallets>;
 
-    static initModel(sequelize: Sequelize.Sequelize): typeof u_user_wallet {
-        u_user_wallet.init(
+    // u_user_wallet belongsTo u_user via id_u_user
+    userUtility!: UserUtility;
+    getUserUtility!: Sequelize.BelongsToGetAssociationMixin<UserUtility>;
+    setUserUtility!: Sequelize.BelongsToSetAssociationMixin<
+        UserUtility,
+        UserUtilityId
+    >;
+    createUserUtility!: Sequelize.BelongsToCreateAssociationMixin<UserUtility>;
+
+    // u_user_wallet hasMany u_user_wallet_top_up via id_u_user_wallet
+    userTopUps!: u_user_wallet_top_up[];
+    getUserTopUps!: Sequelize.HasManyGetAssociationsMixin<u_user_wallet_top_up>;
+    setUserTopUps!: Sequelize.HasManySetAssociationsMixin<
+        u_user_wallet_top_up,
+        u_user_wallet_top_upId
+    >;
+    adduserTopUp!: Sequelize.HasManyAddAssociationMixin<
+        u_user_wallet_top_up,
+        u_user_wallet_top_upId
+    >;
+    addUserTopUps!: Sequelize.HasManyAddAssociationsMixin<
+        u_user_wallet_top_up,
+        u_user_wallet_top_upId
+    >;
+    createUserTopUp!: Sequelize.HasManyCreateAssociationMixin<u_user_wallet_top_up>;
+    removeUserTopUp!: Sequelize.HasManyRemoveAssociationMixin<
+        u_user_wallet_top_up,
+        u_user_wallet_top_upId
+    >;
+    removeUserTopUps!: Sequelize.HasManyRemoveAssociationsMixin<
+        u_user_wallet_top_up,
+        u_user_wallet_top_upId
+    >;
+    hasUserTopUp!: Sequelize.HasManyHasAssociationMixin<
+        u_user_wallet_top_up,
+        u_user_wallet_top_upId
+    >;
+    hasUserTopUps!: Sequelize.HasManyHasAssociationsMixin<
+        u_user_wallet_top_up,
+        u_user_wallet_top_upId
+    >;
+    countUserTopUps!: Sequelize.HasManyCountAssociationsMixin;
+
+    // u_user_wallet hasMany u_user_wallet_withdraw via id_u_user_wallet
+    userWithdraws!: u_user_wallet_withdraw[];
+    getUserWithdraws!: Sequelize.HasManyGetAssociationsMixin<u_user_wallet_withdraw>;
+    setUserWithdraws!: Sequelize.HasManySetAssociationsMixin<
+        u_user_wallet_withdraw,
+        u_user_wallet_withdrawId
+    >;
+    addUserWithdraw!: Sequelize.HasManyAddAssociationMixin<
+        u_user_wallet_withdraw,
+        u_user_wallet_withdrawId
+    >;
+    addUserWithdraws!: Sequelize.HasManyAddAssociationsMixin<
+        u_user_wallet_withdraw,
+        u_user_wallet_withdrawId
+    >;
+    createUserWithdraw!: Sequelize.HasManyCreateAssociationMixin<u_user_wallet_withdraw>;
+    removeUserWithdraw!: Sequelize.HasManyRemoveAssociationMixin<
+        u_user_wallet_withdraw,
+        u_user_wallet_withdrawId
+    >;
+    removeUserWithdraws!: Sequelize.HasManyRemoveAssociationsMixin<
+        u_user_wallet_withdraw,
+        u_user_wallet_withdrawId
+    >;
+    hasUserWithdraw!: Sequelize.HasManyHasAssociationMixin<
+        u_user_wallet_withdraw,
+        u_user_wallet_withdrawId
+    >;
+    hasUserWithdraws!: Sequelize.HasManyHasAssociationsMixin<
+        u_user_wallet_withdraw,
+        u_user_wallet_withdrawId
+    >;
+    countUserWithdraws!: Sequelize.HasManyCountAssociationsMixin;
+
+    static initModel(sequelize: Sequelize.Sequelize): typeof UserWallet {
+        UserWallet.init(
             {
                 id: {
                     autoIncrement: true,
@@ -173,10 +173,12 @@ export class u_user_wallet
                 created_at: {
                     type: DataTypes.DATE,
                     allowNull: true,
+                    defaultValue: Date.now(),
                 },
                 updated_at: {
                     type: DataTypes.DATE,
                     allowNull: true,
+                    defaultValue: Date.now(),
                 },
             },
             {
@@ -204,6 +206,6 @@ export class u_user_wallet
                 underscored: true,
             }
         );
-        return u_user_wallet;
+        return UserWallet;
     }
 }

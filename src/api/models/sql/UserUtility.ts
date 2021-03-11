@@ -1,6 +1,6 @@
 import md5 from "md5";
 import Sequelize, { DataTypes, Model, Optional } from "sequelize";
-import type { m_users, m_usersId } from "./m_users";
+import type { User, UserId } from "./User";
 import type {
     u_user_is_merchant,
     u_user_is_merchantId,
@@ -9,9 +9,9 @@ import type {
     u_user_lost_password,
     u_user_lost_passwordId,
 } from "./u_user_lost_password";
-import type { u_user_wallet, u_user_walletId } from "./u_user_wallet";
+import type { UserWallet, UserWalletId } from "./UserWallet";
 
-export interface u_userAttributes {
+export interface UserUtilityAttributes {
     id: number;
     id_m_users: number;
     api_token: string;
@@ -21,13 +21,16 @@ export interface u_userAttributes {
     updated_at?: Date;
 }
 
-export type u_userPk = "id";
-export type u_userId = u_user[u_userPk];
-export type u_userCreationAttributes = Optional<u_userAttributes, u_userPk>;
+export type UserUtilityPk = "id";
+export type UserUtilityId = UserUtility[UserUtilityPk];
+export type UserUtilityCreationAttributes = Optional<
+    UserUtilityAttributes,
+    UserUtilityPk
+>;
 
-export class u_user
-    extends Model<u_userAttributes, u_userCreationAttributes>
-    implements u_userAttributes {
+export class UserUtility
+    extends Model<UserUtilityAttributes, UserUtilityCreationAttributes>
+    implements UserUtilityAttributes {
     id!: number;
     id_m_users!: number;
     api_token!: string;
@@ -37,115 +40,115 @@ export class u_user
     updated_at?: Date;
 
     // u_user belongsTo m_users via id_m_users
-    id_m_users_m_user!: m_users;
-    getId_m_users_m_user!: Sequelize.BelongsToGetAssociationMixin<m_users>;
-    setId_m_users_m_user!: Sequelize.BelongsToSetAssociationMixin<
-        m_users,
-        m_usersId
-    >;
-    createId_m_users_m_user!: Sequelize.BelongsToCreateAssociationMixin<m_users>;
-    // u_user hasMany u_user_is_merchant via id_u_user
-    u_user_is_merchants!: u_user_is_merchant[];
-    getU_user_is_merchants!: Sequelize.HasManyGetAssociationsMixin<u_user_is_merchant>;
-    setU_user_is_merchants!: Sequelize.HasManySetAssociationsMixin<
-        u_user_is_merchant,
-        u_user_is_merchantId
-    >;
-    addU_user_is_merchant!: Sequelize.HasManyAddAssociationMixin<
-        u_user_is_merchant,
-        u_user_is_merchantId
-    >;
-    addU_user_is_merchants!: Sequelize.HasManyAddAssociationsMixin<
-        u_user_is_merchant,
-        u_user_is_merchantId
-    >;
-    createU_user_is_merchant!: Sequelize.HasManyCreateAssociationMixin<u_user_is_merchant>;
-    removeU_user_is_merchant!: Sequelize.HasManyRemoveAssociationMixin<
-        u_user_is_merchant,
-        u_user_is_merchantId
-    >;
-    removeU_user_is_merchants!: Sequelize.HasManyRemoveAssociationsMixin<
-        u_user_is_merchant,
-        u_user_is_merchantId
-    >;
-    hasU_user_is_merchant!: Sequelize.HasManyHasAssociationMixin<
-        u_user_is_merchant,
-        u_user_is_merchantId
-    >;
-    hasU_user_is_merchants!: Sequelize.HasManyHasAssociationsMixin<
-        u_user_is_merchant,
-        u_user_is_merchantId
-    >;
-    countU_user_is_merchants!: Sequelize.HasManyCountAssociationsMixin;
-    // u_user hasMany u_user_lost_password via id_u_user
-    u_user_lost_passwords!: u_user_lost_password[];
-    getU_user_lost_passwords!: Sequelize.HasManyGetAssociationsMixin<u_user_lost_password>;
-    setU_user_lost_passwords!: Sequelize.HasManySetAssociationsMixin<
-        u_user_lost_password,
-        u_user_lost_passwordId
-    >;
-    addU_user_lost_password!: Sequelize.HasManyAddAssociationMixin<
-        u_user_lost_password,
-        u_user_lost_passwordId
-    >;
-    addU_user_lost_passwords!: Sequelize.HasManyAddAssociationsMixin<
-        u_user_lost_password,
-        u_user_lost_passwordId
-    >;
-    createU_user_lost_password!: Sequelize.HasManyCreateAssociationMixin<u_user_lost_password>;
-    removeU_user_lost_password!: Sequelize.HasManyRemoveAssociationMixin<
-        u_user_lost_password,
-        u_user_lost_passwordId
-    >;
-    removeU_user_lost_passwords!: Sequelize.HasManyRemoveAssociationsMixin<
-        u_user_lost_password,
-        u_user_lost_passwordId
-    >;
-    hasU_user_lost_password!: Sequelize.HasManyHasAssociationMixin<
-        u_user_lost_password,
-        u_user_lost_passwordId
-    >;
-    hasU_user_lost_passwords!: Sequelize.HasManyHasAssociationsMixin<
-        u_user_lost_password,
-        u_user_lost_passwordId
-    >;
-    countU_user_lost_passwords!: Sequelize.HasManyCountAssociationsMixin;
-    // u_user hasMany u_user_wallet via id_u_user
-    u_user_wallets!: u_user_wallet[];
-    getU_user_wallets!: Sequelize.HasManyGetAssociationsMixin<u_user_wallet>;
-    setU_user_wallets!: Sequelize.HasManySetAssociationsMixin<
-        u_user_wallet,
-        u_user_walletId
-    >;
-    addU_user_wallet!: Sequelize.HasManyAddAssociationMixin<
-        u_user_wallet,
-        u_user_walletId
-    >;
-    addU_user_wallets!: Sequelize.HasManyAddAssociationsMixin<
-        u_user_wallet,
-        u_user_walletId
-    >;
-    createU_user_wallet!: Sequelize.HasManyCreateAssociationMixin<u_user_wallet>;
-    removeU_user_wallet!: Sequelize.HasManyRemoveAssociationMixin<
-        u_user_wallet,
-        u_user_walletId
-    >;
-    removeU_user_wallets!: Sequelize.HasManyRemoveAssociationsMixin<
-        u_user_wallet,
-        u_user_walletId
-    >;
-    hasU_user_wallet!: Sequelize.HasManyHasAssociationMixin<
-        u_user_wallet,
-        u_user_walletId
-    >;
-    hasU_user_wallets!: Sequelize.HasManyHasAssociationsMixin<
-        u_user_wallet,
-        u_user_walletId
-    >;
-    countU_user_wallets!: Sequelize.HasManyCountAssociationsMixin;
+    user!: User;
+    getUser!: Sequelize.BelongsToGetAssociationMixin<User>;
+    setUser!: Sequelize.BelongsToSetAssociationMixin<User, UserId>;
+    createUser!: Sequelize.BelongsToCreateAssociationMixin<User>;
 
-    static initModel(sequelize: Sequelize.Sequelize): typeof u_user {
-        u_user.init(
+    // u_user hasMany u_user_is_merchant via id_u_user
+    merchants!: u_user_is_merchant[];
+    getMerchants!: Sequelize.HasManyGetAssociationsMixin<u_user_is_merchant>;
+    setMerchants!: Sequelize.HasManySetAssociationsMixin<
+        u_user_is_merchant,
+        u_user_is_merchantId
+    >;
+    addMerchant!: Sequelize.HasManyAddAssociationMixin<
+        u_user_is_merchant,
+        u_user_is_merchantId
+    >;
+    addMerchants!: Sequelize.HasManyAddAssociationsMixin<
+        u_user_is_merchant,
+        u_user_is_merchantId
+    >;
+    createMerchant!: Sequelize.HasManyCreateAssociationMixin<u_user_is_merchant>;
+    removeMerchant!: Sequelize.HasManyRemoveAssociationMixin<
+        u_user_is_merchant,
+        u_user_is_merchantId
+    >;
+    removeMerchants!: Sequelize.HasManyRemoveAssociationsMixin<
+        u_user_is_merchant,
+        u_user_is_merchantId
+    >;
+    hasMerchant!: Sequelize.HasManyHasAssociationMixin<
+        u_user_is_merchant,
+        u_user_is_merchantId
+    >;
+    hasMerchants!: Sequelize.HasManyHasAssociationsMixin<
+        u_user_is_merchant,
+        u_user_is_merchantId
+    >;
+    countMerchants!: Sequelize.HasManyCountAssociationsMixin;
+
+    // u_user hasMany u_user_lost_password via id_u_user
+    userLostPasswords!: u_user_lost_password[];
+    getuserLostPasswords!: Sequelize.HasManyGetAssociationsMixin<u_user_lost_password>;
+    setuserLostPasswords!: Sequelize.HasManySetAssociationsMixin<
+        u_user_lost_password,
+        u_user_lost_passwordId
+    >;
+    addUserLostPassword!: Sequelize.HasManyAddAssociationMixin<
+        u_user_lost_password,
+        u_user_lost_passwordId
+    >;
+    adduserLostPasswords!: Sequelize.HasManyAddAssociationsMixin<
+        u_user_lost_password,
+        u_user_lost_passwordId
+    >;
+    createUserLostPassword!: Sequelize.HasManyCreateAssociationMixin<u_user_lost_password>;
+    removeUserLostPassword!: Sequelize.HasManyRemoveAssociationMixin<
+        u_user_lost_password,
+        u_user_lost_passwordId
+    >;
+    removeUserLostPasswords!: Sequelize.HasManyRemoveAssociationsMixin<
+        u_user_lost_password,
+        u_user_lost_passwordId
+    >;
+    hasUserLostPassword!: Sequelize.HasManyHasAssociationMixin<
+        u_user_lost_password,
+        u_user_lost_passwordId
+    >;
+    hasuserLostPasswords!: Sequelize.HasManyHasAssociationsMixin<
+        u_user_lost_password,
+        u_user_lost_passwordId
+    >;
+    countUserLostPasswords!: Sequelize.HasManyCountAssociationsMixin;
+
+    // u_user hasMany u_user_wallet via id_u_user
+    userWallets!: UserWallet[];
+    getUserWallets!: Sequelize.HasManyGetAssociationsMixin<UserWallet>;
+    setUserWallets!: Sequelize.HasManySetAssociationsMixin<
+        UserWallet,
+        UserWalletId
+    >;
+    addUserWallet!: Sequelize.HasManyAddAssociationMixin<
+        UserWallet,
+        UserWalletId
+    >;
+    addUserWallets!: Sequelize.HasManyAddAssociationsMixin<
+        UserWallet,
+        UserWalletId
+    >;
+    createUserWallet!: Sequelize.HasManyCreateAssociationMixin<UserWallet>;
+    removeUserWallet!: Sequelize.HasManyRemoveAssociationMixin<
+        UserWallet,
+        UserWalletId
+    >;
+    removeUserWallets!: Sequelize.HasManyRemoveAssociationsMixin<
+        UserWallet,
+        UserWalletId
+    >;
+    hasUserWallet!: Sequelize.HasManyHasAssociationMixin<
+        UserWallet,
+        UserWalletId
+    >;
+    hasUserWallets!: Sequelize.HasManyHasAssociationsMixin<
+        UserWallet,
+        UserWalletId
+    >;
+    countUserWallets!: Sequelize.HasManyCountAssociationsMixin;
+
+    static initModel(sequelize: Sequelize.Sequelize): typeof UserUtility {
+        UserUtility.init(
             {
                 id: {
                     autoIncrement: true,
@@ -199,10 +202,12 @@ export class u_user
                 created_at: {
                     type: DataTypes.DATE,
                     allowNull: true,
+                    defaultValue: Date.now(),
                 },
                 updated_at: {
                     type: DataTypes.DATE,
                     allowNull: true,
+                    defaultValue: Date.now(),
                 },
             },
             {
@@ -225,6 +230,6 @@ export class u_user
                 underscored: true,
             }
         );
-        return u_user;
+        return UserUtility;
     }
 }

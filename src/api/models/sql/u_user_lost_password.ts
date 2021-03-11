@@ -1,7 +1,7 @@
 import md5 from "md5";
 import jwt from "jsonwebtoken";
 import Sequelize, { DataTypes, Model, Optional } from "sequelize";
-import type { u_user, u_userId } from "./u_user";
+import type { UserUtility, UserUtilityId } from "./UserUtility";
 
 export interface u_user_lost_passwordAttributes {
     id: number;
@@ -33,13 +33,13 @@ export class u_user_lost_password
     updated_at?: Date;
 
     // u_user_lost_password belongsTo u_user via id_u_user
-    id_u_user_u_user!: u_user;
-    getId_u_user_u_user!: Sequelize.BelongsToGetAssociationMixin<u_user>;
+    id_u_user_u_user!: UserUtility;
+    getId_u_user_u_user!: Sequelize.BelongsToGetAssociationMixin<UserUtility>;
     setId_u_user_u_user!: Sequelize.BelongsToSetAssociationMixin<
-        u_user,
-        u_userId
+        UserUtility,
+        UserUtilityId
     >;
-    createId_u_user_u_user!: Sequelize.BelongsToCreateAssociationMixin<u_user>;
+    createId_u_user_u_user!: Sequelize.BelongsToCreateAssociationMixin<UserUtility>;
 
     static initModel(
         sequelize: Sequelize.Sequelize

@@ -1,5 +1,5 @@
 import Sequelize, { DataTypes, Model, Optional } from "sequelize";
-import type { m_users, m_usersId } from "./m_users";
+import type { User, UserId } from "./User";
 import type { u_user_chat, u_user_chatId } from "./u_user_chat";
 
 export interface u_user_chat_detailAttributes {
@@ -32,13 +32,10 @@ export class u_user_chat_detail
     updated_at?: Date;
 
     // u_user_chat_detail belongsTo m_users via id_m_users
-    id_m_users_m_user!: m_users;
-    getId_m_users_m_user!: Sequelize.BelongsToGetAssociationMixin<m_users>;
-    setId_m_users_m_user!: Sequelize.BelongsToSetAssociationMixin<
-        m_users,
-        m_usersId
-    >;
-    createId_m_users_m_user!: Sequelize.BelongsToCreateAssociationMixin<m_users>;
+    id_m_users_m_user!: User;
+    getId_m_users_m_user!: Sequelize.BelongsToGetAssociationMixin<User>;
+    setId_m_users_m_user!: Sequelize.BelongsToSetAssociationMixin<User, UserId>;
+    createId_m_users_m_user!: Sequelize.BelongsToCreateAssociationMixin<User>;
     // u_user_chat_detail belongsTo u_user_chat via id_u_user_chat
     id_u_user_chat_u_user_chat!: u_user_chat;
     getId_u_user_chat_u_user_chat!: Sequelize.BelongsToGetAssociationMixin<u_user_chat>;

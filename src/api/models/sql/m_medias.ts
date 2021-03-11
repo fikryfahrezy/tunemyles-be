@@ -2,7 +2,7 @@ import Sequelize, { DataTypes, Model, Optional } from "sequelize";
 import type { m_banks, m_banksId } from "./m_banks";
 import type { m_categories, m_categoriesId } from "./m_categories";
 import type { m_products, m_productsId } from "./m_products";
-import type { m_users, m_usersId } from "./m_users";
+import type { User, UserId } from "./User";
 import type { m_wallets, m_walletsId } from "./m_wallets";
 import type { u_product_photos, u_product_photosId } from "./u_product_photos";
 import type {
@@ -122,19 +122,16 @@ export class m_medias
     >;
     countM_products!: Sequelize.HasManyCountAssociationsMixin;
     // m_medias hasMany m_users via id_photo
-    m_users!: m_users[];
-    getM_users!: Sequelize.HasManyGetAssociationsMixin<m_users>;
-    setM_users!: Sequelize.HasManySetAssociationsMixin<m_users, m_usersId>;
-    addM_user!: Sequelize.HasManyAddAssociationMixin<m_users, m_usersId>;
-    addM_users!: Sequelize.HasManyAddAssociationsMixin<m_users, m_usersId>;
-    createM_user!: Sequelize.HasManyCreateAssociationMixin<m_users>;
-    removeM_user!: Sequelize.HasManyRemoveAssociationMixin<m_users, m_usersId>;
-    removeM_users!: Sequelize.HasManyRemoveAssociationsMixin<
-        m_users,
-        m_usersId
-    >;
-    hasM_user!: Sequelize.HasManyHasAssociationMixin<m_users, m_usersId>;
-    hasM_users!: Sequelize.HasManyHasAssociationsMixin<m_users, m_usersId>;
+    m_users!: User[];
+    getM_users!: Sequelize.HasManyGetAssociationsMixin<User>;
+    setM_users!: Sequelize.HasManySetAssociationsMixin<User, UserId>;
+    addM_user!: Sequelize.HasManyAddAssociationMixin<User, UserId>;
+    addM_users!: Sequelize.HasManyAddAssociationsMixin<User, UserId>;
+    createM_user!: Sequelize.HasManyCreateAssociationMixin<User>;
+    removeM_user!: Sequelize.HasManyRemoveAssociationMixin<User, UserId>;
+    removeM_users!: Sequelize.HasManyRemoveAssociationsMixin<User, UserId>;
+    hasM_user!: Sequelize.HasManyHasAssociationMixin<User, UserId>;
+    hasM_users!: Sequelize.HasManyHasAssociationsMixin<User, UserId>;
     countM_users!: Sequelize.HasManyCountAssociationsMixin;
     // m_medias hasMany m_wallets via id_logo
     m_wallets!: m_wallets[];
