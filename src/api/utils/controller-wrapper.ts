@@ -1,6 +1,6 @@
 import type { HandlerFn } from "../types/fasitify";
-import { errorHandler } from "./error-handler";
 import { sequelize } from "../../databases/sequelize";
+import { errorHandler } from "./error-handler";
 
 export const controllerWrapper = function <T>(fn: HandlerFn<T>): HandlerFn<T> {
     return async function (this, req, res) {

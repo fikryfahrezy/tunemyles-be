@@ -1,7 +1,7 @@
 import Sequelize, { DataTypes, Model, Optional } from "sequelize";
 import type { m_banks, m_banksId } from "./m_banks";
 import type { m_categories, m_categoriesId } from "./m_categories";
-import type { m_products, m_productsId } from "./m_products";
+import type { Product, ProductId } from "./Product";
 import type { User, UserId } from "./User";
 import type { m_wallets, m_walletsId } from "./m_wallets";
 import type { u_product_photos, u_product_photosId } from "./u_product_photos";
@@ -89,37 +89,22 @@ export class m_medias
     >;
     countM_categories!: Sequelize.HasManyCountAssociationsMixin;
     // m_medias hasMany m_products via id_cover
-    m_products!: m_products[];
-    getM_products!: Sequelize.HasManyGetAssociationsMixin<m_products>;
-    setM_products!: Sequelize.HasManySetAssociationsMixin<
-        m_products,
-        m_productsId
-    >;
-    addM_product!: Sequelize.HasManyAddAssociationMixin<
-        m_products,
-        m_productsId
-    >;
-    addM_products!: Sequelize.HasManyAddAssociationsMixin<
-        m_products,
-        m_productsId
-    >;
-    createM_product!: Sequelize.HasManyCreateAssociationMixin<m_products>;
+    m_products!: Product[];
+    getM_products!: Sequelize.HasManyGetAssociationsMixin<Product>;
+    setM_products!: Sequelize.HasManySetAssociationsMixin<Product, ProductId>;
+    addM_product!: Sequelize.HasManyAddAssociationMixin<Product, ProductId>;
+    addM_products!: Sequelize.HasManyAddAssociationsMixin<Product, ProductId>;
+    createM_product!: Sequelize.HasManyCreateAssociationMixin<Product>;
     removeM_product!: Sequelize.HasManyRemoveAssociationMixin<
-        m_products,
-        m_productsId
+        Product,
+        ProductId
     >;
     removeM_products!: Sequelize.HasManyRemoveAssociationsMixin<
-        m_products,
-        m_productsId
+        Product,
+        ProductId
     >;
-    hasM_product!: Sequelize.HasManyHasAssociationMixin<
-        m_products,
-        m_productsId
-    >;
-    hasM_products!: Sequelize.HasManyHasAssociationsMixin<
-        m_products,
-        m_productsId
-    >;
+    hasM_product!: Sequelize.HasManyHasAssociationMixin<Product, ProductId>;
+    hasM_products!: Sequelize.HasManyHasAssociationsMixin<Product, ProductId>;
     countM_products!: Sequelize.HasManyCountAssociationsMixin;
     // m_medias hasMany m_users via id_photo
     m_users!: User[];

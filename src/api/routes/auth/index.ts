@@ -5,11 +5,11 @@ import type {
     HookHandlerDoneFunction,
 } from "fastify";
 import type { SyncHookFn } from "../../types/fasitify";
-import type { RegisterBody } from "../../types/schema";
-import { register } from "./controllers";
-import schemas from "./schemas";
+import type { RegisterBody, LoginBody } from "../../types/schema";
 import { controllerWrapper } from "../../utils/controller-wrapper";
 import { schemaValidationError } from "../../utils/error-handler";
+import schemas from "./schemas";
+import { register, login } from "./controllers";
 
 const { requestBody, responses } = schemas;
 
@@ -47,6 +47,31 @@ async function routes(
             },
         },
         controllerWrapper(register)
+    );
+
+    fastify.post(
+        "/auth/login",
+        {
+            attachValidation: true,
+            schema: {
+                body: requestBody.login,
+                response: {
+                    "200": responses.authenticated,
+                    "4xx": { $ref: "#ApiResponse" },
+                    "5xx": { $ref: "#ApiResponse" },
+                },
+            },
+            preHandler: (
+                req: FastifyRequest<{ Body: LoginBody }>,
+                res,
+                done
+            ) => {
+                const validation = req.validationError;
+                if (validation) return schemaValidationError(validation, res);
+                done();
+            },
+        },
+        controllerWrapper(login)
     );
 
     done();

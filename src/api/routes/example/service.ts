@@ -4,8 +4,8 @@ import pmp from "pump";
 import stream from "stream";
 import util from "util";
 import fs from "fs";
-import { exampleMultipleData, exampleSingleData } from "./model";
 import { ErrorResponse } from "../../utils/error-handler";
+import { exampleMultipleData, exampleSingleData } from "./model";
 
 const pump = util.promisify(pmp) as (
     ...streams: Array<pmp.Stream | pmp.Callback>

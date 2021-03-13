@@ -1,3 +1,5 @@
+import dotenv from "dotenv";
+dotenv.config({ path: ".env.development" });
 import "make-promises-safe";
 import pino from "pino";
 import app from "./app";

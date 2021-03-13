@@ -10,8 +10,8 @@
     "scripts": {
         "postinstall": "husky install",
         "build": "tsc -p tsconfig.json",
-        "start": "node -r dotenv/config",
-        "ts-node": "ts-node -r dotenv/config",
+        "start": "node",
+        "ts-node": "ts-node",
         "dev": "nodemon",
         "pretty-dev": "concurrently \"npm run nodemon\" \"npm run prettier-watch\"",
         "nodemon": "nodemon src/index.ts",
@@ -22,7 +22,8 @@
         "lint-staged": "lint-staged",
         "compile-schemas": "json2ts -i src/schemas -o src/types",
         "yaml2json": "yaml2json",
-        "json2yaml": "json2yaml"
+        "json2yaml": "json2yaml",
+        "seq-auto": "sequelize-auto -o \"./test/models\" -h localhost -u root -p 3306 -x root -e mysql --cm p --cf p -l ts -d"
     },
     "repository": {
         "type": "git",

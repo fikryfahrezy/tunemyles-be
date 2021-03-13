@@ -3,6 +3,8 @@ coverage
 build
 public/image/**
 .env
+.env.development
+.env.test
 .eslintcache
 logs/**
 test

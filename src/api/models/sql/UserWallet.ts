@@ -141,7 +141,6 @@ export class UserWallet
                 id_m_wallets: {
                     type: DataTypes.INTEGER.UNSIGNED,
                     allowNull: true,
-                    defaultValue: 1,
                     references: {
                         model: "m_wallets",
                         key: "id",

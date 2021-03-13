@@ -1,6 +1,6 @@
 import md5 from "md5";
 import Sequelize, { DataTypes, Model, Optional } from "sequelize";
-import type { m_products, m_productsId } from "./m_products";
+import type { Product, ProductId } from "./Product";
 import type {
     u_user_transaction,
     u_user_transactionId,
@@ -46,13 +46,13 @@ export class u_user_transaction_products
     updated_at?: Date;
 
     // u_user_transaction_products belongsTo m_products via id_m_products
-    id_m_products_m_product!: m_products;
-    getId_m_products_m_product!: Sequelize.BelongsToGetAssociationMixin<m_products>;
+    id_m_products_m_product!: Product;
+    getId_m_products_m_product!: Sequelize.BelongsToGetAssociationMixin<Product>;
     setId_m_products_m_product!: Sequelize.BelongsToSetAssociationMixin<
-        m_products,
-        m_productsId
+        Product,
+        ProductId
     >;
-    createId_m_products_m_product!: Sequelize.BelongsToCreateAssociationMixin<m_products>;
+    createId_m_products_m_product!: Sequelize.BelongsToCreateAssociationMixin<Product>;
     // u_user_transaction_products belongsTo u_user_transaction via id_u_user_transaction
     id_u_user_transaction_u_user_transaction!: u_user_transaction;
     getId_u_user_transaction_u_user_transaction!: Sequelize.BelongsToGetAssociationMixin<u_user_transaction>;

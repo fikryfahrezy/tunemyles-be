@@ -1,5 +1,5 @@
 import Sequelize, { DataTypes, Model, Optional } from "sequelize";
-import type { m_products, m_productsId } from "./m_products";
+import type { Product, ProductId } from "./Product";
 import type {
     u_product_categories,
     u_product_categoriesId,
@@ -37,13 +37,14 @@ export class u_product
     updated_at?: Date;
 
     // u_product belongsTo m_products via id_m_products
-    id_m_products_m_product!: m_products;
-    getId_m_products_m_product!: Sequelize.BelongsToGetAssociationMixin<m_products>;
+    id_m_products_m_product!: Product;
+    getId_m_products_m_product!: Sequelize.BelongsToGetAssociationMixin<Product>;
     setId_m_products_m_product!: Sequelize.BelongsToSetAssociationMixin<
-        m_products,
-        m_productsId
+        Product,
+        ProductId
     >;
-    createId_m_products_m_product!: Sequelize.BelongsToCreateAssociationMixin<m_products>;
+    createId_m_products_m_product!: Sequelize.BelongsToCreateAssociationMixin<Product>;
+
     // u_product hasMany u_product_categories via id_u_product
     u_product_categories!: u_product_categories[];
     getU_product_categories!: Sequelize.HasManyGetAssociationsMixin<u_product_categories>;
@@ -77,6 +78,7 @@ export class u_product
         u_product_categoriesId
     >;
     countU_product_categories!: Sequelize.HasManyCountAssociationsMixin;
+
     // u_product hasMany u_product_photos via id_u_product
     u_product_photos!: u_product_photos[];
     getU_product_photos!: Sequelize.HasManyGetAssociationsMixin<u_product_photos>;

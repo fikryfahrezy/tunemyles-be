@@ -13,11 +13,8 @@ import type {
     m_mediasAttributes,
     m_mediasCreationAttributes,
 } from "./m_medias";
-import { m_products } from "./m_products";
-import type {
-    m_productsAttributes,
-    m_productsCreationAttributes,
-} from "./m_products";
+import { Product } from "./Product";
+import type { ProductAttributes, ProductCreationAttributes } from "./Product";
 import { User } from "./User";
 import type { UserAttributes, UserCreationAttributes } from "./User";
 import { m_wallets } from "./m_wallets";
@@ -123,7 +120,7 @@ export {
     m_categories,
     m_faq,
     m_medias,
-    m_products,
+    Product,
     User,
     m_wallets,
     u_bank,
@@ -156,8 +153,8 @@ export type {
     m_faqCreationAttributes,
     m_mediasAttributes,
     m_mediasCreationAttributes,
-    m_productsAttributes,
-    m_productsCreationAttributes,
+    ProductAttributes,
+    ProductCreationAttributes,
     UserAttributes,
     UserCreationAttributes,
     m_walletsAttributes,
@@ -207,7 +204,7 @@ type Model = {
     Category: typeof m_categories;
     Faq: typeof m_faq;
     Media: typeof m_medias;
-    Product: typeof m_products;
+    Product: typeof Product;
     User: typeof User;
     Wallet: typeof m_wallets;
     BankUtility: typeof u_bank;
@@ -236,7 +233,7 @@ export function initModels(sequelize: Sequelize): Model {
     m_categories.initModel(sequelize);
     m_faq.initModel(sequelize);
     m_medias.initModel(sequelize);
-    m_products.initModel(sequelize);
+    Product.initModel(sequelize);
     User.initModel(sequelize);
     m_wallets.initModel(sequelize);
     u_bank.initModel(sequelize);
@@ -309,11 +306,11 @@ export function initModels(sequelize: Sequelize): Model {
         as: "m_categories",
         foreignKey: "id_icon",
     });
-    m_products.belongsTo(m_medias, {
+    Product.belongsTo(m_medias, {
         as: "id_cover_m_media",
         foreignKey: "id_cover",
     });
-    m_medias.hasMany(m_products, { as: "m_products", foreignKey: "id_cover" });
+    m_medias.hasMany(Product, { as: "m_products", foreignKey: "id_cover" });
     User.belongsTo(m_medias, {
         as: "id_photo_m_media",
         foreignKey: "id_photo",
@@ -356,35 +353,35 @@ export function initModels(sequelize: Sequelize): Model {
         as: "u_user_wallet_top_ups",
         foreignKey: "proof_id",
     });
-    u_product.belongsTo(m_products, {
+    u_product.belongsTo(Product, {
         as: "id_m_products_m_product",
         foreignKey: "id_m_products",
     });
-    m_products.hasMany(u_product, {
+    Product.hasMany(u_product, {
         as: "u_products",
         foreignKey: "id_m_products",
     });
-    u_user_cart.belongsTo(m_products, {
+    u_user_cart.belongsTo(Product, {
         as: "id_m_products_m_product",
         foreignKey: "id_m_products",
     });
-    m_products.hasMany(u_user_cart, {
+    Product.hasMany(u_user_cart, {
         as: "u_user_carts",
         foreignKey: "id_m_products",
     });
-    u_user_transaction_products.belongsTo(m_products, {
+    u_user_transaction_products.belongsTo(Product, {
         as: "id_m_products_m_product",
         foreignKey: "id_m_products",
     });
-    m_products.hasMany(u_user_transaction_products, {
+    Product.hasMany(u_user_transaction_products, {
         as: "u_user_transaction_products",
         foreignKey: "id_m_products",
     });
-    m_products.belongsTo(User, {
+    Product.belongsTo(User, {
         as: "id_m_users_m_user",
         foreignKey: "id_m_users",
     });
-    User.hasMany(m_products, { as: "m_products", foreignKey: "id_m_users" });
+    User.hasMany(Product, { as: "m_products", foreignKey: "id_m_users" });
     UserUtility.belongsTo(User, {
         as: "id_m_users_m_user",
         foreignKey: "id_m_users",
@@ -550,15 +547,15 @@ export function initModels(sequelize: Sequelize): Model {
         Category: m_categories,
         Faq: m_faq,
         Media: m_medias,
-        Product: m_products,
-        User: User,
+        Product,
+        User,
         Wallet: m_wallets,
         BankUtility: u_bank,
         BankAccount: u_bank_account,
         ProductUtility: u_product,
         ProductCategory: u_product_categories,
         ProductPhoto: u_product_photos,
-        UserUtility: UserUtility,
+        UserUtility,
         BankUser: u_user_bank_account,
         UserCart: u_user_cart,
         UserChat: u_user_chat,
@@ -569,7 +566,7 @@ export function initModels(sequelize: Sequelize): Model {
         UserTransaction: u_user_transaction,
         ProductReview: u_user_transaction_product_reviews,
         UserTransactionProduct: u_user_transaction_products,
-        UserWallet: UserWallet,
+        UserWallet,
         UserTopUp: u_user_wallet_top_up,
         UserWithdraw: u_user_wallet_withdraw,
     };

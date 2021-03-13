@@ -1,5 +1,5 @@
 import Sequelize, { DataTypes, Model, Optional } from "sequelize";
-import type { m_products, m_productsId } from "./m_products";
+import type { Product, ProductId } from "./Product";
 import type { User, UserId } from "./User";
 
 export interface u_user_cartAttributes {
@@ -33,18 +33,20 @@ export class u_user_cart
     updated_at?: Date;
 
     // u_user_cart belongsTo m_products via id_m_products
-    id_m_products_m_product!: m_products;
-    getId_m_products_m_product!: Sequelize.BelongsToGetAssociationMixin<m_products>;
+    id_m_products_m_product!: Product;
+    getId_m_products_m_product!: Sequelize.BelongsToGetAssociationMixin<Product>;
     setId_m_products_m_product!: Sequelize.BelongsToSetAssociationMixin<
-        m_products,
-        m_productsId
+        Product,
+        ProductId
     >;
-    createId_m_products_m_product!: Sequelize.BelongsToCreateAssociationMixin<m_products>;
+    createId_m_products_m_product!: Sequelize.BelongsToCreateAssociationMixin<Product>;
+
     // u_user_cart belongsTo m_users via id_m_users
     id_m_users_m_user!: User;
     getId_m_users_m_user!: Sequelize.BelongsToGetAssociationMixin<User>;
     setId_m_users_m_user!: Sequelize.BelongsToSetAssociationMixin<User, UserId>;
     createId_m_users_m_user!: Sequelize.BelongsToCreateAssociationMixin<User>;
+
     // u_user_cart belongsTo m_users via id_merchant
     id_merchant_m_user!: User;
     getId_merchant_m_user!: Sequelize.BelongsToGetAssociationMixin<User>;

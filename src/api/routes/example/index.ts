@@ -6,15 +6,15 @@ import type {
 } from "fastify";
 import type { SyncHookFn } from "../../types/fasitify";
 import type { PostRequestBody } from "../../types/schema";
+import { controllerWrapper } from "../../utils/controller-wrapper";
+import { schemaValidationError } from "../../utils/error-handler";
+import schemas from "./schemas";
 import {
     getExample,
     postExample,
     getIdExample,
     postFileExample,
 } from "./controllers";
-import schemas from "./schemas";
-import { controllerWrapper } from "../../utils/controller-wrapper";
-import { schemaValidationError } from "../../utils/error-handler";
 
 declare module "fastify" {
     interface FastifyInstance {
