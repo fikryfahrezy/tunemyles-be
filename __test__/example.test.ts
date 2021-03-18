@@ -24,7 +24,6 @@ describe("Get Data", () => {
         const statusCode = response.statusCode;
         const contenType = response.headers["content-type"];
         const isSuccess = response.json().success;
-
         expect(statusCode).toBe(200);
         expect(contenType).toBe("application/json; charset=utf-8");
         expect(isSuccess).toBe(true);
@@ -41,7 +40,6 @@ describe("Get Single Data", () => {
         const statusCode = response.statusCode;
         const contenType = response.headers["content-type"];
         const isSuccess = response.json().success;
-
         expect(statusCode).toBe(200);
         expect(contenType).toBe("application/json; charset=utf-8");
         expect(isSuccess).toBe(true);
@@ -56,7 +54,6 @@ describe("Get Single Data", () => {
         const statusCode = response.statusCode;
         const contenType = response.headers["content-type"];
         const isSuccess = response.json().success;
-
         expect(statusCode).toBe(404);
         expect(contenType).toBe("application/json; charset=utf-8");
         expect(isSuccess).toBe(false);
@@ -79,7 +76,6 @@ describe("Post Data", () => {
         const statusCode = response.statusCode;
         const contenType = response.headers["content-type"];
         const isSuccess = response.json().success;
-
         expect(statusCode).toBe(200);
         expect(contenType).toBe("application/json; charset=utf-8");
         expect(isSuccess).toBe(true);
@@ -98,7 +94,6 @@ describe("Post Data", () => {
         const statusCode = response.statusCode;
         const contenType = response.headers["content-type"];
         const isSuccess = response.json().success;
-
         expect(statusCode).toBe(422);
         expect(contenType).toBe("application/json; charset=utf-8");
         expect(isSuccess).toBe(false);
@@ -119,7 +114,6 @@ describe("Post File", () => {
         const statusCode = response.statusCode;
         const contenType = response.headers["content-type"];
         const isSuccess = response.json().success;
-
         expect(statusCode).toBe(200);
         expect(contenType).toBe("application/json; charset=utf-8");
         expect(isSuccess).toBe(true);
@@ -131,19 +125,18 @@ describe("Get Private Data", () => {
         const response = await server.inject({
             method: "GET",
             url: "/api/v2/example/private",
-            headers: { key: 1 },
+            headers: { authorization: 1 },
         });
 
         const statusCode = response.statusCode;
         const contenType = response.headers["content-type"];
         const isSuccess = response.json().success;
-
         expect(statusCode).toBe(200);
         expect(contenType).toBe("application/json; charset=utf-8");
         expect(isSuccess).toBe(true);
     });
 
-    test("Get Private Data Fail, Header Key Not Given", async () => {
+    test("Get Private Data Fail, Header Authorization Not Given", async () => {
         const response = await server.inject({
             method: "GET",
             url: "/api/v2/example/private",
@@ -152,23 +145,21 @@ describe("Get Private Data", () => {
         const statusCode = response.statusCode;
         const contentType = response.headers["content-type"];
         const isSuccess = response.json().success;
-
         expect(statusCode).toBe(403);
         expect(contentType).toBe("application/json; charset=utf-8");
         expect(isSuccess).toBe(false);
     });
 
-    test("Get Private Data Fail, Wrong Header Key", async () => {
+    test("Get Private Data Fail, Wrong Header Authorization", async () => {
         const response = await server.inject({
             method: "GET",
             url: "/api/v2/example/private",
-            headers: { key: 2 },
+            headers: { authorization: 2 },
         });
 
         const statusCode = response.statusCode;
         const contentType = response.headers["content-type"];
         const isSuccess = response.json().success;
-
         expect(statusCode).toBe(403);
         expect(contentType).toBe("application/json; charset=utf-8");
         expect(isSuccess).toBe(false);

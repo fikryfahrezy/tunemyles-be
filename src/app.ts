@@ -8,7 +8,6 @@ import fastifyRateLimit from "fastify-rate-limit";
 import { fastifyRequestContextPlugin } from "fastify-request-context";
 import fastifySensible from "fastify-sensible";
 import fastifyCookie from "fastify-cookie";
-import fastifyAuth from "fastify-auth";
 import path from "path";
 import middie from "middie";
 import definitions from "./definitions";
@@ -68,7 +67,6 @@ function app(opts: FastifyServerOptions = {}): FastifyInstance {
         addToBody: true,
         sharedSchemaId: "#MultiPartSchema",
     });
-    app.register(fastifyAuth);
     app.register(fastifyRequestContextPlugin, {
         defaultStoreValues: {
             user: null,

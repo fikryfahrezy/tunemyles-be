@@ -4,20 +4,17 @@ import type {
     FastifyPluginOptions,
     HookHandlerDoneFunction,
 } from "fastify";
-import type { SyncHookFn } from "../../types/fasitify";
-import type { RegisterBody, LoginBody } from "../../types/schema";
-import { controllerWrapper } from "../../utils/controller-wrapper";
+import type { RegisterBody, LoginBody, ApiKeyHeader } from "../../types/schema";
+import {
+    controllerWrapper,
+    handlerWrapper,
+} from "../../utils/serverfn-wrapper";
 import { schemaValidationError } from "../../utils/error-handler";
+import { userProtect } from "../../middlewares/protect-route";
 import schemas from "./schemas";
-import { register, login } from "./controllers";
+import { register, login, me } from "./controllers";
 
 const { requestBody, responses } = schemas;
-
-declare module "fastify" {
-    interface FastifyInstance {
-        exampleProtect: SyncHookFn;
-    }
-}
 
 async function routes(
     fastify: FastifyInstance,
@@ -42,7 +39,7 @@ async function routes(
                 done
             ) => {
                 const validation = req.validationError;
-                if (validation) return schemaValidationError(validation, res);
+                if (validation) schemaValidationError(validation, res);
                 done();
             },
         },
@@ -67,11 +64,34 @@ async function routes(
                 done
             ) => {
                 const validation = req.validationError;
-                if (validation) return schemaValidationError(validation, res);
+                if (validation) schemaValidationError(validation, res);
                 done();
             },
         },
         controllerWrapper(login)
+    );
+
+    fastify.get(
+        "/auth/me",
+        {
+            attachValidation: true,
+            schema: {
+                response: {
+                    "200": responses.authenticated,
+                    "4xx": { $ref: "#ApiResponse" },
+                    "5xx": { $ref: "#ApiResponse" },
+                },
+            },
+            preHandler: [
+                (req: FastifyRequest<{ Headers: ApiKeyHeader }>, res, done) => {
+                    const validation = req.validationError;
+                    if (validation) schemaValidationError(validation, res);
+                    done();
+                },
+                handlerWrapper(userProtect),
+            ],
+        },
+        controllerWrapper(me)
     );
 
     done();

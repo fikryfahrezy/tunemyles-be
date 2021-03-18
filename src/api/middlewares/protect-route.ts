@@ -1,24 +1,14 @@
-import type {
-    FastifyReply,
-    FastifyRequest,
-    HookHandlerDoneFunction,
-} from "fastify";
-import type { FastifyFn } from "../types/fasitify";
-// const UserUtility = require("../models/UserUtility");
-// const ErrorResponse = require("../utils/ErrorResponse");
+import { ErrorResponse } from "../utils/error-handler";
 
-export const exampleProtect = function (
-    req: FastifyRequest<{ Body: Record<string, unknown> }>,
-    res: FastifyReply,
-    done: HookHandlerDoneFunction
-) {
-    if (req.headers.key === "2") res.forbidden();
-    done();
+export const exampleProtect = function (request: Record<string, unknown>) {
+    const {
+        headers: { authorization },
+    } = request as Record<string, Record<string, unknown>>;
+    if (authorization === "2") throw new ErrorResponse("forbidden", 403);
 };
 
-export const userProtect: FastifyFn = async (req, res) => {
-    console.log("hi");
-    //   const { authorization } = ctx.header;
+export const userProtect = async (req: Record<string, unknown>) => {
+    //   const  { authorization }  = req.headers
     //   if (!authorization) throw new ErrorResponse("forbidden", 403);
     //   const user = await UserUtility.findOne({
     //     where: {
@@ -27,11 +17,9 @@ export const userProtect: FastifyFn = async (req, res) => {
     //   });
     //   if (!user) throw new ErrorResponse("forbidden", 403);
     //   else if (user.type >= 3) throw new ErrorResponse("forbidden", 403);
-    //   ctx.state.user = user;
-    //   await next();
 };
 
-export const adminProtect: FastifyFn = async (req, res) => {
+export const adminProtect = async (req: Record<string, unknown>) => {
     console.log("hi");
     //   const { authorization } = ctx.header;
     //   if (!authorization) throw new ErrorResponse("forbidden", 403);
@@ -47,7 +35,7 @@ export const adminProtect: FastifyFn = async (req, res) => {
     //   await next();
 };
 
-export const merchantProtect: FastifyFn = async (req, res) => {
+export const merchantProtect = async (req: Record<string, unknown>) => {
     console.log("hi");
     //   const { authorization } = ctx.header;
     //   if (!authorization) throw new ErrorResponse("forbidden", 403);

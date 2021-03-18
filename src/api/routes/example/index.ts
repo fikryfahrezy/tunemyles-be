@@ -4,10 +4,13 @@ import type {
     FastifyPluginOptions,
     HookHandlerDoneFunction,
 } from "fastify";
-import type { SyncHookFn } from "../../types/fasitify";
 import type { PostRequestBody } from "../../types/schema";
-import { controllerWrapper } from "../../utils/controller-wrapper";
+import {
+    controllerWrapper,
+    handlerWrapper,
+} from "../../utils/serverfn-wrapper";
 import { schemaValidationError } from "../../utils/error-handler";
+import { exampleProtect } from "../../middlewares/protect-route";
 import schemas from "./schemas";
 import {
     getExample,
@@ -15,12 +18,6 @@ import {
     getIdExample,
     postFileExample,
 } from "./controllers";
-
-declare module "fastify" {
-    interface FastifyInstance {
-        exampleProtect: SyncHookFn;
-    }
-}
 
 const { requestBody, requestHeader, requestParams, responses } = schemas;
 
@@ -110,17 +107,14 @@ async function routes(
                     "5xx": { $ref: "#ApiResponse" },
                 },
             },
-            preHandler: fastify.auth(
-                [
-                    (req, res, done) => {
-                        const validation = req.validationError;
-                        if (validation) schemaValidationError(validation, res);
-                        done();
-                    },
-                    fastify.exampleProtect,
-                ],
-                { run: "all" }
-            ),
+            preHandler: [
+                (req, res, done) => {
+                    const validation = req.validationError;
+                    if (validation) schemaValidationError(validation, res);
+                    done();
+                },
+                handlerWrapper(exampleProtect),
+            ],
         },
         controllerWrapper(getExample)
     );

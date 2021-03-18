@@ -1,12 +1,14 @@
 node_modules
 coverage
 build
-public/image/**
+test
+logs/*
+!logs/.gitkeep
+public/image/*
+!public/image/.gitkeep
 .env
 .env.development
 .env.test
 .eslintcache
-logs/**
-test
 .vscode
 .idea

@@ -41,18 +41,6 @@ export type PreHandler<
     T
 >;
 
-// RawServer extends RawServerBase = RawServerDefault,
-// RawRequest extends RawRequestDefaultExpression<RawServer> = RawRequestDefaultExpression<RawServer>,
-// RawReply extends RawReplyDefaultExpression<RawServer> = RawReplyDefaultExpression<RawServer>,
-// RouteGeneric extends RouteGenericInterface = RouteGenericInterface,
-// ContextConfig = ContextConfigDefault
-
-// RawServer extends RawServerBase = RawServerDefault,
-// RawRequest extends RawRequestDefaultExpression<RawServer> = RawRequestDefaultExpression<RawServer>,
-// RawReply extends RawReplyDefaultExpression<RawServer> = RawReplyDefaultExpression<RawServer>,
-// RouteGeneric extends RouteGenericInterface = RouteGenericInterface,
-// ContextConfig = ContextConfigDefault
-
 export type HandlerFn<T extends RequestGenericInterface> = (
     this: FastifyInstance,
     req: FastifyRequest<T, Server, IncomingMessage>,
@@ -65,3 +53,8 @@ export type Request<B = unknown, Q = unknown, P = unknown, H = unknown> = {
     Params: P;
     Headers: H;
 };
+
+export type PreHandlerFn<T extends RequestGenericInterface> = (
+    req: FastifyRequest<T, Server, IncomingMessage>,
+    res: FastifyReply<Server, IncomingMessage, ServerResponse, T, unknown>
+) => Promise<void>;

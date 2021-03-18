@@ -1,11 +1,5 @@
 const requestHeader = {
-    private: {
-        required: ["key"],
-        type: "object",
-        properties: {
-            key: { type: "string" },
-        },
-    },
+    private: { $ref: "#ApiKeyHeader" },
 };
 
 const requestParams = {

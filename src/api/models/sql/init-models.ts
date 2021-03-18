@@ -1,4 +1,4 @@
-import type { Sequelize } from "sequelize";
+import { sequelize } from "../../../databases/sequelize";
 import { m_banks } from "./m_banks";
 import type { m_banksAttributes, m_banksCreationAttributes } from "./m_banks";
 import { m_categories } from "./m_categories";
@@ -228,7 +228,7 @@ type Model = {
     UserWithdraw: typeof u_user_wallet_withdraw;
 };
 
-export function initModels(sequelize: Sequelize): Model {
+export function initModels(): Model {
     m_banks.initModel(sequelize);
     m_categories.initModel(sequelize);
     m_faq.initModel(sequelize);

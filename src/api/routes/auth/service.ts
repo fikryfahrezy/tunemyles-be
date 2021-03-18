@@ -1,12 +1,11 @@
 import type { RegisterBody, LoginBody } from "../../types/schema";
 import type { UserToken } from "../../types/model";
 import bcrypt from "bcrypt";
-import { sequelize } from "../../../databases/sequelize";
 import { ErrorResponse } from "../../utils/error-handler";
 import { initModels } from "../../models/sql/init-models";
 import { userPassword, userUtility } from "./model";
 
-const { User, UserUtility, UserWallet } = initModels(sequelize);
+const { User, UserUtility, UserWallet } = initModels();
 
 export const userRegistration: (
     data: RegisterBody
