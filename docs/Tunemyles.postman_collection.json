@@ -261,10 +261,9 @@
                                     "    url: pm.request.url.toString(),\r",
                                     "    header: {\r",
                                     "        ...pm.request.headers.toObject(),\r",
-                                    "        key: \"1\"\r",
+                                    "        authorization: \"1\"\r",
                                     "    }\r",
                                     "})\r",
-                                    "\r",
                                     "pm.sendRequest(sendRequestOne, (_, response) => {\r",
                                     "    pm.test('Get Private Data Success', () => {\r",
                                     "        const statusCode = response.code\r",
@@ -298,7 +297,7 @@
                                     "    url: pm.request.url.toString(),\r",
                                     "    header: {\r",
                                     "        ...pm.request.headers.toObject(),\r",
-                                    "        key: \"2\"\r",
+                                    "        authorization: \"2\"\r",
                                     "    }\r",
                                     "})\r",
                                     "pm.sendRequest(sendRequestThree, (_, response) => {\r",
@@ -318,15 +317,28 @@
                         }
                     ],
                     "request": {
+                        "auth": {
+                            "type": "apikey",
+                            "apikey": [
+                                {
+                                    "key": "value",
+                                    "value": "1",
+                                    "type": "string"
+                                },
+                                {
+                                    "key": "key",
+                                    "value": "authorization",
+                                    "type": "string"
+                                },
+                                {
+                                    "key": "in",
+                                    "value": "header",
+                                    "type": "string"
+                                }
+                            ]
+                        },
                         "method": "GET",
-                        "header": [
-                            {
-                                "key": "key",
-                                "value": "{{TOKEN}}",
-                                "type": "text",
-                                "disabled": true
-                            }
-                        ],
+                        "header": [],
                         "url": {
                             "raw": "{{URL}}/example/private",
                             "host": ["{{URL}}"],
@@ -549,7 +561,7 @@
                                     "const sendRequestOne = new Request({\r",
                                     "    method: pm.request.method,\r",
                                     "    url: pm.request.url.toString(),\r",
-                                    "     header: {\r",
+                                    "    header: {\r",
                                     "        ...pm.request.headers.toObject(),\r",
                                     "        \"Content-Type\": \"application/json\"\r",
                                     "    },\r",
@@ -572,7 +584,7 @@
                                     "const sendRequestTwo = new Request({\r",
                                     "    method: pm.request.method,\r",
                                     "    url: pm.request.url.toString(),\r",
-                                    "     header: {\r",
+                                    "    header: {\r",
                                     "        ...pm.request.headers.toObject(),\r",
                                     "        \"Content-Type\": \"application/json\"\r",
                                     "    },\r",
@@ -595,7 +607,7 @@
                                     "const sendRequestThree = new Request({\r",
                                     "    method: pm.request.method,\r",
                                     "    url: pm.request.url.toString(),\r",
-                                    "     header: {\r",
+                                    "    header: {\r",
                                     "        ...pm.request.headers.toObject(),\r",
                                     "        \"Content-Type\": \"application/json\"\r",
                                     "    },\r",
@@ -631,7 +643,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\r\n    \"username\": \"fsdfasfsdafas\",\r\n    \"password\": \"password\"\r\n}"
+                            "raw": "{\r\n    \"username\": \"username\",\r\n    \"password\": \"password\"\r\n}"
                         },
                         "url": {
                             "raw": "{{URL}}/auth/login",
@@ -652,13 +664,51 @@
                                     "\r",
                                     "const sendRequestOne = new Request({\r",
                                     "    method: pm.request.method,\r",
-                                    "    url: pm.request.url.toString()\r",
+                                    "    url: pm.request.url.toString(),\r",
+                                    "    header: {\r",
+                                    "        ...pm.request.headers.toObject(),\r",
+                                    "        authorization: pm.environment.replaceIn(\"{{TOKEN}}\")\r",
+                                    "    }\r",
                                     "})\r",
                                     "pm.sendRequest(sendRequestOne, (_, response) => {\r",
-                                    "    pm.test('test success', () => {\r",
+                                    "    pm.test('Get Profile Success', () => {\r",
                                     "        pm.expect(response.code).to.eql(200);\r",
                                     "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
                                     "        pm.expect(response.json().success).to.eql(true);\r",
+                                    "    })\r",
+                                    "});\r",
+                                    "\r",
+                                    "const sendRequestTwo = new Request({\r",
+                                    "    method: pm.request.method,\r",
+                                    "    url: pm.request.url.toString(),\r",
+                                    "    header: {\r",
+                                    "        ...pm.request.headers.toObject(),\r",
+                                    "        authorization: \"this-is-wrong\"\r",
+                                    "    }\r",
+                                    "})\r",
+                                    "pm.sendRequest(sendRequestTwo, (_, response) => {\r",
+                                    "    pm.test('Get Profile Failed, Wrong API Key', () => {\r",
+                                    "        pm.expect(response.code).to.eql(403);\r",
+                                    "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                                    "        pm.expect(response.json().success).to.eql(false);\r",
+                                    "    })\r",
+                                    "});\r",
+                                    "\r",
+                                    "\r",
+                                    "const newHeader = {\r",
+                                    "    ...pm.request.headers.toObject()\r",
+                                    "}\r",
+                                    "if (newHeader.authorization) delete newHeader.authorization\r",
+                                    "const sendRequestThree = new Request({\r",
+                                    "    method: pm.request.method,\r",
+                                    "    url: pm.request.url.toString(),\r",
+                                    "    header: newHeader\r",
+                                    "})\r",
+                                    "pm.sendRequest(sendRequestThree, (_, response) => {\r",
+                                    "    pm.test('Get Profile Failed, API Key Not Given', () => {\r",
+                                    "        pm.expect(response.code).to.eql(403);\r",
+                                    "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                                    "        pm.expect(response.json().success).to.eql(false);\r",
                                     "    })\r",
                                     "});"
                                 ],

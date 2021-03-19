@@ -3,15 +3,6 @@ import app from "../src/app";
 
 let server: null | FastifyInstance = null;
 
-beforeAll(() => {
-    server = app();
-    return server.ready();
-});
-
-afterAll(() => {
-    return server.close();
-});
-
 const userRegistration = (payload: Record<string, unknown>) =>
     server.inject({
         method: "POST",
@@ -34,6 +25,25 @@ const userLogin = (username: string, password: string) =>
             password,
         },
     });
+
+const userProfile = (authorization?: string) => {
+    const headers = { authorization };
+    if (!authorization) delete headers.authorization;
+    return server.inject({
+        method: "GET",
+        url: "/api/v2/auth/me",
+        headers,
+    });
+};
+
+beforeAll(() => {
+    server = app();
+    return server.ready();
+});
+
+afterAll(() => {
+    return server.close();
+});
 
 describe("Registration", () => {
     test("Register Success", async () => {
@@ -205,6 +215,58 @@ describe("Login", () => {
         const contenType = response.headers["content-type"];
         const isSuccess = response.json().success;
         expect(statusCode).toBe(400);
+        expect(contenType).toBe("application/json; charset=utf-8");
+        expect(isSuccess).toBe(false);
+    });
+});
+
+describe("Get Profile", () => {
+    test("Get Profile Success", async () => {
+        const username = Math.random().toString(36).substring(2);
+        const password = "password";
+        const payload = {
+            full_name: "Name",
+            username,
+            password,
+            phone_number: Date.now().toString(),
+            address: "address",
+        };
+        await userRegistration(payload);
+        const user = await userLogin(username, password);
+
+        const authorization = user.json().data.token;
+        const response = await userProfile(authorization);
+
+        const statusCode = response.statusCode;
+        const contenType = response.headers["content-type"];
+        const isSuccess = response.json().success;
+        expect(statusCode).toBe(200);
+        expect(contenType).toBe("application/json; charset=utf-8");
+        expect(isSuccess).toBe(true);
+    });
+
+    test("Get Profile Failed, Wrong API Key", async () => {
+        const authorization = "this-is-wrong-token";
+
+        const response = await userProfile(authorization);
+
+        const statusCode = response.statusCode;
+        const contenType = response.headers["content-type"];
+        const isSuccess = response.json().success;
+        expect(statusCode).toBe(403);
+        expect(contenType).toBe("application/json; charset=utf-8");
+        expect(isSuccess).toBe(false);
+    });
+
+    test("Get Profile Failed, API Key Not Given", async () => {
+        const authorization = undefined;
+
+        const response = await userProfile(authorization);
+
+        const statusCode = response.statusCode;
+        const contenType = response.headers["content-type"];
+        const isSuccess = response.json().success;
+        expect(statusCode).toBe(403);
         expect(contenType).toBe("application/json; charset=utf-8");
         expect(isSuccess).toBe(false);
     });

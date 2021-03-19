@@ -81,55 +81,29 @@ const responses = {
     },
     me: {
         type: "object",
-        properties: {
-            ApiResponse: {
-                $ref: "#ApiResponse",
-            },
-            data: {
+        allOf: [
+            { $ref: "#ApiResponse" },
+            {
                 type: "object",
-                allOf: [
-                    { $ref: "#GetProfile" },
-                    {
+                properties: {
+                    data: {
                         type: "object",
-                        properties: {
-                            wallets: {
-                                type: "array",
-                                items: {
-                                    type: "object",
-                                    allOf: [
-                                        {
-                                            $ref: "#GetProfileUtility",
-                                        },
-                                        {
-                                            type: "object",
-                                            properties: {
-                                                Wallet: {
-                                                    type: "object",
-                                                    allOf: [
-                                                        {
-                                                            $ref: "#GetWallet",
-                                                        },
-                                                        {
-                                                            type: "object",
-                                                            properties: {
-                                                                Logo: {
-                                                                    $ref:
-                                                                        "#GetMedia",
-                                                                },
-                                                            },
-                                                        },
-                                                    ],
-                                                },
-                                            },
-                                        },
-                                    ],
+                        allOf: [
+                            { $ref: "#GetProfile" },
+                            {
+                                type: "object",
+                                properties: {
+                                    wallets: {
+                                        type: "array",
+                                        items: { $ref: "#GetAccountWallet" },
+                                    },
                                 },
                             },
-                        },
+                        ],
                     },
-                ],
+                },
             },
-        },
+        ],
     },
     verifyToken: {
         type: "object",

@@ -1,7 +1,7 @@
 import type { FastifyRequest, FastifyReply } from "fastify";
 import type { Request, RequestHandler } from "../../types/fasitify";
 import type { RegisterBody, LoginBody, ApiKeyHeader } from "../../types/schema";
-import { userRegistration, userLogin } from "./service";
+import { userRegistration, userLogin, userProfile } from "./service";
 
 export const register: RequestHandler<Request<RegisterBody>> = async function (
     req: FastifyRequest<{ Body: RegisterBody }>,
@@ -35,17 +35,20 @@ export const login: RequestHandler<Request<LoginBody>> = async function (
         });
 };
 
-export const me: RequestHandler<
+export const getProfile: RequestHandler<
     Request<unknown, unknown, unknown, ApiKeyHeader>
 > = async function (
-    _: FastifyRequest<{ Headers: ApiKeyHeader }>,
+    req: FastifyRequest<{ Headers: ApiKeyHeader }>,
     res: FastifyReply
 ): Promise<void> {
+    const { authorization } = req.headers;
+    const data = await userProfile(authorization);
     res.status(200)
         .header("Content-Type", "application/json; charset=utf-8")
         .send({
             code: 200,
             success: true,
-            message: "login success",
+            message: "validate success",
+            data,
         });
 };

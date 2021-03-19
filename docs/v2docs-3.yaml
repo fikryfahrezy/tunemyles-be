@@ -78,17 +78,18 @@ paths:
                         application/json:
                             schema:
                                 type: object
-                                properties:
-                                    ApiResponse:
-                                        $ref: "#/components/schemas/ApiResponse"
-                                    data:
-                                        type: object
-                                        allOf:
-                                            - type: object
-                                              properties:
-                                                  type:
-                                                      type: integer
-                                            - $ref: "#/components/schemas/GetToken"
+                                allOf:
+                                    - $ref: "#/components/schemas/ApiResponse"
+                                    - type: object
+                                      properties:
+                                          data:
+                                              type: object
+                                              allOf:
+                                                  - type: object
+                                                    properties:
+                                                        type:
+                                                            type: integer
+                                                  - $ref: "#/components/schemas/GetToken"
                 4XX:
                     description: Request Error
                     content:
@@ -123,17 +124,18 @@ paths:
                         application/json:
                             schema:
                                 type: object
-                                properties:
-                                    ApiResponse:
-                                        $ref: "#/components/schemas/ApiResponse"
-                                    data:
-                                        type: object
-                                        allOf:
-                                            - type: object
-                                              properties:
-                                                  type:
-                                                      type: integer
-                                            - $ref: "#/components/schemas/GetToken"
+                                allOf:
+                                    - $ref: "#/components/schemas/ApiResponse"
+                                    - type: object
+                                      properties:
+                                          data:
+                                              type: object
+                                              allOf:
+                                                  - type: object
+                                                    properties:
+                                                        type:
+                                                            type: integer
+                                                  - $ref: "#/components/schemas/GetToken"
                 4XX:
                     description: Request Error
                     content:
@@ -161,31 +163,20 @@ paths:
                         application/json:
                             schema:
                                 type: object
-                                properties:
-                                    ApiResponse:
-                                        $ref: "#/components/schemas/ApiResponse"
-                                    data:
-                                        type: object
-                                        allOf:
-                                            - $ref: "#/components/schemas/GetProfile"
-                                            - type: object
-                                              properties:
-                                                  wallets:
-                                                      type: array
-                                                      items:
-                                                          type: object
-                                                          allOf:
-                                                              - $ref: "#/components/schemas/GetProfileUtility"
-                                                              - type: object
-                                                                properties:
-                                                                    Wallet:
-                                                                        type: object
-                                                                        allOf:
-                                                                            - $ref: "#/components/schemas/GetWallet"
-                                                                            - type: object
-                                                                              ? properties
-                                                                              : ? Logo
-                                                                                : $ref: "#/components/schemas/GetMedia"
+                                allOf:
+                                    - $ref: "#/components/schemas/ApiResponse"
+                                    - type: object
+                                      properties:
+                                          data:
+                                              type: object
+                                              allOf:
+                                                  - $ref: "#/components/schemas/GetProfile"
+                                                  - type: object
+                                                    properties:
+                                                        wallets:
+                                                            type: array
+                                                            items:
+                                                                $ref: "#/components/schemas/GetAccountWallet"
                 4XX:
                     description: Request Error
                     content:
@@ -3936,8 +3927,6 @@ paths:
                                 $ref: "#/components/schemas/ApiResponse"
 components:
     schemas:
-        IdParam:
-            type: string
         PageQuery:
             type: string
             default: "1"
@@ -4235,33 +4224,26 @@ components:
                     type: string
                 face:
                     type: string
-                token:
-                    type: string
-        GetProfileUtility:
+                    nullable: true
+        GetAccountWallet:
             type: object
             properties:
-                id:
-                    type: integer
-                id_u_user:
-                    type: integer
-                id_m_wallets:
-                    type: integer
                 balance:
                     type: integer
                 is_visible:
                     type: integer
-                created_at:
+                wallet_name:
                     type: string
-                    format: date-time
-                updated_at:
+                    nullable: true
+                wallet_description:
                     type: string
-                    format: date-time
-                createdAt:
+                    nullable: true
+                uri:
                     type: string
-                    format: date-time
-                updatedAt:
+                    nullable: true
+                label:
                     type: string
-                    format: date-time
+                    nullable: true
         GetProduct:
             type: object
             properties:

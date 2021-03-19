@@ -12,7 +12,7 @@ import {
 import { schemaValidationError } from "../../utils/error-handler";
 import { userProtect } from "../../middlewares/protect-route";
 import schemas from "./schemas";
-import { register, login, me } from "./controllers";
+import { register, login, getProfile } from "./controllers";
 
 const { requestBody, responses } = schemas;
 
@@ -77,7 +77,7 @@ async function routes(
             attachValidation: true,
             schema: {
                 response: {
-                    "200": responses.authenticated,
+                    "200": responses.me,
                     "4xx": { $ref: "#ApiResponse" },
                     "5xx": { $ref: "#ApiResponse" },
                 },
@@ -91,7 +91,7 @@ async function routes(
                 handlerWrapper(userProtect),
             ],
         },
-        controllerWrapper(me)
+        controllerWrapper(getProfile)
     );
 
     done();

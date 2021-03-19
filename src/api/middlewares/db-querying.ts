@@ -1,10 +1,7 @@
-import { FastifyRequest, FastifyReply, preHandlerHookHandler } from "fastify";
+import { preHandlerHookHandler } from "fastify";
 
-type SequelQuerying = (name: string) => preHandlerHookHandler;
-export const sequelizeQuerying: SequelQuerying = (modelName: string) => (
-    req: FastifyRequest,
-    reply: FastifyReply
-) => {
+type SequelQuerying = (modelname: string) => preHandlerHookHandler;
+export const sequelizeQuerying: SequelQuerying = () => () => {
     //   const { page, orderBy, orderDirection, limit } = ctx.request.query;
     //   const pagination = {};
     //   const order = {

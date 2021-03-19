@@ -3,7 +3,7 @@ import type { UserToken } from "../../types/model";
 import bcrypt from "bcrypt";
 import { ErrorResponse } from "../../utils/error-handler";
 import { initModels } from "../../models/sql/init-models";
-import { userPassword, userUtility } from "./model";
+import { userPassword, userUtility, userAccount, userWallets } from "./model";
 
 const { User, UserUtility, UserWallet } = initModels();
 
@@ -36,4 +36,17 @@ export const userLogin: (data: LoginBody) => Promise<UserToken> = async ({
         throw new ErrorResponse("account already banned", 403);
 
     return utility;
+};
+
+export const userProfile: (token: string) => Promise<unknown> = async (
+    token
+) => {
+    const user = await userAccount(token);
+    const wallets = await userWallets(user.id as number);
+    const data = {
+        ...user,
+        wallets,
+    };
+    delete data.id;
+    return data;
 };
