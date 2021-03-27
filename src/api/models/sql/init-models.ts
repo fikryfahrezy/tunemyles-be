@@ -1,4 +1,4 @@
-import { sequelize } from "../../../databases/sequelize";
+import { Sequelize } from "sequelize";
 import { m_banks } from "./m_banks";
 import type { m_banksAttributes, m_banksCreationAttributes } from "./m_banks";
 import { m_categories } from "./m_categories";
@@ -115,33 +115,33 @@ import type {
     u_user_wallet_withdrawCreationAttributes,
 } from "./u_user_wallet_withdraw";
 
-export {
-    m_banks,
-    m_categories,
-    m_faq,
-    m_medias,
-    Product,
-    User,
-    m_wallets,
-    u_bank,
-    u_bank_account,
-    u_product,
-    u_product_categories,
-    u_product_photos,
-    UserUtility,
-    u_user_bank_account,
-    u_user_cart,
-    u_user_chat,
-    u_user_chat_detail,
-    u_user_is_merchant,
-    u_user_is_merchant_location,
-    u_user_lost_password,
-    u_user_transaction,
-    u_user_transaction_product_reviews,
-    u_user_transaction_products,
-    UserWallet,
-    u_user_wallet_top_up,
-    u_user_wallet_withdraw,
+export type ModelType = {
+    Bank: m_banks;
+    Category: m_categories;
+    Faq: m_faq;
+    Media: m_medias;
+    Product: Product;
+    UserType: User;
+    Wallet: m_wallets;
+    BankUtility: u_bank;
+    BankAccount: u_bank_account;
+    ProductUtility: u_product;
+    ProductCategory: u_product_categories;
+    ProductPhoto: u_product_photos;
+    UserUtility: UserUtility;
+    BankUser: u_user_bank_account;
+    UserCart: u_user_cart;
+    UserChat: u_user_chat;
+    UserChatDetail: u_user_chat_detail;
+    UserMerchant: u_user_is_merchant;
+    MerchantLocation: u_user_is_merchant_location;
+    UserLostPassword: u_user_lost_password;
+    UserTransaction: u_user_transaction;
+    ProductReview: u_user_transaction_product_reviews;
+    UserTransactionProduct: u_user_transaction_products;
+    UserWallet: UserWallet;
+    UserTopUp: u_user_wallet_top_up;
+    UserWithdraw: u_user_wallet_withdraw;
 };
 
 export type {
@@ -228,7 +228,7 @@ type Model = {
     UserWithdraw: typeof u_user_wallet_withdraw;
 };
 
-export function initModels(): Model {
+export function initModels(sequelize: Sequelize): Model {
     m_banks.initModel(sequelize);
     m_categories.initModel(sequelize);
     m_faq.initModel(sequelize);

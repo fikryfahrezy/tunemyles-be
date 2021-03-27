@@ -1,11 +1,11 @@
-import type { DummyArrayDataType, DummyDataType } from "./model";
+import type { DummyArrayDataType, DummyDataType } from "./repository";
 import type { AddedFileBody } from "../../types/schema";
 import pmp from "pump";
 import stream from "stream";
 import util from "util";
 import fs from "fs";
 import { ErrorResponse } from "../../utils/error-handler";
-import { exampleMultipleData, exampleSingleData } from "./model";
+import { exampleMultipleData, exampleSingleData } from "./repository";
 
 const pump = util.promisify(pmp) as (
     ...streams: Array<pmp.Stream | pmp.Callback>

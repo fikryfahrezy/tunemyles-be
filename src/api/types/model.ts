@@ -1,14 +1,14 @@
-export type UserPassword = {
+type UserPassword = {
     id: number;
     password: string;
 };
 
-export type UserToken = {
+type UserToken = {
     type: number;
     token: string;
 };
 
-export type UserAccount = {
+type UserAccount = {
     full_name: string;
     username: string;
     address: string;
@@ -17,7 +17,7 @@ export type UserAccount = {
     id?: number;
 };
 
-export type UserWallet = {
+type UserWallet = {
     balance: string;
     is_visible: number;
     wallet_name: string | null;
@@ -26,8 +26,16 @@ export type UserWallet = {
     label: string | null;
 };
 
-export type UserUtility = {
+type UserUtility = {
     id: number;
     user_id: number;
     type: number;
+};
+
+export type CustModelType = {
+    UserPassword: UserPassword;
+    UserToken: UserToken;
+    UserAccount: UserAccount;
+    UserWallet: UserWallet;
+    UserUtility: UserUtility;
 };

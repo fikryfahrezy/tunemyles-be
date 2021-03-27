@@ -1,21 +1,23 @@
 import type { RegisterBody, LoginBody } from "../../types/schema";
-import type { UserToken } from "../../types/model";
+import type { CustModelType } from "../../types/model";
 import bcrypt from "bcrypt";
 import { ErrorResponse } from "../../utils/error-handler";
-import { initModels } from "../../models/sql/init-models";
-import { userPassword, userUtility, userAccount, userWallets } from "./model";
-
-const { User, UserUtility, UserWallet } = initModels();
+import {
+    userPassword,
+    userUtility,
+    userAccount,
+    userWallets,
+    createUser,
+    createUserUtility,
+    createUserWallet,
+} from "./model";
 
 export const userRegistration: (
     data: RegisterBody
-) => Promise<UserToken> = async (data) => {
-    const user = await User.create(data);
-    const userUtility = await UserUtility.create({
-        api_token: data.password,
-        id_m_users: user.id,
-    });
-    await UserWallet.create({ id_u_user: userUtility.id });
+) => Promise<CustModelType["UserToken"]> = async (data) => {
+    const user = await createUser(data);
+    const userUtility = await createUserUtility(data.password, user.id);
+    await createUserWallet(userUtility.id);
 
     const type = userUtility.type as number;
     const token = userUtility.api_token;
@@ -23,10 +25,9 @@ export const userRegistration: (
     return { type, token };
 };
 
-export const userLogin: (data: LoginBody) => Promise<UserToken> = async ({
-    username,
-    password,
-}) => {
+export const userLogin: (
+    data: LoginBody
+) => Promise<CustModelType["UserToken"]> = async ({ username, password }) => {
     const user = await userPassword(username);
     if (!user) throw new ErrorResponse("invalid credentials", 400);
     const isSame = await bcrypt.compare(password, user.password);

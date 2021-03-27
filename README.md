@@ -38,7 +38,7 @@ src                                 ->  Application main folder.
 |   |   |_  [routes-name]           ->  Route name folder.
 |   |   |   |_  controller.ts       ->  Route controller. Handle client request and send feedback to client.
 |   |   |   |_  index.ts            ->  Router for controllers.
-|   |   |   |_  model.ts            ->  Bridge for service to interact with a database or other resources.
+|   |   |   |_  repository.ts       ->  Bridge for service to interact with a database or other resources.
 |   |   |   |_  schemas.ts          ->  Route request and response schema.
 |   |   |   |_  service.ts          ->  Route handle logic and process.
 |   |   |_  index.ts                ->  Every API version entry point. Register API router for each version.
