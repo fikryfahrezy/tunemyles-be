@@ -1,8 +1,4 @@
-import type {
-    FastifyRequest,
-    FastifyReply,
-    RequestGenericInterface,
-} from "fastify";
+import type { FastifyRequest, FastifyReply } from "fastify";
 import type {
     PostRequestBody,
     GetIdRequestParams,
@@ -16,7 +12,7 @@ import {
     postService,
 } from "./service";
 
-export const getExample: RequestHandler<RequestGenericInterface> = async function (
+export const getExample: RequestHandler<Request> = async function (
     _: FastifyRequest,
     res: FastifyReply
 ): Promise<void> {

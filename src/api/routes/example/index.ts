@@ -108,7 +108,7 @@ async function routes(
                 },
             },
             preHandler: [
-                (req, res, done) => {
+                (req: FastifyRequest<{ Headers: unknown }>, res, done) => {
                     const validation = req.validationError;
                     if (validation) schemaValidationError(validation, res);
                     done();

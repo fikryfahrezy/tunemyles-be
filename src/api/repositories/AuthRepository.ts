@@ -1,8 +1,8 @@
-import type { CustModelType } from "../../types/model";
-import type { RegisterBody, LoginBody } from "../../types/schema";
+import type { CustModelType } from "../types/model";
+import type { RegisterBody } from "../types/schema";
 import { QueryTypes } from "sequelize";
-import { sequelize } from "../../../databases/sequelize";
-import { ModelType, initModels } from "../../models/sql/init-models";
+import { sequelize } from "../../databases/sequelize";
+import { ModelType, initModels } from "../models/sql/init-models";
 const { User, UserUtility, UserWallet } = initModels(sequelize);
 
 export const createUser: (
@@ -10,7 +10,10 @@ export const createUser: (
 ) => Promise<ModelType["UserType"]> = async (data: RegisterBody) =>
     User.create(data);
 
-export const createUserUtility = (token: string, userId: number) =>
+export const createUserUtility: (
+    token: string,
+    userId: number
+) => Promise<ModelType["UserUtility"]> = (token, userId) =>
     UserUtility.create({ api_token: token, id_m_users: userId });
 
 export const createUserWallet = (
@@ -108,4 +111,26 @@ export const userWallets: (
         }
     );
     return userWallet;
+};
+
+export const userToken: (
+    token: string
+) => Promise<CustModelType["UserUtility"]> = (token) => {
+    const sqlQuery = `
+        SELECT
+            id,
+            id_m_users AS user_id,
+            type
+        FROM u_user
+        WHERE api_token = :token
+   `;
+    const userUtility = sequelize.query<CustModelType["UserUtility"]>(
+        sqlQuery,
+        {
+            replacements: { token },
+            type: QueryTypes.SELECT,
+            plain: true,
+        }
+    );
+    return userUtility;
 };

@@ -1,5 +1,4 @@
 import type { HandlerFn, PreHandlerFn } from "../types/fasitify";
-import type { HandlerWrapperParam } from "../types/util";
 import { sequelize } from "../../databases/sequelize";
 import { errorHandler } from "./error-handler";
 
@@ -20,17 +19,11 @@ export const controllerWrapper = function <T>(fn: HandlerFn<T>): HandlerFn<T> {
 };
 
 export const handlerWrapper = function <T>(
-    fn: (param: HandlerWrapperParam) => void
+    fn: PreHandlerFn<T>
 ): PreHandlerFn<T> {
     return async function (req, res) {
         try {
-            const request: unknown = {
-                headers: req.headers,
-                body: req.body,
-                params: req.params,
-                query: req.query,
-            };
-            return await Promise.resolve(fn(request as HandlerWrapperParam));
+            return await Promise.resolve(fn(req, res));
         } catch (err) {
             errorHandler(err, res);
         }

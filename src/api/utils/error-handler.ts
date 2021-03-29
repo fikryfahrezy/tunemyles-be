@@ -19,9 +19,17 @@ export const errorHandler: (
 ) => void = (err, res) => {
     if (err instanceof ErrorResponse) {
         const { message, status } = err;
-        if (status === 400) res.badRequest(message);
-        else if (status === 403) res.forbidden(message);
-        else if (status === 404) res.notFound(message);
+        switch (status) {
+            case 400:
+                res.badRequest(message);
+                break;
+            case 403:
+                res.forbidden(message);
+                break;
+            case 404:
+                res.notFound(message);
+                break;
+        }
     } else if (err instanceof UniqueConstraintError) {
         const errValue = err.errors[0].value;
         const errMsg = errValue + " already used";

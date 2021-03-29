@@ -10,7 +10,7 @@ import {
     handlerWrapper,
 } from "../../utils/serverfn-wrapper";
 import { schemaValidationError } from "../../utils/error-handler";
-import { userProtect } from "../../middlewares/protect-route";
+import { protect } from "../../middlewares/protect-route";
 import schemas from "./schemas";
 import { register, login, getProfile } from "./controllers";
 
@@ -83,12 +83,16 @@ async function routes(
                 },
             },
             preHandler: [
-                (req: FastifyRequest<{ Headers: ApiKeyHeader }>, res, done) => {
+                (
+                    req: FastifyRequest<{ Headers: ApiKeyHeader | unknown }>,
+                    res,
+                    done
+                ) => {
                     const validation = req.validationError;
                     if (validation) schemaValidationError(validation, res);
                     done();
                 },
-                handlerWrapper(userProtect),
+                handlerWrapper(protect("user")),
             ],
         },
         controllerWrapper(getProfile)

@@ -1,7 +1,7 @@
 import type { FastifyRequest, FastifyReply } from "fastify";
 import type { Request, RequestHandler } from "../../types/fasitify";
 import type { RegisterBody, LoginBody, ApiKeyHeader } from "../../types/schema";
-import { userRegistration, userLogin, userProfile } from "./repository";
+import { userRegistration, userLogin, userProfile } from "./service";
 
 export const register: RequestHandler<Request<RegisterBody>> = async function (
     req: FastifyRequest<{ Body: RegisterBody }>,

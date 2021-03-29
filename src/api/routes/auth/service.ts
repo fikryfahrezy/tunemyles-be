@@ -10,7 +10,7 @@ import {
     createUser,
     createUserUtility,
     createUserWallet,
-} from "./model";
+} from "../../repositories/AuthRepository";
 
 export const userRegistration: (
     data: RegisterBody
