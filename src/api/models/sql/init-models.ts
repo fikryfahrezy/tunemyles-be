@@ -1,573 +1,578 @@
-import { Sequelize } from "sequelize";
-import { m_banks } from "./m_banks";
-import type { m_banksAttributes, m_banksCreationAttributes } from "./m_banks";
-import { m_categories } from "./m_categories";
+import { Sequelize } from 'sequelize';
+import { Bank } from './Bank';
+import type { BankAttributes, BankCreationAttributes } from './Bank';
+import { Category } from './Category';
 import type {
-    m_categoriesAttributes,
-    m_categoriesCreationAttributes,
-} from "./m_categories";
-import { m_faq } from "./m_faq";
-import type { m_faqAttributes, m_faqCreationAttributes } from "./m_faq";
-import { m_medias } from "./m_medias";
+  CategoryAttributes,
+  CategoryCreationAttributes,
+} from './Category';
+import { Faq } from './Faq';
+import type { FaqAttributes, FaqCreationAttributes } from './Faq';
+import { Media } from './Media';
 import type {
-    m_mediasAttributes,
-    m_mediasCreationAttributes,
-} from "./m_medias";
-import { Product } from "./Product";
-import type { ProductAttributes, ProductCreationAttributes } from "./Product";
-import { User } from "./User";
-import type { UserAttributes, UserCreationAttributes } from "./User";
-import { m_wallets } from "./m_wallets";
+  MediaAttributes,
+  MediaCreationAttributes,
+} from './Media';
+import { Product } from './Product';
+import type { ProductAttributes, ProductCreationAttributes } from './Product';
+import { User } from './User';
+import type { UserAttributes, UserCreationAttributes } from './User';
+import { Wallet } from './Wallet';
 import type {
-    m_walletsAttributes,
-    m_walletsCreationAttributes,
-} from "./m_wallets";
-import { u_bank } from "./u_bank";
-import type { u_bankAttributes, u_bankCreationAttributes } from "./u_bank";
-import { u_bank_account } from "./u_bank_account";
+  WalletAttributes,
+  WalletCreationAttributes,
+} from './Wallet';
+import { BankUtility } from './BankUtility';
 import type {
-    u_bank_accountAttributes,
-    u_bank_accountCreationAttributes,
-} from "./u_bank_account";
-import { u_product } from "./u_product";
+  BankUtilityAttributes,
+  BankUtilityCreationAttributes,
+} from './BankUtility';
+import { BankAccount } from './BankAccount';
 import type {
-    u_productAttributes,
-    u_productCreationAttributes,
-} from "./u_product";
-import { u_product_categories } from "./u_product_categories";
+  BankAccountAttributes,
+  BankAccountCreationAttributes,
+} from './BankAccount';
+import { ProductUtility } from './ProductUtility';
 import type {
-    u_product_categoriesAttributes,
-    u_product_categoriesCreationAttributes,
-} from "./u_product_categories";
-import { u_product_photos } from "./u_product_photos";
+  ProductUtilityAttributes,
+  ProductUtilityCreationAttributes,
+} from './ProductUtility';
+import { ProductCategory } from './ProductCategory';
 import type {
-    u_product_photosAttributes,
-    u_product_photosCreationAttributes,
-} from "./u_product_photos";
-import { UserUtility } from "./UserUtility";
+  ProductCategoryAttributes,
+  ProductCategoryCreationAttributes,
+} from './ProductCategory';
+import { ProductPhoto } from './ProductPhoto';
 import type {
-    UserUtilityAttributes,
-    UserUtilityCreationAttributes,
-} from "./UserUtility";
-import { u_user_bank_account } from "./u_user_bank_account";
+  ProductPhotoAttributes,
+  ProductPhotoCreationAttributes,
+} from './ProductPhoto';
+import { UserUtility } from './UserUtility';
 import type {
-    u_user_bank_accountAttributes,
-    u_user_bank_accountCreationAttributes,
-} from "./u_user_bank_account";
-import { u_user_cart } from "./u_user_cart";
+  UserUtilityAttributes,
+  UserUtilityCreationAttributes,
+} from './UserUtility';
+import { BankUser } from './BankUser';
 import type {
-    u_user_cartAttributes,
-    u_user_cartCreationAttributes,
-} from "./u_user_cart";
-import { u_user_chat } from "./u_user_chat";
+  BankUserAttributes,
+  BankUserCreationAttributes,
+} from './BankUser';
+import { UserCart } from './UserCart';
 import type {
-    u_user_chatAttributes,
-    u_user_chatCreationAttributes,
-} from "./u_user_chat";
-import { u_user_chat_detail } from "./u_user_chat_detail";
+  UserCartAttributes,
+  UserCartCreationAttributes,
+} from './UserCart';
+import { UserChat } from './UserChat';
 import type {
-    u_user_chat_detailAttributes,
-    u_user_chat_detailCreationAttributes,
-} from "./u_user_chat_detail";
-import { u_user_is_merchant } from "./u_user_is_merchant";
+  UserChatAttributes,
+  UserChatCreationAttributes,
+} from './UserChat';
+import { UserChatDetail } from './UserChatDetail';
 import type {
-    u_user_is_merchantAttributes,
-    u_user_is_merchantCreationAttributes,
-} from "./u_user_is_merchant";
-import { u_user_is_merchant_location } from "./u_user_is_merchant_location";
+  UserChatDetailAttributes,
+  UserChatDetailCreationAttributes,
+} from './UserChatDetail';
+import { Merchant } from './Merchant';
 import type {
-    u_user_is_merchant_locationAttributes,
-    u_user_is_merchant_locationCreationAttributes,
-} from "./u_user_is_merchant_location";
-import { u_user_lost_password } from "./u_user_lost_password";
+  MerchantAttributes,
+  MerchantCreationAttributes,
+} from './Merchant';
+import { MerchantLocation } from './MerchantLocation';
 import type {
-    u_user_lost_passwordAttributes,
-    u_user_lost_passwordCreationAttributes,
-} from "./u_user_lost_password";
-import { u_user_transaction } from "./u_user_transaction";
+  MerchantLocationAttributes,
+  MerchantLocationCreationAttributes,
+} from './MerchantLocation';
+import { UserLostPassword } from './UserLostPassword';
 import type {
-    u_user_transactionAttributes,
-    u_user_transactionCreationAttributes,
-} from "./u_user_transaction";
-import { u_user_transaction_product_reviews } from "./u_user_transaction_product_reviews";
+  UserLostPasswordAttributes,
+  UserLostPasswordCreationAttributes,
+} from './UserLostPassword';
+import { UserTransaction } from './UserTransaction';
 import type {
-    u_user_transaction_product_reviewsAttributes,
-    u_user_transaction_product_reviewsCreationAttributes,
-} from "./u_user_transaction_product_reviews";
-import { u_user_transaction_products } from "./u_user_transaction_products";
+  UserTransactionAttributes,
+  UserTransactionCreationAttributes,
+} from './UserTransaction';
+import { ProductReview } from './ProductReview';
 import type {
-    u_user_transaction_productsAttributes,
-    u_user_transaction_productsCreationAttributes,
-} from "./u_user_transaction_products";
-import { UserWallet } from "./UserWallet";
+  ProductReviewAttributes,
+  ProductReviewCreationAttributes,
+} from './ProductReview';
+import { TransactionProduct } from './TransactionProduct';
 import type {
-    UserWalletAttributes,
-    UserWalletCreationAttributes,
-} from "./UserWallet";
-import { u_user_wallet_top_up } from "./u_user_wallet_top_up";
+  TransactionProductAttributes,
+  TransactionProductCreationAttributes,
+} from './TransactionProduct';
+import { UserWallet } from './UserWallet';
 import type {
-    u_user_wallet_top_upAttributes,
-    u_user_wallet_top_upCreationAttributes,
-} from "./u_user_wallet_top_up";
-import { u_user_wallet_withdraw } from "./u_user_wallet_withdraw";
+  UserWalletAttributes,
+  UserWalletCreationAttributes,
+} from './UserWallet';
+import { UserTopUp } from './UserTopUp';
 import type {
-    u_user_wallet_withdrawAttributes,
-    u_user_wallet_withdrawCreationAttributes,
-} from "./u_user_wallet_withdraw";
+  UserTopUpAttributes,
+  UserTopUpCreationAttributes,
+} from './UserTopUp';
+import { UserWithdraw } from './UserWithdraw';
+import type {
+  UserWithdrawAttributes,
+  UserWithdrawCreationAttributes,
+} from './UserWithdraw';
 
 export type ModelType = {
-    Bank: m_banks;
-    Category: m_categories;
-    Faq: m_faq;
-    Media: m_medias;
-    Product: Product;
-    UserType: User;
-    Wallet: m_wallets;
-    BankUtility: u_bank;
-    BankAccount: u_bank_account;
-    ProductUtility: u_product;
-    ProductCategory: u_product_categories;
-    ProductPhoto: u_product_photos;
-    UserUtility: UserUtility;
-    BankUser: u_user_bank_account;
-    UserCart: u_user_cart;
-    UserChat: u_user_chat;
-    UserChatDetail: u_user_chat_detail;
-    UserMerchant: u_user_is_merchant;
-    MerchantLocation: u_user_is_merchant_location;
-    UserLostPassword: u_user_lost_password;
-    UserTransaction: u_user_transaction;
-    ProductReview: u_user_transaction_product_reviews;
-    UserTransactionProduct: u_user_transaction_products;
-    UserWallet: UserWallet;
-    UserTopUp: u_user_wallet_top_up;
-    UserWithdraw: u_user_wallet_withdraw;
+  Bank: Bank;
+  Category: Category;
+  Faq: Faq;
+  Media: Media;
+  Product: Product;
+  UserType: User;
+  Wallet: Wallet;
+  BankUtility: BankUtility;
+  BankAccount: BankAccount;
+  ProductUtility: ProductUtility;
+  ProductCategory: ProductCategory;
+  ProductPhoto: ProductPhoto;
+  UserUtility: UserUtility;
+  BankUser: BankUser;
+  UserCart: UserCart;
+  UserChat: UserChat;
+  UserChatDetail: UserChatDetail;
+  Merchant: Merchant;
+  MerchantLocation: MerchantLocation;
+  UserLostPassword: UserLostPassword;
+  UserTransaction: UserTransaction;
+  ProductReview: ProductReview;
+  TransactionProduct: TransactionProduct;
+  UserWallet: UserWallet;
+  UserTopUp: UserTopUp;
+  UserWithdraw: UserWithdraw;
 };
 
 export type {
-    m_banksAttributes,
-    m_banksCreationAttributes,
-    m_categoriesAttributes,
-    m_categoriesCreationAttributes,
-    m_faqAttributes,
-    m_faqCreationAttributes,
-    m_mediasAttributes,
-    m_mediasCreationAttributes,
-    ProductAttributes,
-    ProductCreationAttributes,
-    UserAttributes,
-    UserCreationAttributes,
-    m_walletsAttributes,
-    m_walletsCreationAttributes,
-    u_bankAttributes,
-    u_bankCreationAttributes,
-    u_bank_accountAttributes,
-    u_bank_accountCreationAttributes,
-    u_productAttributes,
-    u_productCreationAttributes,
-    u_product_categoriesAttributes,
-    u_product_categoriesCreationAttributes,
-    u_product_photosAttributes,
-    u_product_photosCreationAttributes,
-    UserUtilityAttributes,
-    UserUtilityCreationAttributes,
-    u_user_bank_accountAttributes,
-    u_user_bank_accountCreationAttributes,
-    u_user_cartAttributes,
-    u_user_cartCreationAttributes,
-    u_user_chatAttributes,
-    u_user_chatCreationAttributes,
-    u_user_chat_detailAttributes,
-    u_user_chat_detailCreationAttributes,
-    u_user_is_merchantAttributes,
-    u_user_is_merchantCreationAttributes,
-    u_user_is_merchant_locationAttributes,
-    u_user_is_merchant_locationCreationAttributes,
-    u_user_lost_passwordAttributes,
-    u_user_lost_passwordCreationAttributes,
-    u_user_transactionAttributes,
-    u_user_transactionCreationAttributes,
-    u_user_transaction_product_reviewsAttributes,
-    u_user_transaction_product_reviewsCreationAttributes,
-    u_user_transaction_productsAttributes,
-    u_user_transaction_productsCreationAttributes,
-    UserWalletAttributes,
-    UserWalletCreationAttributes,
-    u_user_wallet_top_upAttributes,
-    u_user_wallet_top_upCreationAttributes,
-    u_user_wallet_withdrawAttributes,
-    u_user_wallet_withdrawCreationAttributes,
+  BankAttributes,
+  BankCreationAttributes,
+  CategoryAttributes,
+  CategoryCreationAttributes,
+  FaqAttributes,
+  FaqCreationAttributes,
+  MediaAttributes,
+  MediaCreationAttributes,
+  ProductAttributes,
+  ProductCreationAttributes,
+  UserAttributes,
+  UserCreationAttributes,
+  WalletAttributes,
+  WalletCreationAttributes,
+  BankUtilityAttributes,
+  BankUtilityCreationAttributes,
+  BankAccountAttributes,
+  BankAccountCreationAttributes,
+  ProductUtilityAttributes,
+  ProductUtilityCreationAttributes,
+  ProductCategoryAttributes,
+  ProductCategoryCreationAttributes,
+  ProductPhotoAttributes,
+  ProductPhotoCreationAttributes,
+  UserUtilityAttributes,
+  UserUtilityCreationAttributes,
+  BankUserAttributes,
+  BankUserCreationAttributes,
+  UserCartAttributes,
+  UserCartCreationAttributes,
+  UserChatAttributes,
+  UserChatCreationAttributes,
+  UserChatDetailAttributes,
+  UserChatDetailCreationAttributes,
+  MerchantAttributes,
+  MerchantCreationAttributes,
+  MerchantLocationAttributes,
+  MerchantLocationCreationAttributes,
+  UserLostPasswordAttributes,
+  UserLostPasswordCreationAttributes,
+  UserTransactionAttributes,
+  UserTransactionCreationAttributes,
+  ProductReviewAttributes,
+  ProductReviewCreationAttributes,
+  TransactionProductAttributes,
+  TransactionProductCreationAttributes,
+  UserWalletAttributes,
+  UserWalletCreationAttributes,
+  UserTopUpAttributes,
+  UserTopUpCreationAttributes,
+  UserWithdrawAttributes,
+  UserWithdrawCreationAttributes,
 };
 
 type Model = {
-    Bank: typeof m_banks;
-    Category: typeof m_categories;
-    Faq: typeof m_faq;
-    Media: typeof m_medias;
-    Product: typeof Product;
-    User: typeof User;
-    Wallet: typeof m_wallets;
-    BankUtility: typeof u_bank;
-    BankAccount: typeof u_bank_account;
-    ProductUtility: typeof u_product;
-    ProductCategory: typeof u_product_categories;
-    ProductPhoto: typeof u_product_photos;
-    UserUtility: typeof UserUtility;
-    BankUser: typeof u_user_bank_account;
-    UserCart: typeof u_user_cart;
-    UserChat: typeof u_user_chat;
-    UserChatDetail: typeof u_user_chat_detail;
-    UserMerchant: typeof u_user_is_merchant;
-    MerchantLocation: typeof u_user_is_merchant_location;
-    UserLostPassword: typeof u_user_lost_password;
-    UserTransaction: typeof u_user_transaction;
-    ProductReview: typeof u_user_transaction_product_reviews;
-    UserTransactionProduct: typeof u_user_transaction_products;
-    UserWallet: typeof UserWallet;
-    UserTopUp: typeof u_user_wallet_top_up;
-    UserWithdraw: typeof u_user_wallet_withdraw;
+  Bank: typeof Bank;
+  Category: typeof Category;
+  Faq: typeof Faq;
+  Media: typeof Media;
+  Product: typeof Product;
+  User: typeof User;
+  Wallet: typeof Wallet;
+  BankUtility: typeof BankUtility;
+  BankAccount: typeof BankAccount;
+  ProductUtility: typeof ProductUtility;
+  ProductCategory: typeof ProductCategory;
+  ProductPhoto: typeof ProductPhoto;
+  UserUtility: typeof UserUtility;
+  BankUser: typeof BankUser;
+  UserCart: typeof UserCart;
+  UserChat: typeof UserChat;
+  UserChatDetail: typeof UserChatDetail;
+  Merchant: typeof Merchant;
+  MerchantLocation: typeof MerchantLocation;
+  UserLostPassword: typeof UserLostPassword;
+  UserTransaction: typeof UserTransaction;
+  ProductReview: typeof ProductReview;
+  TransactionProduct: typeof TransactionProduct;
+  UserWallet: typeof UserWallet;
+  UserTopUp: typeof UserTopUp;
+  UserWithdraw: typeof UserWithdraw;
 };
 
-export function initModels(sequelize: Sequelize): Model {
-    m_banks.initModel(sequelize);
-    m_categories.initModel(sequelize);
-    m_faq.initModel(sequelize);
-    m_medias.initModel(sequelize);
-    Product.initModel(sequelize);
-    User.initModel(sequelize);
-    m_wallets.initModel(sequelize);
-    u_bank.initModel(sequelize);
-    u_bank_account.initModel(sequelize);
-    u_product.initModel(sequelize);
-    u_product_categories.initModel(sequelize);
-    u_product_photos.initModel(sequelize);
-    UserUtility.initModel(sequelize);
-    u_user_bank_account.initModel(sequelize);
-    u_user_cart.initModel(sequelize);
-    u_user_chat.initModel(sequelize);
-    u_user_chat_detail.initModel(sequelize);
-    u_user_is_merchant.initModel(sequelize);
-    u_user_is_merchant_location.initModel(sequelize);
-    u_user_lost_password.initModel(sequelize);
-    u_user_transaction.initModel(sequelize);
-    u_user_transaction_product_reviews.initModel(sequelize);
-    u_user_transaction_products.initModel(sequelize);
-    UserWallet.initModel(sequelize);
-    u_user_wallet_top_up.initModel(sequelize);
-    u_user_wallet_withdraw.initModel(sequelize);
+const initModels = function initModels(sequelize: Sequelize): Model {
+  Bank.initModel(sequelize);
+  Category.initModel(sequelize);
+  Faq.initModel(sequelize);
+  Media.initModel(sequelize);
+  Product.initModel(sequelize);
+  User.initModel(sequelize);
+  Wallet.initModel(sequelize);
+  BankUtility.initModel(sequelize);
+  BankAccount.initModel(sequelize);
+  ProductUtility.initModel(sequelize);
+  ProductCategory.initModel(sequelize);
+  ProductPhoto.initModel(sequelize);
+  UserUtility.initModel(sequelize);
+  BankUser.initModel(sequelize);
+  UserCart.initModel(sequelize);
+  UserChat.initModel(sequelize);
+  UserChatDetail.initModel(sequelize);
+  Merchant.initModel(sequelize);
+  MerchantLocation.initModel(sequelize);
+  UserLostPassword.initModel(sequelize);
+  UserTransaction.initModel(sequelize);
+  ProductReview.initModel(sequelize);
+  TransactionProduct.initModel(sequelize);
+  UserWallet.initModel(sequelize);
+  UserTopUp.initModel(sequelize);
+  UserWithdraw.initModel(sequelize);
 
-    u_bank.belongsTo(m_banks, {
-        as: "id_m_banks_m_bank",
-        foreignKey: "id_m_banks",
-    });
-    m_banks.hasMany(u_bank, { as: "u_banks", foreignKey: "id_m_banks" });
-    u_bank_account.belongsTo(m_banks, {
-        as: "id_m_banks_m_bank",
-        foreignKey: "id_m_banks",
-    });
-    m_banks.hasMany(u_bank_account, {
-        as: "u_bank_accounts",
-        foreignKey: "id_m_banks",
-    });
-    u_user_bank_account.belongsTo(m_banks, {
-        as: "id_m_banks_m_bank",
-        foreignKey: "id_m_banks",
-    });
-    m_banks.hasMany(u_user_bank_account, {
-        as: "u_user_bank_accounts",
-        foreignKey: "id_m_banks",
-    });
-    u_user_wallet_top_up.belongsTo(m_banks, {
-        as: "id_m_banks_m_bank",
-        foreignKey: "id_m_banks",
-    });
-    m_banks.hasMany(u_user_wallet_top_up, {
-        as: "u_user_wallet_top_ups",
-        foreignKey: "id_m_banks",
-    });
-    u_product_categories.belongsTo(m_categories, {
-        as: "id_m_categories_m_category",
-        foreignKey: "id_m_categories",
-    });
-    m_categories.hasMany(u_product_categories, {
-        as: "u_product_categories",
-        foreignKey: "id_m_categories",
-    });
-    m_banks.belongsTo(m_medias, {
-        as: "id_logo_m_media",
-        foreignKey: "id_logo",
-    });
-    m_medias.hasMany(m_banks, { as: "m_banks", foreignKey: "id_logo" });
-    m_categories.belongsTo(m_medias, {
-        as: "id_icon_m_media",
-        foreignKey: "id_icon",
-    });
-    m_medias.hasMany(m_categories, {
-        as: "m_categories",
-        foreignKey: "id_icon",
-    });
-    Product.belongsTo(m_medias, {
-        as: "id_cover_m_media",
-        foreignKey: "id_cover",
-    });
-    m_medias.hasMany(Product, { as: "m_products", foreignKey: "id_cover" });
-    User.belongsTo(m_medias, {
-        as: "id_photo_m_media",
-        foreignKey: "id_photo",
-    });
-    m_medias.hasMany(User, { as: "m_users", foreignKey: "id_photo" });
-    m_wallets.belongsTo(m_medias, {
-        as: "id_logo_m_media",
-        foreignKey: "id_logo",
-    });
-    m_medias.hasMany(m_wallets, { as: "m_wallets", foreignKey: "id_logo" });
-    u_product_photos.belongsTo(m_medias, {
-        as: "id_m_medias_m_media",
-        foreignKey: "id_m_medias",
-    });
-    m_medias.hasMany(u_product_photos, {
-        as: "u_product_photos",
-        foreignKey: "id_m_medias",
-    });
-    u_user_is_merchant.belongsTo(m_medias, {
-        as: "id_identity_photo_m_media",
-        foreignKey: "id_identity_photo",
-    });
-    m_medias.hasMany(u_user_is_merchant, {
-        as: "u_user_is_merchants",
-        foreignKey: "id_identity_photo",
-    });
-    u_user_is_merchant.belongsTo(m_medias, {
-        as: "id_market_photo_m_media",
-        foreignKey: "id_market_photo",
-    });
-    m_medias.hasMany(u_user_is_merchant, {
-        as: "id_market_photo_u_user_is_merchants",
-        foreignKey: "id_market_photo",
-    });
-    u_user_wallet_top_up.belongsTo(m_medias, {
-        as: "proof",
-        foreignKey: "proof_id",
-    });
-    m_medias.hasMany(u_user_wallet_top_up, {
-        as: "u_user_wallet_top_ups",
-        foreignKey: "proof_id",
-    });
-    u_product.belongsTo(Product, {
-        as: "id_m_products_m_product",
-        foreignKey: "id_m_products",
-    });
-    Product.hasMany(u_product, {
-        as: "u_products",
-        foreignKey: "id_m_products",
-    });
-    u_user_cart.belongsTo(Product, {
-        as: "id_m_products_m_product",
-        foreignKey: "id_m_products",
-    });
-    Product.hasMany(u_user_cart, {
-        as: "u_user_carts",
-        foreignKey: "id_m_products",
-    });
-    u_user_transaction_products.belongsTo(Product, {
-        as: "id_m_products_m_product",
-        foreignKey: "id_m_products",
-    });
-    Product.hasMany(u_user_transaction_products, {
-        as: "u_user_transaction_products",
-        foreignKey: "id_m_products",
-    });
-    Product.belongsTo(User, {
-        as: "id_m_users_m_user",
-        foreignKey: "id_m_users",
-    });
-    User.hasMany(Product, { as: "m_products", foreignKey: "id_m_users" });
-    UserUtility.belongsTo(User, {
-        as: "id_m_users_m_user",
-        foreignKey: "id_m_users",
-    });
-    User.hasMany(UserUtility, { as: "u_users", foreignKey: "id_m_users" });
-    u_user_bank_account.belongsTo(User, {
-        as: "id_m_users_m_user",
-        foreignKey: "id_m_users",
-    });
-    User.hasMany(u_user_bank_account, {
-        as: "u_user_bank_accounts",
-        foreignKey: "id_m_users",
-    });
-    u_user_cart.belongsTo(User, {
-        as: "id_m_users_m_user",
-        foreignKey: "id_m_users",
-    });
-    User.hasMany(u_user_cart, {
-        as: "u_user_carts",
-        foreignKey: "id_m_users",
-    });
-    u_user_cart.belongsTo(User, {
-        as: "id_merchant_m_user",
-        foreignKey: "id_merchant",
-    });
-    User.hasMany(u_user_cart, {
-        as: "id_merchant_u_user_carts",
-        foreignKey: "id_merchant",
-    });
-    u_user_chat.belongsTo(User, { as: "id_cs_m_user", foreignKey: "id_cs" });
-    User.hasMany(u_user_chat, { as: "u_user_chats", foreignKey: "id_cs" });
-    u_user_chat.belongsTo(User, {
-        as: "id_m_users_m_user",
-        foreignKey: "id_m_users",
-    });
-    User.hasMany(u_user_chat, {
-        as: "id_m_users_u_user_chats",
-        foreignKey: "id_m_users",
-    });
-    u_user_chat_detail.belongsTo(User, {
-        as: "id_m_users_m_user",
-        foreignKey: "id_m_users",
-    });
-    User.hasMany(u_user_chat_detail, {
-        as: "u_user_chat_details",
-        foreignKey: "id_m_users",
-    });
-    u_user_transaction.belongsTo(User, {
-        as: "id_m_users_m_user",
-        foreignKey: "id_m_users",
-    });
-    User.hasMany(u_user_transaction, {
-        as: "u_user_transactions",
-        foreignKey: "id_m_users",
-    });
-    u_user_transaction.belongsTo(User, {
-        as: "id_merchant_m_user",
-        foreignKey: "id_merchant",
-    });
-    User.hasMany(u_user_transaction, {
-        as: "id_merchant_u_user_transactions",
-        foreignKey: "id_merchant",
-    });
-    UserWallet.belongsTo(m_wallets, {
-        as: "id_m_wallets_m_wallet",
-        foreignKey: "id_m_wallets",
-    });
-    m_wallets.hasMany(UserWallet, {
-        as: "u_user_wallets",
-        foreignKey: "id_m_wallets",
-    });
-    u_product_categories.belongsTo(u_product, {
-        as: "id_u_product_u_product",
-        foreignKey: "id_u_product",
-    });
-    u_product.hasMany(u_product_categories, {
-        as: "u_product_categories",
-        foreignKey: "id_u_product",
-    });
-    u_product_photos.belongsTo(u_product, {
-        as: "id_u_product_u_product",
-        foreignKey: "id_u_product",
-    });
-    u_product.hasMany(u_product_photos, {
-        as: "u_product_photos",
-        foreignKey: "id_u_product",
-    });
-    u_user_is_merchant.belongsTo(UserUtility, {
-        as: "id_u_user_u_user",
-        foreignKey: "id_u_user",
-    });
-    UserUtility.hasMany(u_user_is_merchant, {
-        as: "u_user_is_merchants",
-        foreignKey: "id_u_user",
-    });
-    u_user_lost_password.belongsTo(UserUtility, {
-        as: "id_u_user_u_user",
-        foreignKey: "id_u_user",
-    });
-    UserUtility.hasMany(u_user_lost_password, {
-        as: "u_user_lost_passwords",
-        foreignKey: "id_u_user",
-    });
-    UserWallet.belongsTo(UserUtility, {
-        as: "id_u_user_u_user",
-        foreignKey: "id_u_user",
-    });
-    UserUtility.hasMany(UserWallet, {
-        as: "u_user_wallets",
-        foreignKey: "id_u_user",
-    });
-    u_user_wallet_withdraw.belongsTo(u_user_bank_account, {
-        as: "id_u_user_bank_account_u_user_bank_account",
-        foreignKey: "id_u_user_bank_account",
-    });
-    u_user_bank_account.hasMany(u_user_wallet_withdraw, {
-        as: "u_user_wallet_withdraws",
-        foreignKey: "id_u_user_bank_account",
-    });
-    u_user_chat_detail.belongsTo(u_user_chat, {
-        as: "id_u_user_chat_u_user_chat",
-        foreignKey: "id_u_user_chat",
-    });
-    u_user_chat.hasMany(u_user_chat_detail, {
-        as: "u_user_chat_details",
-        foreignKey: "id_u_user_chat",
-    });
-    u_user_transaction_products.belongsTo(u_user_transaction, {
-        as: "id_u_user_transaction_u_user_transaction",
-        foreignKey: "id_u_user_transaction",
-    });
-    u_user_transaction.hasMany(u_user_transaction_products, {
-        as: "u_user_transaction_products",
-        foreignKey: "id_u_user_transaction",
-    });
-    u_user_transaction_product_reviews.belongsTo(u_user_transaction_products, {
-        as: "id_u_user_transaction_products_u_user_transaction_product",
-        foreignKey: "id_u_user_transaction_products",
-    });
-    u_user_transaction_products.hasMany(u_user_transaction_product_reviews, {
-        as: "u_user_transaction_product_reviews",
-        foreignKey: "id_u_user_transaction_products",
-    });
-    u_user_wallet_top_up.belongsTo(UserWallet, {
-        as: "id_u_user_wallet_u_user_wallet",
-        foreignKey: "id_u_user_wallet",
-    });
-    UserWallet.hasMany(u_user_wallet_top_up, {
-        as: "u_user_wallet_top_ups",
-        foreignKey: "id_u_user_wallet",
-    });
-    u_user_wallet_withdraw.belongsTo(UserWallet, {
-        as: "id_u_user_wallet_u_user_wallet",
-        foreignKey: "id_u_user_wallet",
-    });
-    UserWallet.hasMany(u_user_wallet_withdraw, {
-        as: "u_user_wallet_withdraws",
-        foreignKey: "id_u_user_wallet",
-    });
+  BankUtility.belongsTo(Bank, {
+    as: 'id_m_banks_m_bank',
+    foreignKey: 'id_m_banks',
+  });
+  Bank.hasMany(BankUtility, { as: 'u_banks', foreignKey: 'id_m_banks' });
+  BankAccount.belongsTo(Bank, {
+    as: 'id_m_banks_m_bank',
+    foreignKey: 'id_m_banks',
+  });
+  Bank.hasMany(BankAccount, {
+    as: 'u_bank_accounts',
+    foreignKey: 'id_m_banks',
+  });
+  BankUser.belongsTo(Bank, {
+    as: 'id_m_banks_m_bank',
+    foreignKey: 'id_m_banks',
+  });
+  Bank.hasMany(BankUser, {
+    as: 'u_user_bank_accounts',
+    foreignKey: 'id_m_banks',
+  });
+  UserTopUp.belongsTo(Bank, {
+    as: 'id_m_banks_m_bank',
+    foreignKey: 'id_m_banks',
+  });
+  Bank.hasMany(UserTopUp, {
+    as: 'u_user_wallet_top_ups',
+    foreignKey: 'id_m_banks',
+  });
+  ProductCategory.belongsTo(Category, {
+    as: 'id_m_categories_m_category',
+    foreignKey: 'id_m_categories',
+  });
+  Category.hasMany(ProductCategory, {
+    as: 'u_product_categories',
+    foreignKey: 'id_m_categories',
+  });
+  Bank.belongsTo(Media, {
+    as: 'id_logo_m_media',
+    foreignKey: 'id_logo',
+  });
+  Media.hasMany(Bank, { as: 'm_banks', foreignKey: 'id_logo' });
+  Category.belongsTo(Media, {
+    as: 'id_icon_m_media',
+    foreignKey: 'id_icon',
+  });
+  Media.hasMany(Category, {
+    as: 'm_categories',
+    foreignKey: 'id_icon',
+  });
+  Product.belongsTo(Media, {
+    as: 'id_cover_m_media',
+    foreignKey: 'id_cover',
+  });
+  Media.hasMany(Product, { as: 'm_products', foreignKey: 'id_cover' });
+  User.belongsTo(Media, {
+    as: 'id_photo_m_media',
+    foreignKey: 'id_photo',
+  });
+  Media.hasMany(User, { as: 'm_users', foreignKey: 'id_photo' });
+  Wallet.belongsTo(Media, {
+    as: 'id_logo_m_media',
+    foreignKey: 'id_logo',
+  });
+  Media.hasMany(Wallet, { as: 'm_wallets', foreignKey: 'id_logo' });
+  ProductPhoto.belongsTo(Media, {
+    as: 'id_m_medias_m_media',
+    foreignKey: 'id_m_medias',
+  });
+  Media.hasMany(ProductPhoto, {
+    as: 'u_product_photos',
+    foreignKey: 'id_m_medias',
+  });
+  Merchant.belongsTo(Media, {
+    as: 'id_identity_photo_m_media',
+    foreignKey: 'id_identity_photo',
+  });
+  Media.hasMany(Merchant, {
+    as: 'u_user_is_merchants',
+    foreignKey: 'id_identity_photo',
+  });
+  Merchant.belongsTo(Media, {
+    as: 'id_market_photo_m_media',
+    foreignKey: 'id_market_photo',
+  });
+  Media.hasMany(Merchant, {
+    as: 'id_market_photo_u_user_is_merchants',
+    foreignKey: 'id_market_photo',
+  });
+  UserTopUp.belongsTo(Media, {
+    as: 'proof',
+    foreignKey: 'proof_id',
+  });
+  Media.hasMany(UserTopUp, {
+    as: 'u_user_wallet_top_ups',
+    foreignKey: 'proof_id',
+  });
+  ProductUtility.belongsTo(Product, {
+    as: 'id_m_products_m_product',
+    foreignKey: 'id_m_products',
+  });
+  Product.hasMany(ProductUtility, {
+    as: 'u_products',
+    foreignKey: 'id_m_products',
+  });
+  UserCart.belongsTo(Product, {
+    as: 'id_m_products_m_product',
+    foreignKey: 'id_m_products',
+  });
+  Product.hasMany(UserCart, {
+    as: 'u_user_carts',
+    foreignKey: 'id_m_products',
+  });
+  TransactionProduct.belongsTo(Product, {
+    as: 'id_m_products_m_product',
+    foreignKey: 'id_m_products',
+  });
+  Product.hasMany(TransactionProduct, {
+    as: 'u_user_transaction_products',
+    foreignKey: 'id_m_products',
+  });
+  Product.belongsTo(User, {
+    as: 'id_m_users_m_user',
+    foreignKey: 'id_m_users',
+  });
+  User.hasMany(Product, { as: 'm_products', foreignKey: 'id_m_users' });
+  UserUtility.belongsTo(User, {
+    as: 'id_m_users_m_user',
+    foreignKey: 'id_m_users',
+  });
+  User.hasMany(UserUtility, { as: 'u_users', foreignKey: 'id_m_users' });
+  BankUser.belongsTo(User, {
+    as: 'id_m_users_m_user',
+    foreignKey: 'id_m_users',
+  });
+  User.hasMany(BankUser, {
+    as: 'u_user_bank_accounts',
+    foreignKey: 'id_m_users',
+  });
+  UserCart.belongsTo(User, {
+    as: 'id_m_users_m_user',
+    foreignKey: 'id_m_users',
+  });
+  User.hasMany(UserCart, {
+    as: 'u_user_carts',
+    foreignKey: 'id_m_users',
+  });
+  UserCart.belongsTo(User, {
+    as: 'id_merchant_m_user',
+    foreignKey: 'id_merchant',
+  });
+  User.hasMany(UserCart, {
+    as: 'id_merchant_u_user_carts',
+    foreignKey: 'id_merchant',
+  });
+  UserChat.belongsTo(User, { as: 'id_cs_m_user', foreignKey: 'id_cs' });
+  User.hasMany(UserChat, { as: 'u_user_chats', foreignKey: 'id_cs' });
+  UserChat.belongsTo(User, {
+    as: 'id_m_users_m_user',
+    foreignKey: 'id_m_users',
+  });
+  User.hasMany(UserChat, {
+    as: 'id_m_users_u_user_chats',
+    foreignKey: 'id_m_users',
+  });
+  UserChatDetail.belongsTo(User, {
+    as: 'id_m_users_m_user',
+    foreignKey: 'id_m_users',
+  });
+  User.hasMany(UserChatDetail, {
+    as: 'u_user_chat_details',
+    foreignKey: 'id_m_users',
+  });
+  UserTransaction.belongsTo(User, {
+    as: 'id_m_users_m_user',
+    foreignKey: 'id_m_users',
+  });
+  User.hasMany(UserTransaction, {
+    as: 'u_user_transactions',
+    foreignKey: 'id_m_users',
+  });
+  UserTransaction.belongsTo(User, {
+    as: 'id_merchant_m_user',
+    foreignKey: 'id_merchant',
+  });
+  User.hasMany(UserTransaction, {
+    as: 'id_merchant_u_user_transactions',
+    foreignKey: 'id_merchant',
+  });
+  UserWallet.belongsTo(Wallet, {
+    as: 'id_m_wallets_m_wallet',
+    foreignKey: 'id_m_wallets',
+  });
+  Wallet.hasMany(UserWallet, {
+    as: 'u_user_wallets',
+    foreignKey: 'id_m_wallets',
+  });
+  ProductCategory.belongsTo(ProductUtility, {
+    as: 'id_u_product_u_product',
+    foreignKey: 'id_u_product',
+  });
+  ProductUtility.hasMany(ProductCategory, {
+    as: 'u_product_categories',
+    foreignKey: 'id_u_product',
+  });
+  ProductPhoto.belongsTo(ProductUtility, {
+    as: 'id_u_product_u_product',
+    foreignKey: 'id_u_product',
+  });
+  ProductUtility.hasMany(ProductPhoto, {
+    as: 'u_product_photos',
+    foreignKey: 'id_u_product',
+  });
+  Merchant.belongsTo(UserUtility, {
+    as: 'id_u_user_u_user',
+    foreignKey: 'id_u_user',
+  });
+  UserUtility.hasMany(Merchant, {
+    as: 'u_user_is_merchants',
+    foreignKey: 'id_u_user',
+  });
+  UserLostPassword.belongsTo(UserUtility, {
+    as: 'id_u_user_u_user',
+    foreignKey: 'id_u_user',
+  });
+  UserUtility.hasMany(UserLostPassword, {
+    as: 'u_user_lost_passwords',
+    foreignKey: 'id_u_user',
+  });
+  UserWallet.belongsTo(UserUtility, {
+    as: 'id_u_user_u_user',
+    foreignKey: 'id_u_user',
+  });
+  UserUtility.hasMany(UserWallet, {
+    as: 'u_user_wallets',
+    foreignKey: 'id_u_user',
+  });
+  UserWithdraw.belongsTo(BankUser, {
+    as: 'id_u_user_bank_account_u_user_bank_account',
+    foreignKey: 'id_u_user_bank_account',
+  });
+  BankUser.hasMany(UserWithdraw, {
+    as: 'u_user_wallet_withdraws',
+    foreignKey: 'id_u_user_bank_account',
+  });
+  UserChatDetail.belongsTo(UserChat, {
+    as: 'id_u_user_chat_u_user_chat',
+    foreignKey: 'id_u_user_chat',
+  });
+  UserChat.hasMany(UserChatDetail, {
+    as: 'u_user_chat_details',
+    foreignKey: 'id_u_user_chat',
+  });
+  TransactionProduct.belongsTo(UserTransaction, {
+    as: 'id_u_user_transaction_u_user_transaction',
+    foreignKey: 'id_u_user_transaction',
+  });
+  UserTransaction.hasMany(TransactionProduct, {
+    as: 'u_user_transaction_products',
+    foreignKey: 'id_u_user_transaction',
+  });
+  ProductReview.belongsTo(TransactionProduct, {
+    as: 'id_u_user_transaction_products_u_user_transaction_product',
+    foreignKey: 'id_u_user_transaction_products',
+  });
+  TransactionProduct.hasMany(ProductReview, {
+    as: 'u_user_transaction_product_reviews',
+    foreignKey: 'id_u_user_transaction_products',
+  });
+  UserTopUp.belongsTo(UserWallet, {
+    as: 'id_u_user_wallet_u_user_wallet',
+    foreignKey: 'id_u_user_wallet',
+  });
+  UserWallet.hasMany(UserTopUp, {
+    as: 'u_user_wallet_top_ups',
+    foreignKey: 'id_u_user_wallet',
+  });
+  UserWithdraw.belongsTo(UserWallet, {
+    as: 'id_u_user_wallet_u_user_wallet',
+    foreignKey: 'id_u_user_wallet',
+  });
+  UserWallet.hasMany(UserWithdraw, {
+    as: 'u_user_wallet_withdraws',
+    foreignKey: 'id_u_user_wallet',
+  });
 
-    return {
-        Bank: m_banks,
-        Category: m_categories,
-        Faq: m_faq,
-        Media: m_medias,
-        Product,
-        User,
-        Wallet: m_wallets,
-        BankUtility: u_bank,
-        BankAccount: u_bank_account,
-        ProductUtility: u_product,
-        ProductCategory: u_product_categories,
-        ProductPhoto: u_product_photos,
-        UserUtility,
-        BankUser: u_user_bank_account,
-        UserCart: u_user_cart,
-        UserChat: u_user_chat,
-        UserChatDetail: u_user_chat_detail,
-        UserMerchant: u_user_is_merchant,
-        MerchantLocation: u_user_is_merchant_location,
-        UserLostPassword: u_user_lost_password,
-        UserTransaction: u_user_transaction,
-        ProductReview: u_user_transaction_product_reviews,
-        UserTransactionProduct: u_user_transaction_products,
-        UserWallet,
-        UserTopUp: u_user_wallet_top_up,
-        UserWithdraw: u_user_wallet_withdraw,
-    };
-}
+  return {
+    Bank,
+    Category,
+    Faq,
+    Media,
+    Product,
+    User,
+    Wallet,
+    BankUtility,
+    BankAccount,
+    ProductUtility,
+    ProductCategory,
+    ProductPhoto,
+    UserUtility,
+    BankUser,
+    UserCart,
+    UserChat,
+    UserChatDetail,
+    Merchant,
+    MerchantLocation,
+    UserLostPassword,
+    UserTransaction,
+    ProductReview,
+    TransactionProduct,
+    UserWallet,
+    UserTopUp,
+    UserWithdraw,
+  };
+};
+
+export default initModels;

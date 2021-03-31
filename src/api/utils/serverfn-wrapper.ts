@@ -1,31 +1,35 @@
-import type { HandlerFn, PreHandlerFn } from "../types/fasitify";
-import { sequelize } from "../../databases/sequelize";
-import { errorHandler } from "./error-handler";
+import type { PreHandlerFn, RequestHandler } from '../types/fasitify';
+import sequelize from '../../databases/sequelize';
+import { errorHandler } from './error-handler';
 
-export const controllerWrapper = function <T>(fn: HandlerFn<T>): HandlerFn<T> {
-    return async function (this, req, res) {
-        const boundFn = fn.bind(this);
-        try {
-            if (req.method === "GET")
-                return await Promise.resolve(boundFn(req, res));
-            else
-                return await sequelize.transaction(
-                    async () => await Promise.resolve(boundFn(req, res))
-                );
-        } catch (err) {
-            errorHandler(err, res);
-        }
-    };
+export const controllerWrapper = function controllerWrapper<T>(
+  fn: RequestHandler<T>,
+): RequestHandler<T> {
+  return async function controllerWrapperFn(this, req, res) {
+    const boundFn = fn.bind(this);
+    if (req.method === 'GET') {
+      return Promise.resolve(boundFn(req, res)).catch((err) => {
+        errorHandler(err, res);
+      });
+    }
+
+    return await sequelize.transaction(async () => (
+      /**
+       * This comment just to help eslint not to get confused
+       * with max-len rule and formatting
+       */
+      Promise.resolve(boundFn(req, res)).catch((err) => {
+        errorHandler(err, res);
+      })));
+  };
 };
 
-export const handlerWrapper = function <T>(
-    fn: PreHandlerFn<T>
+export const handlerWrapper = function handlerWrapper<T>(
+  fn: PreHandlerFn<T>,
 ): PreHandlerFn<T> {
-    return async function (req, res) {
-        try {
-            return await Promise.resolve(fn(req, res));
-        } catch (err) {
-            errorHandler(err, res);
-        }
-    };
+  return async function handlerWrapperFn(req, res) {
+    return Promise.resolve(fn(req, res)).catch((err) => {
+      errorHandler(err, res);
+    });
+  };
 };

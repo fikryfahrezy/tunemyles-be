@@ -1,173 +1,173 @@
 export type GetIdRequestParams = {
-    id: string;
+  id: string;
 };
 
 export type PostRequestBody = {
-    name: string;
+  name: string;
 };
 
 export type FileRequestBody = {
-    file: AddedFileBody[];
+  file: AddedFileBody[];
 };
 
 export type ApiKeyHeader = {
-    authorization: string;
+  authorization: string;
 };
 
 export type AddBankStepBody = {
-    step: string;
+  step: string;
 };
 
 export type AddBankUserBody = {
-    id_m_banks: number;
-    account_number: string;
-    account_name: string;
+  id_m_banks: number;
+  account_number: string;
+  account_name: string;
 };
 
 export type AddFaqBody = {
-    question: string;
-    answer: string;
+  question: string;
+  answer: string;
 };
 
 export type AddToCartBody = {
-    qty: number;
-    id_merchant: number;
-    id_m_products: number;
+  qty: number;
+  id_merchant: number;
+  id_m_products: number;
 };
 export type BindProductCategoryBody = {
-    id_category: number;
+  id_category: number;
 };
 
 export type CheckoutBody = {
-    price_total: number;
+  price_total: number;
 };
 
 export type ForgotPasswordBody = {
-    phone_number: string;
+  phone_number: string;
 };
 
 export type LoginBody = {
-    username: string;
-    password: string;
+  username: string;
+  password: string;
 };
 
 export type RegisterBody = {
-    full_name: string;
-    username: string;
-    password: string;
-    phone_number: string;
-    address: string;
+  full_name: string;
+  username: string;
+  password: string;
+  phone_number: string;
+  address: string;
 };
 
 export type ResetPasswordBody = {
-    new_password: string;
+  new_password: string;
 };
 
 export type ReviewTransactionBody = {
-    rating: number;
-    review: string;
+  rating: number;
+  review: string;
 };
 
 export type TopUpBody = {
-    id_m_banks: number;
-    balance_request: number;
-    balance_transfer: number;
+  id_m_banks: number;
+  balance_request: number;
+  balance_transfer: number;
 };
 
 export type UpdateBankBody = {
-    bank_name?: string;
-    is_visible?: number;
+  bank_name?: string;
+  is_visible?: number;
 };
 
 export type UpdateBankDetailBody = {
-    account_number: string;
-    account_name: string;
+  account_number: string;
+  account_name: string;
 };
 
 export type UpdateBankUserBody = {
-    id_m_banks?: number;
-    account_number?: string;
-    account_name?: string;
+  id_m_banks?: number;
+  account_number?: string;
+  account_name?: string;
 };
 
 export type UpdateCategoryBody = {
-    category?: string;
-    slug?: string;
-    description?: string;
-    is_visible?: number;
+  category?: string;
+  slug?: string;
+  description?: string;
+  is_visible?: number;
 };
 
 export type UpdateFaqBody = {
-    question?: string;
-    answer?: string;
+  question?: string;
+  answer?: string;
 };
 
 export type UpdateMerchantOperation = {
-    market_close_time?: string;
+  market_close_time?: string;
 };
 
 export type UpdateProductBody = {
-    product_name?: string;
-    description?: string;
-    price_default?: number;
-    price_selling?: number;
-    qty?: number;
-    discount?: number;
-    is_visible?: number;
+  product_name?: string;
+  description?: string;
+  price_default?: number;
+  price_selling?: number;
+  qty?: number;
+  discount?: number;
+  is_visible?: number;
 };
 
 export type UpdateProductOrderStatusBody = {
-    status?: number;
+  status?: number;
 };
 
 export type UpdateProductQtyBody = {
-    qty: number;
+  qty: number;
 };
 
 export type UpdateProductStatusBody = {
-    is_visible?: number;
+  is_visible?: number;
 };
 
 export type UpdateTopUpStatusBody = {
-    status?: number;
+  status?: number;
 };
 
 export type UpdateWalletBody = {
-    wallet_name?: string;
-    wallet_description?: string;
-    is_visible?: number;
+  wallet_name?: string;
+  wallet_description?: string;
+  is_visible?: number;
 };
 
 export type UpdateWithdrawStatusBody = {
-    status?: number;
+  status?: number;
 };
 
 export type WithdrawBody = {
-    id_u_user_bank_account: number;
-    balance_request: number;
+  id_u_user_bank_account: number;
+  balance_request: number;
 };
 
 export type UserUtility = {
-    id: number;
-    id_m_user: number;
-    api_token: string;
-    type: number;
-    type_before_banned: number;
-    created_at: string;
-    updated_at: string;
+  id: number;
+  id_m_user: number;
+  api_token: string;
+  type: number;
+  type_before_banned: number;
+  created_at: string;
+  updated_at: string;
 };
 
 export type ModelQuery = {
-    offset: number;
-    limit: number;
-    order: [[string, string]];
-    availableFields: string[];
+  offset: number;
+  limit: number;
+  order: [[string, string]];
+  availableFields: string[];
 };
 
 export type AddedFileBody = {
-    data: Iterable<unknown> | AsyncIterable<unknown>;
-    encoding: string;
-    filename: string;
-    limit: boolean;
-    mimetype: string;
+  data: Iterable<unknown> | AsyncIterable<unknown>;
+  encoding: string;
+  filename: string;
+  limit: boolean;
+  mimetype: string;
 };

@@ -1,310 +1,308 @@
 const requestParams = {
-    id: { $ref: "#RouteIdParam" },
+  id: { $ref: '#RouteIdParam' },
 };
 
 const requestQuery = {
-    getMedias: {
-        type: "object",
-        properties: {
-            page: { $ref: "#PageQuery" },
-            search: { $ref: "#SearchQuery" },
-            orderBy: {
-                allOf: [
-                    { $ref: "#OrderByQuery" },
-                    { enum: ["created_at", "label"] },
-                ],
-            },
-            orderDirection: { $ref: "#OrderDirectionQuery" },
-        },
+  getMedias: {
+    type: 'object',
+    properties: {
+      page: { $ref: '#PageQuery' },
+      search: { $ref: '#SearchQuery' },
+      orderBy: {
+        allOf: [{ $ref: '#OrderByQuery' }, { enum: ['created_at', 'label'] }],
+      },
+      orderDirection: { $ref: '#OrderDirectionQuery' },
     },
-    getWallets: {
-        type: "object",
-        properties: {
-            page: { $ref: "#PageQuery" },
-            search: { $ref: "#SearchQuery" },
-            orderBy: {
-                allOf: [
-                    { $ref: "#OrderByQuery" },
-                    {
-                        enum: [
-                            "created_at",
-                            "wallet_name",
-                            "wallet_description",
-                        ],
-                    },
-                ],
-            },
-            orderDirection: { $ref: "#OrderDirectionQuery" },
-        },
+  },
+  getWallets: {
+    type: 'object',
+    properties: {
+      page: { $ref: '#PageQuery' },
+      search: { $ref: '#SearchQuery' },
+      orderBy: {
+        allOf: [
+          { $ref: '#OrderByQuery' },
+          {
+            enum: ['created_at', 'wallet_name', 'wallet_description'],
+          },
+        ],
+      },
+      orderDirection: { $ref: '#OrderDirectionQuery' },
     },
-    getBanks: {
-        type: "object",
-        properties: {
-            page: { $ref: "#PageQuery" },
-            search: { $ref: "#SearchQuery" },
-            orderBy: {
-                allOf: [
-                    { $ref: "#OrderByQuery" },
-                    { enum: ["created_at", "bank_name"] },
-                ],
-            },
-            orderDirection: { $ref: "#OrderDirectionQuery" },
-        },
+  },
+  getBanks: {
+    type: 'object',
+    properties: {
+      page: { $ref: '#PageQuery' },
+      search: { $ref: '#SearchQuery' },
+      orderBy: {
+        allOf: [
+          { $ref: '#OrderByQuery' },
+          { enum: ['created_at', 'bank_name'] },
+        ],
+      },
+      orderDirection: { $ref: '#OrderDirectionQuery' },
     },
-    getCategories: {
-        type: "object",
-        properties: {
-            page: { $ref: "#PageQuery" },
-            search: { $ref: "#SearchQuery" },
-            orderBy: {
-                allOf: [
-                    { $ref: "#OrderByQuery" },
-                    { enum: ["category", "description"] },
-                ],
-            },
-            orderDirection: { $ref: "#OrderDirectionQuery" },
-        },
+  },
+  getCategories: {
+    type: 'object',
+    properties: {
+      page: { $ref: '#PageQuery' },
+      search: { $ref: '#SearchQuery' },
+      orderBy: {
+        allOf: [
+          { $ref: '#OrderByQuery' },
+          { enum: ['category', 'description'] },
+        ],
+      },
+      orderDirection: { $ref: '#OrderDirectionQuery' },
     },
+  },
 };
 
 const requestBody = {
-    addMedia: {
-        required: ["image"],
-        type: "object",
-        properties: {
-            image: { $ref: "#MultiPartSchema" },
-        },
-        additionalProperties: false,
+  addMedia: {
+    required: ['image'],
+    type: 'object',
+    properties: {
+      image: { $ref: '#MultiPartSchema' },
     },
-    updateMedia: {
-        required: ["image"],
-        type: "object",
-        properties: {
-            image: { $ref: "#MultiPartSchema" },
-        },
-        additionalProperties: false,
+    additionalProperties: false,
+  },
+  updateMedia: {
+    required: ['image'],
+    type: 'object',
+    properties: {
+      image: { $ref: '#MultiPartSchema' },
     },
-    addWallet: {
-        required: ["wallet_description", "wallet_name"],
-        type: "object",
-        properties: {
-            logo: { $ref: "#MultiPartSchema" },
-            wallet_name: { type: "string" },
-            wallet_description: { type: "string" },
-        },
+    additionalProperties: false,
+  },
+  addWallet: {
+    required: ['wallet_description', 'wallet_name'],
+    type: 'object',
+    properties: {
+      logo: { $ref: '#MultiPartSchema' },
+      wallet_name: { type: 'string' },
+      wallet_description: { type: 'string' },
     },
-    updateWalletLogo: {
-        required: ["logo"],
-        type: "object",
-        properties: {
-            logo: { $ref: "#MultiPartSchema" },
-        },
+  },
+  updateWalletLogo: {
+    required: ['logo'],
+    type: 'object',
+    properties: {
+      logo: { $ref: '#MultiPartSchema' },
     },
-    updateWallet: {
-        type: "object",
-        properties: {
-            wallet_name: { type: "string" },
-            wallet_description: { type: "string" },
-            is_visible: { type: "integer" },
-        },
-        additionalProperties: false,
+  },
+  updateWallet: {
+    type: 'object',
+    properties: {
+      wallet_name: { type: 'string' },
+      wallet_description: { type: 'string' },
+      is_visible: { type: 'integer' },
     },
-    addBank: {
-        required: ["bank_name"],
-        type: "object",
-        properties: {
-            logo: { $ref: "#MultiPartSchema" },
-            bank_name: { type: "string" },
-        },
-        additionalProperties: false,
+    additionalProperties: false,
+  },
+  addBank: {
+    required: ['bank_name'],
+    type: 'object',
+    properties: {
+      logo: { $ref: '#MultiPartSchema' },
+      bank_name: { type: 'string' },
     },
-    updateBank: {
-        type: "object",
-        properties: {
-            bank_name: { type: "string" },
-            is_visible: { type: "integer" },
-        },
-        additionalProperties: false,
+    additionalProperties: false,
+  },
+  updateBank: {
+    type: 'object',
+    properties: {
+      bank_name: { type: 'string' },
+      is_visible: { type: 'integer' },
     },
-    updateBankLogo: {
-        required: ["logo"],
-        type: "object",
-        properties: {
-            logo: { $ref: "#MultiPartSchema" },
-        },
-        additionalProperties: false,
+    additionalProperties: false,
+  },
+  updateBankLogo: {
+    required: ['logo'],
+    type: 'object',
+    properties: {
+      logo: { $ref: '#MultiPartSchema' },
     },
-    updateBankdetail: {
-        required: ["account_name", "account_number"],
-        type: "object",
-        properties: {
-            account_number: { type: "string" },
-            account_name: { type: "string" },
-        },
-        additionalProperties: false,
+    additionalProperties: false,
+  },
+  updateBankdetail: {
+    required: ['account_name', 'account_number'],
+    type: 'object',
+    properties: {
+      account_number: { type: 'string' },
+      account_name: { type: 'string' },
     },
-    postBankStep: {
-        required: ["step"],
-        type: "object",
-        properties: { step: { type: "string" } },
-        additionalProperties: false,
+    additionalProperties: false,
+  },
+  postBankStep: {
+    required: ['step'],
+    type: 'object',
+    properties: { step: { type: 'string' } },
+    additionalProperties: false,
+  },
+  addCategory: {
+    required: ['category', 'description', 'slug'],
+    type: 'object',
+    properties: {
+      logo: { $ref: '#MultiPartSchema' },
+      category: { type: 'string' },
+      slug: { type: 'string' },
+      description: { type: 'string' },
     },
-    addCategory: {
-        required: ["category", "description", "slug"],
-        type: "object",
-        properties: {
-            logo: { $ref: "#MultiPartSchema" },
-            category: { type: "string" },
-            slug: { type: "string" },
-            description: { type: "string" },
-        },
-        additionalProperties: false,
+    additionalProperties: false,
+  },
+  updateCategory: {
+    type: 'object',
+    properties: {
+      category: { type: 'string' },
+      slug: { type: 'string' },
+      description: { type: 'string' },
+      is_visible: { type: 'integer' },
     },
-    updateCategory: {
-        type: "object",
-        properties: {
-            category: { type: "string" },
-            slug: { type: "string" },
-            description: { type: "string" },
-            is_visible: { type: "integer" },
-        },
-        additionalProperties: false,
+    additionalProperties: false,
+  },
+  updateCategoryIcon: {
+    required: ['icon'],
+    type: 'object',
+    properties: {
+      icon: { $ref: '#MultiPartSchema' },
     },
-    updateCategoryIcon: {
-        required: ["icon"],
-        type: "object",
-        properties: {
-            icon: { $ref: "#MultiPartSchema" },
-        },
-        additionalProperties: false,
+    additionalProperties: false,
+  },
+  postFaq: {
+    required: ['answer', 'question'],
+    type: 'object',
+    properties: {
+      question: { type: 'string' },
+      answer: { type: 'string' },
     },
-    postFaq: {
-        required: ["answer", "question"],
-        type: "object",
-        properties: {
-            question: { type: "string" },
-            answer: { type: "string" },
-        },
-        additionalProperties: false,
+    additionalProperties: false,
+  },
+  updateFaq: {
+    type: 'object',
+    properties: {
+      question: { type: 'string' },
+      answer: { type: 'string' },
     },
-    updateFaq: {
-        type: "object",
-        properties: {
-            question: { type: "string" },
-            answer: { type: "string" },
-        },
-        additionalProperties: false,
-    },
+    additionalProperties: false,
+  },
 };
 
 const responses = {
-    medias: {
-        type: "object",
-        properties: {
-            ApiResponse: {
-                $ref: "#ApiResponse",
-            },
-            data: {
-                type: "array",
-                items: { $ref: "#GetMedia" },
-            },
-        },
+  medias: {
+    type: 'object',
+    properties: {
+      ApiResponse: {
+        $ref: '#ApiResponse',
+      },
+      data: {
+        type: 'array',
+        items: { $ref: '#GetMedia' },
+      },
     },
-    wallets: {
-        type: "object",
-        properties: {
-            ApiResponse: {
-                $ref: "#ApiResponse",
-            },
-            data: { $ref: "#GetUserWallet" },
-        },
+  },
+  wallets: {
+    type: 'object',
+    properties: {
+      ApiResponse: {
+        $ref: '#ApiResponse',
+      },
+      data: { $ref: '#GetUserWallet' },
     },
-    banks: {
-        type: "object",
-        properties: {
-            ApiResponse: {
-                $ref: "#ApiResponse",
-            },
-            data: {
-                type: "array",
-                items: {
-                    type: "object",
-                    allOf: [
-                        { $ref: "#GetBank" },
-                        {
-                            type: "object",
-                            properties: {
-                                Logo: {
-                                    $ref: "#GetMedia",
-                                },
-                            },
-                        },
-                    ],
+  },
+  banks: {
+    type: 'object',
+    properties: {
+      ApiResponse: {
+        $ref: '#ApiResponse',
+      },
+      data: {
+        type: 'array',
+        items: {
+          type: 'object',
+          allOf: [
+            { $ref: '#GetBank' },
+            {
+              type: 'object',
+              properties: {
+                Logo: {
+                  $ref: '#GetMedia',
                 },
+              },
             },
+          ],
         },
+      },
     },
-    bankDetail: {
-        type: "object",
-        properties: {
-            ApiResponse: {
-                $ref: "#ApiResponse",
-            },
-            data: {
-                type: "array",
-                items: {
-                    type: "object",
-                    allOf: [
-                        { $ref: "#GetBank" },
-                        {
-                            type: "object",
-                            properties: {
-                                Logo: {
-                                    $ref: "#GetMedia",
-                                },
-                                Accounts: {
-                                    type: "array",
-                                    items: {
-                                        $ref: "#GetBankUser",
-                                    },
-                                },
-                                Utilities: {
-                                    type: "array",
-                                    items: {
-                                        $ref: "#GetBankUtility",
-                                    },
-                                },
-                            },
-                        },
-                    ],
+  },
+  bankDetail: {
+    type: 'object',
+    properties: {
+      ApiResponse: {
+        $ref: '#ApiResponse',
+      },
+      data: {
+        type: 'array',
+        items: {
+          type: 'object',
+          allOf: [
+            { $ref: '#GetBank' },
+            {
+              type: 'object',
+              properties: {
+                Logo: {
+                  $ref: '#GetMedia',
                 },
+                Accounts: {
+                  type: 'array',
+                  items: {
+                    $ref: '#GetBankUser',
+                  },
+                },
+                Utilities: {
+                  type: 'array',
+                  items: {
+                    $ref: '#GetBankUtility',
+                  },
+                },
+              },
             },
+          ],
         },
+      },
     },
-    categories: {
-        type: "object",
-        properties: {
-            ApiResponse: {
-                $ref: "#ApiResponse",
-            },
-            data: {
-                type: "array",
-                items: { $ref: "#GetCategory" },
-            },
-        },
+  },
+  categories: {
+    type: 'object',
+    properties: {
+      ApiResponse: {
+        $ref: '#ApiResponse',
+      },
+      data: {
+        type: 'array',
+        items: { $ref: '#GetCategory' },
+      },
     },
-    faqs: {
-        type: "object",
-        properties: {
-            ApiResponse: {
-                $ref: "#ApiResponse",
-            },
-            data: {
-                type: "array",
-                items: { $ref: "#GetFaq" },
-            },
-        },
+  },
+  faqs: {
+    type: 'object',
+    properties: {
+      ApiResponse: {
+        $ref: '#ApiResponse',
+      },
+      data: {
+        type: 'array',
+        items: { $ref: '#GetFaq' },
+      },
     },
+  },
 };
 
-export default { requestBody, requestQuery, requestParams, responses };
+export default {
+  requestBody,
+  requestQuery,
+  requestParams,
+  responses,
+};

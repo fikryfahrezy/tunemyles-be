@@ -1,30 +1,30 @@
 import {
-    FastifyInstance,
-    FastifyPluginOptions,
-    HookHandlerDoneFunction,
-} from "fastify";
-import { helloWorld } from "./controllers";
+  FastifyInstance,
+  FastifyPluginOptions,
+  HookHandlerDoneFunction,
+} from 'fastify';
+import helloWorld from './controllers';
 
-async function routes(
-    fastify: FastifyInstance,
-    _: FastifyPluginOptions,
-    done: HookHandlerDoneFunction
-): Promise<void> {
-    fastify.get(
-        "/",
-        {
-            schema: {
-                response: {
-                    "200": { $ref: "#ApiResponse" },
-                    "4xx": { $ref: "#ApiResponse" },
-                    "5xx": { $ref: "#ApiResponse" },
-                },
-            },
+const routes = function routes(
+  fastify: FastifyInstance,
+  _: FastifyPluginOptions,
+  donePlugin: HookHandlerDoneFunction,
+): void {
+  fastify.get(
+    '/',
+    {
+      schema: {
+        response: {
+          200: { $ref: '#ApiResponse' },
+          '4xx': { $ref: '#ApiResponse' },
+          '5xx': { $ref: '#ApiResponse' },
         },
-        helloWorld
-    );
+      },
+    },
+    helloWorld,
+  );
 
-    done();
-}
+  donePlugin();
+};
 
 export default routes;
