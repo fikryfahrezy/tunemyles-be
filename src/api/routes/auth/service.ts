@@ -38,10 +38,10 @@ export const userLogin: (
   return utility;
 };
 
-export const userProfile: (token: string) => Promise<unknown> = async (
-  token,
+export const userProfile: (userId: number) => Promise<unknown> = async (
+  userId,
 ) => {
-  const user = await userAccount(token);
+  const user = await userAccount(userId);
   const wallets = await userWallets(user.id as number);
   const data = {
     ...user,

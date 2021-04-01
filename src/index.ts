@@ -1,12 +1,10 @@
-import dotenv from 'dotenv';
 import 'make-promises-safe';
+import './env-setup';
 import pino from 'pino';
 import app from './app';
 import sequelize from './databases/sequelize';
 import { logger, dest } from './utils/logger';
 import validateEnv from './config/validateEnv';
-
-dotenv.config({ path: '.env.development' });
 
 const start = async function start() {
   const server = app({

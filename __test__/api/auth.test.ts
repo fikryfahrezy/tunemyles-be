@@ -1,9 +1,15 @@
 import { FastifyInstance } from 'fastify';
-import app from '../src/app';
+import app from '../../src/app';
 
 let server: null | FastifyInstance = null;
 
-const userRegistration = (payload: Record<string, unknown>) =>
+const userRegistration = (payload: {
+  full_name: string;
+  username: string;
+  password: string;
+  phone_number: string;
+  address: string;
+}) =>
   server.inject({
     method: 'POST',
     url: '/api/v2/auth/register',
@@ -70,12 +76,12 @@ describe('Registration', () => {
   });
 
   test('Register Fail, Phone Number Already Exist', async () => {
-    const usedPhoneNumber = Date.now().toString();
+    const phone_number = Date.now().toString();
     const payload = {
+      phone_number,
       full_name: 'Name',
       username: Math.random().toString(36).substring(2),
       password: 'password',
-      phone_number: usedPhoneNumber,
       address: 'address',
     };
     await userRegistration(payload);
@@ -83,7 +89,7 @@ describe('Registration', () => {
     const newPayload = {
       ...payload,
       username: Math.random().toString(36).substring(2),
-      phone_number: usedPhoneNumber,
+      phone_number,
     };
     const response = await userRegistration(newPayload);
 
@@ -96,10 +102,10 @@ describe('Registration', () => {
   });
 
   test('Register Fail, Username Already Exist', async () => {
-    const usedUsername = Math.random().toString(36).substring(2);
+    const username = Math.random().toString(36).substring(2);
     const payload = {
+      username,
       full_name: 'Name',
-      username: usedUsername,
       password: 'password',
       phone_number: Date.now().toString(),
       address: 'address',
@@ -108,7 +114,7 @@ describe('Registration', () => {
 
     const newPayload = {
       ...payload,
-      username: usedUsername,
+      username,
       phone_number: Date.now().toString(),
     };
     const response = await userRegistration(newPayload);
@@ -162,18 +168,18 @@ describe('Registration', () => {
 
 describe('Login', () => {
   test('Login Success', async () => {
-    const userUsername = Math.random().toString(36).substring(2);
-    const userPassword = 'password';
+    const username = Math.random().toString(36).substring(2);
+    const password = 'password';
     const payload = {
+      username,
+      password,
       full_name: 'Name',
-      username: userUsername,
-      password: userPassword,
       phone_number: Date.now().toString(),
       address: 'address',
     };
     await userRegistration(payload);
 
-    const response = await userLogin(userUsername, userPassword);
+    const response = await userLogin(username, password);
 
     const statusCode = response.statusCode;
     const contenType = response.headers['content-type'];
@@ -184,10 +190,10 @@ describe('Login', () => {
   });
 
   test('Login Failed, Wrong Password', async () => {
-    const userUsername = Math.random().toString(36).substring(2);
+    const username = Math.random().toString(36).substring(2);
     const payload = {
+      username,
       full_name: 'Name',
-      username: userUsername,
       password: 'password',
       phone_number: Date.now().toString(),
       address: 'address',
@@ -195,7 +201,7 @@ describe('Login', () => {
     await userRegistration(payload);
 
     const wrongPassword = 'wrong-password';
-    const response = await userLogin(userUsername, wrongPassword);
+    const response = await userLogin(username, wrongPassword);
 
     const statusCode = response.statusCode;
     const contenType = response.headers['content-type'];
@@ -225,16 +231,16 @@ describe('Get Profile', () => {
     const username = Math.random().toString(36).substring(2);
     const password = 'password';
     const payload = {
-      full_name: 'Name',
       username,
       password,
+      full_name: 'Name',
       phone_number: Date.now().toString(),
       address: 'address',
     };
     await userRegistration(payload);
     const user = await userLogin(username, password);
-
     const authorization = user.json().data.token;
+
     const response = await userProfile(authorization);
 
     const statusCode = response.statusCode;

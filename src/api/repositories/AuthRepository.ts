@@ -8,7 +8,7 @@ const { User, UserUtility, UserWallet } = initModels(sequelize);
 
 export const createUser: (
   data: RegisterBody
-) => Promise<ModelType['UserType']> = async (data: RegisterBody) => User.create(data);
+) => Promise<ModelType['UserType']> = (data: RegisterBody) => User.create(data);
 
 export const createUserUtility: (
   token: string,
@@ -21,7 +21,7 @@ export const createUserWallet = (
 
 export const userPassword: (
   username: string
-) => Promise<CustModelType['UserPassword']> = async (username) => {
+) => Promise<CustModelType['UserPassword']> = (username) => {
   const sqlQuery = `
         SELECT
             id,
@@ -29,7 +29,7 @@ export const userPassword: (
         FROM m_users
         WHERE username = :username
     `;
-  const user = await sequelize.query<CustModelType['UserPassword']>(sqlQuery, {
+  const user = sequelize.query<CustModelType['UserPassword']>(sqlQuery, {
     replacements: { username },
     type: QueryTypes.SELECT,
     plain: true,
@@ -39,7 +39,7 @@ export const userPassword: (
 
 export const userUtility: (
   userId: number
-) => Promise<CustModelType['UserToken']> = async (userId) => {
+) => Promise<CustModelType['UserToken']> = (userId) => {
   const sqlQuery = `
         SELECT
             type,
@@ -47,7 +47,7 @@ export const userUtility: (
         FROM u_user
         WHERE id_m_users = :userId
     `;
-  const user = await sequelize.query<CustModelType['UserToken']>(sqlQuery, {
+  const user = sequelize.query<CustModelType['UserToken']>(sqlQuery, {
     replacements: { userId },
     type: QueryTypes.SELECT,
     plain: true,
@@ -56,8 +56,8 @@ export const userUtility: (
 };
 
 export const userAccount: (
-  token: string
-) => Promise<CustModelType['UserAccount']> = async (token) => {
+  userId: number
+) => Promise<CustModelType['UserAccount']> = (userId) => {
   const sqlQuery = ` 
         SELECT
             mu.full_name,
@@ -69,10 +69,10 @@ export const userAccount: (
         FROM m_users mu
         LEFT JOIN m_medias mm ON mu.id_photo = mm.id
         LEFT JOIN u_user uu ON mu.id = uu.id_m_users
-        WHERE uu.api_token = :token;
+        WHERE uu.id = :userId;
     `;
-  const user = await sequelize.query<CustModelType['UserAccount']>(sqlQuery, {
-    replacements: { token },
+  const user = sequelize.query<CustModelType['UserAccount']>(sqlQuery, {
+    replacements: { userId },
     type: QueryTypes.SELECT,
     plain: true,
   });
@@ -81,7 +81,7 @@ export const userAccount: (
 
 export const userWallets: (
   userId: number
-) => Promise<CustModelType['UserWallet'][]> = async (userId) => {
+) => Promise<CustModelType['UserWallet'][]> = (userId) => {
   const sqlQuery = `
         SELECT
             uuw.balance,
@@ -95,7 +95,7 @@ export const userWallets: (
         LEFT JOIN m_medias mm ON mw.id_logo = mm.id
         WHERE uuw.id_u_user = :userId;
     `;
-  const userWallet = await sequelize.query<CustModelType['UserWallet']>(
+  const userWallet = sequelize.query<CustModelType['UserWallet']>(
     sqlQuery,
     {
       replacements: { userId },

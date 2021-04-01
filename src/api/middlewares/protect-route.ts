@@ -27,7 +27,7 @@ const userUtility: (
         if (user.type >= 3 || user.type < 1) throw new ErrorResponse('forbidden', 403);
         break;
       default:
-        console.log('');
+        throw new ErrorResponse('forbidden', 403);
     }
   }
   return user;
@@ -41,7 +41,7 @@ export const protect: (
 ) => Promise<void> = (who) => async (req) => {
   const token = req.headers.authorization;
   const user = await userUtility(who, token);
-  console.log(user);
+  req.requestContext.set('user', user);
 };
 
 export const exampleProtect: (

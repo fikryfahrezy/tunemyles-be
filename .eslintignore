@@ -1,1 +1,4 @@
-/node_modules
+__test__
+coverage
+build
+node_modules

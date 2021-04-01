@@ -1,6 +1,7 @@
 import type { FastifyRequest, FastifyReply } from 'fastify';
 import type { Request, RequestHandler } from '../../types/fasitify';
 import type { RegisterBody, LoginBody, ApiKeyHeader } from '../../types/schema';
+import type CustModelType from '../../types/model';
 import { userRegistration, userLogin, userProfile } from './service';
 
 export const register: RequestHandler<
@@ -47,8 +48,8 @@ Request<unknown, unknown, unknown, ApiKeyHeader>
   req: FastifyRequest<{ Headers: ApiKeyHeader }>,
   res: FastifyReply,
 ): Promise<void> {
-  const { authorization } = req.headers;
-  const data = await userProfile(authorization);
+  const { id } = this.requestContext.get('user') as CustModelType['UserUtility'];
+  const data = await userProfile(id);
 
   res
     .status(200)
