@@ -45,11 +45,11 @@ export const login: RequestHandler<Request<LoginBody>> = async function login(
 export const getProfile: RequestHandler<
 Request<unknown, unknown, unknown, ApiKeyHeader>
 > = async function getProfile(
-  req: FastifyRequest<{ Headers: ApiKeyHeader }>,
+  _: FastifyRequest<{ Headers: ApiKeyHeader }>,
   res: FastifyReply,
 ): Promise<void> {
-  const { id } = this.requestContext.get('user') as CustModelType['UserUtility'];
-  const data = await userProfile(id);
+  const { utilId } = this.requestContext.get('user') as CustModelType['UserUtility'];
+  const data = await userProfile(utilId);
 
   res
     .status(200)

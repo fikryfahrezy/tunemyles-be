@@ -1,5 +1,5 @@
 import { FastifyInstance } from 'fastify';
-import app from '../../src/app';
+import app from '../../src/config/app';
 
 let server: null | FastifyInstance = null;
 

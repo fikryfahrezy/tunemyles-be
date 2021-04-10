@@ -9,26 +9,26 @@ type UserToken = {
 };
 
 type UserAccount = {
-  full_name: string;
+  fullName: string;
   username: string;
   address: string;
-  phone_number: string;
+  phoneNumber: string;
   face: string | null;
   id?: number;
 };
 
 type UserWallet = {
   balance: string;
-  is_visible: number;
-  wallet_name: string | null;
-  wallet_description: string | null;
+  isVisible: number;
+  walletName: string | null;
+  walletDescription: string | null;
   uri: string | null;
   label: string | null;
 };
 
 type UserUtility = {
-  id: number;
-  user_id: number;
+  userId: number;
+  utilId: number;
   type: number;
 };
 

@@ -39,15 +39,16 @@ export const userPassword: (
 
 export const userUtility: (
   userId: number
-) => Promise<CustModelType['UserToken']> = (userId) => {
+) => Promise<CustModelType['UserUtility']> = (userId) => {
   const sqlQuery = `
         SELECT
+            id AS utilId,
             type,
             api_token as token
         FROM u_user
         WHERE id_m_users = :userId
     `;
-  const user = sequelize.query<CustModelType['UserToken']>(sqlQuery, {
+  const user = sequelize.query<CustModelType['UserUtility']>(sqlQuery, {
     replacements: { userId },
     type: QueryTypes.SELECT,
     plain: true,
@@ -60,10 +61,10 @@ export const userAccount: (
 ) => Promise<CustModelType['UserAccount']> = (userId) => {
   const sqlQuery = ` 
         SELECT
-            mu.full_name,
+            mu.full_name AS fullName,
             mu.username,
             mu.address,
-            mu.phone_number,
+            mu.phone_number AS phoneNumber,
             mm.uri AS face,
             uu.id
         FROM m_users mu
@@ -85,9 +86,9 @@ export const userWallets: (
   const sqlQuery = `
         SELECT
             uuw.balance,
-            uuw.is_visible,
-            mw.wallet_name,
-            mw.wallet_description,
+            uuw.is_visible AS isVisible,
+            mw.wallet_name AS walletName,
+            mw.wallet_description AS walletDescription,
             mm.uri,
             mm.label
         FROM u_user_wallet uuw
@@ -110,8 +111,8 @@ export const userToken: (
 ) => Promise<CustModelType['UserUtility']> = (token) => {
   const sqlQuery = `
         SELECT
-            id,
-            id_m_users AS user_id,
+            id_m_users AS userId,
+            id AS utilId,
             type
         FROM u_user
         WHERE api_token = :token

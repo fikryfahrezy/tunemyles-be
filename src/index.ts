@@ -1,9 +1,9 @@
 import 'make-promises-safe';
-import './env-setup';
+import './config/env-setup';
 import pino from 'pino';
-import app from './app';
 import sequelize from './databases/sequelize';
 import { logger, dest } from './utils/logger';
+import app from './config/app';
 import validateEnv from './config/validateEnv';
 
 const start = async function start() {

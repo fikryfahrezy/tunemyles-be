@@ -10,9 +10,9 @@ import fastifySensible from 'fastify-sensible';
 import fastifyCookie from 'fastify-cookie';
 import path from 'path';
 import middie from 'middie';
-import definitions from './definitions';
-import api from './api';
-import sequelize from './databases/sequelize';
+import definitions from '../definitions';
+import api from '../api';
+import sequelize from '../databases/sequelize';
 
 const app = function app(opts: FastifyServerOptions = {}): FastifyInstance {
   const fastifyApp = fastify(opts);

@@ -1,5 +1,5 @@
 import { FastifyInstance } from 'fastify';
-import app from '../../src/app';
+import app from '../../src/config/app';
 
 let server: null | FastifyInstance = null;
 
@@ -32,9 +32,10 @@ const userLogin = (username: string, password: string) =>
     },
   });
 
-const userProfile = (authorization?: string) => {
-  const headers = { authorization };
-  if (!authorization) delete headers.authorization;
+const userProfile = (token?: string) => {
+  let headers = {};
+  if (token) headers = { authorization: `Bearer ${token}` };
+
   return server.inject({
     method: 'GET',
     url: '/api/v2/auth/me',
@@ -177,13 +178,15 @@ describe('Login', () => {
       phone_number: Date.now().toString(),
       address: 'address',
     };
-    await userRegistration(payload);
+    const registration = await userRegistration(payload);
+    registration.json();
 
     const response = await userLogin(username, password);
+    const resBody = response.json();
 
     const statusCode = response.statusCode;
     const contenType = response.headers['content-type'];
-    const isSuccess = response.json().success;
+    const isSuccess = resBody.success;
     expect(statusCode).toBe(200);
     expect(contenType).toBe('application/json; charset=utf-8');
     expect(isSuccess).toBe(true);
@@ -237,11 +240,14 @@ describe('Get Profile', () => {
       phone_number: Date.now().toString(),
       address: 'address',
     };
-    await userRegistration(payload);
-    const user = await userLogin(username, password);
-    const authorization = user.json().data.token;
+    const registration = await userRegistration(payload);
+    registration.json();
 
-    const response = await userProfile(authorization);
+    const user = await userLogin(username, password);
+    const userBody = user.json();
+    const token = userBody.data.token;
+
+    const response = await userProfile(token);
 
     const statusCode = response.statusCode;
     const contenType = response.headers['content-type'];

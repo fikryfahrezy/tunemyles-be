@@ -50,6 +50,8 @@ src                                 ->  Application main folder.
 |   |   |_  [files].ts              ->  Utility files.
 |   |_  index.ts                    ->  API starting point. Register API version entry point.
 |_  config                          ->  Global or server configuration variables.
+|   |_  app.ts                      ->  Server entry point. Fastify server, plugin registering process, global server hook and decorator, and schema definitions.
+|   |_  env-setup.ts                ->  Load .env file.
 |   |_  validateEnv.ts              ->  Validation for needed global variable in application.
 |   |_  [files].ts                  ->  Any config files.
 |_  databases                       ->  Databases loader folder.
@@ -58,7 +60,6 @@ src                                 ->  Application main folder.
 |   |_  index.ts                    ->  Defined structured JSON-Schemas definition to use as a responses route.
 |_  utils                           ->  Global (server) utility folder.
 |   |_  [files].ts                  ->  Utility config or utility process files.
-|_  app.ts                          ->  Server entry point. Fastify server, plugin registering process, global server hook and decorator, and schema definitions.
 |_  index.ts                        ->  Application starting point. Contain Fastify server startup and server options, global process exception, environment variable loader, and another loader such as database connection.
 
 ```

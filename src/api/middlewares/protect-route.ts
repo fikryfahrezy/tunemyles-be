@@ -2,18 +2,18 @@ import type { FastifyRequest, FastifyReply } from 'fastify';
 import type { ApiKeyHeader } from '../types/schema';
 import type CustModelType from '../types/model';
 import { ErrorResponse } from '../utils/error-handler';
-import { userToken } from '../repositories/AuthRepository';
+import { verifyJwt } from '../utils/jwt';
 
 const userUtility: (
   who: string,
   token?: string
-) => Promise<CustModelType['UserUtility']> = async function userUtility(
+) => CustModelType['UserUtility'] = function userUtility(
   who,
   token,
 ) {
   if (!token) throw new ErrorResponse('forbidden', 403);
 
-  const user = await userToken(token);
+  const user = verifyJwt(token);
   if (!user) throw new ErrorResponse('forbidden', 403);
   else {
     switch (who) {
@@ -38,9 +38,9 @@ export const protect: (
 ) => (
   req: FastifyRequest<{ Headers: ApiKeyHeader | unknown }>,
   res: FastifyReply
-) => Promise<void> = (who) => async (req) => {
+) => void = (who) => (req) => {
   const token = req.headers.authorization;
-  const user = await userUtility(who, token);
+  const user = userUtility(who, token);
   req.requestContext.set('user', user);
 };
 

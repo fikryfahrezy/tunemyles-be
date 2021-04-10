@@ -1,7 +1,7 @@
 import { FastifyInstance } from 'fastify';
 import formAutoContent from 'form-auto-content';
 import fs from 'fs';
-import app from '../../src/app';
+import app from '../../src/config/app';
 
 let server: null | FastifyInstance = null;
 
