@@ -29,12 +29,12 @@ export const userPassword: (
         FROM m_users
         WHERE username = :username
     `;
-  const user = sequelize.query<CustModelType['UserPassword']>(sqlQuery, {
+
+  return sequelize.query<CustModelType['UserPassword']>(sqlQuery, {
     replacements: { username },
     type: QueryTypes.SELECT,
     plain: true,
   });
-  return user;
 };
 
 export const userUtility: (
@@ -48,12 +48,12 @@ export const userUtility: (
         FROM u_user
         WHERE id_m_users = :userId
     `;
-  const user = sequelize.query<CustModelType['UserUtility']>(sqlQuery, {
+
+  return sequelize.query<CustModelType['UserUtility']>(sqlQuery, {
     replacements: { userId },
     type: QueryTypes.SELECT,
     plain: true,
   });
-  return user;
 };
 
 export const userAccount: (
@@ -72,12 +72,12 @@ export const userAccount: (
         LEFT JOIN u_user uu ON mu.id = uu.id_m_users
         WHERE uu.id = :userId;
     `;
-  const user = sequelize.query<CustModelType['UserAccount']>(sqlQuery, {
+
+  return sequelize.query<CustModelType['UserAccount']>(sqlQuery, {
     replacements: { userId },
     type: QueryTypes.SELECT,
     plain: true,
   });
-  return user;
 };
 
 export const userWallets: (
@@ -96,14 +96,14 @@ export const userWallets: (
         LEFT JOIN m_medias mm ON mw.id_logo = mm.id
         WHERE uuw.id_u_user = :userId;
     `;
-  const userWallet = sequelize.query<CustModelType['UserWallet']>(
+
+  return sequelize.query<CustModelType['UserWallet']>(
     sqlQuery,
     {
       replacements: { userId },
       type: QueryTypes.SELECT,
     },
   );
-  return userWallet;
 };
 
 export const userToken: (
@@ -117,10 +117,10 @@ export const userToken: (
         FROM u_user
         WHERE api_token = :token
    `;
-  const utility = sequelize.query<CustModelType['UserUtility']>(sqlQuery, {
+
+  return sequelize.query<CustModelType['UserUtility']>(sqlQuery, {
     replacements: { token },
     type: QueryTypes.SELECT,
     plain: true,
   });
-  return utility;
 };

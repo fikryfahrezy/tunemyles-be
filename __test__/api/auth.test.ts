@@ -1,7 +1,10 @@
-import { FastifyInstance } from 'fastify';
+import type { Server } from 'http';
+import type { FastifyInstance } from 'fastify';
+import supertest from 'supertest';
 import app from '../../src/config/app';
 
-let server: null | FastifyInstance = null;
+let appServer: null | FastifyInstance = null;
+let server: null | Server = null;
 
 const userRegistration = (payload: {
   full_name: string;
@@ -10,46 +13,33 @@ const userRegistration = (payload: {
   phone_number: string;
   address: string;
 }) =>
-  server.inject({
-    method: 'POST',
-    url: '/api/v2/auth/register',
-    headers: {
-      'content-type': 'application/json',
-    },
-    payload,
-  });
+  supertest(server)
+    .post('/api/v2/auth/register')
+    .set('Content-Type', 'application/json')
+    .send(payload);
 
-const userLogin = (username: string, password: string) =>
-  server.inject({
-    method: 'POST',
-    url: '/api/v2/auth/login',
-    headers: {
-      'content-type': 'application/json',
-    },
-    payload: {
-      username,
-      password,
-    },
-  });
+const userLogin = (payload: { username: string; password: string }) =>
+  supertest(server)
+    .post('/api/v2/auth/login')
+    .set('Content-Type', 'application/json')
+    .send(payload);
 
 const userProfile = (token?: string) => {
-  let headers = {};
-  if (token) headers = { authorization: `Bearer ${token}` };
+  const req = supertest(server).get('/api/v2/auth/me');
 
-  return server.inject({
-    method: 'GET',
-    url: '/api/v2/auth/me',
-    headers,
-  });
+  if (token) req.set('authorization', `Bearer ${token}`);
+
+  return req;
 };
 
-beforeAll(() => {
-  server = app();
-  return server.ready();
+beforeAll(async () => {
+  appServer = app();
+  appServer.ready();
+  server = appServer.server;
 });
 
 afterAll(() => {
-  return server.close();
+  return appServer.close();
 });
 
 describe('Registration', () => {
@@ -66,12 +56,11 @@ describe('Registration', () => {
       address: 'address',
     };
 
-    const response = await userRegistration(payload);
+    const { status, headers, body } = await userRegistration(payload);
 
-    const statusCode = response.statusCode;
-    const contenType = response.headers['content-type'];
-    const isSuccess = response.json().success;
-    expect(statusCode).toBe(200);
+    const contenType = headers['content-type'];
+    const isSuccess = body.success;
+    expect(status).toBe(200);
     expect(contenType).toBe('application/json; charset=utf-8');
     expect(isSuccess).toBe(true);
   });
@@ -85,19 +74,19 @@ describe('Registration', () => {
       password: 'password',
       address: 'address',
     };
-    await userRegistration(payload);
+    const { body: regBody } = await userRegistration(payload);
+    expect(regBody.success).toBe(true);
 
     const newPayload = {
       ...payload,
       username: Math.random().toString(36).substring(2),
       phone_number,
     };
-    const response = await userRegistration(newPayload);
+    const { status, headers, body } = await userRegistration(newPayload);
 
-    const statusCode = response.statusCode;
-    const contenType = response.headers['content-type'];
-    const isSuccess = response.json().success;
-    expect(statusCode).toBe(400);
+    const contenType = headers['content-type'];
+    const isSuccess = body.success;
+    expect(status).toBe(400);
     expect(contenType).toBe('application/json; charset=utf-8');
     expect(isSuccess).toBe(false);
   });
@@ -111,19 +100,19 @@ describe('Registration', () => {
       phone_number: Date.now().toString(),
       address: 'address',
     };
-    await userRegistration(payload);
+    const { body: regBody } = await userRegistration(payload);
+    expect(regBody.success).toBe(true);
 
     const newPayload = {
       ...payload,
       username,
       phone_number: Date.now().toString(),
     };
-    const response = await userRegistration(newPayload);
+    const { status, headers, body } = await userRegistration(newPayload);
 
-    const statusCode = response.statusCode;
-    const contenType = response.headers['content-type'];
-    const isSuccess = response.json().success;
-    expect(statusCode).toBe(400);
+    const contenType = headers['content-type'];
+    const isSuccess = body.success;
+    expect(status).toBe(400);
     expect(contenType).toBe('application/json; charset=utf-8');
     expect(isSuccess).toBe(false);
   });
@@ -137,12 +126,11 @@ describe('Registration', () => {
       address: 'address',
     };
 
-    const response = await userRegistration(payload);
+    const { status, headers, body } = await userRegistration(payload);
 
-    const statusCode = response.statusCode;
-    const contenType = response.headers['content-type'];
-    const isSuccess = response.json().success;
-    expect(statusCode).toBe(422);
+    const contenType = headers['content-type'];
+    const isSuccess = body.success;
+    expect(status).toBe(422);
     expect(contenType).toBe('application/json; charset=utf-8');
     expect(isSuccess).toBe(false);
   });
@@ -158,9 +146,9 @@ describe('Registration', () => {
 
     const response = await userRegistration(payload);
 
-    const statusCode = response.statusCode;
+    const statusCode = response.status;
     const contenType = response.headers['content-type'];
-    const isSuccess = response.json().success;
+    const isSuccess = response.body.success;
     expect(statusCode).toBe(422);
     expect(contenType).toBe('application/json; charset=utf-8');
     expect(isSuccess).toBe(false);
@@ -178,16 +166,14 @@ describe('Login', () => {
       phone_number: Date.now().toString(),
       address: 'address',
     };
-    const registration = await userRegistration(payload);
-    registration.json();
+    const { body: regBody } = await userRegistration(payload);
+    expect(regBody.success).toBe(true);
 
-    const response = await userLogin(username, password);
-    const resBody = response.json();
+    const { status, headers, body } = await userLogin({ username, password });
 
-    const statusCode = response.statusCode;
-    const contenType = response.headers['content-type'];
-    const isSuccess = resBody.success;
-    expect(statusCode).toBe(200);
+    const contenType = headers['content-type'];
+    const isSuccess = body.success;
+    expect(status).toBe(200);
     expect(contenType).toBe('application/json; charset=utf-8');
     expect(isSuccess).toBe(true);
   });
@@ -201,15 +187,18 @@ describe('Login', () => {
       phone_number: Date.now().toString(),
       address: 'address',
     };
-    await userRegistration(payload);
+    const { body: regBody } = await userRegistration(payload);
+    expect(regBody.success).toBe(true);
 
     const wrongPassword = 'wrong-password';
-    const response = await userLogin(username, wrongPassword);
+    const { status, headers, body } = await userLogin({
+      username,
+      password: wrongPassword,
+    });
 
-    const statusCode = response.statusCode;
-    const contenType = response.headers['content-type'];
-    const isSuccess = response.json().success;
-    expect(statusCode).toBe(400);
+    const contenType = headers['content-type'];
+    const isSuccess = body.success;
+    expect(status).toBe(400);
     expect(contenType).toBe('application/json; charset=utf-8');
     expect(isSuccess).toBe(false);
   });
@@ -218,12 +207,14 @@ describe('Login', () => {
     const wrongUsername = 'this-username-doesnt-exist';
     const wrongPasssword = 'just-random-password';
 
-    const response = await userLogin(wrongUsername, wrongPasssword);
+    const { status, headers, body } = await userLogin({
+      username: wrongUsername,
+      password: wrongPasssword,
+    });
 
-    const statusCode = response.statusCode;
-    const contenType = response.headers['content-type'];
-    const isSuccess = response.json().success;
-    expect(statusCode).toBe(400);
+    const contenType = headers['content-type'];
+    const isSuccess = body.success;
+    expect(status).toBe(400);
     expect(contenType).toBe('application/json; charset=utf-8');
     expect(isSuccess).toBe(false);
   });
@@ -240,19 +231,18 @@ describe('Get Profile', () => {
       phone_number: Date.now().toString(),
       address: 'address',
     };
-    const registration = await userRegistration(payload);
-    registration.json();
+    const { body: regBody } = await userRegistration(payload);
+    expect(regBody.success).toBe(true);
 
-    const user = await userLogin(username, password);
-    const userBody = user.json();
-    const token = userBody.data.token;
+    const { body: logBody } = await userLogin({ username, password });
+    expect(logBody.success).toBe(true);
+    const token = logBody.data.token;
 
-    const response = await userProfile(token);
+    const { status, headers, body } = await userProfile(token);
 
-    const statusCode = response.statusCode;
-    const contenType = response.headers['content-type'];
-    const isSuccess = response.json().success;
-    expect(statusCode).toBe(200);
+    const contenType = headers['content-type'];
+    const isSuccess = body.success;
+    expect(status).toBe(200);
     expect(contenType).toBe('application/json; charset=utf-8');
     expect(isSuccess).toBe(true);
   });
@@ -260,12 +250,11 @@ describe('Get Profile', () => {
   test('Get Profile Failed, Wrong API Key', async () => {
     const authorization = 'this-is-wrong-token';
 
-    const response = await userProfile(authorization);
+    const { status, headers, body } = await userProfile(authorization);
 
-    const statusCode = response.statusCode;
-    const contenType = response.headers['content-type'];
-    const isSuccess = response.json().success;
-    expect(statusCode).toBe(403);
+    const contenType = headers['content-type'];
+    const isSuccess = body.success;
+    expect(status).toBe(403);
     expect(contenType).toBe('application/json; charset=utf-8');
     expect(isSuccess).toBe(false);
   });
@@ -273,12 +262,11 @@ describe('Get Profile', () => {
   test('Get Profile Failed, API Key Not Given', async () => {
     const authorization = undefined;
 
-    const response = await userProfile(authorization);
+    const { status, headers, body } = await userProfile(authorization);
 
-    const statusCode = response.statusCode;
-    const contenType = response.headers['content-type'];
-    const isSuccess = response.json().success;
-    expect(statusCode).toBe(403);
+    const contenType = headers['content-type'];
+    const isSuccess = body.success;
+    expect(status).toBe(403);
     expect(contenType).toBe('application/json; charset=utf-8');
     expect(isSuccess).toBe(false);
   });

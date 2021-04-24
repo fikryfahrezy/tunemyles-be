@@ -51,6 +51,7 @@
     "@types/node": "^14.14.25",
     "@types/pino": "^6.3.5",
     "@types/pump": "^1.1.0",
+    "@types/supertest": "^2.0.11",
     "@types/validator": "^13.1.3",
     "@typescript-eslint/eslint-plugin": "^4.14.2",
     "@typescript-eslint/parser": "^4.14.2",
@@ -69,6 +70,7 @@
     "onchange": "^7.1.0",
     "prettier": "^2.2.1",
     "sequelize-auto": "^0.7.11",
+    "supertest": "^6.1.3",
     "ts-node": "^9.1.1",
     "typescript": "^4.1.3",
     "yamljs": "^0.3.0"

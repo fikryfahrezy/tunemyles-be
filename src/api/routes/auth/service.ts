@@ -34,7 +34,7 @@ export const userLogin: (
   data: LoginBody
 ) => Promise<CustModelType['UserToken']> = async ({ username, password }) => {
   const user = await userPassword(username);
-  if (!user) throw new ErrorResponse('invalid credentials user', 400);
+  if (!user) throw new ErrorResponse('invalid credentials', 400);
 
   const isSame = await bcrypt.compare(password, user.password);
   if (!isSame) throw new ErrorResponse('invalid credentials', 400);
