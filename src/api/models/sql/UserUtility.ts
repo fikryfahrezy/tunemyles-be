@@ -1,14 +1,8 @@
 import md5 from 'md5';
 import Sequelize, { DataTypes, Model, Optional } from 'sequelize';
 import type { User, UserId } from './User';
-import type {
-  Merchant,
-  MerchantId,
-} from './Merchant';
-import type {
-  UserLostPassword,
-  UserLostPasswordId,
-} from './UserLostPassword';
+import type { Merchant, MerchantId } from './Merchant';
+import type { UserLostPassword, UserLostPasswordId } from './UserLostPassword';
 import type { UserWallet, UserWalletId } from './UserWallet';
 
 export interface UserUtilityAttributes {
@@ -59,20 +53,11 @@ export class UserUtility
 
   getMerchants!: Sequelize.HasManyGetAssociationsMixin<Merchant>;
 
-  setMerchants!: Sequelize.HasManySetAssociationsMixin<
-  Merchant,
-  MerchantId
-  >;
+  setMerchants!: Sequelize.HasManySetAssociationsMixin<Merchant, MerchantId>;
 
-  addMerchant!: Sequelize.HasManyAddAssociationMixin<
-  Merchant,
-  MerchantId
-  >;
+  addMerchant!: Sequelize.HasManyAddAssociationMixin<Merchant, MerchantId>;
 
-  addMerchants!: Sequelize.HasManyAddAssociationsMixin<
-  Merchant,
-  MerchantId
-  >;
+  addMerchants!: Sequelize.HasManyAddAssociationsMixin<Merchant, MerchantId>;
 
   createMerchant!: Sequelize.HasManyCreateAssociationMixin<Merchant>;
 
@@ -86,15 +71,9 @@ export class UserUtility
   MerchantId
   >;
 
-  hasMerchant!: Sequelize.HasManyHasAssociationMixin<
-  Merchant,
-  MerchantId
-  >;
+  hasMerchant!: Sequelize.HasManyHasAssociationMixin<Merchant, MerchantId>;
 
-  hasMerchants!: Sequelize.HasManyHasAssociationsMixin<
-  Merchant,
-  MerchantId
-  >;
+  hasMerchants!: Sequelize.HasManyHasAssociationsMixin<Merchant, MerchantId>;
 
   countMerchants!: Sequelize.HasManyCountAssociationsMixin;
 

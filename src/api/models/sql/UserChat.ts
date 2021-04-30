@@ -1,9 +1,6 @@
 import Sequelize, { DataTypes, Model, Optional } from 'sequelize';
 import type { User, UserId } from './User';
-import type {
-  UserChatDetail,
-  UserChatDetailId,
-} from './UserChatDetail';
+import type { UserChatDetail, UserChatDetailId } from './UserChatDetail';
 
 export interface UserChatAttributes {
   id: number;

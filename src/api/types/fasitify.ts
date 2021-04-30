@@ -7,7 +7,6 @@ import type {
   RawRequestDefaultExpression,
   RawReplyDefaultExpression,
   RequestGenericInterface,
-  FastifyInstance,
   HookHandlerDoneFunction,
 } from 'fastify';
 
@@ -17,11 +16,6 @@ export type Request<B = unknown, Q = unknown, P = unknown, H = unknown> = {
   Params: P;
   Headers: H;
 };
-
-export type FastifyFn = (
-  req: FastifyRequest,
-  res: FastifyReply
-) => Promise<void>;
 
 export type SyncHookFn = (
   req: FastifyRequest,
@@ -37,12 +31,6 @@ RawRequestDefaultExpression<RawServerDefault>,
 RawReplyDefaultExpression<RawServerDefault>,
 T
 >;
-
-export type HandlerFn<T extends RequestGenericInterface> = (
-  this: FastifyInstance,
-  req: FastifyRequest<T, Server, IncomingMessage>,
-  res: FastifyReply<Server, IncomingMessage, ServerResponse, T, unknown>
-) => void;
 
 export type PreHandlerFn<T extends RequestGenericInterface> = (
   req: FastifyRequest<T, Server, IncomingMessage>,

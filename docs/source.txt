@@ -7,5 +7,8 @@ https://github.com/docker/compose/issues/7495
 Migrate types to v3 (RouteHandlerMethod) #199
 https://github.com/fastify/help/issues/199
 
-NOTE: Generate random string/characters in JavaScript
+Generate random string/characters in JavaScript
 https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript
+
+express (using multer) Error: Multipart: Boundary not found, request sent by POSTMAN
+https://stackoverflow.com/a/49694133/12976234

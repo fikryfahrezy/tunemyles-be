@@ -1,10 +1,7 @@
 import slugify from 'slugify';
 import Sequelize, { DataTypes, Model, Optional } from 'sequelize';
 import type { Media, MediaId } from './Media';
-import type {
-  ProductCategory,
-  ProductCategoryId,
-} from './ProductCategory';
+import type { ProductCategory, ProductCategoryId } from './ProductCategory';
 
 export interface CategoryAttributes {
   id: number;
@@ -92,10 +89,7 @@ export class Category
 
   getMedia!: Sequelize.BelongsToGetAssociationMixin<Media>;
 
-  setMedia!: Sequelize.BelongsToSetAssociationMixin<
-  Media,
-  MediaId
-  >;
+  setMedia!: Sequelize.BelongsToSetAssociationMixin<Media, MediaId>;
 
   createMedia!: Sequelize.BelongsToCreateAssociationMixin<Media>;
 

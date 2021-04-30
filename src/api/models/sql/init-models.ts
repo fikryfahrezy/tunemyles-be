@@ -9,19 +9,13 @@ import type {
 import { Faq } from './Faq';
 import type { FaqAttributes, FaqCreationAttributes } from './Faq';
 import { Media } from './Media';
-import type {
-  MediaAttributes,
-  MediaCreationAttributes,
-} from './Media';
+import type { MediaAttributes, MediaCreationAttributes } from './Media';
 import { Product } from './Product';
 import type { ProductAttributes, ProductCreationAttributes } from './Product';
 import { User } from './User';
 import type { UserAttributes, UserCreationAttributes } from './User';
 import { Wallet } from './Wallet';
-import type {
-  WalletAttributes,
-  WalletCreationAttributes,
-} from './Wallet';
+import type { WalletAttributes, WalletCreationAttributes } from './Wallet';
 import { BankUtility } from './BankUtility';
 import type {
   BankUtilityAttributes,

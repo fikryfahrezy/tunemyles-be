@@ -182,108 +182,135 @@ const requestBody = {
 const responses = {
   merchants: {
     type: 'object',
-    properties: {
-      ApiResponse: {
-        $ref: '#ApiResponse',
+    allOf: [
+      { $ref: '#ApiResponse' },
+      {
+        type: 'object',
+        properties: {
+          data: { $ref: '#GetMerchant' },
+        },
       },
-      data: { $ref: '#GetMerchant' },
-    },
+    ],
   },
   merchantProduct: {
     type: 'object',
-    properties: {
-      ApiResponse: {
-        $ref: '#ApiResponse',
+    allOf: [
+      { $ref: '#ApiResponse' },
+      {
+        type: 'object',
+        properties: {
+          data: {
+            type: 'array',
+            items: { $ref: '#GetProduct' },
+          },
+        },
       },
-      data: {
-        type: 'array',
-        items: { $ref: '#GetProduct' },
-      },
-    },
+    ],
   },
   postedProduct: {
     type: 'object',
-    properties: {
-      ApiResponse: {
-        $ref: '#/components/schemas/ApiResponse',
+    allOf: [
+      { $ref: '#ApiResponse' },
+      {
+        type: 'object',
+        properties: {
+          data: { $ref: '#GetProductId' },
+        },
       },
-      data: { $ref: '#GetProductId' },
-    },
+    ],
   },
   merchantSingleProduct: {
     type: 'object',
-    properties: {
-      ApiResponse: {
-        $ref: '#ApiResponse',
+    allOf: [
+      { $ref: '#ApiResponse' },
+      {
+        type: 'object',
+        properties: {
+          data: { $ref: '#GetSingleProduct' },
+        },
       },
-      data: { $ref: '#GetSingleProduct' },
-    },
+    ],
   },
   merchantOrder: {
     type: 'object',
-    properties: {
-      ApiResponse: {
-        $ref: '#ApiResponse',
+    allOf: [
+      { $ref: '#ApiResponse' },
+      {
+        type: 'object',
+        properties: {
+          data: {
+            type: 'array',
+            items: { $ref: '#GetOrder' },
+          },
+        },
       },
-      data: {
-        type: 'array',
-        items: { $ref: '#GetOrder' },
-      },
-    },
+    ],
   },
   merchantOrderDetail: {
     type: 'object',
-    properties: {
-      ApiResponse: {
-        $ref: '#ApiResponse',
-      },
-      data: {
-        type: 'array',
-        items: {
-          $ref: '#GetProductOrder',
+    allOf: [
+      { $ref: '#ApiResponse' },
+      {
+        type: 'object',
+        properties: {
+          data: {
+            type: 'array',
+            items: {
+              $ref: '#GetProductOrder',
+            },
+          },
         },
       },
-    },
+    ],
   },
   merchantList: {
     type: 'object',
-    properties: {
-      ApiResponse: {
-        $ref: '#ApiResponse',
+    allOf: [
+      { $ref: '#ApiResponse' },
+      {
+        type: 'object',
+        properties: {
+          data: {
+            type: 'array',
+            items: { $ref: '#GetMerchant' },
+          },
+        },
       },
-      data: {
-        type: 'array',
-        items: { $ref: '#GetMerchant' },
-      },
-    },
+    ],
   },
   merchantTransactions: {
     type: 'object',
-    properties: {
-      ApiResponse: {
-        $ref: '#ApiResponse',
-      },
-      data: {
-        type: 'array',
-        items: {
-          $ref: '#GetUserTransaction',
+    allOf: [
+      { $ref: '#ApiResponse' },
+      {
+        type: 'object',
+        properties: {
+          data: {
+            type: 'array',
+            items: {
+              $ref: '#GetUserTransaction',
+            },
+          },
         },
       },
-    },
+    ],
   },
   merchantIncomes: {
     type: 'object',
-    properties: {
-      ApiResponse: {
-        $ref: '#ApiResponse',
-      },
-      data: {
-        type: 'array',
-        items: {
-          $ref: '#GetMerchantIncomes',
+    allOf: [
+      { $ref: '#ApiResponse' },
+      {
+        type: 'object',
+        properties: {
+          data: {
+            type: 'array',
+            items: {
+              $ref: '#GetMerchantIncomes',
+            },
+          },
         },
       },
-    },
+    ],
   },
 };
 

@@ -2,14 +2,8 @@ import Sequelize, { DataTypes, Model, Optional } from 'sequelize';
 import type { Media, MediaId } from './Media';
 import type { BankUtility, BankUtilityId } from './BankUtility';
 import type { BankAccount, BankAccountId } from './BankAccount';
-import type {
-  BankUser,
-  BankUserId,
-} from './BankUser';
-import type {
-  UserTopUp,
-  UserTopUpId,
-} from './UserTopUp';
+import type { BankUser, BankUserId } from './BankUser';
+import type { UserTopUp, UserTopUpId } from './UserTopUp';
 
 export interface BankAttributes {
   id: number;
@@ -44,21 +38,42 @@ export class Bank
 
   getBankUtilities!: Sequelize.HasManyGetAssociationsMixin<BankUtility>;
 
-  setBankUtilities!: Sequelize.HasManySetAssociationsMixin<BankUtility, BankUtilityId>;
+  setBankUtilities!: Sequelize.HasManySetAssociationsMixin<
+  BankUtility,
+  BankUtilityId
+  >;
 
-  addBankUtility!: Sequelize.HasManyAddAssociationMixin<BankUtility, BankUtilityId>;
+  addBankUtility!: Sequelize.HasManyAddAssociationMixin<
+  BankUtility,
+  BankUtilityId
+  >;
 
-  addBankUtilities!: Sequelize.HasManyAddAssociationsMixin<BankUtility, BankUtilityId>;
+  addBankUtilities!: Sequelize.HasManyAddAssociationsMixin<
+  BankUtility,
+  BankUtilityId
+  >;
 
   createBankUtility!: Sequelize.HasManyCreateAssociationMixin<BankUtility>;
 
-  removeBankUtility!: Sequelize.HasManyRemoveAssociationMixin<BankUtility, BankUtilityId>;
+  removeBankUtility!: Sequelize.HasManyRemoveAssociationMixin<
+  BankUtility,
+  BankUtilityId
+  >;
 
-  removeBankUtilities!: Sequelize.HasManyRemoveAssociationsMixin<BankUtility, BankUtilityId>;
+  removeBankUtilities!: Sequelize.HasManyRemoveAssociationsMixin<
+  BankUtility,
+  BankUtilityId
+  >;
 
-  hasBankUtility!: Sequelize.HasManyHasAssociationMixin<BankUtility, BankUtilityId>;
+  hasBankUtility!: Sequelize.HasManyHasAssociationMixin<
+  BankUtility,
+  BankUtilityId
+  >;
 
-  hasBankUtilities!: Sequelize.HasManyHasAssociationsMixin<BankUtility, BankUtilityId>;
+  hasBankUtilities!: Sequelize.HasManyHasAssociationsMixin<
+  BankUtility,
+  BankUtilityId
+  >;
 
   countBankUtilities!: Sequelize.HasManyCountAssociationsMixin;
 
@@ -111,20 +126,11 @@ export class Bank
 
   getBankUsers!: Sequelize.HasManyGetAssociationsMixin<BankUser>;
 
-  setBankUsers!: Sequelize.HasManySetAssociationsMixin<
-  BankUser,
-  BankUserId
-  >;
+  setBankUsers!: Sequelize.HasManySetAssociationsMixin<BankUser, BankUserId>;
 
-  addBankUser!: Sequelize.HasManyAddAssociationMixin<
-  BankUser,
-  BankUserId
-  >;
+  addBankUser!: Sequelize.HasManyAddAssociationMixin<BankUser, BankUserId>;
 
-  addBankUsers!: Sequelize.HasManyAddAssociationsMixin<
-  BankUser,
-  BankUserId
-  >;
+  addBankUsers!: Sequelize.HasManyAddAssociationsMixin<BankUser, BankUserId>;
 
   createBankUser!: Sequelize.HasManyCreateAssociationMixin<BankUser>;
 
@@ -138,15 +144,9 @@ export class Bank
   BankUserId
   >;
 
-  hasBankUser!: Sequelize.HasManyHasAssociationMixin<
-  BankUser,
-  BankUserId
-  >;
+  hasBankUser!: Sequelize.HasManyHasAssociationMixin<BankUser, BankUserId>;
 
-  hasBankUsers!: Sequelize.HasManyHasAssociationsMixin<
-  BankUser,
-  BankUserId
-  >;
+  hasBankUsers!: Sequelize.HasManyHasAssociationsMixin<BankUser, BankUserId>;
 
   countBankUsers!: Sequelize.HasManyCountAssociationsMixin;
 
@@ -155,20 +155,11 @@ export class Bank
 
   getUserTopUps!: Sequelize.HasManyGetAssociationsMixin<UserTopUp>;
 
-  setUserTopUps!: Sequelize.HasManySetAssociationsMixin<
-  UserTopUp,
-  UserTopUpId
-  >;
+  setUserTopUps!: Sequelize.HasManySetAssociationsMixin<UserTopUp, UserTopUpId>;
 
-  addUserTopUp!: Sequelize.HasManyAddAssociationMixin<
-  UserTopUp,
-  UserTopUpId
-  >;
+  addUserTopUp!: Sequelize.HasManyAddAssociationMixin<UserTopUp, UserTopUpId>;
 
-  addUserTopUps!: Sequelize.HasManyAddAssociationsMixin<
-  UserTopUp,
-  UserTopUpId
-  >;
+  addUserTopUps!: Sequelize.HasManyAddAssociationsMixin<UserTopUp, UserTopUpId>;
 
   createUserTopUp!: Sequelize.HasManyCreateAssociationMixin<UserTopUp>;
 
@@ -182,15 +173,9 @@ export class Bank
   UserTopUpId
   >;
 
-  hasUserTopUp!: Sequelize.HasManyHasAssociationMixin<
-  UserTopUp,
-  UserTopUpId
-  >;
+  hasUserTopUp!: Sequelize.HasManyHasAssociationMixin<UserTopUp, UserTopUpId>;
 
-  hasUserTopUps!: Sequelize.HasManyHasAssociationsMixin<
-  UserTopUp,
-  UserTopUpId
-  >;
+  hasUserTopUps!: Sequelize.HasManyHasAssociationsMixin<UserTopUp, UserTopUpId>;
 
   countUserTopUps!: Sequelize.HasManyCountAssociationsMixin;
 
@@ -199,10 +184,7 @@ export class Bank
 
   getMedia!: Sequelize.BelongsToGetAssociationMixin<Media>;
 
-  setMedia!: Sequelize.BelongsToSetAssociationMixin<
-  Media,
-  MediaId
-  >;
+  setMedia!: Sequelize.BelongsToSetAssociationMixin<Media, MediaId>;
 
   createMedia!: Sequelize.BelongsToCreateAssociationMixin<Media>;
 

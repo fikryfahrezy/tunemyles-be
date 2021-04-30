@@ -14,10 +14,7 @@ export interface WalletAttributes {
 
 export type WalletPk = 'id';
 export type WalletId = Wallet[WalletPk];
-export type WalletCreationAttributes = Optional<
-WalletAttributes,
-WalletPk
->;
+export type WalletCreationAttributes = Optional<WalletAttributes, WalletPk>;
 
 export class Wallet
   extends Model<WalletAttributes, WalletCreationAttributes>
@@ -41,10 +38,7 @@ export class Wallet
 
   getMedia!: Sequelize.BelongsToGetAssociationMixin<Media>;
 
-  setMedia!: Sequelize.BelongsToSetAssociationMixin<
-  Media,
-  MediaId
-  >;
+  setMedia!: Sequelize.BelongsToSetAssociationMixin<Media, MediaId>;
 
   createMedia!: Sequelize.BelongsToCreateAssociationMixin<Media>;
 

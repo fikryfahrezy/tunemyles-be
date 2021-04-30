@@ -21,7 +21,7 @@ export const createUserWallet = (
 
 export const userPassword: (
   username: string
-) => Promise<CustModelType['UserPassword']> = (username) => {
+) => Promise<CustModelType['UserPassword'] | null> = (username) => {
   const sqlQuery = `
         SELECT
             id,
@@ -61,10 +61,10 @@ export const userAccount: (
 ) => Promise<CustModelType['UserAccount']> = (userId) => {
   const sqlQuery = ` 
         SELECT
-            mu.full_name AS fullName,
+            mu.full_name,
             mu.username,
             mu.address,
-            mu.phone_number AS phoneNumber,
+            mu.phone_number,
             mm.uri AS face,
             uu.id
         FROM m_users mu
@@ -86,9 +86,9 @@ export const userWallets: (
   const sqlQuery = `
         SELECT
             uuw.balance,
-            uuw.is_visible AS isVisible,
-            mw.wallet_name AS walletName,
-            mw.wallet_description AS walletDescription,
+            uuw.is_visible,
+            mw.wallet_name,
+            mw.wallet_description,
             mm.uri,
             mm.label
         FROM u_user_wallet uuw
@@ -97,13 +97,10 @@ export const userWallets: (
         WHERE uuw.id_u_user = :userId;
     `;
 
-  return sequelize.query<CustModelType['UserWallet']>(
-    sqlQuery,
-    {
-      replacements: { userId },
-      type: QueryTypes.SELECT,
-    },
-  );
+  return sequelize.query<CustModelType['UserWallet']>(sqlQuery, {
+    replacements: { userId },
+    type: QueryTypes.SELECT,
+  });
 };
 
 export const userToken: (

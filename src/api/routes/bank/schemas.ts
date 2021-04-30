@@ -27,101 +27,110 @@ const requestBody = {
 const responses = {
   bank: {
     type: 'object',
-    properties: {
-      ApiResponse: {
-        $ref: '#ApiResponse',
-      },
-      data: {
-        type: 'array',
-        items: {
-          type: 'object',
-          allOf: [
-            { $ref: '#GetBank' },
-            {
+    allOf: [
+      { $ref: '#ApiResponse' },
+      {
+        type: 'object',
+        properties: {
+          data: {
+            type: 'array',
+            items: {
               type: 'object',
-              properties: {
-                Logo: {
-                  $ref: '#GetMedia',
-                },
-                Account: {
-                  type: 'array',
-                  items: {
-                    $ref: '#GetBankUser',
+              allOf: [
+                { $ref: '#GetBank' },
+                {
+                  type: 'object',
+                  properties: {
+                    Logo: {
+                      $ref: '#GetMedia',
+                    },
+                    Account: {
+                      type: 'array',
+                      items: {
+                        $ref: '#GetBankUser',
+                      },
+                    },
                   },
                 },
-              },
+              ],
             },
-          ],
+          },
         },
       },
-    },
+    ],
   },
   bankDetail: {
     type: 'object',
-    properties: {
-      ApiResponse: {
-        $ref: '#ApiResponse',
-      },
-      data: {
-        type: 'array',
-        items: {
-          type: 'object',
-          allOf: [
-            { $ref: '#GetBank' },
-            {
+    allOf: [
+      { $ref: '#ApiResponse' },
+      {
+        type: 'object',
+        properties: {
+          data: {
+            type: 'array',
+            items: {
               type: 'object',
-              properties: {
-                Logo: {
-                  $ref: '#GetMedia',
-                },
-                Utilities: {
-                  type: 'array',
-                  items: {
-                    $ref: '#GetBankUtility',
+              allOf: [
+                { $ref: '#GetBank' },
+                {
+                  type: 'object',
+                  properties: {
+                    Logo: {
+                      $ref: '#GetMedia',
+                    },
+                    Utilities: {
+                      type: 'array',
+                      items: {
+                        $ref: '#GetBankUtility',
+                      },
+                    },
                   },
                 },
-              },
+              ],
             },
-          ],
+          },
         },
       },
-    },
+    ],
   },
   bankUser: {
     type: 'object',
-    properties: {
-      ApiResponse: {
-        $ref: '#ApiResponse',
-      },
-      data: {
-        type: 'array',
-        items: {
-          type: 'object',
-          allOf: [
-            { $ref: 'GetBankUser' },
-            {
+    allOf: [
+      { $ref: '#ApiResponse' },
+      {
+        type: 'object',
+        properties: {
+          data: {
+            type: 'array',
+            items: {
               type: 'object',
-              properties: {
-                Bank: {
+              allOf: [
+                { $ref: 'GetBankUser' },
+                {
                   type: 'object',
-                  allOf: [
-                    { $ref: '#GetBank' },
-                    {
+                  properties: {
+                    Bank: {
                       type: 'object',
-                      properties: {
-                        Logo: {
-                          $ref: '#GetMedia',
+                      allOf: [
+                        { $ref: '#GetBank' },
+                        {
+                          type: 'object',
+                          properties: {
+                            Logo: {
+                              $ref: '#GetMedia',
+                            },
+                          },
                         },
-                      },
+                      ],
                     },
-                  ],
+                  },
                 },
-              },
+              ],
             },
-          ],
+          },
         },
       },
-    },
+    ],
   },
 };
 

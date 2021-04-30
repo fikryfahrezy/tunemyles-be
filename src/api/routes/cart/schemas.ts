@@ -30,15 +30,18 @@ const requestBody = {
 const responses = {
   carts: {
     type: 'object',
-    properties: {
-      ApiResponse: {
-        $ref: '#ApiResponse',
+    allOf: [
+      { $ref: '#ApiResponse' },
+      {
+        type: 'object',
+        properties: {
+          data: {
+            type: 'array',
+            items: { $ref: '#GetCart' },
+          },
+        },
       },
-      data: {
-        type: 'array',
-        items: { $ref: '#GetCart' },
-      },
-    },
+    ],
   },
 };
 

@@ -84,117 +84,129 @@ const requestBody = {
 const responses = {
   wallets: {
     type: 'object',
-    properties: {
-      ApiResponse: {
-        $ref: '#ApiResponse',
+    allOf: [
+      { $ref: '#ApiResponse' },
+      {
+        type: 'object',
+        properties: {
+          data: { $ref: '#GetUserWallet' },
+        },
       },
-      data: { $ref: '#GetUserWallet' },
-    },
+    ],
   },
   topUpHistories: {
     type: 'object',
-    properties: {
-      ApiResponse: {
-        $ref: '#ApiResponse',
+    allOf: [
+      { $ref: '#ApiResponse' },
+      {
+        type: 'object',
+        properties: {
+          data: {
+            type: 'array',
+            items: { $ref: '#GetTopUp' },
+          },
+        },
       },
-      data: {
-        type: 'array',
-        items: { $ref: '#GetTopUp' },
-      },
-    },
+    ],
   },
   withdrawHistories: {
     type: 'object',
-    properties: {
-      ApiResponse: {
-        $ref: '#ApiResponse',
-      },
-      data: {
-        type: 'array',
-        items: {
-          type: 'object',
-          allOf: [
-            { $ref: '#GetWithdraw' },
-            {
+    allOf: [
+      { $ref: '#ApiResponse' },
+      {
+        type: 'object',
+        properties: {
+          data: {
+            type: 'array',
+            items: {
               type: 'object',
-              properties: {
-                UserBank: {
+              allOf: [
+                { $ref: '#GetWithdraw' },
+                {
                   type: 'object',
-                  allOf: [
-                    {
-                      $ref: '#GetBankUser',
-                    },
-                    {
+                  properties: {
+                    UserBank: {
                       type: 'object',
-                      properties: {
-                        Bank: {
-                          $ref: '#GetBank',
+                      allOf: [
+                        {
+                          $ref: '#GetBankUser',
                         },
-                      },
+                        {
+                          type: 'object',
+                          properties: {
+                            Bank: {
+                              $ref: '#GetBank',
+                            },
+                          },
+                        },
+                      ],
                     },
-                  ],
+                  },
                 },
-              },
+              ],
             },
-          ],
+          },
         },
       },
-    },
+    ],
   },
   topUpDetail: {
     type: 'object',
-    properties: {
-      ApiResponse: {
-        $ref: '#ApiResponse',
-      },
-      data: {
-        type: 'array',
-        items: {
-          type: 'object',
-          allOf: [
-            { $ref: '#GetTopUp' },
-            {
+    allOf: [
+      { $ref: '#ApiResponse' },
+      {
+        type: 'object',
+        properties: {
+          data: {
+            type: 'array',
+            items: {
               type: 'object',
-              properties: {
-                Bank: {
-                  type: 'object',
-                  allOf: [
-                    { $ref: '#GetBank' },
-                    {
-                      type: 'object',
-                      properties: {
-                        Utilities: {
-                          type: 'array',
-                          items: {
-                            $ref: '#GetBankUtility',
-                          },
-                        },
-                        Accounts: {
-                          type: 'array',
-                          items: {
-                            $ref: '#GetBankUser',
-                          },
-                        },
-                      },
-                    },
-                  ],
-                },
-                Media: {
-                  $ref: '#GetMedia',
-                },
-                UserWallet: {
+              allOf: [
+                { $ref: '#GetTopUp' },
+                {
                   type: 'object',
                   properties: {
-                    id_u_user: { type: 'integer' },
-                    u_user: {
+                    Bank: {
                       type: 'object',
-                      properties: {
-                        id_m_users: { type: 'integer' },
-                        m_user: {
+                      allOf: [
+                        { $ref: '#GetBank' },
+                        {
                           type: 'object',
                           properties: {
-                            full_name: {
-                              type: 'string',
+                            Utilities: {
+                              type: 'array',
+                              items: {
+                                $ref: '#GetBankUtility',
+                              },
+                            },
+                            Accounts: {
+                              type: 'array',
+                              items: {
+                                $ref: '#GetBankUser',
+                              },
+                            },
+                          },
+                        },
+                      ],
+                    },
+                    Media: {
+                      $ref: '#GetMedia',
+                    },
+                    UserWallet: {
+                      type: 'object',
+                      properties: {
+                        id_u_user: { type: 'integer' },
+                        u_user: {
+                          type: 'object',
+                          properties: {
+                            id_m_users: { type: 'integer' },
+                            m_user: {
+                              type: 'object',
+                              properties: {
+                                full_name: {
+                                  type: 'string',
+                                },
+                              },
                             },
                           },
                         },
@@ -202,90 +214,99 @@ const responses = {
                     },
                   },
                 },
-              },
+              ],
             },
-          ],
+          },
         },
       },
-    },
+    ],
   },
   withdrawDetail: {
     type: 'object',
-    properties: {
-      ApiResponse: {
-        $ref: '#ApiResponse',
-      },
-      data: {
-        type: 'array',
-        items: {
-          type: 'object',
-          allOf: [
-            { $ref: '#GetTopUp' },
-            {
+    allOf: [
+      { $ref: '#ApiResponse' },
+      {
+        type: 'object',
+        properties: {
+          data: {
+            type: 'array',
+            items: {
               type: 'object',
-              properties: {
-                UserBank: {
+              allOf: [
+                { $ref: '#GetTopUp' },
+                {
                   type: 'object',
-                  allOf: [
-                    {
-                      $ref: '#GetBankUser',
-                    },
-                    {
+                  properties: {
+                    UserBank: {
                       type: 'object',
-                      properties: {
-                        Bank: {
+                      allOf: [
+                        {
+                          $ref: '#GetBankUser',
+                        },
+                        {
                           type: 'object',
-                          allOf: [
-                            {
-                              $ref: '#GetBank',
-                            },
-                            {
+                          properties: {
+                            Bank: {
                               type: 'object',
-                              properties: {
-                                Utilities: {
-                                  type: 'array',
-                                  items: {
-                                    $ref: '#GetBankUtility',
+                              allOf: [
+                                {
+                                  $ref: '#GetBank',
+                                },
+                                {
+                                  type: 'object',
+                                  properties: {
+                                    Utilities: {
+                                      type: 'array',
+                                      items: {
+                                        $ref: '#GetBankUtility',
+                                      },
+                                    },
                                   },
                                 },
-                              },
+                              ],
                             },
-                          ],
+                          },
                         },
-                      },
+                      ],
                     },
-                  ],
+                  },
                 },
-              },
+              ],
             },
-          ],
+          },
         },
       },
-    },
+    ],
   },
   userTopUp: {
     type: 'object',
-    properties: {
-      ApiResponse: {
-        $ref: '#ApiResponse',
+    allOf: [
+      { $ref: '#ApiResponse' },
+      {
+        type: 'object',
+        properties: {
+          data: {
+            type: 'array',
+            items: { $ref: '#GetTopUp' },
+          },
+        },
       },
-      data: {
-        type: 'array',
-        items: { $ref: '#GetTopUp' },
-      },
-    },
+    ],
   },
   userWithdraw: {
     type: 'object',
-    properties: {
-      ApiResponse: {
-        $ref: '#ApiResponse',
+    allOf: [
+      { $ref: '#ApiResponse' },
+      {
+        type: 'object',
+        properties: {
+          data: {
+            type: 'array',
+            items: { $ref: '#GetWithdraw' },
+          },
+        },
       },
-      data: {
-        type: 'array',
-        items: { $ref: '#GetWithdraw' },
-      },
-    },
+    ],
   },
 };
 

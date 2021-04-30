@@ -25,21 +25,21 @@ export const issueJwt: (
 export const verifyJwt: (
   token: string
 ) => {
-  userId: number,
-  utilId: number,
-  type: number
-} = function verifyJwt(
-  token,
-) {
-  const jwtToken = token.split(' ')[1];
+  userId: number;
+  utilId: number;
+  type: number;
+} = function verifyJwt(token) {
+  const tokenPrefix = 'Bearer ';
+  if (!token.startsWith(tokenPrefix)) {
+    throw new ErrorResponse('forbidden', 403);
+  }
+
+  const jwtToken = token.slice(tokenPrefix.length);
   if (!jwtToken) throw new ErrorResponse('forbidden', 403);
 
   const decoded = jwt.verify(jwtToken, JWT_TEMP_TOKEN as string);
   const {
-    user_id: userId,
-    util_id: utilId,
-    type,
-    exp,
+    user_id: userId, util_id: utilId, type, exp,
   } = decoded as JwtPayload;
 
   if (exp < Math.floor(Date.now() / 1000)) {

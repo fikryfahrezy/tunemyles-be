@@ -193,110 +193,128 @@ const requestBody = {
 const responses = {
   medias: {
     type: 'object',
-    properties: {
-      ApiResponse: {
-        $ref: '#ApiResponse',
+    allOf: [
+      { $ref: '#ApiResponse' },
+      {
+        type: 'object',
+        properties: {
+          data: {
+            type: 'array',
+            items: { $ref: '#GetMedia' },
+          },
+        },
       },
-      data: {
-        type: 'array',
-        items: { $ref: '#GetMedia' },
-      },
-    },
+    ],
   },
   wallets: {
     type: 'object',
-    properties: {
-      ApiResponse: {
-        $ref: '#ApiResponse',
+    allOf: [
+      { $ref: '#ApiResponse' },
+      {
+        type: 'object',
+        properties: {
+          data: { $ref: '#GetUserWallet' },
+        },
       },
-      data: { $ref: '#GetUserWallet' },
-    },
+    ],
   },
   banks: {
     type: 'object',
-    properties: {
-      ApiResponse: {
-        $ref: '#ApiResponse',
-      },
-      data: {
-        type: 'array',
-        items: {
-          type: 'object',
-          allOf: [
-            { $ref: '#GetBank' },
-            {
+    allOf: [
+      { $ref: '#ApiResponse' },
+      {
+        type: 'object',
+        properties: {
+          data: {
+            type: 'array',
+            items: {
               type: 'object',
-              properties: {
-                Logo: {
-                  $ref: '#GetMedia',
+              allOf: [
+                { $ref: '#GetBank' },
+                {
+                  type: 'object',
+                  properties: {
+                    Logo: {
+                      $ref: '#GetMedia',
+                    },
+                  },
                 },
-              },
+              ],
             },
-          ],
+          },
         },
       },
-    },
+    ],
   },
   bankDetail: {
     type: 'object',
-    properties: {
-      ApiResponse: {
-        $ref: '#ApiResponse',
-      },
-      data: {
-        type: 'array',
-        items: {
-          type: 'object',
-          allOf: [
-            { $ref: '#GetBank' },
-            {
+    allOf: [
+      { $ref: '#ApiResponse' },
+      {
+        type: 'object',
+        properties: {
+          data: {
+            type: 'array',
+            items: {
               type: 'object',
-              properties: {
-                Logo: {
-                  $ref: '#GetMedia',
-                },
-                Accounts: {
-                  type: 'array',
-                  items: {
-                    $ref: '#GetBankUser',
+              allOf: [
+                { $ref: '#GetBank' },
+                {
+                  type: 'object',
+                  properties: {
+                    Logo: {
+                      $ref: '#GetMedia',
+                    },
+                    Accounts: {
+                      type: 'array',
+                      items: {
+                        $ref: '#GetBankUser',
+                      },
+                    },
+                    Utilities: {
+                      type: 'array',
+                      items: {
+                        $ref: '#GetBankUtility',
+                      },
+                    },
                   },
                 },
-                Utilities: {
-                  type: 'array',
-                  items: {
-                    $ref: '#GetBankUtility',
-                  },
-                },
-              },
+              ],
             },
-          ],
+          },
         },
       },
-    },
+    ],
   },
   categories: {
     type: 'object',
-    properties: {
-      ApiResponse: {
-        $ref: '#ApiResponse',
+    allOf: [
+      { $ref: '#ApiResponse' },
+      {
+        type: 'object',
+        properties: {
+          data: {
+            type: 'array',
+            items: { $ref: '#GetCategory' },
+          },
+        },
       },
-      data: {
-        type: 'array',
-        items: { $ref: '#GetCategory' },
-      },
-    },
+    ],
   },
   faqs: {
     type: 'object',
-    properties: {
-      ApiResponse: {
-        $ref: '#ApiResponse',
+    allOf: [
+      { $ref: '#ApiResponse' },
+      {
+        type: 'object',
+        properties: {
+          data: {
+            type: 'array',
+            items: { $ref: '#GetFaq' },
+          },
+        },
       },
-      data: {
-        type: 'array',
-        items: { $ref: '#GetFaq' },
-      },
-    },
+    ],
   },
 };
 

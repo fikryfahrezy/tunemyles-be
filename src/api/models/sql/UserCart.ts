@@ -44,10 +44,7 @@ export class UserCart
 
   getProduct!: Sequelize.BelongsToGetAssociationMixin<Product>;
 
-  setProduct!: Sequelize.BelongsToSetAssociationMixin<
-  Product,
-  ProductId
-  >;
+  setProduct!: Sequelize.BelongsToSetAssociationMixin<Product, ProductId>;
 
   createProduct!: Sequelize.BelongsToCreateAssociationMixin<Product>;
 

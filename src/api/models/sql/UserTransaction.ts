@@ -25,10 +25,7 @@ UserTransactionPk
 >;
 
 export class UserTransaction
-  extends Model<
-  UserTransactionAttributes,
-  UserTransactionCreationAttributes
-  >
+  extends Model<UserTransactionAttributes, UserTransactionCreationAttributes>
   implements UserTransactionAttributes {
   id!: number;
 

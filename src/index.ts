@@ -22,6 +22,9 @@ const start = async function start() {
         .send(data);
     },
   });
+  server.addHook('onClose', async () => {
+    await sequelize.close();
+  });
 
   try {
     const { error } = validateEnv(process.env);

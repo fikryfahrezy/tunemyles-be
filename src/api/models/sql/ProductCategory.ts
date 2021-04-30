@@ -18,10 +18,7 @@ ProductCategoryPk
 >;
 
 export class ProductCategory
-  extends Model<
-  ProductCategoryAttributes,
-  ProductCategoryCreationAttributes
-  >
+  extends Model<ProductCategoryAttributes, ProductCategoryCreationAttributes>
   implements ProductCategoryAttributes {
   id!: number;
 
@@ -38,10 +35,7 @@ export class ProductCategory
 
   getCategory!: Sequelize.BelongsToGetAssociationMixin<Category>;
 
-  setCategory!: Sequelize.BelongsToSetAssociationMixin<
-  Category,
-  CategoryId
-  >;
+  setCategory!: Sequelize.BelongsToSetAssociationMixin<Category, CategoryId>;
 
   createCategory!: Sequelize.BelongsToCreateAssociationMixin<Category>;
 
@@ -57,9 +51,7 @@ export class ProductCategory
 
   createProductUtility!: Sequelize.BelongsToCreateAssociationMixin<ProductUtility>;
 
-  static initModel(
-    sequelize: Sequelize.Sequelize,
-  ): typeof ProductCategory {
+  static initModel(sequelize: Sequelize.Sequelize): typeof ProductCategory {
     ProductCategory.init(
       {
         id: {

@@ -39,40 +39,46 @@ const requestBody = {
 const responses = {
   transactions: {
     type: 'object',
-    properties: {
-      ApiResponse: {
-        $ref: '#ApiResponse',
+    allOf: [
+      { $ref: '#ApiResponse' },
+      {
+        type: 'object',
+        properties: {
+          data: {
+            type: 'array',
+            items: { $ref: '#GetOrder' },
+          },
+        },
       },
-      data: {
-        type: 'array',
-        items: { $ref: '#GetOrder' },
-      },
-    },
+    ],
   },
   transactionDetail: {
     type: 'object',
-    properties: {
-      ApiResponse: {
-        $ref: '#ApiResponse',
-      },
-      data: {
+    allOf: [
+      { $ref: '#ApiResponse' },
+      {
         type: 'object',
-        allOf: [
-          { $ref: '#GetOrder' },
-          {
+        properties: {
+          data: {
             type: 'object',
-            properties: {
-              products: {
-                type: 'array',
-                items: {
-                  $ref: '#GetProductOrder',
+            allOf: [
+              { $ref: '#GetOrder' },
+              {
+                type: 'object',
+                properties: {
+                  products: {
+                    type: 'array',
+                    items: {
+                      $ref: '#GetProductOrder',
+                    },
+                  },
                 },
               },
-            },
+            ],
           },
-        ],
+        },
       },
-    },
+    ],
   },
 };
 

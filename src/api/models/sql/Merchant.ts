@@ -26,10 +26,7 @@ MerchantPk
 >;
 
 export class Merchant
-  extends Model<
-  MerchantAttributes,
-  MerchantCreationAttributes
-  >
+  extends Model<MerchantAttributes, MerchantCreationAttributes>
   implements MerchantAttributes {
   id!: number;
 
@@ -62,10 +59,7 @@ export class Merchant
 
   getIdentityPhoto!: Sequelize.BelongsToGetAssociationMixin<Media>;
 
-  setIdentityPhoto!: Sequelize.BelongsToSetAssociationMixin<
-  Media,
-  MediaId
-  >;
+  setIdentityPhoto!: Sequelize.BelongsToSetAssociationMixin<Media, MediaId>;
 
   createIdentityPhoto!: Sequelize.BelongsToCreateAssociationMixin<Media>;
 
@@ -74,10 +68,7 @@ export class Merchant
 
   getMarketPhoto!: Sequelize.BelongsToGetAssociationMixin<Media>;
 
-  setMarketPhoto!: Sequelize.BelongsToSetAssociationMixin<
-  Media,
-  MediaId
-  >;
+  setMarketPhoto!: Sequelize.BelongsToSetAssociationMixin<Media, MediaId>;
 
   createMarketPhoto!: Sequelize.BelongsToCreateAssociationMixin<Media>;
 

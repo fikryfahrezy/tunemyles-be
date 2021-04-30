@@ -20,10 +20,7 @@ UserLostPasswordPk
 >;
 
 export class UserLostPassword
-  extends Model<
-  UserLostPasswordAttributes,
-  UserLostPasswordCreationAttributes
-  >
+  extends Model<UserLostPasswordAttributes, UserLostPasswordCreationAttributes>
   implements UserLostPasswordAttributes {
   id!: number;
 
@@ -49,9 +46,7 @@ export class UserLostPassword
 
   createUserUtility!: Sequelize.BelongsToCreateAssociationMixin<UserUtility>;
 
-  static initModel(
-    sequelize: Sequelize.Sequelize,
-  ): typeof UserLostPassword {
+  static initModel(sequelize: Sequelize.Sequelize): typeof UserLostPassword {
     UserLostPassword.init(
       {
         id: {

@@ -1,5 +1,29 @@
+export type ModelQuery = {
+  offset: number;
+  limit: number;
+  order: [[string, string]];
+  availableFields: string[];
+};
+
+export type AddedFileBody = {
+  data: Iterable<unknown> | AsyncIterable<unknown>;
+  encoding: string;
+  filename: string;
+  limit: boolean;
+  mimetype: string;
+};
+
 export type GetIdRequestParams = {
   id: string;
+};
+
+export type ApiKeyHeader = {
+  authorization: string;
+};
+
+export type LoginBody = {
+  username: string;
+  password: string;
 };
 
 export type PostRequestBody = {
@@ -10,10 +34,24 @@ export type FileRequestBody = {
   file: AddedFileBody[];
 };
 
-export type ApiKeyHeader = {
-  authorization: string;
+export type RegisterBody = {
+  full_name: string;
+  username: string;
+  password: string;
+  phone_number: string;
+  address: string;
 };
 
+export type UpdateProfileBody = {
+  full_name: string;
+  address: string;
+  phone_number: string;
+  avatar: AddedFileBody[];
+};
+
+export type ResetPasswordBody = {
+  new_password: string;
+};
 export type AddBankStepBody = {
   step: string;
 };
@@ -44,23 +82,6 @@ export type CheckoutBody = {
 
 export type ForgotPasswordBody = {
   phone_number: string;
-};
-
-export type LoginBody = {
-  username: string;
-  password: string;
-};
-
-export type RegisterBody = {
-  full_name: string;
-  username: string;
-  password: string;
-  phone_number: string;
-  address: string;
-};
-
-export type ResetPasswordBody = {
-  new_password: string;
 };
 
 export type ReviewTransactionBody = {
@@ -155,19 +176,4 @@ export type UserUtility = {
   type_before_banned: number;
   created_at: string;
   updated_at: string;
-};
-
-export type ModelQuery = {
-  offset: number;
-  limit: number;
-  order: [[string, string]];
-  availableFields: string[];
-};
-
-export type AddedFileBody = {
-  data: Iterable<unknown> | AsyncIterable<unknown>;
-  encoding: string;
-  filename: string;
-  limit: boolean;
-  mimetype: string;
 };

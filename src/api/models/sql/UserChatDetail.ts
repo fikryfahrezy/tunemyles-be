@@ -19,10 +19,7 @@ UserChatDetailPk
 >;
 
 export class UserChatDetail
-  extends Model<
-  UserChatDetailAttributes,
-  UserChatDetailCreationAttributes
-  >
+  extends Model<UserChatDetailAttributes, UserChatDetailCreationAttributes>
   implements UserChatDetailAttributes {
   id!: number;
 
@@ -50,10 +47,7 @@ export class UserChatDetail
 
   getUserChat!: Sequelize.BelongsToGetAssociationMixin<UserChat>;
 
-  setUserChat!: Sequelize.BelongsToSetAssociationMixin<
-  UserChat,
-  UserChatId
-  >;
+  setUserChat!: Sequelize.BelongsToSetAssociationMixin<UserChat, UserChatId>;
 
   createUserChat!: Sequelize.BelongsToCreateAssociationMixin<UserChat>;
 

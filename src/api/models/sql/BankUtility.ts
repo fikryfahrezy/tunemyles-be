@@ -11,7 +11,10 @@ export interface BankUtilityAttributes {
 
 export type BankUtilityPk = 'id';
 export type BankUtilityId = BankUtility[BankUtilityPk];
-export type BankUtilityCreationAttributes = Optional<BankUtilityAttributes, BankUtilityPk>;
+export type BankUtilityCreationAttributes = Optional<
+BankUtilityAttributes,
+BankUtilityPk
+>;
 
 export class BankUtility
   extends Model<BankUtilityAttributes, BankUtilityCreationAttributes>
@@ -31,10 +34,7 @@ export class BankUtility
 
   getBank!: Sequelize.BelongsToGetAssociationMixin<Bank>;
 
-  setBank!: Sequelize.BelongsToSetAssociationMixin<
-  Bank,
-  BankId
-  >;
+  setBank!: Sequelize.BelongsToSetAssociationMixin<Bank, BankId>;
 
   createBank!: Sequelize.BelongsToCreateAssociationMixin<Bank>;
 

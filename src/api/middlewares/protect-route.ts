@@ -7,10 +7,7 @@ import { verifyJwt } from '../utils/jwt';
 const userUtility: (
   who: string,
   token?: string
-) => CustModelType['UserUtility'] = function userUtility(
-  who,
-  token,
-) {
+) => CustModelType['UserUtility'] = function userUtility(who, token) {
   if (!token) throw new ErrorResponse('forbidden', 403);
 
   const user = verifyJwt(token);

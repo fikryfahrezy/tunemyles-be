@@ -21,10 +21,7 @@ ProductReviewPk
 >;
 
 export class ProductReview
-  extends Model<
-  ProductReviewAttributes,
-  ProductReviewCreationAttributes
-  >
+  extends Model<ProductReviewAttributes, ProductReviewCreationAttributes>
   implements ProductReviewAttributes {
   id!: number;
 
@@ -53,9 +50,7 @@ export class ProductReview
 
   createTransactionProduct!: Sequelize.BelongsToCreateAssociationMixin<TransactionProduct>;
 
-  static initModel(
-    sequelize: Sequelize.Sequelize,
-  ): typeof ProductReview {
+  static initModel(sequelize: Sequelize.Sequelize): typeof ProductReview {
     ProductReview.init(
       {
         id: {

@@ -1,3 +1,27 @@
+import pmp from 'pump';
+import stream from 'stream';
+import fs from 'fs';
+import util from 'util';
+import type { AddedFileBody } from '../types/schema';
+
+const pump = util.promisify(pmp) as (
+  ...streams: Array<pmp.Stream | pmp.Callback>
+) => Promise<void>;
+
+export const saveFiles: (files: AddedFileBody[]) => Promise<void> = async (
+  files: AddedFileBody[],
+) => {
+  await Promise.all(
+    files.map(({ filename, data }) => {
+      const destFile = `./public/image/${filename}`;
+      const streamFile = stream.Readable.from(data);
+      const dest = fs.createWriteStream(destFile);
+      return pump(streamFile, dest);
+    }),
+  );
+};
+
+export const test = 'hi';
 // "use strict";
 
 // const multer = require("@koa/multer");

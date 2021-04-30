@@ -34,7 +34,7 @@ export const userLogin: (
   data: LoginBody
 ) => Promise<CustModelType['UserToken']> = async ({ username, password }) => {
   const user = await userPassword(username);
-  if (!user) throw new ErrorResponse('invalid credentials', 400);
+  if (!user) throw new ErrorResponse('invalid credentials user', 400);
 
   const isSame = await bcrypt.compare(password, user.password);
   if (!isSame) throw new ErrorResponse('invalid credentials', 400);
@@ -54,12 +54,39 @@ export const userLogin: (
 export const userProfile: (userId: number) => Promise<unknown> = async (
   userId,
 ) => {
-  const user = await userAccount(userId);
-  const wallets = await userWallets(user.id as number);
+  const { id, ...user } = await userAccount(userId);
+  const wallets = await userWallets(id as number);
   const data = {
     ...user,
     wallets,
   };
-  delete data.id;
   return data;
+};
+
+export const updateUserProfile: (userId: number) => Promise<boolean> = async (
+  userId,
+) => {
+  const test = userId === 1;
+  return Promise.resolve(test);
+};
+
+export const forgotUserPassword: (userId: number) => Promise<boolean> = async (
+  userId,
+) => {
+  const test = userId === 1;
+  return Promise.resolve(test);
+};
+
+export const verifyUserToken: (userId: number) => Promise<boolean> = async (
+  userId,
+) => {
+  const test = userId === 1;
+  return Promise.resolve(test);
+};
+
+export const resetUserPassword: (userId: number) => Promise<boolean> = async (
+  userId,
+) => {
+  const test = userId === 1;
+  return Promise.resolve(test);
 };

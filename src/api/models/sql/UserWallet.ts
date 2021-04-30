@@ -1,14 +1,8 @@
 import Sequelize, { DataTypes, Model, Optional } from 'sequelize';
 import type { Wallet, WalletId } from './Wallet';
 import type { UserUtility, UserUtilityId } from './UserUtility';
-import type {
-  UserTopUp,
-  UserTopUpId,
-} from './UserTopUp';
-import type {
-  UserWithdraw,
-  UserWithdrawId,
-} from './UserWithdraw';
+import type { UserTopUp, UserTopUpId } from './UserTopUp';
+import type { UserWithdraw, UserWithdrawId } from './UserWithdraw';
 
 export interface UserWalletAttributes {
   id: number;
@@ -70,20 +64,11 @@ export class UserWallet
 
   getUserTopUps!: Sequelize.HasManyGetAssociationsMixin<UserTopUp>;
 
-  setUserTopUps!: Sequelize.HasManySetAssociationsMixin<
-  UserTopUp,
-  UserTopUpId
-  >;
+  setUserTopUps!: Sequelize.HasManySetAssociationsMixin<UserTopUp, UserTopUpId>;
 
-  adduserTopUp!: Sequelize.HasManyAddAssociationMixin<
-  UserTopUp,
-  UserTopUpId
-  >;
+  adduserTopUp!: Sequelize.HasManyAddAssociationMixin<UserTopUp, UserTopUpId>;
 
-  addUserTopUps!: Sequelize.HasManyAddAssociationsMixin<
-  UserTopUp,
-  UserTopUpId
-  >;
+  addUserTopUps!: Sequelize.HasManyAddAssociationsMixin<UserTopUp, UserTopUpId>;
 
   createUserTopUp!: Sequelize.HasManyCreateAssociationMixin<UserTopUp>;
 
@@ -97,15 +82,9 @@ export class UserWallet
   UserTopUpId
   >;
 
-  hasUserTopUp!: Sequelize.HasManyHasAssociationMixin<
-  UserTopUp,
-  UserTopUpId
-  >;
+  hasUserTopUp!: Sequelize.HasManyHasAssociationMixin<UserTopUp, UserTopUpId>;
 
-  hasUserTopUps!: Sequelize.HasManyHasAssociationsMixin<
-  UserTopUp,
-  UserTopUpId
-  >;
+  hasUserTopUps!: Sequelize.HasManyHasAssociationsMixin<UserTopUp, UserTopUpId>;
 
   countUserTopUps!: Sequelize.HasManyCountAssociationsMixin;
 

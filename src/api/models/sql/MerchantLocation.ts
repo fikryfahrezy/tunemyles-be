@@ -17,10 +17,7 @@ export interface MerchantLocationAttributes {
 export type MerchantLocationCreationAttributes = MerchantLocationAttributes;
 
 export class MerchantLocation
-  extends Model<
-  MerchantLocationAttributes,
-  MerchantLocationCreationAttributes
-  >
+  extends Model<MerchantLocationAttributes, MerchantLocationCreationAttributes>
   implements MerchantLocationAttributes {
   id_u_user_is_merchant!: number;
 
@@ -44,9 +41,7 @@ export class MerchantLocation
 
   address!: string;
 
-  static initModel(
-    sequelize: Sequelize.Sequelize,
-  ): typeof MerchantLocation {
+  static initModel(sequelize: Sequelize.Sequelize): typeof MerchantLocation {
     MerchantLocation.init(
       {
         id_u_user_is_merchant: {

@@ -40,10 +40,7 @@ export class BankAccount
 
   getBank!: Sequelize.BelongsToGetAssociationMixin<Bank>;
 
-  setBank!: Sequelize.BelongsToSetAssociationMixin<
-  Bank,
-  BankId
-  >;
+  setBank!: Sequelize.BelongsToSetAssociationMixin<Bank, BankId>;
 
   createBank!: Sequelize.BelongsToCreateAssociationMixin<Bank>;
 

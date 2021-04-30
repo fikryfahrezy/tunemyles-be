@@ -1,3 +1,7 @@
+export const requestHeader = {
+  private: { $ref: '#ApiKeyHeader' },
+};
+
 export const requestParams = {
   verifyToken: { $ref: '#RequestToken' },
 };
@@ -31,11 +35,12 @@ export const requestBody = {
   updateProfile: {
     type: 'object',
     properties: {
-      avatar: { $ref: '#MultiPartSchema' },
       full_name: { type: 'string' },
       address: { type: 'string' },
       phone_number: { type: 'string' },
+      avatar: { type: 'array', items: { $ref: '#MultiPartSchema' } },
     },
+    additionalProperties: false,
   },
   forgotPassword: {
     required: ['phone_number'],

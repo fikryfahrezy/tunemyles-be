@@ -5,14 +5,8 @@ import type { Product, ProductId } from './Product';
 import type { User, UserId } from './User';
 import type { Wallet, WalletId } from './Wallet';
 import type { ProductPhoto, ProductPhotoId } from './ProductPhoto';
-import type {
-  Merchant,
-  MerchantId,
-} from './Merchant';
-import type {
-  UserTopUp,
-  UserTopUpId,
-} from './UserTopUp';
+import type { Merchant, MerchantId } from './Merchant';
+import type { UserTopUp, UserTopUpId } from './UserTopUp';
 
 export interface MediaAttributes {
   id: number;
@@ -25,10 +19,7 @@ export interface MediaAttributes {
 
 export type MediaPk = 'id';
 export type MediaId = Media[MediaPk];
-export type MediaCreationAttributes = Optional<
-MediaAttributes,
-MediaPk
->;
+export type MediaCreationAttributes = Optional<MediaAttributes, MediaPk>;
 
 export class Media
   extends Model<MediaAttributes, MediaCreationAttributes>
@@ -73,20 +64,11 @@ export class Media
 
   getCategories!: Sequelize.HasManyGetAssociationsMixin<Category>;
 
-  setCategories!: Sequelize.HasManySetAssociationsMixin<
-  Category,
-  CategoryId
-  >;
+  setCategories!: Sequelize.HasManySetAssociationsMixin<Category, CategoryId>;
 
-  addCategory!: Sequelize.HasManyAddAssociationMixin<
-  Category,
-  CategoryId
-  >;
+  addCategory!: Sequelize.HasManyAddAssociationMixin<Category, CategoryId>;
 
-  addCategories!: Sequelize.HasManyAddAssociationsMixin<
-  Category,
-  CategoryId
-  >;
+  addCategories!: Sequelize.HasManyAddAssociationsMixin<Category, CategoryId>;
 
   createCategory!: Sequelize.HasManyCreateAssociationMixin<Category>;
 
@@ -100,15 +82,9 @@ export class Media
   CategoryId
   >;
 
-  hasCategory!: Sequelize.HasManyHasAssociationMixin<
-  Category,
-  CategoryId
-  >;
+  hasCategory!: Sequelize.HasManyHasAssociationMixin<Category, CategoryId>;
 
-  hasCategories!: Sequelize.HasManyHasAssociationsMixin<
-  Category,
-  CategoryId
-  >;
+  hasCategories!: Sequelize.HasManyHasAssociationsMixin<Category, CategoryId>;
 
   countCategories!: Sequelize.HasManyCountAssociationsMixin;
 
@@ -127,10 +103,7 @@ export class Media
 
   removeProduct!: Sequelize.HasManyRemoveAssociationMixin<Product, ProductId>;
 
-  removeProducts!: Sequelize.HasManyRemoveAssociationsMixin<
-  Product,
-  ProductId
-  >;
+  removeProducts!: Sequelize.HasManyRemoveAssociationsMixin<Product, ProductId>;
 
   hasProduct!: Sequelize.HasManyHasAssociationMixin<Product, ProductId>;
 
@@ -174,15 +147,9 @@ export class Media
 
   createWallet!: Sequelize.HasManyCreateAssociationMixin<Wallet>;
 
-  removeWallet!: Sequelize.HasManyRemoveAssociationMixin<
-  Wallet,
-  WalletId
-  >;
+  removeWallet!: Sequelize.HasManyRemoveAssociationMixin<Wallet, WalletId>;
 
-  removeWallets!: Sequelize.HasManyRemoveAssociationsMixin<
-  Wallet,
-  WalletId
-  >;
+  removeWallets!: Sequelize.HasManyRemoveAssociationsMixin<Wallet, WalletId>;
 
   hasWallet!: Sequelize.HasManyHasAssociationMixin<Wallet, WalletId>;
 
@@ -239,20 +206,11 @@ export class Media
 
   getMerchants!: Sequelize.HasManyGetAssociationsMixin<Merchant>;
 
-  setMerchants!: Sequelize.HasManySetAssociationsMixin<
-  Merchant,
-  MerchantId
-  >;
+  setMerchants!: Sequelize.HasManySetAssociationsMixin<Merchant, MerchantId>;
 
-  addMerchant!: Sequelize.HasManyAddAssociationMixin<
-  Merchant,
-  MerchantId
-  >;
+  addMerchant!: Sequelize.HasManyAddAssociationMixin<Merchant, MerchantId>;
 
-  addMerchants!: Sequelize.HasManyAddAssociationsMixin<
-  Merchant,
-  MerchantId
-  >;
+  addMerchants!: Sequelize.HasManyAddAssociationsMixin<Merchant, MerchantId>;
 
   createMerchant!: Sequelize.HasManyCreateAssociationMixin<Merchant>;
 
@@ -266,15 +224,9 @@ export class Media
   MerchantId
   >;
 
-  hasMerchant!: Sequelize.HasManyHasAssociationMixin<
-  Merchant,
-  MerchantId
-  >;
+  hasMerchant!: Sequelize.HasManyHasAssociationMixin<Merchant, MerchantId>;
 
-  hasMerchants!: Sequelize.HasManyHasAssociationsMixin<
-  Merchant,
-  MerchantId
-  >;
+  hasMerchants!: Sequelize.HasManyHasAssociationsMixin<Merchant, MerchantId>;
 
   countMerchants!: Sequelize.HasManyCountAssociationsMixin;
 
@@ -288,10 +240,7 @@ export class Media
   MerchantId
   >;
 
-  addMerchantPhoto!: Sequelize.HasManyAddAssociationMixin<
-  Merchant,
-  MerchantId
-  >;
+  addMerchantPhoto!: Sequelize.HasManyAddAssociationMixin<Merchant, MerchantId>;
 
   addMerchantPhotos!: Sequelize.HasManyAddAssociationsMixin<
   Merchant,
@@ -310,10 +259,7 @@ export class Media
   MerchantId
   >;
 
-  hasMerchantPhoto!: Sequelize.HasManyHasAssociationMixin<
-  Merchant,
-  MerchantId
-  >;
+  hasMerchantPhoto!: Sequelize.HasManyHasAssociationMixin<Merchant, MerchantId>;
 
   hasMerchantPhotos!: Sequelize.HasManyHasAssociationsMixin<
   Merchant,
@@ -327,20 +273,11 @@ export class Media
 
   getUserTopUps!: Sequelize.HasManyGetAssociationsMixin<UserTopUp>;
 
-  setUserTopUps!: Sequelize.HasManySetAssociationsMixin<
-  UserTopUp,
-  UserTopUpId
-  >;
+  setUserTopUps!: Sequelize.HasManySetAssociationsMixin<UserTopUp, UserTopUpId>;
 
-  addUserTopUp!: Sequelize.HasManyAddAssociationMixin<
-  UserTopUp,
-  UserTopUpId
-  >;
+  addUserTopUp!: Sequelize.HasManyAddAssociationMixin<UserTopUp, UserTopUpId>;
 
-  addUserTopUps!: Sequelize.HasManyAddAssociationsMixin<
-  UserTopUp,
-  UserTopUpId
-  >;
+  addUserTopUps!: Sequelize.HasManyAddAssociationsMixin<UserTopUp, UserTopUpId>;
 
   createUserTopUp!: Sequelize.HasManyCreateAssociationMixin<UserTopUp>;
 
@@ -354,15 +291,9 @@ export class Media
   UserTopUpId
   >;
 
-  hasUserTopUp!: Sequelize.HasManyHasAssociationMixin<
-  UserTopUp,
-  UserTopUpId
-  >;
+  hasUserTopUp!: Sequelize.HasManyHasAssociationMixin<UserTopUp, UserTopUpId>;
 
-  hasUserTopUps!: Sequelize.HasManyHasAssociationsMixin<
-  UserTopUp,
-  UserTopUpId
-  >;
+  hasUserTopUps!: Sequelize.HasManyHasAssociationsMixin<UserTopUp, UserTopUpId>;
 
   countUserTopUps!: Sequelize.HasManyCountAssociationsMixin;
 

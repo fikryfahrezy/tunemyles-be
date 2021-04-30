@@ -16,9 +16,9 @@ externalDocs:
   description: Find out more about Swagger
   url: 'http://swagger.io'
 servers:
-  - url: 'http://172.24.160.214:5000'
-    description: Development Server Base
-  - url: 'http://172.24.160.214:5000/api/v2'
+  - url: 'http://localhost:5000'
+    description: Development Server Api v2
+  - url: 'http://xxx.xxx.xxx.xxx:5000/api/v2'
     description: Development Server Api v2
 tags:
   - name: check
@@ -202,6 +202,7 @@ paths:
         content:
           multipart/form-data:
             schema:
+              type: 'object'
               properties:
                 avatar:
                   type: string
@@ -287,11 +288,12 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  ApiResponse:
-                    $ref: '#/components/schemas/ApiResponse'
-                  data:
-                    $ref: '#/components/schemas/GetToken'
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/GetToken'
         4XX:
           description: Request Error
           content:
@@ -358,11 +360,12 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  ApiResponse:
-                    $ref: '#/components/schemas/ApiResponse'
-                  data:
-                    $ref: '#/components/schemas/GetMerchant'
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/GetMerchant'
         4XX:
           description: Request Error
           content:
@@ -530,13 +533,14 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  ApiResponse:
-                    $ref: '#/components/schemas/ApiResponse'
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/GetProduct'
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/GetProduct'
         4XX:
           description: Request Error
           content:
@@ -601,11 +605,12 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  ApiResponse:
-                    $ref: '#/components/schemas/ApiResponse'
-                  data:
-                    $ref: '#/components/schemas/GetProductId'
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/GetProductId'
         4XX:
           description: Request Error
           content:
@@ -640,11 +645,12 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  ApiResponse:
-                    $ref: '#/components/schemas/ApiResponse'
-                  data:
-                    $ref: '#/components/schemas/GetSingleProduct'
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/GetSingleProduct'
         4XX:
           description: Request Error
           content:
@@ -764,16 +770,17 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  ApiResponse:
-                    $ref: '#/components/schemas/ApiResponse'
-                  data:
-                    type: object
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
                     properties:
-                      cover_uri:
-                        type: string
-                      cover_label:
-                        type: string
+                      data:
+                        type: object
+                        properties:
+                          cover_uri:
+                            type: string
+                          cover_label:
+                            type: string
         4XX:
           description: Request Error
           content:
@@ -814,14 +821,15 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  ApiResponse:
-                    $ref: '#/components/schemas/ApiResponse'
-                  data:
-                    type: object
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
                     properties:
-                      is_visible:
-                        type: integer
+                      data:
+                        type: object
+                        properties:
+                          is_visible:
+                            type: integer
         4XX:
           description: Request Error
           content:
@@ -863,11 +871,12 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  ApiResponse:
-                    $ref: '#/components/schemas/ApiResponse'
-                  data:
-                    $ref: '#/components/schemas/GetProductCategory'
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/GetProductCategory'
         4XX:
           description: Request Error
           content:
@@ -1048,13 +1057,14 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  ApiResponse:
-                    $ref: '#/components/schemas/ApiResponse'
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/GetOrder'
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/GetOrder'
         4XX:
           description: Request Error
           content:
@@ -1089,13 +1099,14 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  ApiResponse:
-                    $ref: '#/components/schemas/ApiResponse'
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/GetProductOrder'
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/GetProductOrder'
         4XX:
           description: Request Error
           content:
@@ -1135,11 +1146,12 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  ApiResponse:
-                    $ref: '#/components/schemas/ApiResponse'
-                  data:
-                    $ref: '#/components/schemas/GetProductOrder'
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/GetProductOrder'
         4XX:
           description: Request Error
           content:
@@ -1196,13 +1208,14 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  ApiResponse:
-                    $ref: '#/components/schemas/ApiResponse'
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/GetMerchant'
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/GetMerchant'
         4XX:
           description: Request Error
           content:
@@ -1234,13 +1247,14 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  ApiResponse:
-                    $ref: '#/components/schemas/ApiResponse'
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/GetMerchant'
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/GetMerchant'
         4XX:
           description: Request Error
           content:
@@ -1273,13 +1287,14 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  ApiResponse:
-                    $ref: '#/components/schemas/ApiResponse'
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/GetProduct'
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/GetProduct'
         4XX:
           description: Request Error
           content:
@@ -1312,13 +1327,14 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  ApiResponse:
-                    $ref: '#/components/schemas/ApiResponse'
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/GetUserTransaction'
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/GetUserTransaction'
         4XX:
           description: Request Error
           content:
@@ -1353,13 +1369,14 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  ApiResponse:
-                    $ref: '#/components/schemas/ApiResponse'
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/GetMerchantIncomes'
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/GetMerchantIncomes'
         4XX:
           description: Request Error
           content:
@@ -1423,13 +1440,14 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  ApiResponse:
-                    $ref: '#/components/schemas/ApiResponse'
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/GetCart'
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/GetCart'
         4XX:
           description: Request Error
           content:
@@ -1635,13 +1653,14 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  ApiResponse:
-                    $ref: '#/components/schemas/ApiResponse'
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/GetOrder'
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/GetOrder'
         4XX:
           description: Request Error
           content:
@@ -1676,19 +1695,20 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  ApiResponse:
-                    $ref: '#/components/schemas/ApiResponse'
-                  data:
-                    type: object
-                    allOf:
-                      - $ref: '#/components/schemas/GetOrder'
-                      - type: object
-                        properties:
-                          products:
-                            type: array
-                            items:
-                              $ref: '#/components/schemas/GetProductOrder'
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        allOf:
+                          - $ref: '#/components/schemas/GetOrder'
+                          - type: object
+                            properties:
+                              products:
+                                type: array
+                                items:
+                                  $ref: '#/components/schemas/GetProductOrder'
         4XX:
           description: Request Error
           content:
@@ -1813,13 +1833,14 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  ApiResponse:
-                    $ref: '#/components/schemas/ApiResponse'
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/GetMedia'
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/GetMedia'
         4XX:
           description: Request Error
           content:
@@ -1987,13 +2008,14 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  ApiResponse:
-                    $ref: '#/components/schemas/ApiResponse'
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/GetWallet'
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/GetWallet'
         4XX:
           description: Request Error
           content:
@@ -2206,19 +2228,20 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  ApiResponse:
-                    $ref: '#/components/schemas/ApiResponse'
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      allOf:
-                        - $ref: '#/components/schemas/GetBank'
-                        - type: object
-                          properties:
-                            Logo:
-                              $ref: '#/components/schemas/GetMedia'
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          allOf:
+                            - $ref: '#/components/schemas/GetBank'
+                            - type: object
+                              properties:
+                                Logo:
+                                  $ref: '#/components/schemas/GetMedia'
         4XX:
           description: Request Error
           content:
@@ -2293,27 +2316,28 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  ApiResponse:
-                    $ref: '#/components/schemas/ApiResponse'
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      allOf:
-                        - $ref: '#/components/schemas/GetBank'
-                        - type: object
-                          properties:
-                            Logo:
-                              $ref: '#/components/schemas/GetMedia'
-                            Accounts:
-                              type: array
-                              items:
-                                $ref: '#/components/schemas/GetBankUser'
-                            Utilities:
-                              type: array
-                              items:
-                                $ref: '#/components/schemas/GetBankUtility'
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          allOf:
+                            - $ref: '#/components/schemas/GetBank'
+                            - type: object
+                              properties:
+                                Logo:
+                                  $ref: '#/components/schemas/GetMedia'
+                                Accounts:
+                                  type: array
+                                  items:
+                                    $ref: '#/components/schemas/GetBankUser'
+                                Utilities:
+                                  type: array
+                                  items:
+                                    $ref: '#/components/schemas/GetBankUtility'
         4XX:
           description: Request Error
           content:
@@ -2599,13 +2623,14 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  ApiResponse:
-                    $ref: '#/components/schemas/ApiResponse'
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/GetCategory'
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/GetCategory'
         4XX:
           description: Request Error
           content:
@@ -2799,13 +2824,14 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  ApiResponse:
-                    $ref: '#/components/schemas/ApiResponse'
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/GetFaq'
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/GetFaq'
         4XX:
           description: Request Error
           content:
@@ -2940,23 +2966,24 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  ApiResponse:
-                    $ref: '#/components/schemas/ApiResponse'
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      allOf:
-                        - $ref: '#/components/schemas/GetBank'
-                        - type: object
-                          properties:
-                            Logo:
-                              $ref: '#/components/schemas/GetMedia'
-                            Account:
-                              type: array
-                              items:
-                                $ref: '#/components/schemas/GetBankUser'
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          allOf:
+                            - $ref: '#/components/schemas/GetBank'
+                            - type: object
+                              properties:
+                                Logo:
+                                  $ref: '#/components/schemas/GetMedia'
+                                Account:
+                                  type: array
+                                  items:
+                                    $ref: '#/components/schemas/GetBankUser'
         4XX:
           description: Request Error
           content:
@@ -2991,23 +3018,24 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  ApiResponse:
-                    $ref: '#/components/schemas/ApiResponse'
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      allOf:
-                        - $ref: '#/components/schemas/GetBank'
-                        - type: object
-                          properties:
-                            Logo:
-                              $ref: '#/components/schemas/GetMedia'
-                            Utilities:
-                              type: array
-                              items:
-                                $ref: '#/components/schemas/GetBankUtility'
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          allOf:
+                            - $ref: '#/components/schemas/GetBank'
+                            - type: object
+                              properties:
+                                Logo:
+                                  $ref: '#/components/schemas/GetMedia'
+                                Utilities:
+                                  type: array
+                                  items:
+                                    $ref: '#/components/schemas/GetBankUtility'
         4XX:
           description: Request Error
           content:
@@ -3036,25 +3064,26 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  ApiResponse:
-                    $ref: '#/components/schemas/ApiResponse'
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      allOf:
-                        - $ref: '#/components/schemas/GetBankUser'
-                        - type: object
-                          properties:
-                            Bank:
-                              type: object
-                              allOf:
-                                - $ref: '#/components/schemas/GetBank'
-                                - type: object
-                                  properties:
-                                    Logo:
-                                      $ref: '#/components/schemas/GetMedia'
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          allOf:
+                            - $ref: '#/components/schemas/GetBankUser'
+                            - type: object
+                              properties:
+                                Bank:
+                                  type: object
+                                  allOf:
+                                    - $ref: '#/components/schemas/GetBank'
+                                    - type: object
+                                      properties:
+                                        Logo:
+                                          $ref: '#/components/schemas/GetMedia'
         4XX:
           description: Request Error
           content:
@@ -3192,11 +3221,12 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  ApiResponse:
-                    $ref: '#/components/schemas/ApiResponse'
-                  data:
-                    $ref: '#/components/schemas/GetUserWallet'
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/GetUserWallet'
         4XX:
           description: Request Error
           content:
@@ -3365,13 +3395,14 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  ApiResponse:
-                    $ref: '#/components/schemas/ApiResponse'
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/GetTopUp'
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/GetTopUp'
         4XX:
           description: Request Error
           content:
@@ -3422,25 +3453,26 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  ApiResponse:
-                    $ref: '#/components/schemas/ApiResponse'
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      allOf:
-                        - $ref: '#/components/schemas/GetWithdraw'
-                        - type: object
-                          properties:
-                            UserBank:
-                              type: object
-                              allOf:
-                                - $ref: '#/components/schemas/GetBankUser'
-                                - type: object
-                                  properties:
-                                    Bank:
-                                      $ref: '#/components/schemas/GetBank'
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          allOf:
+                            - $ref: '#/components/schemas/GetWithdraw'
+                            - type: object
+                              properties:
+                                UserBank:
+                                  type: object
+                                  allOf:
+                                    - $ref: '#/components/schemas/GetBankUser'
+                                    - type: object
+                                      properties:
+                                        Bank:
+                                          $ref: '#/components/schemas/GetBank'
         4XX:
           description: Request Error
           content:
@@ -3475,48 +3507,49 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  ApiResponse:
-                    $ref: '#/components/schemas/ApiResponse'
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      allOf:
-                        - $ref: '#/components/schemas/GetTopUp'
-                        - type: object
-                          properties:
-                            Bank:
-                              type: object
-                              allOf:
-                                - $ref: '#/components/schemas/GetBank'
-                                - type: object
-                                  properties:
-                                    Utilities:
-                                      type: array
-                                      items:
-                                        $ref: '#/components/schemas/GetBankUtility'
-                                    Accounts:
-                                      type: array
-                                      items:
-                                        $ref: '#/components/schemas/GetBankUser'
-                            Media:
-                              $ref: '#/components/schemas/GetMedia'
-                            UserWallet:
-                              type: object
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          allOf:
+                            - $ref: '#/components/schemas/GetTopUp'
+                            - type: object
                               properties:
-                                id_u_user:
-                                  type: integer
-                                u_user:
+                                Bank:
+                                  type: object
+                                  allOf:
+                                    - $ref: '#/components/schemas/GetBank'
+                                    - type: object
+                                      properties:
+                                        Utilities:
+                                          type: array
+                                          items:
+                                            $ref: '#/components/schemas/GetBankUtility'
+                                        Accounts:
+                                          type: array
+                                          items:
+                                            $ref: '#/components/schemas/GetBankUser'
+                                Media:
+                                  $ref: '#/components/schemas/GetMedia'
+                                UserWallet:
                                   type: object
                                   properties:
-                                    id_m_users:
+                                    id_u_user:
                                       type: integer
-                                    m_user:
+                                    u_user:
                                       type: object
                                       properties:
-                                        full_name:
-                                          type: string
+                                        id_m_users:
+                                          type: integer
+                                        m_user:
+                                          type: object
+                                          properties:
+                                            full_name:
+                                              type: string
         4XX:
           description: Request Error
           content:
@@ -3551,33 +3584,34 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  ApiResponse:
-                    $ref: '#/components/schemas/ApiResponse'
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      allOf:
-                        - $ref: '#/components/schemas/GetTopUp'
-                        - type: object
-                          properties:
-                            UserBank:
-                              type: object
-                              allOf:
-                                - $ref: '#/components/schemas/GetBankUser'
-                                - type: object
-                                  properties:
-                                    Bank:
-                                      type: object
-                                      allOf:
-                                        - $ref: '#/components/schemas/GetBank'
-                                        - type: object
-                                          properties:
-                                            Utilities:
-                                              type: array
-                                              items:
-                                                $ref: '#/components/schemas/GetBankUtility'
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          allOf:
+                            - $ref: '#/components/schemas/GetTopUp'
+                            - type: object
+                              properties:
+                                UserBank:
+                                  type: object
+                                  allOf:
+                                    - $ref: '#/components/schemas/GetBankUser'
+                                    - type: object
+                                      properties:
+                                        Bank:
+                                          type: object
+                                          allOf:
+                                            - $ref: '#/components/schemas/GetBank'
+                                            - type: object
+                                              properties:
+                                                Utilities:
+                                                  type: array
+                                                  items:
+                                                    $ref: '#/components/schemas/GetBankUtility'
         4XX:
           description: Request Error
           content:
@@ -3718,13 +3752,14 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  ApiResponse:
-                    $ref: '#/components/schemas/ApiResponse'
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/GetTopUp'
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/GetTopUp'
         4XX:
           description: Request Error
           content:
@@ -3780,13 +3815,14 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  ApiResponse:
-                    $ref: '#/components/schemas/ApiResponse'
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/GetWithdraw'
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/GetWithdraw'
         4XX:
           description: Request Error
           content:
@@ -3844,13 +3880,14 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  ApiResponse:
-                    $ref: '#/components/schemas/ApiResponse'
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/GetProduct'
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/GetProduct'
         4XX:
           description: Request Error
           content:
@@ -3906,13 +3943,14 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  ApiResponse:
-                    $ref: '#/components/schemas/ApiResponse'
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/GetProduct'
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/GetProduct'
         4XX:
           description: Request Error
           content:

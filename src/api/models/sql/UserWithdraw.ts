@@ -1,8 +1,5 @@
 import Sequelize, { DataTypes, Model, Optional } from 'sequelize';
-import type {
-  BankUser,
-  BankUserId,
-} from './BankUser';
+import type { BankUser, BankUserId } from './BankUser';
 import type { UserWallet, UserWalletId } from './UserWallet';
 
 export interface UserWithdrawAttributes {
@@ -23,10 +20,7 @@ UserWithdrawPk
 >;
 
 export class UserWithdraw
-  extends Model<
-  UserWithdrawAttributes,
-  UserWithdrawCreationAttributes
-  >
+  extends Model<UserWithdrawAttributes, UserWithdrawCreationAttributes>
   implements UserWithdrawAttributes {
   id!: number;
 
@@ -47,10 +41,7 @@ export class UserWithdraw
 
   getBankUser!: Sequelize.BelongsToGetAssociationMixin<BankUser>;
 
-  setBankUser!: Sequelize.BelongsToSetAssociationMixin<
-  BankUser,
-  BankUserId
-  >;
+  setBankUser!: Sequelize.BelongsToSetAssociationMixin<BankUser, BankUserId>;
 
   createBankAccount!: Sequelize.BelongsToCreateAssociationMixin<BankUser>;
 
@@ -66,9 +57,7 @@ export class UserWithdraw
 
   createUserWallet!: Sequelize.BelongsToCreateAssociationMixin<UserWallet>;
 
-  static initModel(
-    sequelize: Sequelize.Sequelize,
-  ): typeof UserWithdraw {
+  static initModel(sequelize: Sequelize.Sequelize): typeof UserWithdraw {
     UserWithdraw.init(
       {
         id: {

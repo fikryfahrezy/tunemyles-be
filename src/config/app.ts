@@ -12,17 +12,15 @@ import path from 'path';
 import middie from 'middie';
 import definitions from '../definitions';
 import api from '../api';
-import sequelize from '../databases/sequelize';
 
 const app = function app(opts: FastifyServerOptions = {}): FastifyInstance {
   const fastifyApp = fastify(opts);
   const ENV = process.env.NODE_ENV;
   const schemas = definitions.components.schemas as Record<string, unknown>;
 
-  Object.keys(schemas).forEach((key) => {
+  Object.entries(schemas).forEach(([key, value]) => {
     if (Object.prototype.hasOwnProperty.call(schemas, key)) {
-      const element = schemas[key];
-      fastifyApp.addSchema(element);
+      fastifyApp.addSchema(value);
     }
   });
 
@@ -83,24 +81,17 @@ const app = function app(opts: FastifyServerOptions = {}): FastifyInstance {
     reply.header('Content-Type', 'application/json; charset=utf-8').send(data);
   });
 
-  fastifyApp.setErrorHandler(function callback(
-    { statusCode, message },
-    _,
-    reply,
-  ) {
+  fastifyApp.setErrorHandler(function callback(err, _, reply) {
+    const { statusCode, message } = err;
     const status = statusCode || 500;
-    this.log.error(message);
     const data = {
       code: status,
       success: false,
       message,
     };
 
+    this.log.error(message);
     reply.status(status).send(data);
-  });
-
-  fastifyApp.addHook('onClose', async () => {
-    await sequelize.close();
   });
 
   fastifyApp.register(api, { prefix: '/api' });

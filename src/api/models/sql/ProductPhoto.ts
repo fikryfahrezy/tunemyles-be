@@ -35,10 +35,7 @@ export class ProductPhoto
 
   getMedia!: Sequelize.BelongsToGetAssociationMixin<Media>;
 
-  setMedia!: Sequelize.BelongsToSetAssociationMixin<
-  Media,
-  MediaId
-  >;
+  setMedia!: Sequelize.BelongsToSetAssociationMixin<Media, MediaId>;
 
   createMedia!: Sequelize.BelongsToCreateAssociationMixin<Media>;
 

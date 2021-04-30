@@ -100,20 +100,11 @@ export class Product
 
   getUserCarts!: Sequelize.HasManyGetAssociationsMixin<UserCart>;
 
-  setUserCarts!: Sequelize.HasManySetAssociationsMixin<
-  UserCart,
-  UserCartId
-  >;
+  setUserCarts!: Sequelize.HasManySetAssociationsMixin<UserCart, UserCartId>;
 
-  addUserCart!: Sequelize.HasManyAddAssociationMixin<
-  UserCart,
-  UserCartId
-  >;
+  addUserCart!: Sequelize.HasManyAddAssociationMixin<UserCart, UserCartId>;
 
-  addUserCarts!: Sequelize.HasManyAddAssociationsMixin<
-  UserCart,
-  UserCartId
-  >;
+  addUserCarts!: Sequelize.HasManyAddAssociationsMixin<UserCart, UserCartId>;
 
   createUserCart!: Sequelize.HasManyCreateAssociationMixin<UserCart>;
 
@@ -127,15 +118,9 @@ export class Product
   UserCartId
   >;
 
-  hasUserCart!: Sequelize.HasManyHasAssociationMixin<
-  UserCart,
-  UserCartId
-  >;
+  hasUserCart!: Sequelize.HasManyHasAssociationMixin<UserCart, UserCartId>;
 
-  hasUserCarts!: Sequelize.HasManyHasAssociationsMixin<
-  UserCart,
-  UserCartId
-  >;
+  hasUserCarts!: Sequelize.HasManyHasAssociationsMixin<UserCart, UserCartId>;
 
   countUserCarts!: Sequelize.HasManyCountAssociationsMixin;
 

@@ -1,14 +1,8 @@
 import md5 from 'md5';
 import Sequelize, { DataTypes, Model, Optional } from 'sequelize';
 import type { Product, ProductId } from './Product';
-import type {
-  UserTransaction,
-  UserTransactionId,
-} from './UserTransaction';
-import type {
-  ProductReview,
-  ProductReviewId,
-} from './ProductReview';
+import type { UserTransaction, UserTransactionId } from './UserTransaction';
+import type { ProductReview, ProductReviewId } from './ProductReview';
 
 export interface TransactionProductAttributes {
   id: number;
@@ -124,9 +118,7 @@ export class TransactionProduct
 
   countProductReviews!: Sequelize.HasManyCountAssociationsMixin;
 
-  static initModel(
-    sequelize: Sequelize.Sequelize,
-  ): typeof TransactionProduct {
+  static initModel(sequelize: Sequelize.Sequelize): typeof TransactionProduct {
     TransactionProduct.init(
       {
         id: {

@@ -3,20 +3,11 @@ import Sequelize, { DataTypes, Model, Optional } from 'sequelize';
 import type { Media, MediaId } from './Media';
 import type { Product, ProductId } from './Product';
 import type { UserUtility, UserUtilityPk } from './UserUtility';
-import type {
-  BankUser,
-  BankUserId,
-} from './BankUser';
+import type { BankUser, BankUserId } from './BankUser';
 import type { UserCart, UserCartId } from './UserCart';
 import type { UserChat, UserChatId } from './UserChat';
-import type {
-  UserChatDetail,
-  UserChatDetailId,
-} from './UserChatDetail';
-import type {
-  UserTransaction,
-  UserTransactionId,
-} from './UserTransaction';
+import type { UserChatDetail, UserChatDetailId } from './UserChatDetail';
+import type { UserTransaction, UserTransactionId } from './UserTransaction';
 
 export interface UserAttributes {
   id: number;
@@ -136,20 +127,11 @@ export class User
 
   getBankUsers!: Sequelize.HasManyGetAssociationsMixin<BankUser>;
 
-  setBankUsers!: Sequelize.HasManySetAssociationsMixin<
-  BankUser,
-  BankUserId
-  >;
+  setBankUsers!: Sequelize.HasManySetAssociationsMixin<BankUser, BankUserId>;
 
-  addBankUser!: Sequelize.HasManyAddAssociationMixin<
-  BankUser,
-  BankUserId
-  >;
+  addBankUser!: Sequelize.HasManyAddAssociationMixin<BankUser, BankUserId>;
 
-  addBankUsers!: Sequelize.HasManyAddAssociationsMixin<
-  BankUser,
-  BankUserId
-  >;
+  addBankUsers!: Sequelize.HasManyAddAssociationsMixin<BankUser, BankUserId>;
 
   createBankUser!: Sequelize.HasManyCreateAssociationMixin<BankUser>;
 
@@ -163,15 +145,9 @@ export class User
   BankUserId
   >;
 
-  hasBankUser!: Sequelize.HasManyHasAssociationMixin<
-  BankUser,
-  BankUserId
-  >;
+  hasBankUser!: Sequelize.HasManyHasAssociationMixin<BankUser, BankUserId>;
 
-  hasBankUsers!: Sequelize.HasManyHasAssociationsMixin<
-  BankUser,
-  BankUserId
-  >;
+  hasBankUsers!: Sequelize.HasManyHasAssociationsMixin<BankUser, BankUserId>;
 
   countBankUsers!: Sequelize.HasManyCountAssociationsMixin;
 
@@ -180,20 +156,11 @@ export class User
 
   getUserCarts!: Sequelize.HasManyGetAssociationsMixin<UserCart>;
 
-  setUserCarts!: Sequelize.HasManySetAssociationsMixin<
-  UserCart,
-  UserCartId
-  >;
+  setUserCarts!: Sequelize.HasManySetAssociationsMixin<UserCart, UserCartId>;
 
-  addUserCart!: Sequelize.HasManyAddAssociationMixin<
-  UserCart,
-  UserCartId
-  >;
+  addUserCart!: Sequelize.HasManyAddAssociationMixin<UserCart, UserCartId>;
 
-  addUserCarts!: Sequelize.HasManyAddAssociationsMixin<
-  UserCart,
-  UserCartId
-  >;
+  addUserCarts!: Sequelize.HasManyAddAssociationsMixin<UserCart, UserCartId>;
 
   createUserCart!: Sequelize.HasManyCreateAssociationMixin<UserCart>;
 
@@ -207,15 +174,9 @@ export class User
   UserCartId
   >;
 
-  hasUserCart!: Sequelize.HasManyHasAssociationMixin<
-  UserCart,
-  UserCartId
-  >;
+  hasUserCart!: Sequelize.HasManyHasAssociationMixin<UserCart, UserCartId>;
 
-  hasUserCarts!: Sequelize.HasManyHasAssociationsMixin<
-  UserCart,
-  UserCartId
-  >;
+  hasUserCarts!: Sequelize.HasManyHasAssociationsMixin<UserCart, UserCartId>;
 
   countUserCarts!: Sequelize.HasManyCountAssociationsMixin;
 
@@ -229,10 +190,7 @@ export class User
   UserCartId
   >;
 
-  addMerchatChart!: Sequelize.HasManyAddAssociationMixin<
-  UserCart,
-  UserCartId
-  >;
+  addMerchatChart!: Sequelize.HasManyAddAssociationMixin<UserCart, UserCartId>;
 
   addMerchatCharts!: Sequelize.HasManyAddAssociationsMixin<
   UserCart,
@@ -251,10 +209,7 @@ export class User
   UserCartId
   >;
 
-  hasMerchatChart!: Sequelize.HasManyHasAssociationMixin<
-  UserCart,
-  UserCartId
-  >;
+  hasMerchatChart!: Sequelize.HasManyHasAssociationMixin<UserCart, UserCartId>;
 
   hasMerchatCharts!: Sequelize.HasManyHasAssociationsMixin<
   UserCart,
@@ -268,24 +223,15 @@ export class User
 
   getCsChats!: Sequelize.HasManyGetAssociationsMixin<UserChat>;
 
-  setCsChats!: Sequelize.HasManySetAssociationsMixin<
-  UserChat,
-  UserChatId
-  >;
+  setCsChats!: Sequelize.HasManySetAssociationsMixin<UserChat, UserChatId>;
 
   addCsChat!: Sequelize.HasManyAddAssociationMixin<UserChat, UserChatId>;
 
-  addCsChats!: Sequelize.HasManyAddAssociationsMixin<
-  UserChat,
-  UserChatId
-  >;
+  addCsChats!: Sequelize.HasManyAddAssociationsMixin<UserChat, UserChatId>;
 
   createCsChat!: Sequelize.HasManyCreateAssociationMixin<UserChat>;
 
-  removeCsChat!: Sequelize.HasManyRemoveAssociationMixin<
-  UserChat,
-  UserChatId
-  >;
+  removeCsChat!: Sequelize.HasManyRemoveAssociationMixin<UserChat, UserChatId>;
 
   removeCsChats!: Sequelize.HasManyRemoveAssociationsMixin<
   UserChat,
@@ -294,10 +240,7 @@ export class User
 
   hasCsChat!: Sequelize.HasManyHasAssociationMixin<UserChat, UserChatId>;
 
-  hasCsChats!: Sequelize.HasManyHasAssociationsMixin<
-  UserChat,
-  UserChatId
-  >;
+  hasCsChats!: Sequelize.HasManyHasAssociationsMixin<UserChat, UserChatId>;
 
   countCsChats!: Sequelize.HasManyCountAssociationsMixin;
 
@@ -306,20 +249,11 @@ export class User
 
   getUserChats!: Sequelize.HasManyGetAssociationsMixin<UserChat>;
 
-  setUserChats!: Sequelize.HasManySetAssociationsMixin<
-  UserChat,
-  UserChatId
-  >;
+  setUserChats!: Sequelize.HasManySetAssociationsMixin<UserChat, UserChatId>;
 
-  addUserChat!: Sequelize.HasManyAddAssociationMixin<
-  UserChat,
-  UserChatId
-  >;
+  addUserChat!: Sequelize.HasManyAddAssociationMixin<UserChat, UserChatId>;
 
-  addUserChats!: Sequelize.HasManyAddAssociationsMixin<
-  UserChat,
-  UserChatId
-  >;
+  addUserChats!: Sequelize.HasManyAddAssociationsMixin<UserChat, UserChatId>;
 
   createUserChat!: Sequelize.HasManyCreateAssociationMixin<UserChat>;
 
@@ -333,15 +267,9 @@ export class User
   UserChatId
   >;
 
-  hasUserChat!: Sequelize.HasManyHasAssociationMixin<
-  UserChat,
-  UserChatId
-  >;
+  hasUserChat!: Sequelize.HasManyHasAssociationMixin<UserChat, UserChatId>;
 
-  hasUserChats!: Sequelize.HasManyHasAssociationsMixin<
-  UserChat,
-  UserChatId
-  >;
+  hasUserChats!: Sequelize.HasManyHasAssociationsMixin<UserChat, UserChatId>;
 
   countUserChats!: Sequelize.HasManyCountAssociationsMixin;
 

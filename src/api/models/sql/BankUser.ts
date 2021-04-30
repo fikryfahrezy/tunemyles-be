@@ -1,10 +1,7 @@
 import Sequelize, { DataTypes, Model, Optional } from 'sequelize';
 import type { Bank, BankId } from './Bank';
 import type { User, UserId } from './User';
-import type {
-  UserWithdraw,
-  UserWithdrawId,
-} from './UserWithdraw';
+import type { UserWithdraw, UserWithdrawId } from './UserWithdraw';
 
 export interface BankUserAttributes {
   id: number;
@@ -25,10 +22,7 @@ BankUserPk
 >;
 
 export class BankUser
-  extends Model<
-  BankUserAttributes,
-  BankUserCreationAttributes
-  >
+  extends Model<BankUserAttributes, BankUserCreationAttributes>
   implements BankUserAttributes {
   id!: number;
 
@@ -51,10 +45,7 @@ export class BankUser
 
   getBank!: Sequelize.BelongsToGetAssociationMixin<Bank>;
 
-  setBank!: Sequelize.BelongsToSetAssociationMixin<
-  Bank,
-  BankId
-  >;
+  setBank!: Sequelize.BelongsToSetAssociationMixin<Bank, BankId>;
 
   createBank!: Sequelize.BelongsToCreateAssociationMixin<Bank>;
 

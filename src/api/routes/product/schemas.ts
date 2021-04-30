@@ -29,15 +29,18 @@ const requestQuery = {
 const responses = {
   products: {
     type: 'object',
-    properties: {
-      ApiResponse: {
-        $ref: '#ApiResponse',
+    allOf: [
+      { $ref: '#ApiResponse' },
+      {
+        type: 'object',
+        properties: {
+          data: {
+            type: 'array',
+            items: { $ref: '#GetProduct' },
+          },
+        },
       },
-      data: {
-        type: 'array',
-        items: { $ref: '#GetProduct' },
-      },
-    },
+    ],
   },
 };
 

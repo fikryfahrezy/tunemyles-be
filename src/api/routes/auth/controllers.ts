@@ -1,8 +1,21 @@
 import type { FastifyRequest, FastifyReply } from 'fastify';
 import type { Request, RequestHandler } from '../../types/fasitify';
-import type { RegisterBody, LoginBody, ApiKeyHeader } from '../../types/schema';
+import type {
+  RegisterBody,
+  LoginBody,
+  ApiKeyHeader,
+  UpdateProfileBody,
+} from '../../types/schema';
 import type CustModelType from '../../types/model';
-import { userRegistration, userLogin, userProfile } from './service';
+import {
+  userRegistration,
+  userLogin,
+  userProfile,
+  updateUserProfile,
+  verifyUserToken,
+  resetUserPassword,
+  forgotUserPassword,
+} from './service';
 
 export const register: RequestHandler<
 Request<RegisterBody>
@@ -48,7 +61,9 @@ Request<unknown, unknown, unknown, ApiKeyHeader>
   _: FastifyRequest<{ Headers: ApiKeyHeader }>,
   res: FastifyReply,
 ): Promise<void> {
-  const { utilId } = this.requestContext.get('user') as CustModelType['UserUtility'];
+  const { utilId } = this.requestContext.get(
+    'user',
+  ) as CustModelType['UserUtility'];
   const data = await userProfile(utilId);
 
   res
@@ -58,6 +73,79 @@ Request<unknown, unknown, unknown, ApiKeyHeader>
       code: 200,
       success: true,
       message: 'validate success',
+      data,
+    });
+};
+
+export const updateProfile: RequestHandler<
+Request<UpdateProfileBody, unknown, unknown, ApiKeyHeader>
+> = async function updateProfile(
+  req: FastifyRequest<{ Body: UpdateProfileBody; Headers: ApiKeyHeader }>,
+  res: FastifyReply,
+): Promise<void> {
+  const { utilId } = this.requestContext.get(
+    'user',
+  ) as CustModelType['UserUtility'];
+  const data = await updateUserProfile(utilId);
+
+  res
+    .status(200)
+    .header('Content-Type', 'application/json; charset=utf-8')
+    .send({
+      code: 200,
+      success: true,
+      message: 'message',
+      data,
+    });
+};
+
+export const forgotPassword: RequestHandler<Request> = async function forgotPassword(
+  _: FastifyRequest,
+  res: FastifyReply,
+): Promise<void> {
+  const data = await forgotUserPassword(1);
+
+  res
+    .status(200)
+    .header('Content-Type', 'application/json; charset=utf-8')
+    .send({
+      code: 200,
+      success: true,
+      message: 'message',
+      data,
+    });
+};
+
+export const verifyToken: RequestHandler<Request> = async function verifyToken(
+  _: FastifyRequest,
+  res: FastifyReply,
+): Promise<void> {
+  const data = await verifyUserToken(1);
+
+  res
+    .status(200)
+    .header('Content-Type', 'application/json; charset=utf-8')
+    .send({
+      code: 200,
+      success: true,
+      message: 'message',
+      data,
+    });
+};
+
+export const resetPassword: RequestHandler<Request> = async function resetPassword(
+  _: FastifyRequest,
+  res: FastifyReply,
+): Promise<void> {
+  const data = await resetUserPassword(1);
+
+  res
+    .status(200)
+    .header('Content-Type', 'application/json; charset=utf-8')
+    .send({
+      code: 200,
+      success: true,
+      message: 'message',
       data,
     });
 };

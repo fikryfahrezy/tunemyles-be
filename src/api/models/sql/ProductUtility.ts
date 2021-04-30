@@ -1,9 +1,6 @@
 import Sequelize, { DataTypes, Model, Optional } from 'sequelize';
 import type { Product, ProductId } from './Product';
-import type {
-  ProductCategory,
-  ProductCategoryId,
-} from './ProductCategory';
+import type { ProductCategory, ProductCategoryId } from './ProductCategory';
 import type { ProductPhoto, ProductPhotoId } from './ProductPhoto';
 
 export interface ProductUtilityAttributes {
@@ -48,10 +45,7 @@ export class ProductUtility
 
   getProduct!: Sequelize.BelongsToGetAssociationMixin<Product>;
 
-  setProduct!: Sequelize.BelongsToSetAssociationMixin<
-  Product,
-  ProductId
-  >;
+  setProduct!: Sequelize.BelongsToSetAssociationMixin<Product, ProductId>;
 
   createProduct!: Sequelize.BelongsToCreateAssociationMixin<Product>;
 

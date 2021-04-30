@@ -23,10 +23,7 @@ UserTopUpPk
 >;
 
 export class UserTopUp
-  extends Model<
-  UserTopUpAttributes,
-  UserTopUpCreationAttributes
-  >
+  extends Model<UserTopUpAttributes, UserTopUpCreationAttributes>
   implements UserTopUpAttributes {
   id!: number;
 
@@ -51,10 +48,7 @@ export class UserTopUp
 
   getId_m_banks_m_bank!: Sequelize.BelongsToGetAssociationMixin<Bank>;
 
-  setId_m_banks_m_bank!: Sequelize.BelongsToSetAssociationMixin<
-  Bank,
-  BankId
-  >;
+  setId_m_banks_m_bank!: Sequelize.BelongsToSetAssociationMixin<Bank, BankId>;
 
   createId_m_banks_m_bank!: Sequelize.BelongsToCreateAssociationMixin<Bank>;
 
@@ -79,9 +73,7 @@ export class UserTopUp
 
   createId_u_user_wallet_u_user_wallet!: Sequelize.BelongsToCreateAssociationMixin<UserWallet>;
 
-  static initModel(
-    sequelize: Sequelize.Sequelize,
-  ): typeof UserTopUp {
+  static initModel(sequelize: Sequelize.Sequelize): typeof UserTopUp {
     UserTopUp.init(
       {
         id: {
