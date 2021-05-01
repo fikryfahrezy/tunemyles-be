@@ -4,9 +4,7 @@ import fs from 'fs';
 import util from 'util';
 import type { AddedFileBody } from '../types/schema';
 
-const pump = util.promisify(pmp) as (
-  ...streams: Array<pmp.Stream | pmp.Callback>
-) => Promise<void>;
+const pump = util.promisify(pmp) as (...streams: Array<pmp.Stream | pmp.Callback>) => Promise<void>;
 
 export const saveFiles: (files: AddedFileBody[]) => Promise<void> = async (
   files: AddedFileBody[],

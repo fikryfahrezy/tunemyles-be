@@ -47,42 +47,21 @@ export class Wallet
 
   getUserWallets!: Sequelize.HasManyGetAssociationsMixin<UserWallet>;
 
-  setUserWallets!: Sequelize.HasManySetAssociationsMixin<
-  UserWallet,
-  UserWalletId
-  >;
+  setUserWallets!: Sequelize.HasManySetAssociationsMixin<UserWallet, UserWalletId>;
 
-  addUserWallet!: Sequelize.HasManyAddAssociationMixin<
-  UserWallet,
-  UserWalletId
-  >;
+  addUserWallet!: Sequelize.HasManyAddAssociationMixin<UserWallet, UserWalletId>;
 
-  addUserWallets!: Sequelize.HasManyAddAssociationsMixin<
-  UserWallet,
-  UserWalletId
-  >;
+  addUserWallets!: Sequelize.HasManyAddAssociationsMixin<UserWallet, UserWalletId>;
 
   createUserWallet!: Sequelize.HasManyCreateAssociationMixin<UserWallet>;
 
-  removeUserWallet!: Sequelize.HasManyRemoveAssociationMixin<
-  UserWallet,
-  UserWalletId
-  >;
+  removeUserWallet!: Sequelize.HasManyRemoveAssociationMixin<UserWallet, UserWalletId>;
 
-  removeUserWallets!: Sequelize.HasManyRemoveAssociationsMixin<
-  UserWallet,
-  UserWalletId
-  >;
+  removeUserWallets!: Sequelize.HasManyRemoveAssociationsMixin<UserWallet, UserWalletId>;
 
-  hasUserWallet!: Sequelize.HasManyHasAssociationMixin<
-  UserWallet,
-  UserWalletId
-  >;
+  hasUserWallet!: Sequelize.HasManyHasAssociationMixin<UserWallet, UserWalletId>;
 
-  hasUserWallets!: Sequelize.HasManyHasAssociationsMixin<
-  UserWallet,
-  UserWalletId
-  >;
+  hasUserWallets!: Sequelize.HasManyHasAssociationsMixin<UserWallet, UserWalletId>;
 
   countUserWallets!: Sequelize.HasManyCountAssociationsMixin;
 
@@ -136,9 +115,7 @@ export class Wallet
           validate: {
             customValidator(value: number) {
               if (value < 0 || value > 2) {
-                throw new Error(
-                  'wallet visibility must be between or equal 0 and 2',
-                );
+                throw new Error('wallet visibility must be between or equal 0 and 2');
               }
             },
           },

@@ -19,9 +19,7 @@ describe('Get Data', () => {
   test('Get Success', async () => {
     const { appServer, server } = await setUpServer();
 
-    const { status, headers, body } = await supertest(server).get(
-      '/api/v2/example'
-    );
+    const { status, headers, body } = await supertest(server).get('/api/v2/example');
 
     expect(status).toBe(200);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -35,9 +33,7 @@ describe('Get Single Data', () => {
   test('Found Single Data', async () => {
     const { appServer, server } = await setUpServer();
 
-    const { status, headers, body } = await supertest(server).get(
-      '/api/v2/example/1'
-    );
+    const { status, headers, body } = await supertest(server).get('/api/v2/example/1');
 
     expect(status).toBe(200);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -49,9 +45,7 @@ describe('Get Single Data', () => {
   test('Data Not Found', async () => {
     const { appServer, server } = await setUpServer();
 
-    const { status, headers, body } = await supertest(server).get(
-      '/api/v2/example/100'
-    );
+    const { status, headers, body } = await supertest(server).get('/api/v2/example/100');
 
     expect(status).toBe(404);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -129,9 +123,7 @@ describe('Get Private Data', () => {
   test('Get Private Data Fail, Header Authorization Not Given', async () => {
     const { appServer, server } = await setUpServer();
 
-    const { status, headers, body } = await supertest(server).get(
-      '/api/v2/example/private'
-    );
+    const { status, headers, body } = await supertest(server).get('/api/v2/example/private');
 
     expect(status).toBe(403);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');

@@ -6,8 +6,8 @@ import { verifyJwt } from '../utils/jwt';
 
 const userUtility: (
   who: string,
-  token?: string
-) => CustModelType['UserUtility'] = function userUtility(who, token) {
+  token?: string,
+) => CustModelType['UserToken'] = function userUtility(who, token) {
   if (!token) throw new ErrorResponse('forbidden', 403);
 
   const user = verifyJwt(token);
@@ -31,11 +31,10 @@ const userUtility: (
 };
 
 export const protect: (
-  who: 'user' | 'merchant' | 'admin'
-) => (
-  req: FastifyRequest<{ Headers: ApiKeyHeader | unknown }>,
-  res: FastifyReply
-) => void = (who) => (req) => {
+  who: 'user' | 'merchant' | 'admin',
+) => (req: FastifyRequest<{ Headers: ApiKeyHeader | unknown }>, res: FastifyReply) => void = (
+  who,
+) => (req) => {
   const token = req.headers.authorization;
   const user = userUtility(who, token);
   req.requestContext.set('user', user);
@@ -43,7 +42,7 @@ export const protect: (
 
 export const exampleProtect: (
   req: FastifyRequest<{ Headers: ApiKeyHeader | unknown }>,
-  res: FastifyReply
+  res: FastifyReply,
 ) => void = (req) => {
   const token = req.headers.authorization;
   if (token && token === '2') throw new ErrorResponse('forbidden', 403);

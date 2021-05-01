@@ -21,9 +21,7 @@ export const controllerWrapper = function controllerWrapper<T>(
   };
 };
 
-export const handlerWrapper = function handlerWrapper<T>(
-  fn: PreHandlerFn<T>,
-): PreHandlerFn<T> {
+export const handlerWrapper = function handlerWrapper<T>(fn: PreHandlerFn<T>): PreHandlerFn<T> {
   return async function handlerWrapperFn(req, res) {
     try {
       await fn(req, res);

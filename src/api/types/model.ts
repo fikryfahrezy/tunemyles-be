@@ -1,11 +1,19 @@
-type UserPassword = {
+type User = {
   id: number;
+  full_name: string;
+  username: string;
   password: string;
+  phone_number: string;
+  address: string;
+  id_photo?: number;
 };
 
-type UserToken = {
-  type: number;
+type UserUtility = {
+  id: number;
+  user_id: number;
   token: string;
+  type: number;
+  previous_type: number;
 };
 
 type UserAccount = {
@@ -26,18 +34,24 @@ type UserWallet = {
   label: string | null;
 };
 
-type UserUtility = {
+type UserToken = {
   userId: number;
   utilId: number;
   type: number;
 };
 
+type UserAuth = {
+  type: number;
+  token: string;
+};
+
 type CustModelType = {
-  UserPassword: UserPassword;
+  User: User;
   UserToken: UserToken;
   UserAccount: UserAccount;
   UserWallet: UserWallet;
   UserUtility: UserUtility;
+  UserAuth: UserAuth;
 };
 
 export default CustModelType;

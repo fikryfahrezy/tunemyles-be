@@ -72,15 +72,9 @@ export class Media
 
   createCategory!: Sequelize.HasManyCreateAssociationMixin<Category>;
 
-  removeCategory!: Sequelize.HasManyRemoveAssociationMixin<
-  Category,
-  CategoryId
-  >;
+  removeCategory!: Sequelize.HasManyRemoveAssociationMixin<Category, CategoryId>;
 
-  removeCategories!: Sequelize.HasManyRemoveAssociationsMixin<
-  Category,
-  CategoryId
-  >;
+  removeCategories!: Sequelize.HasManyRemoveAssociationsMixin<Category, CategoryId>;
 
   hasCategory!: Sequelize.HasManyHasAssociationMixin<Category, CategoryId>;
 
@@ -162,42 +156,21 @@ export class Media
 
   getProductPhotos!: Sequelize.HasManyGetAssociationsMixin<ProductPhoto>;
 
-  setProductPhotos!: Sequelize.HasManySetAssociationsMixin<
-  ProductPhoto,
-  ProductPhotoId
-  >;
+  setProductPhotos!: Sequelize.HasManySetAssociationsMixin<ProductPhoto, ProductPhotoId>;
 
-  addProductPhoto!: Sequelize.HasManyAddAssociationMixin<
-  ProductPhoto,
-  ProductPhotoId
-  >;
+  addProductPhoto!: Sequelize.HasManyAddAssociationMixin<ProductPhoto, ProductPhotoId>;
 
-  addProductPhotos!: Sequelize.HasManyAddAssociationsMixin<
-  ProductPhoto,
-  ProductPhotoId
-  >;
+  addProductPhotos!: Sequelize.HasManyAddAssociationsMixin<ProductPhoto, ProductPhotoId>;
 
   createProductPhoto!: Sequelize.HasManyCreateAssociationMixin<ProductPhoto>;
 
-  removeProductPhoto!: Sequelize.HasManyRemoveAssociationMixin<
-  ProductPhoto,
-  ProductPhotoId
-  >;
+  removeProductPhoto!: Sequelize.HasManyRemoveAssociationMixin<ProductPhoto, ProductPhotoId>;
 
-  removeProductPhotos!: Sequelize.HasManyRemoveAssociationsMixin<
-  ProductPhoto,
-  ProductPhotoId
-  >;
+  removeProductPhotos!: Sequelize.HasManyRemoveAssociationsMixin<ProductPhoto, ProductPhotoId>;
 
-  hasProductPhoto!: Sequelize.HasManyHasAssociationMixin<
-  ProductPhoto,
-  ProductPhotoId
-  >;
+  hasProductPhoto!: Sequelize.HasManyHasAssociationMixin<ProductPhoto, ProductPhotoId>;
 
-  hasProductPhotos!: Sequelize.HasManyHasAssociationsMixin<
-  ProductPhoto,
-  ProductPhotoId
-  >;
+  hasProductPhotos!: Sequelize.HasManyHasAssociationsMixin<ProductPhoto, ProductPhotoId>;
 
   countProductPhotos!: Sequelize.HasManyCountAssociationsMixin;
 
@@ -214,15 +187,9 @@ export class Media
 
   createMerchant!: Sequelize.HasManyCreateAssociationMixin<Merchant>;
 
-  removeMerchant!: Sequelize.HasManyRemoveAssociationMixin<
-  Merchant,
-  MerchantId
-  >;
+  removeMerchant!: Sequelize.HasManyRemoveAssociationMixin<Merchant, MerchantId>;
 
-  removeMerchants!: Sequelize.HasManyRemoveAssociationsMixin<
-  Merchant,
-  MerchantId
-  >;
+  removeMerchants!: Sequelize.HasManyRemoveAssociationsMixin<Merchant, MerchantId>;
 
   hasMerchant!: Sequelize.HasManyHasAssociationMixin<Merchant, MerchantId>;
 
@@ -235,36 +202,21 @@ export class Media
 
   getMerchantPhotos!: Sequelize.HasManyGetAssociationsMixin<Merchant>;
 
-  setMerchantPhotos!: Sequelize.HasManySetAssociationsMixin<
-  Merchant,
-  MerchantId
-  >;
+  setMerchantPhotos!: Sequelize.HasManySetAssociationsMixin<Merchant, MerchantId>;
 
   addMerchantPhoto!: Sequelize.HasManyAddAssociationMixin<Merchant, MerchantId>;
 
-  addMerchantPhotos!: Sequelize.HasManyAddAssociationsMixin<
-  Merchant,
-  MerchantId
-  >;
+  addMerchantPhotos!: Sequelize.HasManyAddAssociationsMixin<Merchant, MerchantId>;
 
   createMerchantPhoto!: Sequelize.HasManyCreateAssociationMixin<Merchant>;
 
-  removeMerchantPhoto!: Sequelize.HasManyRemoveAssociationMixin<
-  Merchant,
-  MerchantId
-  >;
+  removeMerchantPhoto!: Sequelize.HasManyRemoveAssociationMixin<Merchant, MerchantId>;
 
-  removeMerchantPhotos!: Sequelize.HasManyRemoveAssociationsMixin<
-  Merchant,
-  MerchantId
-  >;
+  removeMerchantPhotos!: Sequelize.HasManyRemoveAssociationsMixin<Merchant, MerchantId>;
 
   hasMerchantPhoto!: Sequelize.HasManyHasAssociationMixin<Merchant, MerchantId>;
 
-  hasMerchantPhotos!: Sequelize.HasManyHasAssociationsMixin<
-  Merchant,
-  MerchantId
-  >;
+  hasMerchantPhotos!: Sequelize.HasManyHasAssociationsMixin<Merchant, MerchantId>;
 
   countMerchantPhotos!: Sequelize.HasManyCountAssociationsMixin;
 
@@ -281,15 +233,9 @@ export class Media
 
   createUserTopUp!: Sequelize.HasManyCreateAssociationMixin<UserTopUp>;
 
-  removeUserTopUp!: Sequelize.HasManyRemoveAssociationMixin<
-  UserTopUp,
-  UserTopUpId
-  >;
+  removeUserTopUp!: Sequelize.HasManyRemoveAssociationMixin<UserTopUp, UserTopUpId>;
 
-  removeUserTopUps!: Sequelize.HasManyRemoveAssociationsMixin<
-  UserTopUp,
-  UserTopUpId
-  >;
+  removeUserTopUps!: Sequelize.HasManyRemoveAssociationsMixin<UserTopUp, UserTopUpId>;
 
   hasUserTopUp!: Sequelize.HasManyHasAssociationMixin<UserTopUp, UserTopUpId>;
 

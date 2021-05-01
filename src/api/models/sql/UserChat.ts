@@ -13,10 +13,7 @@ export interface UserChatAttributes {
 
 export type UserChatPk = 'id';
 export type UserChatId = UserChat[UserChatPk];
-export type UserChatCreationAttributes = Optional<
-UserChatAttributes,
-UserChatPk
->;
+export type UserChatCreationAttributes = Optional<UserChatAttributes, UserChatPk>;
 
 export class UserChat
   extends Model<UserChatAttributes, UserChatCreationAttributes>
@@ -56,42 +53,24 @@ export class UserChat
 
   getUserChatDetails!: Sequelize.HasManyGetAssociationsMixin<UserChatDetail>;
 
-  setUserChatDetails!: Sequelize.HasManySetAssociationsMixin<
-  UserChatDetail,
-  UserChatDetailId
-  >;
+  setUserChatDetails!: Sequelize.HasManySetAssociationsMixin<UserChatDetail, UserChatDetailId>;
 
-  addUserChatDetail!: Sequelize.HasManyAddAssociationMixin<
-  UserChatDetail,
-  UserChatDetailId
-  >;
+  addUserChatDetail!: Sequelize.HasManyAddAssociationMixin<UserChatDetail, UserChatDetailId>;
 
-  addUserChatDetails!: Sequelize.HasManyAddAssociationsMixin<
-  UserChatDetail,
-  UserChatDetailId
-  >;
+  addUserChatDetails!: Sequelize.HasManyAddAssociationsMixin<UserChatDetail, UserChatDetailId>;
 
   createUserChatDetail!: Sequelize.HasManyCreateAssociationMixin<UserChatDetail>;
 
-  removeUserChatDetail!: Sequelize.HasManyRemoveAssociationMixin<
-  UserChatDetail,
-  UserChatDetailId
-  >;
+  removeUserChatDetail!: Sequelize.HasManyRemoveAssociationMixin<UserChatDetail, UserChatDetailId>;
 
   removeUserChatDetails!: Sequelize.HasManyRemoveAssociationsMixin<
-  UserChatDetail,
-  UserChatDetailId
+    UserChatDetail,
+    UserChatDetailId
   >;
 
-  hasUserChatDetail!: Sequelize.HasManyHasAssociationMixin<
-  UserChatDetail,
-  UserChatDetailId
-  >;
+  hasUserChatDetail!: Sequelize.HasManyHasAssociationMixin<UserChatDetail, UserChatDetailId>;
 
-  hasUserChatDetails!: Sequelize.HasManyHasAssociationsMixin<
-  UserChatDetail,
-  UserChatDetailId
-  >;
+  hasUserChatDetails!: Sequelize.HasManyHasAssociationsMixin<UserChatDetail, UserChatDetailId>;
 
   countChatDetails!: Sequelize.HasManyCountAssociationsMixin;
 

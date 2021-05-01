@@ -12,9 +12,7 @@ export type FaqPk = 'id';
 export type FaqId = Faq[FaqPk];
 export type FaqCreationAttributes = Optional<FaqAttributes, FaqPk>;
 
-export class Faq
-  extends Model<FaqAttributes, FaqCreationAttributes>
-  implements FaqAttributes {
+export class Faq extends Model<FaqAttributes, FaqCreationAttributes> implements FaqAttributes {
   id!: number;
 
   question!: string;

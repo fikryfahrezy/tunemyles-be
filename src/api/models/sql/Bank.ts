@@ -18,9 +18,7 @@ export type BankPk = 'id';
 export type BankId = Bank[BankPk];
 export type BankCreationAttributes = Optional<BankAttributes, BankPk>;
 
-export class Bank
-  extends Model<BankAttributes, BankCreationAttributes>
-  implements BankAttributes {
+export class Bank extends Model<BankAttributes, BankCreationAttributes> implements BankAttributes {
   id!: number;
 
   bank_name!: string;
@@ -38,42 +36,21 @@ export class Bank
 
   getBankUtilities!: Sequelize.HasManyGetAssociationsMixin<BankUtility>;
 
-  setBankUtilities!: Sequelize.HasManySetAssociationsMixin<
-  BankUtility,
-  BankUtilityId
-  >;
+  setBankUtilities!: Sequelize.HasManySetAssociationsMixin<BankUtility, BankUtilityId>;
 
-  addBankUtility!: Sequelize.HasManyAddAssociationMixin<
-  BankUtility,
-  BankUtilityId
-  >;
+  addBankUtility!: Sequelize.HasManyAddAssociationMixin<BankUtility, BankUtilityId>;
 
-  addBankUtilities!: Sequelize.HasManyAddAssociationsMixin<
-  BankUtility,
-  BankUtilityId
-  >;
+  addBankUtilities!: Sequelize.HasManyAddAssociationsMixin<BankUtility, BankUtilityId>;
 
   createBankUtility!: Sequelize.HasManyCreateAssociationMixin<BankUtility>;
 
-  removeBankUtility!: Sequelize.HasManyRemoveAssociationMixin<
-  BankUtility,
-  BankUtilityId
-  >;
+  removeBankUtility!: Sequelize.HasManyRemoveAssociationMixin<BankUtility, BankUtilityId>;
 
-  removeBankUtilities!: Sequelize.HasManyRemoveAssociationsMixin<
-  BankUtility,
-  BankUtilityId
-  >;
+  removeBankUtilities!: Sequelize.HasManyRemoveAssociationsMixin<BankUtility, BankUtilityId>;
 
-  hasBankUtility!: Sequelize.HasManyHasAssociationMixin<
-  BankUtility,
-  BankUtilityId
-  >;
+  hasBankUtility!: Sequelize.HasManyHasAssociationMixin<BankUtility, BankUtilityId>;
 
-  hasBankUtilities!: Sequelize.HasManyHasAssociationsMixin<
-  BankUtility,
-  BankUtilityId
-  >;
+  hasBankUtilities!: Sequelize.HasManyHasAssociationsMixin<BankUtility, BankUtilityId>;
 
   countBankUtilities!: Sequelize.HasManyCountAssociationsMixin;
 
@@ -82,42 +59,21 @@ export class Bank
 
   getBankAccounts!: Sequelize.HasManyGetAssociationsMixin<BankAccount>;
 
-  setBankAccounts!: Sequelize.HasManySetAssociationsMixin<
-  BankAccount,
-  BankAccountId
-  >;
+  setBankAccounts!: Sequelize.HasManySetAssociationsMixin<BankAccount, BankAccountId>;
 
-  addBankAccount!: Sequelize.HasManyAddAssociationMixin<
-  BankAccount,
-  BankAccountId
-  >;
+  addBankAccount!: Sequelize.HasManyAddAssociationMixin<BankAccount, BankAccountId>;
 
-  addBankAccounts!: Sequelize.HasManyAddAssociationsMixin<
-  BankAccount,
-  BankAccountId
-  >;
+  addBankAccounts!: Sequelize.HasManyAddAssociationsMixin<BankAccount, BankAccountId>;
 
   createBankAccount!: Sequelize.HasManyCreateAssociationMixin<BankAccount>;
 
-  removeBankAccount!: Sequelize.HasManyRemoveAssociationMixin<
-  BankAccount,
-  BankAccountId
-  >;
+  removeBankAccount!: Sequelize.HasManyRemoveAssociationMixin<BankAccount, BankAccountId>;
 
-  removeBankAccounts!: Sequelize.HasManyRemoveAssociationsMixin<
-  BankAccount,
-  BankAccountId
-  >;
+  removeBankAccounts!: Sequelize.HasManyRemoveAssociationsMixin<BankAccount, BankAccountId>;
 
-  hasBankAccount!: Sequelize.HasManyHasAssociationMixin<
-  BankAccount,
-  BankAccountId
-  >;
+  hasBankAccount!: Sequelize.HasManyHasAssociationMixin<BankAccount, BankAccountId>;
 
-  hasBankAccounts!: Sequelize.HasManyHasAssociationsMixin<
-  BankAccount,
-  BankAccountId
-  >;
+  hasBankAccounts!: Sequelize.HasManyHasAssociationsMixin<BankAccount, BankAccountId>;
 
   countBankAccounts!: Sequelize.HasManyCountAssociationsMixin;
 
@@ -134,15 +90,9 @@ export class Bank
 
   createBankUser!: Sequelize.HasManyCreateAssociationMixin<BankUser>;
 
-  removeBankUser!: Sequelize.HasManyRemoveAssociationMixin<
-  BankUser,
-  BankUserId
-  >;
+  removeBankUser!: Sequelize.HasManyRemoveAssociationMixin<BankUser, BankUserId>;
 
-  removeBankUsers!: Sequelize.HasManyRemoveAssociationsMixin<
-  BankUser,
-  BankUserId
-  >;
+  removeBankUsers!: Sequelize.HasManyRemoveAssociationsMixin<BankUser, BankUserId>;
 
   hasBankUser!: Sequelize.HasManyHasAssociationMixin<BankUser, BankUserId>;
 
@@ -163,15 +113,9 @@ export class Bank
 
   createUserTopUp!: Sequelize.HasManyCreateAssociationMixin<UserTopUp>;
 
-  removeUserTopUp!: Sequelize.HasManyRemoveAssociationMixin<
-  UserTopUp,
-  UserTopUpId
-  >;
+  removeUserTopUp!: Sequelize.HasManyRemoveAssociationMixin<UserTopUp, UserTopUpId>;
 
-  removeUserTopUps!: Sequelize.HasManyRemoveAssociationsMixin<
-  UserTopUp,
-  UserTopUpId
-  >;
+  removeUserTopUps!: Sequelize.HasManyRemoveAssociationsMixin<UserTopUp, UserTopUpId>;
 
   hasUserTopUp!: Sequelize.HasManyHasAssociationMixin<UserTopUp, UserTopUpId>;
 
@@ -225,9 +169,7 @@ export class Bank
           validate: {
             customValidator(value: number) {
               if (value < 0 || value > 2) {
-                throw new Error(
-                  'wallet visibility must be between or equal 0 and 2',
-                );
+                throw new Error('wallet visibility must be between or equal 0 and 2');
               }
             },
           },

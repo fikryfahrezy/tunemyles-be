@@ -7,7 +7,7 @@ const { JWT_TEMP_TOKEN, JWT_TEMP_TOKEN_EXP } = process.env;
 export const issueJwt: (
   userId: number,
   utilId: number,
-  userType: number
+  userType: number,
 ) => string = function issueJwt(userId, utilId, userType) {
   const token = jwt.sign(
     {
@@ -23,7 +23,7 @@ export const issueJwt: (
 };
 
 export const verifyJwt: (
-  token: string
+  token: string,
 ) => {
   userId: number;
   utilId: number;
@@ -38,9 +38,7 @@ export const verifyJwt: (
   if (!jwtToken) throw new ErrorResponse('forbidden', 403);
 
   const decoded = jwt.verify(jwtToken, JWT_TEMP_TOKEN as string);
-  const {
-    user_id: userId, util_id: utilId, type, exp,
-  } = decoded as JwtPayload;
+  const { user_id: userId, util_id: utilId, type, exp } = decoded as JwtPayload;
 
   if (exp < Math.floor(Date.now() / 1000)) {
     throw new ErrorResponse('forbidden', 403);

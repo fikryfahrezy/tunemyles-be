@@ -14,10 +14,10 @@ export class ErrorResponse extends Error {
   }
 }
 
-export const errorHandler: (
-  err: ErrorResponse | unknown,
-  res: FastifyReply
-) => void = (err, res) => {
+export const errorHandler: (err: ErrorResponse | unknown, res: FastifyReply) => void = (
+  err,
+  res,
+) => {
   if (err instanceof ErrorResponse) {
     const { message, status } = err;
     switch (status) {
@@ -47,7 +47,7 @@ export const errorHandler: (
 
 export const schemaValidationError: (
   err: Error & { validation: Validation[]; validationContext: string },
-  res: FastifyReply
+  res: FastifyReply,
 ) => void = (err, res) => {
   const context = err.validationContext;
   if (context === 'headers') res.forbidden();

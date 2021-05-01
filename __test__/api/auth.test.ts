@@ -22,17 +22,14 @@ const register = (
     password: string;
     phone_number: string;
     address: string;
-  }
+  },
 ) =>
   supertest(server)
     .post('/api/v2/auth/register')
     .set('Content-Type', 'application/json')
     .send(payload);
 
-const login = (
-  server: Server,
-  payload: { username: string; password: string }
-) =>
+const login = (server: Server, payload: { username: string; password: string }) =>
   supertest(server)
     .post('/api/v2/auth/login')
     .set('Content-Type', 'application/json')
@@ -46,17 +43,21 @@ const getProfile = (server: Server, token?: string) => {
   return req;
 };
 
-const resetPw = (
+const updateUser = (
   server: Server,
   payload: {
     token?: string;
-    fields?: { full_name: string; address: string; phone_number: string };
+    fields?: { full_name?: string; address?: string; phone_number?: string };
     files?: { field: string; file: ReadStream }[];
-  } = {}
+  } = {},
 ) => {
   const {
     token,
-    fields = { full_name: '', address: '', phone_number: '' },
+    fields = {
+      full_name: 'Name',
+      address: 'Address',
+      phone_number: '12345678901234',
+    },
     files,
   } = payload;
   const req = supertest(server)
@@ -66,7 +67,7 @@ const resetPw = (
 
   if (fields) {
     Object.entries(fields).forEach(([key, value]) => {
-      req.field(key, value);
+      if (Object.prototype.hasOwnProperty.call(fields, key)) req.field(key, value);
     });
   }
 
@@ -186,6 +187,158 @@ describe('Registration', () => {
       password: 'password',
       phone_number: Date.now().toString(),
       address: '',
+    };
+
+    const { status, headers, body } = await register(server, payload);
+
+    expect(status).toBe(422);
+    expect(headers['content-type']).toBe('application/json; charset=utf-8');
+    expect(body.success).toBe(false);
+
+    appServer.close();
+  });
+
+  test('Register Fail, Name too Short', async () => {
+    const { appServer, server } = await setUpServer();
+    const payload = {
+      full_name: 'x',
+      username: Math.random().toString(36).substring(2),
+      password: 'password',
+      phone_number: Date.now().toString(),
+      address: 'address',
+    };
+
+    const { status, headers, body } = await register(server, payload);
+
+    expect(status).toBe(422);
+    expect(headers['content-type']).toBe('application/json; charset=utf-8');
+    expect(body.success).toBe(false);
+
+    appServer.close();
+  });
+
+  test('Register Fail, Name too Long', async () => {
+    const { appServer, server } = await setUpServer();
+    const payload = {
+      full_name: Array(257).toString(),
+      username: Math.random().toString(36).substring(2),
+      password: 'password',
+      phone_number: Date.now().toString(),
+      address: 'address',
+    };
+
+    const { status, headers, body } = await register(server, payload);
+
+    expect(status).toBe(422);
+    expect(headers['content-type']).toBe('application/json; charset=utf-8');
+    expect(body.success).toBe(false);
+
+    appServer.close();
+  });
+
+  test('Register Fail, Username too Short', async () => {
+    const { appServer, server } = await setUpServer();
+    const payload = {
+      full_name: 'Name',
+      username: Math.random().toString(36).substring(7),
+      password: 'password',
+      phone_number: Date.now().toString(),
+      address: 'address',
+    };
+
+    const { status, headers, body } = await register(server, payload);
+
+    expect(status).toBe(422);
+    expect(headers['content-type']).toBe('application/json; charset=utf-8');
+    expect(body.success).toBe(false);
+
+    appServer.close();
+  });
+
+  test('Register Fail, Username too Long', async () => {
+    const { appServer, server } = await setUpServer();
+    const payload = {
+      full_name: 'Name',
+      username: Array(22).toString(),
+      password: 'password',
+      phone_number: Date.now().toString(),
+      address: 'address',
+    };
+
+    const { status, headers, body } = await register(server, payload);
+
+    expect(status).toBe(422);
+    expect(headers['content-type']).toBe('application/json; charset=utf-8');
+    expect(body.success).toBe(false);
+
+    appServer.close();
+  });
+
+  test('Register Fail, Phone Number too Short', async () => {
+    const { appServer, server } = await setUpServer();
+    const payload = {
+      full_name: 'Name',
+      username: Math.random().toString(36).substring(2),
+      password: 'password',
+      phone_number: '1234',
+      address: 'address',
+    };
+
+    const { status, headers, body } = await register(server, payload);
+
+    expect(status).toBe(422);
+    expect(headers['content-type']).toBe('application/json; charset=utf-8');
+    expect(body.success).toBe(false);
+
+    appServer.close();
+  });
+
+  test('Register Fail, Phone Number too Long', async () => {
+    const { appServer, server } = await setUpServer();
+    const payload = {
+      full_name: 'Name',
+      username: Math.random().toString(36).substring(2),
+      password: 'password',
+      phone_number: '123456789012345',
+      address: 'address',
+    };
+
+    const { status, headers, body } = await register(server, payload);
+
+    expect(status).toBe(422);
+    expect(headers['content-type']).toBe('application/json; charset=utf-8');
+    expect(body.success).toBe(false);
+
+    appServer.close();
+  });
+
+  test('Register Fail, Address too Short', async () => {
+    const { appServer, server } = await setUpServer();
+    const payload = {
+      full_name: 'Name',
+      username: Math.random().toString(36).substring(2),
+      password: 'password',
+      phone_number: Date.now().toString(),
+      address: 'addr',
+    };
+
+    const { status, headers, body } = await register(server, payload);
+
+    expect(status).toBe(422);
+    expect(headers['content-type']).toBe('application/json; charset=utf-8');
+    expect(body.success).toBe(false);
+
+    appServer.close();
+  });
+
+  test('Register Fail, Address too Long', async () => {
+    const { appServer, server } = await setUpServer();
+    const payload = {
+      full_name: 'Name',
+      username: Math.random().toString(36).substring(2),
+      password: 'password',
+      phone_number: Date.now().toString(),
+      address: Array(1002).toString(),
     };
 
     const { status, headers, body } = await register(server, payload);
@@ -343,7 +496,7 @@ describe('Update Profile', () => {
       files: [{ file, field: 'avatar' }],
     };
 
-    const { status, headers, body } = await resetPw(server, updatePayload);
+    const { status, headers, body } = await updateUser(server, updatePayload);
 
     expect(status).toBe(200);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -356,7 +509,7 @@ describe('Update Profile', () => {
     const { appServer, server } = await setUpServer();
     const authorization = 'this-is-wrong-token';
 
-    const { status, headers, body } = await resetPw(server, {
+    const { status, headers, body } = await updateUser(server, {
       token: authorization,
     });
 
@@ -372,9 +525,183 @@ describe('Update Profile', () => {
   test('Update Profile Failed, API Key Not Given', async () => {
     const { appServer, server } = await setUpServer();
 
-    const { status, headers, body } = await resetPw(server);
+    const { status, headers, body } = await updateUser(server);
 
     expect(status).toBe(403);
+    expect(headers['content-type']).toBe('application/json; charset=utf-8');
+    expect(body.success).toBe(false);
+
+    appServer.close();
+  });
+
+  test('Update Profile Failed, Name too Short', async () => {
+    const { appServer, server } = await setUpServer();
+    const username = Math.random().toString(36).substring(2);
+    const password = 'password';
+    const regPayload = {
+      full_name: 'Name',
+      username,
+      password,
+      phone_number: Date.now().toString(),
+      address: 'address',
+    };
+    await userRegistration(regPayload);
+    const { token } = await userLogin({ username, password });
+    const updatePayload = {
+      token,
+      fields: {
+        full_name: 'x',
+      },
+    };
+
+    const { status, headers, body } = await updateUser(server, updatePayload);
+
+    expect(status).toBe(422);
+    expect(headers['content-type']).toBe('application/json; charset=utf-8');
+    expect(body.success).toBe(false);
+
+    appServer.close();
+  });
+
+  test('Update Profile Failed, Name too Long', async () => {
+    const { appServer, server } = await setUpServer();
+    const username = Math.random().toString(36).substring(2);
+    const password = 'password';
+    const regPayload = {
+      full_name: 'Name',
+      username,
+      password,
+      phone_number: Date.now().toString(),
+      address: 'address',
+    };
+    await userRegistration(regPayload);
+    const { token } = await userLogin({ username, password });
+    const updatePayload = {
+      token,
+      fields: {
+        full_name: Array(257).toString(),
+      },
+    };
+
+    const { status, headers, body } = await updateUser(server, updatePayload);
+
+    expect(status).toBe(422);
+    expect(headers['content-type']).toBe('application/json; charset=utf-8');
+    expect(body.success).toBe(false);
+
+    appServer.close();
+  });
+
+  test('Update Profile Failed, Phone Number too Short', async () => {
+    const { appServer, server } = await setUpServer();
+    const username = Math.random().toString(36).substring(2);
+    const password = 'password';
+    const regPayload = {
+      full_name: 'Name',
+      username,
+      password,
+      phone_number: Date.now().toString(),
+      address: 'address',
+    };
+    await userRegistration(regPayload);
+    const { token } = await userLogin({ username, password });
+    const updatePayload = {
+      token,
+      fields: {
+        phone_number: '1234',
+      },
+    };
+
+    const { status, headers, body } = await updateUser(server, updatePayload);
+
+    expect(status).toBe(422);
+    expect(headers['content-type']).toBe('application/json; charset=utf-8');
+    expect(body.success).toBe(false);
+
+    appServer.close();
+  });
+
+  test('Update Profile Failed, Phone Number too Long', async () => {
+    const { appServer, server } = await setUpServer();
+    const username = Math.random().toString(36).substring(2);
+    const password = 'password';
+    const regPayload = {
+      full_name: 'Name',
+      username,
+      password,
+      phone_number: Date.now().toString(),
+      address: 'address',
+    };
+    await userRegistration(regPayload);
+    const { token } = await userLogin({ username, password });
+    const updatePayload = {
+      token,
+      fields: {
+        phone_number: '123456789012345',
+      },
+    };
+
+    const { status, headers, body } = await updateUser(server, updatePayload);
+
+    expect(status).toBe(422);
+    expect(headers['content-type']).toBe('application/json; charset=utf-8');
+    expect(body.success).toBe(false);
+
+    appServer.close();
+  });
+
+  test('Update Profile Failed, Address too Short', async () => {
+    const { appServer, server } = await setUpServer();
+    const username = Math.random().toString(36).substring(2);
+    const password = 'password';
+    const regPayload = {
+      full_name: 'Name',
+      username,
+      password,
+      phone_number: Date.now().toString(),
+      address: 'address',
+    };
+    await userRegistration(regPayload);
+    const { token } = await userLogin({ username, password });
+    const updatePayload = {
+      token,
+      fields: {
+        address: 'addr',
+      },
+    };
+
+    const { status, headers, body } = await updateUser(server, updatePayload);
+
+    expect(status).toBe(422);
+    expect(headers['content-type']).toBe('application/json; charset=utf-8');
+    expect(body.success).toBe(false);
+
+    appServer.close();
+  });
+
+  test('Update Profile Failed, Address too Long', async () => {
+    const { appServer, server } = await setUpServer();
+    const username = Math.random().toString(36).substring(2);
+    const password = 'password';
+    const regPayload = {
+      full_name: 'Name',
+      username,
+      password,
+      phone_number: Date.now().toString(),
+      address: 'address',
+    };
+    await userRegistration(regPayload);
+    const { token } = await userLogin({ username, password });
+    const updatePayload = {
+      token,
+      fields: {
+        address: Array(1002).toString(),
+      },
+    };
+
+    const { status, headers, body } = await updateUser(server, updatePayload);
+
+    expect(status).toBe(422);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
     expect(body.success).toBe(false);
 

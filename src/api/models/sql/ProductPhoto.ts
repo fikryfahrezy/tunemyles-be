@@ -12,10 +12,7 @@ export interface ProductPhotoAttributes {
 
 export type ProductPhotoPk = 'id';
 export type ProductPhotoId = ProductPhoto[ProductPhotoPk];
-export type ProductPhotoCreationAttributes = Optional<
-ProductPhotoAttributes,
-ProductPhotoPk
->;
+export type ProductPhotoCreationAttributes = Optional<ProductPhotoAttributes, ProductPhotoPk>;
 
 export class ProductPhoto
   extends Model<ProductPhotoAttributes, ProductPhotoCreationAttributes>
@@ -44,10 +41,7 @@ export class ProductPhoto
 
   getProductUtility!: Sequelize.BelongsToGetAssociationMixin<ProductUtility>;
 
-  setProductUtility!: Sequelize.BelongsToSetAssociationMixin<
-  ProductUtility,
-  ProductUtilityId
-  >;
+  setProductUtility!: Sequelize.BelongsToSetAssociationMixin<ProductUtility, ProductUtilityId>;
 
   createProductUtility!: Sequelize.BelongsToCreateAssociationMixin<ProductUtility>;
 

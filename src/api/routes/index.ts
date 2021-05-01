@@ -1,8 +1,4 @@
-import {
-  FastifyInstance,
-  FastifyPluginOptions,
-  HookHandlerDoneFunction,
-} from 'fastify';
+import { FastifyInstance, FastifyPluginOptions, HookHandlerDoneFunction } from 'fastify';
 import helloWorld from './hello-world';
 import example from './example';
 import auth from './auth';

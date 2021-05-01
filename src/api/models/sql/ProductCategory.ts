@@ -13,8 +13,8 @@ export interface ProductCategoryAttributes {
 export type ProductCategoryPk = 'id';
 export type ProductCategoryId = ProductCategory[ProductCategoryPk];
 export type ProductCategoryCreationAttributes = Optional<
-ProductCategoryAttributes,
-ProductCategoryPk
+  ProductCategoryAttributes,
+  ProductCategoryPk
 >;
 
 export class ProductCategory
@@ -44,10 +44,7 @@ export class ProductCategory
 
   getProductUtility!: Sequelize.BelongsToGetAssociationMixin<ProductUtility>;
 
-  setProductUtility!: Sequelize.BelongsToSetAssociationMixin<
-  ProductUtility,
-  ProductUtilityId
-  >;
+  setProductUtility!: Sequelize.BelongsToSetAssociationMixin<ProductUtility, ProductUtilityId>;
 
   createProductUtility!: Sequelize.BelongsToCreateAssociationMixin<ProductUtility>;
 

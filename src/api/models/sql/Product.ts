@@ -3,10 +3,7 @@ import type { Media, MediaId } from './Media';
 import type { User, UserId } from './User';
 import type { ProductUtility, ProductUtilityId } from './ProductUtility';
 import type { UserCart, UserCartId } from './UserCart';
-import type {
-  TransactionProduct,
-  TransactionProductId,
-} from './TransactionProduct';
+import type { TransactionProduct, TransactionProductId } from './TransactionProduct';
 
 export interface ProductAttributes {
   id: number;
@@ -56,42 +53,24 @@ export class Product
 
   getProductUtilities!: Sequelize.HasManyGetAssociationsMixin<ProductUtility>;
 
-  setProductUtilities!: Sequelize.HasManySetAssociationsMixin<
-  ProductUtility,
-  ProductUtilityId
-  >;
+  setProductUtilities!: Sequelize.HasManySetAssociationsMixin<ProductUtility, ProductUtilityId>;
 
-  addProductUtility!: Sequelize.HasManyAddAssociationMixin<
-  ProductUtility,
-  ProductUtilityId
-  >;
+  addProductUtility!: Sequelize.HasManyAddAssociationMixin<ProductUtility, ProductUtilityId>;
 
-  addProductUtilities!: Sequelize.HasManyAddAssociationsMixin<
-  ProductUtility,
-  ProductUtilityId
-  >;
+  addProductUtilities!: Sequelize.HasManyAddAssociationsMixin<ProductUtility, ProductUtilityId>;
 
   createProductUtility!: Sequelize.HasManyCreateAssociationMixin<ProductUtility>;
 
-  removeProductUtility!: Sequelize.HasManyRemoveAssociationMixin<
-  ProductUtility,
-  ProductUtilityId
-  >;
+  removeProductUtility!: Sequelize.HasManyRemoveAssociationMixin<ProductUtility, ProductUtilityId>;
 
   removeProductUtilities!: Sequelize.HasManyRemoveAssociationsMixin<
-  ProductUtility,
-  ProductUtilityId
+    ProductUtility,
+    ProductUtilityId
   >;
 
-  hasProductUtility!: Sequelize.HasManyHasAssociationMixin<
-  ProductUtility,
-  ProductUtilityId
-  >;
+  hasProductUtility!: Sequelize.HasManyHasAssociationMixin<ProductUtility, ProductUtilityId>;
 
-  hasProductUtilities!: Sequelize.HasManyHasAssociationsMixin<
-  ProductUtility,
-  ProductUtilityId
-  >;
+  hasProductUtilities!: Sequelize.HasManyHasAssociationsMixin<ProductUtility, ProductUtilityId>;
 
   countProductUtilities!: Sequelize.HasManyCountAssociationsMixin;
 
@@ -108,15 +87,9 @@ export class Product
 
   createUserCart!: Sequelize.HasManyCreateAssociationMixin<UserCart>;
 
-  removeUserCart!: Sequelize.HasManyRemoveAssociationMixin<
-  UserCart,
-  UserCartId
-  >;
+  removeUserCart!: Sequelize.HasManyRemoveAssociationMixin<UserCart, UserCartId>;
 
-  removeUserCarts!: Sequelize.HasManyRemoveAssociationsMixin<
-  UserCart,
-  UserCartId
-  >;
+  removeUserCarts!: Sequelize.HasManyRemoveAssociationsMixin<UserCart, UserCartId>;
 
   hasUserCart!: Sequelize.HasManyHasAssociationMixin<UserCart, UserCartId>;
 
@@ -130,40 +103,40 @@ export class Product
   getTransactionProducts!: Sequelize.HasManyGetAssociationsMixin<TransactionProduct>;
 
   setTransactionProducts!: Sequelize.HasManySetAssociationsMixin<
-  TransactionProduct,
-  TransactionProductId
+    TransactionProduct,
+    TransactionProductId
   >;
 
   addTransactionProduct!: Sequelize.HasManyAddAssociationMixin<
-  TransactionProduct,
-  TransactionProductId
+    TransactionProduct,
+    TransactionProductId
   >;
 
   addTransactionProducts!: Sequelize.HasManyAddAssociationsMixin<
-  TransactionProduct,
-  TransactionProductId
+    TransactionProduct,
+    TransactionProductId
   >;
 
   createTransactionProduct!: Sequelize.HasManyCreateAssociationMixin<TransactionProduct>;
 
   removeTransactionProduct!: Sequelize.HasManyRemoveAssociationMixin<
-  TransactionProduct,
-  TransactionProductId
+    TransactionProduct,
+    TransactionProductId
   >;
 
   removeTransactionProducts!: Sequelize.HasManyRemoveAssociationsMixin<
-  TransactionProduct,
-  TransactionProductId
+    TransactionProduct,
+    TransactionProductId
   >;
 
   hasTransactionProduct!: Sequelize.HasManyHasAssociationMixin<
-  TransactionProduct,
-  TransactionProductId
+    TransactionProduct,
+    TransactionProductId
   >;
 
   hasTransactionProducts!: Sequelize.HasManyHasAssociationsMixin<
-  TransactionProduct,
-  TransactionProductId
+    TransactionProduct,
+    TransactionProductId
   >;
 
   countTransactionProducts!: Sequelize.HasManyCountAssociationsMixin;

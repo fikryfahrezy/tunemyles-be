@@ -36,10 +36,7 @@ const requestQuery = {
       page: { $ref: '#PageQuery' },
       search: { $ref: '#SearchQuery' },
       orderBy: {
-        allOf: [
-          { $ref: '#OrderByQuery' },
-          { enum: ['created_at', 'bank_name'] },
-        ],
+        allOf: [{ $ref: '#OrderByQuery' }, { enum: ['created_at', 'bank_name'] }],
       },
       orderDirection: { $ref: '#OrderDirectionQuery' },
     },
@@ -50,10 +47,7 @@ const requestQuery = {
       page: { $ref: '#PageQuery' },
       search: { $ref: '#SearchQuery' },
       orderBy: {
-        allOf: [
-          { $ref: '#OrderByQuery' },
-          { enum: ['category', 'description'] },
-        ],
+        allOf: [{ $ref: '#OrderByQuery' }, { enum: ['category', 'description'] }],
       },
       orderDirection: { $ref: '#OrderDirectionQuery' },
     },

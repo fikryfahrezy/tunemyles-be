@@ -16,10 +16,7 @@ export interface BankUserAttributes {
 
 export type BankUserPk = 'id';
 export type BankUserId = BankUser[BankUserPk];
-export type BankUserCreationAttributes = Optional<
-BankUserAttributes,
-BankUserPk
->;
+export type BankUserCreationAttributes = Optional<BankUserAttributes, BankUserPk>;
 
 export class BankUser
   extends Model<BankUserAttributes, BankUserCreationAttributes>
@@ -63,42 +60,21 @@ export class BankUser
 
   getUserWitdraws!: Sequelize.HasManyGetAssociationsMixin<UserWithdraw>;
 
-  setUserWitdraws!: Sequelize.HasManySetAssociationsMixin<
-  UserWithdraw,
-  UserWithdrawId
-  >;
+  setUserWitdraws!: Sequelize.HasManySetAssociationsMixin<UserWithdraw, UserWithdrawId>;
 
-  addUserWitdraw!: Sequelize.HasManyAddAssociationMixin<
-  UserWithdraw,
-  UserWithdrawId
-  >;
+  addUserWitdraw!: Sequelize.HasManyAddAssociationMixin<UserWithdraw, UserWithdrawId>;
 
-  addUserWitdraws!: Sequelize.HasManyAddAssociationsMixin<
-  UserWithdraw,
-  UserWithdrawId
-  >;
+  addUserWitdraws!: Sequelize.HasManyAddAssociationsMixin<UserWithdraw, UserWithdrawId>;
 
   createUserWitdraw!: Sequelize.HasManyCreateAssociationMixin<UserWithdraw>;
 
-  removeUserWitdraw!: Sequelize.HasManyRemoveAssociationMixin<
-  UserWithdraw,
-  UserWithdrawId
-  >;
+  removeUserWitdraw!: Sequelize.HasManyRemoveAssociationMixin<UserWithdraw, UserWithdrawId>;
 
-  removeUserWitdraws!: Sequelize.HasManyRemoveAssociationsMixin<
-  UserWithdraw,
-  UserWithdrawId
-  >;
+  removeUserWitdraws!: Sequelize.HasManyRemoveAssociationsMixin<UserWithdraw, UserWithdrawId>;
 
-  hasUserWitdraw!: Sequelize.HasManyHasAssociationMixin<
-  UserWithdraw,
-  UserWithdrawId
-  >;
+  hasUserWitdraw!: Sequelize.HasManyHasAssociationMixin<UserWithdraw, UserWithdrawId>;
 
-  hasUserWitdraws!: Sequelize.HasManyHasAssociationsMixin<
-  UserWithdraw,
-  UserWithdrawId
-  >;
+  hasUserWitdraws!: Sequelize.HasManyHasAssociationsMixin<UserWithdraw, UserWithdrawId>;
 
   countUserWitdraws!: Sequelize.HasManyCountAssociationsMixin;
 

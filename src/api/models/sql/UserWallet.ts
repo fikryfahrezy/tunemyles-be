@@ -16,10 +16,7 @@ export interface UserWalletAttributes {
 
 export type UserWalletPk = 'id';
 export type UserWalletId = UserWallet[UserWalletPk];
-export type UserWalletCreationAttributes = Optional<
-UserWalletAttributes,
-UserWalletPk
->;
+export type UserWalletCreationAttributes = Optional<UserWalletAttributes, UserWalletPk>;
 
 export class UserWallet
   extends Model<UserWalletAttributes, UserWalletCreationAttributes>
@@ -52,10 +49,7 @@ export class UserWallet
 
   getUserUtility!: Sequelize.BelongsToGetAssociationMixin<UserUtility>;
 
-  setUserUtility!: Sequelize.BelongsToSetAssociationMixin<
-  UserUtility,
-  UserUtilityId
-  >;
+  setUserUtility!: Sequelize.BelongsToSetAssociationMixin<UserUtility, UserUtilityId>;
 
   createUserUtility!: Sequelize.BelongsToCreateAssociationMixin<UserUtility>;
 
@@ -72,15 +66,9 @@ export class UserWallet
 
   createUserTopUp!: Sequelize.HasManyCreateAssociationMixin<UserTopUp>;
 
-  removeUserTopUp!: Sequelize.HasManyRemoveAssociationMixin<
-  UserTopUp,
-  UserTopUpId
-  >;
+  removeUserTopUp!: Sequelize.HasManyRemoveAssociationMixin<UserTopUp, UserTopUpId>;
 
-  removeUserTopUps!: Sequelize.HasManyRemoveAssociationsMixin<
-  UserTopUp,
-  UserTopUpId
-  >;
+  removeUserTopUps!: Sequelize.HasManyRemoveAssociationsMixin<UserTopUp, UserTopUpId>;
 
   hasUserTopUp!: Sequelize.HasManyHasAssociationMixin<UserTopUp, UserTopUpId>;
 
@@ -93,42 +81,21 @@ export class UserWallet
 
   getUserWithdraws!: Sequelize.HasManyGetAssociationsMixin<UserWithdraw>;
 
-  setUserWithdraws!: Sequelize.HasManySetAssociationsMixin<
-  UserWithdraw,
-  UserWithdrawId
-  >;
+  setUserWithdraws!: Sequelize.HasManySetAssociationsMixin<UserWithdraw, UserWithdrawId>;
 
-  addUserWithdraw!: Sequelize.HasManyAddAssociationMixin<
-  UserWithdraw,
-  UserWithdrawId
-  >;
+  addUserWithdraw!: Sequelize.HasManyAddAssociationMixin<UserWithdraw, UserWithdrawId>;
 
-  addUserWithdraws!: Sequelize.HasManyAddAssociationsMixin<
-  UserWithdraw,
-  UserWithdrawId
-  >;
+  addUserWithdraws!: Sequelize.HasManyAddAssociationsMixin<UserWithdraw, UserWithdrawId>;
 
   createUserWithdraw!: Sequelize.HasManyCreateAssociationMixin<UserWithdraw>;
 
-  removeUserWithdraw!: Sequelize.HasManyRemoveAssociationMixin<
-  UserWithdraw,
-  UserWithdrawId
-  >;
+  removeUserWithdraw!: Sequelize.HasManyRemoveAssociationMixin<UserWithdraw, UserWithdrawId>;
 
-  removeUserWithdraws!: Sequelize.HasManyRemoveAssociationsMixin<
-  UserWithdraw,
-  UserWithdrawId
-  >;
+  removeUserWithdraws!: Sequelize.HasManyRemoveAssociationsMixin<UserWithdraw, UserWithdrawId>;
 
-  hasUserWithdraw!: Sequelize.HasManyHasAssociationMixin<
-  UserWithdraw,
-  UserWithdrawId
-  >;
+  hasUserWithdraw!: Sequelize.HasManyHasAssociationMixin<UserWithdraw, UserWithdrawId>;
 
-  hasUserWithdraws!: Sequelize.HasManyHasAssociationsMixin<
-  UserWithdraw,
-  UserWithdrawId
-  >;
+  hasUserWithdraws!: Sequelize.HasManyHasAssociationsMixin<UserWithdraw, UserWithdrawId>;
 
   countUserWithdraws!: Sequelize.HasManyCountAssociationsMixin;
 

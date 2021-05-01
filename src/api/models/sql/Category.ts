@@ -16,10 +16,7 @@ export interface CategoryAttributes {
 
 export type CategoryPk = 'id';
 export type CategoryId = Category[CategoryPk];
-export type CategoryCreationAttributes = Optional<
-CategoryAttributes,
-CategoryPk
->;
+export type CategoryCreationAttributes = Optional<CategoryAttributes, CategoryPk>;
 
 export class Category
   extends Model<CategoryAttributes, CategoryCreationAttributes>
@@ -45,42 +42,27 @@ export class Category
 
   getProductCategories!: Sequelize.HasManyGetAssociationsMixin<ProductCategory>;
 
-  setProductCategories!: Sequelize.HasManySetAssociationsMixin<
-  ProductCategory,
-  ProductCategoryId
-  >;
+  setProductCategories!: Sequelize.HasManySetAssociationsMixin<ProductCategory, ProductCategoryId>;
 
-  addProductCategory!: Sequelize.HasManyAddAssociationMixin<
-  ProductCategory,
-  ProductCategoryId
-  >;
+  addProductCategory!: Sequelize.HasManyAddAssociationMixin<ProductCategory, ProductCategoryId>;
 
-  addProductCategories!: Sequelize.HasManyAddAssociationsMixin<
-  ProductCategory,
-  ProductCategoryId
-  >;
+  addProductCategories!: Sequelize.HasManyAddAssociationsMixin<ProductCategory, ProductCategoryId>;
 
   createProductCategory!: Sequelize.HasManyCreateAssociationMixin<ProductCategory>;
 
   removeProductCategory!: Sequelize.HasManyRemoveAssociationMixin<
-  ProductCategory,
-  ProductCategoryId
+    ProductCategory,
+    ProductCategoryId
   >;
 
   removeProductCategories!: Sequelize.HasManyRemoveAssociationsMixin<
-  ProductCategory,
-  ProductCategoryId
+    ProductCategory,
+    ProductCategoryId
   >;
 
-  hasProductCategory!: Sequelize.HasManyHasAssociationMixin<
-  ProductCategory,
-  ProductCategoryId
-  >;
+  hasProductCategory!: Sequelize.HasManyHasAssociationMixin<ProductCategory, ProductCategoryId>;
 
-  hasProductCategories!: Sequelize.HasManyHasAssociationsMixin<
-  ProductCategory,
-  ProductCategoryId
-  >;
+  hasProductCategories!: Sequelize.HasManyHasAssociationsMixin<ProductCategory, ProductCategoryId>;
 
   countProductCategories!: Sequelize.HasManyCountAssociationsMixin;
 
@@ -146,9 +128,7 @@ export class Category
           validate: {
             customValidator(value: number) {
               if (value < 0 || value > 2) {
-                throw new Error(
-                  'category visibility must be between or equal 0 and 2',
-                );
+                throw new Error('category visibility must be between or equal 0 and 2');
               }
             },
           },

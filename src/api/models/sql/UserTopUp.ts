@@ -17,10 +17,7 @@ export interface UserTopUpAttributes {
 
 export type UserTopUpPk = 'id';
 export type UserTopUpId = UserTopUp[UserTopUpPk];
-export type UserTopUpCreationAttributes = Optional<
-UserTopUpAttributes,
-UserTopUpPk
->;
+export type UserTopUpCreationAttributes = Optional<UserTopUpAttributes, UserTopUpPk>;
 
 export class UserTopUp
   extends Model<UserTopUpAttributes, UserTopUpCreationAttributes>
@@ -67,8 +64,8 @@ export class UserTopUp
   getId_u_user_wallet_u_user_wallet!: Sequelize.BelongsToGetAssociationMixin<UserWallet>;
 
   setId_u_user_wallet_u_user_wallet!: Sequelize.BelongsToSetAssociationMixin<
-  UserWallet,
-  UserWalletId
+    UserWallet,
+    UserWalletId
   >;
 
   createId_u_user_wallet_u_user_wallet!: Sequelize.BelongsToCreateAssociationMixin<UserWallet>;

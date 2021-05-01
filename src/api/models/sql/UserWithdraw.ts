@@ -14,10 +14,7 @@ export interface UserWithdrawAttributes {
 
 export type UserWithdrawPk = 'id';
 export type UserWithdrawId = UserWithdraw[UserWithdrawPk];
-export type UserWithdrawCreationAttributes = Optional<
-UserWithdrawAttributes,
-UserWithdrawPk
->;
+export type UserWithdrawCreationAttributes = Optional<UserWithdrawAttributes, UserWithdrawPk>;
 
 export class UserWithdraw
   extends Model<UserWithdrawAttributes, UserWithdrawCreationAttributes>
@@ -50,10 +47,7 @@ export class UserWithdraw
 
   getUserWallet!: Sequelize.BelongsToGetAssociationMixin<UserWallet>;
 
-  setUserWallet!: Sequelize.BelongsToSetAssociationMixin<
-  UserWallet,
-  UserWalletId
-  >;
+  setUserWallet!: Sequelize.BelongsToSetAssociationMixin<UserWallet, UserWalletId>;
 
   createUserWallet!: Sequelize.BelongsToCreateAssociationMixin<UserWallet>;
 

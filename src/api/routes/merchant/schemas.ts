@@ -14,12 +14,7 @@ const requestQuery = {
         allOf: [
           { $ref: '#OrderByQuery' },
           {
-            enum: [
-              'created_at',
-              'product_name',
-              'market_name',
-              'market_address',
-            ],
+            enum: ['created_at', 'product_name', 'market_name', 'market_address'],
           },
         ],
       },
@@ -51,13 +46,7 @@ const requestQuery = {
         allOf: [
           { $ref: '#OrderByQuery' },
           {
-            enum: [
-              'created_at',
-              'full_name',
-              'phone_number',
-              'market_name',
-              'market_address',
-            ],
+            enum: ['created_at', 'full_name', 'phone_number', 'market_name', 'market_address'],
           },
         ],
       },
@@ -106,14 +95,7 @@ const requestBody = {
     additionalProperties: false,
   },
   postProduct: {
-    required: [
-      'description',
-      'discount',
-      'price_default',
-      'price_selling',
-      'product_name',
-      'qty',
-    ],
+    required: ['description', 'discount', 'price_default', 'price_selling', 'product_name', 'qty'],
     properties: {
       product_name: { type: 'string' },
       description: { type: 'string' },

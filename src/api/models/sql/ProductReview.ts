@@ -1,8 +1,5 @@
 import Sequelize, { DataTypes, Model, Optional } from 'sequelize';
-import type {
-  TransactionProduct,
-  TransactionProductId,
-} from './TransactionProduct';
+import type { TransactionProduct, TransactionProductId } from './TransactionProduct';
 
 export interface ProductReviewAttributes {
   id: number;
@@ -15,10 +12,7 @@ export interface ProductReviewAttributes {
 
 export type ProductReviewPk = 'id';
 export type ProductReviewId = ProductReview[ProductReviewPk];
-export type ProductReviewCreationAttributes = Optional<
-ProductReviewAttributes,
-ProductReviewPk
->;
+export type ProductReviewCreationAttributes = Optional<ProductReviewAttributes, ProductReviewPk>;
 
 export class ProductReview
   extends Model<ProductReviewAttributes, ProductReviewCreationAttributes>
@@ -44,8 +38,8 @@ export class ProductReview
   getTransactionProduct!: Sequelize.BelongsToGetAssociationMixin<TransactionProduct>;
 
   setTransactionProduct!: Sequelize.BelongsToSetAssociationMixin<
-  TransactionProduct,
-  TransactionProductId
+    TransactionProduct,
+    TransactionProductId
   >;
 
   createTransactionProduct!: Sequelize.BelongsToCreateAssociationMixin<TransactionProduct>;

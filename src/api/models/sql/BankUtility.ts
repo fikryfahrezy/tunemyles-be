@@ -11,10 +11,7 @@ export interface BankUtilityAttributes {
 
 export type BankUtilityPk = 'id';
 export type BankUtilityId = BankUtility[BankUtilityPk];
-export type BankUtilityCreationAttributes = Optional<
-BankUtilityAttributes,
-BankUtilityPk
->;
+export type BankUtilityCreationAttributes = Optional<BankUtilityAttributes, BankUtilityPk>;
 
 export class BankUtility
   extends Model<BankUtilityAttributes, BankUtilityCreationAttributes>

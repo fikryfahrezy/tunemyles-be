@@ -13,10 +13,7 @@ export interface BankAccountAttributes {
 
 export type BankAccountPk = 'id';
 export type BankAccountId = BankAccount[BankAccountPk];
-export type BankAccountCreationAttributes = Optional<
-BankAccountAttributes,
-BankAccountPk
->;
+export type BankAccountCreationAttributes = Optional<BankAccountAttributes, BankAccountPk>;
 
 export class BankAccount
   extends Model<BankAccountAttributes, BankAccountCreationAttributes>
@@ -94,9 +91,7 @@ export class BankAccount
           validate: {
             customValidator(value: number) {
               if (value < 0 || value > 2) {
-                throw new Error(
-                  'wallet visibility must be between or equal 0 and 2',
-                );
+                throw new Error('wallet visibility must be between or equal 0 and 2');
               }
             },
           },

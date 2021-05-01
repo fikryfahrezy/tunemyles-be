@@ -12,12 +12,7 @@ const requestQuery = {
         allOf: [
           { $ref: '#OrderByQuery' },
           {
-            enum: [
-              'created_at',
-              'product_name',
-              'market_name',
-              'market_address',
-            ],
+            enum: ['created_at', 'product_name', 'market_name', 'market_address'],
           },
         ],
       },

@@ -20,10 +20,7 @@ export interface MerchantAttributes {
 
 export type MerchantPk = 'id';
 export type MerchantId = Merchant[MerchantPk];
-export type MerchantCreationAttributes = Optional<
-MerchantAttributes,
-MerchantPk
->;
+export type MerchantCreationAttributes = Optional<MerchantAttributes, MerchantPk>;
 
 export class Merchant
   extends Model<MerchantAttributes, MerchantCreationAttributes>
@@ -77,10 +74,7 @@ export class Merchant
 
   getUserUtility!: Sequelize.BelongsToGetAssociationMixin<UserUtility>;
 
-  setUserUtility!: Sequelize.BelongsToSetAssociationMixin<
-  UserUtility,
-  UserUtilityId
-  >;
+  setUserUtility!: Sequelize.BelongsToSetAssociationMixin<UserUtility, UserUtilityId>;
 
   createUserUtility!: Sequelize.BelongsToCreateAssociationMixin<UserUtility>;
 

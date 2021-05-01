@@ -632,12 +632,7 @@
               "allOf": [
                 { "$ref": "#/components/schemas/OrderByQuery" },
                 {
-                  "enum": [
-                    "created_at",
-                    "product_name",
-                    "market_name",
-                    "market_address"
-                  ]
+                  "enum": ["created_at", "product_name", "market_name", "market_address"]
                 }
               ]
             }
@@ -1309,10 +1304,7 @@
             "name": "status",
             "in": "query",
             "schema": {
-              "allOf": [
-                { "$ref": "#/components/schemas/StatusQuery" },
-                { "enum": ["0", "1", "2"] }
-              ]
+              "allOf": [{ "$ref": "#/components/schemas/StatusQuery" }, { "enum": ["0", "1", "2"] }]
             }
           }
         ],
@@ -4875,10 +4867,7 @@
             "name": "status",
             "in": "query",
             "schema": {
-              "allOf": [
-                { "$ref": "#/components/schemas/StatusQuery" },
-                { "enum": ["0", "1", "2"] }
-              ]
+              "allOf": [{ "$ref": "#/components/schemas/StatusQuery" }, { "enum": ["0", "1", "2"] }]
             }
           }
         ],
@@ -4957,10 +4946,7 @@
             "name": "status",
             "in": "query",
             "schema": {
-              "allOf": [
-                { "$ref": "#/components/schemas/StatusQuery" },
-                { "enum": ["0", "1", "2"] }
-              ]
+              "allOf": [{ "$ref": "#/components/schemas/StatusQuery" }, { "enum": ["0", "1", "2"] }]
             }
           }
         ],
@@ -5039,12 +5025,7 @@
               "allOf": [
                 { "$ref": "#/components/schemas/OrderByQuery" },
                 {
-                  "enum": [
-                    "created_at",
-                    "product_name",
-                    "market_name",
-                    "market_address"
-                  ]
+                  "enum": ["created_at", "product_name", "market_name", "market_address"]
                 }
               ]
             }
@@ -5127,12 +5108,7 @@
               "allOf": [
                 { "$ref": "#/components/schemas/OrderByQuery" },
                 {
-                  "enum": [
-                    "created_at",
-                    "product_name",
-                    "market_name",
-                    "market_address"
-                  ]
+                  "enum": ["created_at", "product_name", "market_name", "market_address"]
                 }
               ]
             }
@@ -5209,13 +5185,7 @@
         }
       },
       "PostRegister": {
-        "required": [
-          "address",
-          "full_name",
-          "password",
-          "phone_number",
-          "username"
-        ],
+        "required": ["address", "full_name", "password", "phone_number", "username"],
         "type": "object",
         "properties": {
           "full_name": { "type": "string" },

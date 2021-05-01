@@ -13,10 +13,7 @@ export interface UserChatDetailAttributes {
 
 export type UserChatDetailPk = 'id';
 export type UserChatDetailId = UserChatDetail[UserChatDetailPk];
-export type UserChatDetailCreationAttributes = Optional<
-UserChatDetailAttributes,
-UserChatDetailPk
->;
+export type UserChatDetailCreationAttributes = Optional<UserChatDetailAttributes, UserChatDetailPk>;
 
 export class UserChatDetail
   extends Model<UserChatDetailAttributes, UserChatDetailCreationAttributes>

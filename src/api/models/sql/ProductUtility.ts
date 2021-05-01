@@ -16,10 +16,7 @@ export interface ProductUtilityAttributes {
 
 export type ProductUtilityPk = 'id';
 export type ProductUtilityId = ProductUtility[ProductUtilityPk];
-export type ProductUtilityCreationAttributes = Optional<
-ProductUtilityAttributes,
-ProductUtilityPk
->;
+export type ProductUtilityCreationAttributes = Optional<ProductUtilityAttributes, ProductUtilityPk>;
 
 export class ProductUtility
   extends Model<ProductUtilityAttributes, ProductUtilityCreationAttributes>
@@ -54,42 +51,27 @@ export class ProductUtility
 
   getProductCategories!: Sequelize.HasManyGetAssociationsMixin<ProductCategory>;
 
-  setProductCategories!: Sequelize.HasManySetAssociationsMixin<
-  ProductCategory,
-  ProductCategoryId
-  >;
+  setProductCategories!: Sequelize.HasManySetAssociationsMixin<ProductCategory, ProductCategoryId>;
 
-  addProductCategory!: Sequelize.HasManyAddAssociationMixin<
-  ProductCategory,
-  ProductCategoryId
-  >;
+  addProductCategory!: Sequelize.HasManyAddAssociationMixin<ProductCategory, ProductCategoryId>;
 
-  addProductCategories!: Sequelize.HasManyAddAssociationsMixin<
-  ProductCategory,
-  ProductCategoryId
-  >;
+  addProductCategories!: Sequelize.HasManyAddAssociationsMixin<ProductCategory, ProductCategoryId>;
 
   createProductCategory!: Sequelize.HasManyCreateAssociationMixin<ProductCategory>;
 
   removeProductCategory!: Sequelize.HasManyRemoveAssociationMixin<
-  ProductCategory,
-  ProductCategoryId
+    ProductCategory,
+    ProductCategoryId
   >;
 
   removeProductCategories!: Sequelize.HasManyRemoveAssociationsMixin<
-  ProductCategory,
-  ProductCategoryId
+    ProductCategory,
+    ProductCategoryId
   >;
 
-  hasU_product_category!: Sequelize.HasManyHasAssociationMixin<
-  ProductCategory,
-  ProductCategoryId
-  >;
+  hasU_product_category!: Sequelize.HasManyHasAssociationMixin<ProductCategory, ProductCategoryId>;
 
-  hasProductCategories!: Sequelize.HasManyHasAssociationsMixin<
-  ProductCategory,
-  ProductCategoryId
-  >;
+  hasProductCategories!: Sequelize.HasManyHasAssociationsMixin<ProductCategory, ProductCategoryId>;
 
   countProductCategories!: Sequelize.HasManyCountAssociationsMixin;
 
@@ -98,42 +80,21 @@ export class ProductUtility
 
   getProductPhotos!: Sequelize.HasManyGetAssociationsMixin<ProductPhoto>;
 
-  setProductPhotos!: Sequelize.HasManySetAssociationsMixin<
-  ProductPhoto,
-  ProductPhotoId
-  >;
+  setProductPhotos!: Sequelize.HasManySetAssociationsMixin<ProductPhoto, ProductPhotoId>;
 
-  addProductPhoto!: Sequelize.HasManyAddAssociationMixin<
-  ProductPhoto,
-  ProductPhotoId
-  >;
+  addProductPhoto!: Sequelize.HasManyAddAssociationMixin<ProductPhoto, ProductPhotoId>;
 
-  addProductPhotos!: Sequelize.HasManyAddAssociationsMixin<
-  ProductPhoto,
-  ProductPhotoId
-  >;
+  addProductPhotos!: Sequelize.HasManyAddAssociationsMixin<ProductPhoto, ProductPhotoId>;
 
   createProductPhoto!: Sequelize.HasManyCreateAssociationMixin<ProductPhoto>;
 
-  removeProductPhoto!: Sequelize.HasManyRemoveAssociationMixin<
-  ProductPhoto,
-  ProductPhotoId
-  >;
+  removeProductPhoto!: Sequelize.HasManyRemoveAssociationMixin<ProductPhoto, ProductPhotoId>;
 
-  removeProductPhotos!: Sequelize.HasManyRemoveAssociationsMixin<
-  ProductPhoto,
-  ProductPhotoId
-  >;
+  removeProductPhotos!: Sequelize.HasManyRemoveAssociationsMixin<ProductPhoto, ProductPhotoId>;
 
-  hasProductPhoto!: Sequelize.HasManyHasAssociationMixin<
-  ProductPhoto,
-  ProductPhotoId
-  >;
+  hasProductPhoto!: Sequelize.HasManyHasAssociationMixin<ProductPhoto, ProductPhotoId>;
 
-  hasProductPhotos!: Sequelize.HasManyHasAssociationsMixin<
-  ProductPhoto,
-  ProductPhotoId
-  >;
+  hasProductPhotos!: Sequelize.HasManyHasAssociationsMixin<ProductPhoto, ProductPhotoId>;
 
   countProductPhotos!: Sequelize.HasManyCountAssociationsMixin;
 

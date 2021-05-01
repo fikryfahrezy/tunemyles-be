@@ -16,10 +16,7 @@ const start = async function start() {
         message: error,
       };
 
-      res
-        .code(500)
-        .header('Content-Type', 'application/json; charset=utf-8')
-        .send(data);
+      res.code(500).header('Content-Type', 'application/json; charset=utf-8').send(data);
     },
   });
   server.addHook('onClose', async () => {

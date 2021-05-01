@@ -5,24 +5,11 @@ import type {
   HookHandlerDoneFunction,
 } from 'fastify';
 import type { PostRequestBody } from '../../types/schema';
-import {
-  controllerWrapper,
-  handlerWrapper,
-} from '../../utils/serverfn-wrapper';
+import { controllerWrapper, handlerWrapper } from '../../utils/serverfn-wrapper';
 import { schemaValidationError } from '../../utils/error-handler';
 import { exampleProtect } from '../../middlewares/protect-route';
-import {
-  requestBody,
-  requestHeader,
-  requestParams,
-  responses,
-} from './schemas';
-import {
-  getExample,
-  postExample,
-  getIdExample,
-  postFileExample,
-} from './controllers';
+import { requestBody, requestHeader, requestParams, responses } from './schemas';
+import { getExample, postExample, getIdExample, postFileExample } from './controllers';
 
 const routes = function routes(
   fastify: FastifyInstance,
@@ -55,11 +42,7 @@ const routes = function routes(
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preHandler: (
-        req: FastifyRequest<{ Body: PostRequestBody }>,
-        res,
-        done,
-      ) => {
+      preHandler: (req: FastifyRequest<{ Body: PostRequestBody }>, res, done) => {
         const validation = req.validationError;
         if (validation) schemaValidationError(validation, res);
         done();

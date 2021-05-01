@@ -2,10 +2,7 @@ import { Sequelize } from 'sequelize';
 import { Bank } from './Bank';
 import type { BankAttributes, BankCreationAttributes } from './Bank';
 import { Category } from './Category';
-import type {
-  CategoryAttributes,
-  CategoryCreationAttributes,
-} from './Category';
+import type { CategoryAttributes, CategoryCreationAttributes } from './Category';
 import { Faq } from './Faq';
 import type { FaqAttributes, FaqCreationAttributes } from './Faq';
 import { Media } from './Media';
@@ -17,60 +14,30 @@ import type { UserAttributes, UserCreationAttributes } from './User';
 import { Wallet } from './Wallet';
 import type { WalletAttributes, WalletCreationAttributes } from './Wallet';
 import { BankUtility } from './BankUtility';
-import type {
-  BankUtilityAttributes,
-  BankUtilityCreationAttributes,
-} from './BankUtility';
+import type { BankUtilityAttributes, BankUtilityCreationAttributes } from './BankUtility';
 import { BankAccount } from './BankAccount';
-import type {
-  BankAccountAttributes,
-  BankAccountCreationAttributes,
-} from './BankAccount';
+import type { BankAccountAttributes, BankAccountCreationAttributes } from './BankAccount';
 import { ProductUtility } from './ProductUtility';
-import type {
-  ProductUtilityAttributes,
-  ProductUtilityCreationAttributes,
-} from './ProductUtility';
+import type { ProductUtilityAttributes, ProductUtilityCreationAttributes } from './ProductUtility';
 import { ProductCategory } from './ProductCategory';
 import type {
   ProductCategoryAttributes,
   ProductCategoryCreationAttributes,
 } from './ProductCategory';
 import { ProductPhoto } from './ProductPhoto';
-import type {
-  ProductPhotoAttributes,
-  ProductPhotoCreationAttributes,
-} from './ProductPhoto';
+import type { ProductPhotoAttributes, ProductPhotoCreationAttributes } from './ProductPhoto';
 import { UserUtility } from './UserUtility';
-import type {
-  UserUtilityAttributes,
-  UserUtilityCreationAttributes,
-} from './UserUtility';
+import type { UserUtilityAttributes, UserUtilityCreationAttributes } from './UserUtility';
 import { BankUser } from './BankUser';
-import type {
-  BankUserAttributes,
-  BankUserCreationAttributes,
-} from './BankUser';
+import type { BankUserAttributes, BankUserCreationAttributes } from './BankUser';
 import { UserCart } from './UserCart';
-import type {
-  UserCartAttributes,
-  UserCartCreationAttributes,
-} from './UserCart';
+import type { UserCartAttributes, UserCartCreationAttributes } from './UserCart';
 import { UserChat } from './UserChat';
-import type {
-  UserChatAttributes,
-  UserChatCreationAttributes,
-} from './UserChat';
+import type { UserChatAttributes, UserChatCreationAttributes } from './UserChat';
 import { UserChatDetail } from './UserChatDetail';
-import type {
-  UserChatDetailAttributes,
-  UserChatDetailCreationAttributes,
-} from './UserChatDetail';
+import type { UserChatDetailAttributes, UserChatDetailCreationAttributes } from './UserChatDetail';
 import { Merchant } from './Merchant';
-import type {
-  MerchantAttributes,
-  MerchantCreationAttributes,
-} from './Merchant';
+import type { MerchantAttributes, MerchantCreationAttributes } from './Merchant';
 import { MerchantLocation } from './MerchantLocation';
 import type {
   MerchantLocationAttributes,
@@ -87,30 +54,18 @@ import type {
   UserTransactionCreationAttributes,
 } from './UserTransaction';
 import { ProductReview } from './ProductReview';
-import type {
-  ProductReviewAttributes,
-  ProductReviewCreationAttributes,
-} from './ProductReview';
+import type { ProductReviewAttributes, ProductReviewCreationAttributes } from './ProductReview';
 import { TransactionProduct } from './TransactionProduct';
 import type {
   TransactionProductAttributes,
   TransactionProductCreationAttributes,
 } from './TransactionProduct';
 import { UserWallet } from './UserWallet';
-import type {
-  UserWalletAttributes,
-  UserWalletCreationAttributes,
-} from './UserWallet';
+import type { UserWalletAttributes, UserWalletCreationAttributes } from './UserWallet';
 import { UserTopUp } from './UserTopUp';
-import type {
-  UserTopUpAttributes,
-  UserTopUpCreationAttributes,
-} from './UserTopUp';
+import type { UserTopUpAttributes, UserTopUpCreationAttributes } from './UserTopUp';
 import { UserWithdraw } from './UserWithdraw';
-import type {
-  UserWithdrawAttributes,
-  UserWithdrawCreationAttributes,
-} from './UserWithdraw';
+import type { UserWithdrawAttributes, UserWithdrawCreationAttributes } from './UserWithdraw';
 
 export type ModelType = {
   Bank: Bank;
@@ -118,7 +73,7 @@ export type ModelType = {
   Faq: Faq;
   Media: Media;
   Product: Product;
-  UserType: User;
+  User: User;
   Wallet: Wallet;
   BankUtility: BankUtility;
   BankAccount: BankAccount;

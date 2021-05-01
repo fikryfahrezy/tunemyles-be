@@ -15,10 +15,7 @@ export interface UserCartAttributes {
 
 export type UserCartPk = 'id';
 export type UserCartId = UserCart[UserCartPk];
-export type UserCartCreationAttributes = Optional<
-UserCartAttributes,
-UserCartPk
->;
+export type UserCartCreationAttributes = Optional<UserCartAttributes, UserCartPk>;
 
 export class UserCart
   extends Model<UserCartAttributes, UserCartCreationAttributes>

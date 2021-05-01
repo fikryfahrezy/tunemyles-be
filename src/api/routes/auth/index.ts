@@ -5,16 +5,8 @@ import type {
   HookHandlerDoneFunction,
 } from 'fastify';
 import type { Request } from '../../types/fasitify';
-import type {
-  RegisterBody,
-  LoginBody,
-  ApiKeyHeader,
-  UpdateProfileBody,
-} from '../../types/schema';
-import {
-  controllerWrapper,
-  handlerWrapper,
-} from '../../utils/serverfn-wrapper';
+import type { RegisterBody, LoginBody, ApiKeyHeader, UpdateProfileBody } from '../../types/schema';
+import { controllerWrapper, handlerWrapper } from '../../utils/serverfn-wrapper';
 import { schemaValidationError } from '../../utils/error-handler';
 import { protect } from '../../middlewares/protect-route';
 import { requestHeader, requestBody, responses } from './schemas';
@@ -88,11 +80,7 @@ const routes = function routes(
         },
       },
       preHandler: [
-        (
-          req: FastifyRequest<{ Headers: ApiKeyHeader | unknown }>,
-          res,
-          done,
-        ) => {
+        (req: FastifyRequest<{ Headers: ApiKeyHeader | unknown }>, res, done) => {
           const validation = req.validationError;
           if (validation) schemaValidationError(validation, res);
           done();

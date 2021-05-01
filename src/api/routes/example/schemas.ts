@@ -20,15 +20,6 @@ export const requestBody = {
       name: { type: 'string' },
     },
     additionalProperties: false,
-    errorMessage: {
-      required: {
-        name: 'name is required',
-      },
-      type: 'data sould be an object',
-      properties: {
-        name: 'name should be string',
-      },
-    },
   },
   postFile: {
     required: ['file'],

@@ -15,8 +15,8 @@ export interface UserLostPasswordAttributes {
 export type UserLostPasswordPk = 'id';
 export type UserLostPasswordId = UserLostPassword[UserLostPasswordPk];
 export type UserLostPasswordCreationAttributes = Optional<
-UserLostPasswordAttributes,
-UserLostPasswordPk
+  UserLostPasswordAttributes,
+  UserLostPasswordPk
 >;
 
 export class UserLostPassword
@@ -39,10 +39,7 @@ export class UserLostPassword
 
   getUserUtility!: Sequelize.BelongsToGetAssociationMixin<UserUtility>;
 
-  setUserUtility!: Sequelize.BelongsToSetAssociationMixin<
-  UserUtility,
-  UserUtilityId
-  >;
+  setUserUtility!: Sequelize.BelongsToSetAssociationMixin<UserUtility, UserUtilityId>;
 
   createUserUtility!: Sequelize.BelongsToCreateAssociationMixin<UserUtility>;
 

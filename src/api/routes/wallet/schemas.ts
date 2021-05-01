@@ -28,10 +28,7 @@ const requestQuery = {
       page: { $ref: '#PageQuery' },
       search: { $ref: '#SearchQuery' },
       orderBy: {
-        allOf: [
-          { $ref: '#OrderByQuery' },
-          { enum: ['created_at', 'balance_request'] },
-        ],
+        allOf: [{ $ref: '#OrderByQuery' }, { enum: ['created_at', 'balance_request'] }],
       },
       orderDirection: { $ref: '#OrderDirectionQuery' },
       status: {

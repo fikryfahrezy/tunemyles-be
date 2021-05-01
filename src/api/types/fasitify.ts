@@ -20,19 +20,17 @@ export type Request<B = unknown, Q = unknown, P = unknown, H = unknown> = {
 export type SyncHookFn = (
   req: FastifyRequest,
   res: FastifyReply,
-  done: HookHandlerDoneFunction
+  done: HookHandlerDoneFunction,
 ) => void;
 
-export type RequestHandler<
-  T extends RequestGenericInterface,
-> = RouteHandlerMethod<
-RawServerDefault,
-RawRequestDefaultExpression<RawServerDefault>,
-RawReplyDefaultExpression<RawServerDefault>,
-T
+export type RequestHandler<T extends RequestGenericInterface> = RouteHandlerMethod<
+  RawServerDefault,
+  RawRequestDefaultExpression<RawServerDefault>,
+  RawReplyDefaultExpression<RawServerDefault>,
+  T
 >;
 
 export type PreHandlerFn<T extends RequestGenericInterface> = (
   req: FastifyRequest<T, Server, IncomingMessage>,
-  res: FastifyReply<Server, IncomingMessage, ServerResponse, T, unknown>
+  res: FastifyReply<Server, IncomingMessage, ServerResponse, T, unknown>,
 ) => Promise<void> | void;

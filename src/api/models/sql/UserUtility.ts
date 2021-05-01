@@ -17,10 +17,7 @@ export interface UserUtilityAttributes {
 
 export type UserUtilityPk = 'id';
 export type UserUtilityId = UserUtility[UserUtilityPk];
-export type UserUtilityCreationAttributes = Optional<
-UserUtilityAttributes,
-UserUtilityPk
->;
+export type UserUtilityCreationAttributes = Optional<UserUtilityAttributes, UserUtilityPk>;
 
 export class UserUtility
   extends Model<UserUtilityAttributes, UserUtilityCreationAttributes>
@@ -61,15 +58,9 @@ export class UserUtility
 
   createMerchant!: Sequelize.HasManyCreateAssociationMixin<Merchant>;
 
-  removeMerchant!: Sequelize.HasManyRemoveAssociationMixin<
-  Merchant,
-  MerchantId
-  >;
+  removeMerchant!: Sequelize.HasManyRemoveAssociationMixin<Merchant, MerchantId>;
 
-  removeMerchants!: Sequelize.HasManyRemoveAssociationsMixin<
-  Merchant,
-  MerchantId
-  >;
+  removeMerchants!: Sequelize.HasManyRemoveAssociationsMixin<Merchant, MerchantId>;
 
   hasMerchant!: Sequelize.HasManyHasAssociationMixin<Merchant, MerchantId>;
 
@@ -83,40 +74,34 @@ export class UserUtility
   getuserLostPasswords!: Sequelize.HasManyGetAssociationsMixin<UserLostPassword>;
 
   setuserLostPasswords!: Sequelize.HasManySetAssociationsMixin<
-  UserLostPassword,
-  UserLostPasswordId
+    UserLostPassword,
+    UserLostPasswordId
   >;
 
-  addUserLostPassword!: Sequelize.HasManyAddAssociationMixin<
-  UserLostPassword,
-  UserLostPasswordId
-  >;
+  addUserLostPassword!: Sequelize.HasManyAddAssociationMixin<UserLostPassword, UserLostPasswordId>;
 
   adduserLostPasswords!: Sequelize.HasManyAddAssociationsMixin<
-  UserLostPassword,
-  UserLostPasswordId
+    UserLostPassword,
+    UserLostPasswordId
   >;
 
   createUserLostPassword!: Sequelize.HasManyCreateAssociationMixin<UserLostPassword>;
 
   removeUserLostPassword!: Sequelize.HasManyRemoveAssociationMixin<
-  UserLostPassword,
-  UserLostPasswordId
+    UserLostPassword,
+    UserLostPasswordId
   >;
 
   removeUserLostPasswords!: Sequelize.HasManyRemoveAssociationsMixin<
-  UserLostPassword,
-  UserLostPasswordId
+    UserLostPassword,
+    UserLostPasswordId
   >;
 
-  hasUserLostPassword!: Sequelize.HasManyHasAssociationMixin<
-  UserLostPassword,
-  UserLostPasswordId
-  >;
+  hasUserLostPassword!: Sequelize.HasManyHasAssociationMixin<UserLostPassword, UserLostPasswordId>;
 
   hasuserLostPasswords!: Sequelize.HasManyHasAssociationsMixin<
-  UserLostPassword,
-  UserLostPasswordId
+    UserLostPassword,
+    UserLostPasswordId
   >;
 
   countUserLostPasswords!: Sequelize.HasManyCountAssociationsMixin;
@@ -126,42 +111,21 @@ export class UserUtility
 
   getUserWallets!: Sequelize.HasManyGetAssociationsMixin<UserWallet>;
 
-  setUserWallets!: Sequelize.HasManySetAssociationsMixin<
-  UserWallet,
-  UserWalletId
-  >;
+  setUserWallets!: Sequelize.HasManySetAssociationsMixin<UserWallet, UserWalletId>;
 
-  addUserWallet!: Sequelize.HasManyAddAssociationMixin<
-  UserWallet,
-  UserWalletId
-  >;
+  addUserWallet!: Sequelize.HasManyAddAssociationMixin<UserWallet, UserWalletId>;
 
-  addUserWallets!: Sequelize.HasManyAddAssociationsMixin<
-  UserWallet,
-  UserWalletId
-  >;
+  addUserWallets!: Sequelize.HasManyAddAssociationsMixin<UserWallet, UserWalletId>;
 
   createUserWallet!: Sequelize.HasManyCreateAssociationMixin<UserWallet>;
 
-  removeUserWallet!: Sequelize.HasManyRemoveAssociationMixin<
-  UserWallet,
-  UserWalletId
-  >;
+  removeUserWallet!: Sequelize.HasManyRemoveAssociationMixin<UserWallet, UserWalletId>;
 
-  removeUserWallets!: Sequelize.HasManyRemoveAssociationsMixin<
-  UserWallet,
-  UserWalletId
-  >;
+  removeUserWallets!: Sequelize.HasManyRemoveAssociationsMixin<UserWallet, UserWalletId>;
 
-  hasUserWallet!: Sequelize.HasManyHasAssociationMixin<
-  UserWallet,
-  UserWalletId
-  >;
+  hasUserWallet!: Sequelize.HasManyHasAssociationMixin<UserWallet, UserWalletId>;
 
-  hasUserWallets!: Sequelize.HasManyHasAssociationsMixin<
-  UserWallet,
-  UserWalletId
-  >;
+  hasUserWallets!: Sequelize.HasManyHasAssociationsMixin<UserWallet, UserWalletId>;
 
   countUserWallets!: Sequelize.HasManyCountAssociationsMixin;
 

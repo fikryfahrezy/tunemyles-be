@@ -19,15 +19,12 @@ export interface TransactionProductAttributes {
 export type TransactionProductPk = 'id';
 export type TransactionProductId = TransactionProduct[TransactionProductPk];
 export type TransactionProductCreationAttributes = Optional<
-TransactionProductAttributes,
-TransactionProductPk
+  TransactionProductAttributes,
+  TransactionProductPk
 >;
 
 export class TransactionProduct
-  extends Model<
-  TransactionProductAttributes,
-  TransactionProductCreationAttributes
-  >
+  extends Model<TransactionProductAttributes, TransactionProductCreationAttributes>
   implements TransactionProductAttributes {
   id!: number;
 
@@ -52,10 +49,7 @@ export class TransactionProduct
 
   getId_m_products_m_product!: Sequelize.BelongsToGetAssociationMixin<Product>;
 
-  setId_m_products_m_product!: Sequelize.BelongsToSetAssociationMixin<
-  Product,
-  ProductId
-  >;
+  setId_m_products_m_product!: Sequelize.BelongsToSetAssociationMixin<Product, ProductId>;
 
   createId_m_products_m_product!: Sequelize.BelongsToCreateAssociationMixin<Product>;
 
@@ -64,10 +58,7 @@ export class TransactionProduct
 
   getUserTransaction!: Sequelize.BelongsToGetAssociationMixin<UserTransaction>;
 
-  setUserTransaction!: Sequelize.BelongsToSetAssociationMixin<
-  UserTransaction,
-  UserTransactionId
-  >;
+  setUserTransaction!: Sequelize.BelongsToSetAssociationMixin<UserTransaction, UserTransactionId>;
 
   createUserTransaction!: Sequelize.BelongsToCreateAssociationMixin<UserTransaction>;
 
@@ -79,42 +70,21 @@ export class TransactionProduct
 
   getProductReviews!: Sequelize.HasManyGetAssociationsMixin<ProductReview>;
 
-  setProductReviews!: Sequelize.HasManySetAssociationsMixin<
-  ProductReview,
-  ProductReviewId
-  >;
+  setProductReviews!: Sequelize.HasManySetAssociationsMixin<ProductReview, ProductReviewId>;
 
-  addProductReview!: Sequelize.HasManyAddAssociationMixin<
-  ProductReview,
-  ProductReviewId
-  >;
+  addProductReview!: Sequelize.HasManyAddAssociationMixin<ProductReview, ProductReviewId>;
 
-  addProductReviews!: Sequelize.HasManyAddAssociationsMixin<
-  ProductReview,
-  ProductReviewId
-  >;
+  addProductReviews!: Sequelize.HasManyAddAssociationsMixin<ProductReview, ProductReviewId>;
 
   createProductReview!: Sequelize.HasManyCreateAssociationMixin<ProductReview>;
 
-  removeProductReview!: Sequelize.HasManyRemoveAssociationMixin<
-  ProductReview,
-  ProductReviewId
-  >;
+  removeProductReview!: Sequelize.HasManyRemoveAssociationMixin<ProductReview, ProductReviewId>;
 
-  removeProductReviews!: Sequelize.HasManyRemoveAssociationsMixin<
-  ProductReview,
-  ProductReviewId
-  >;
+  removeProductReviews!: Sequelize.HasManyRemoveAssociationsMixin<ProductReview, ProductReviewId>;
 
-  hasProductReview!: Sequelize.HasManyHasAssociationMixin<
-  ProductReview,
-  ProductReviewId
-  >;
+  hasProductReview!: Sequelize.HasManyHasAssociationMixin<ProductReview, ProductReviewId>;
 
-  hasProductReviews!: Sequelize.HasManyHasAssociationsMixin<
-  ProductReview,
-  ProductReviewId
-  >;
+  hasProductReviews!: Sequelize.HasManyHasAssociationsMixin<ProductReview, ProductReviewId>;
 
   countProductReviews!: Sequelize.HasManyCountAssociationsMixin;
 

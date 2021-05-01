@@ -43,10 +43,10 @@ export type RegisterBody = {
 };
 
 export type UpdateProfileBody = {
-  full_name: string;
-  address: string;
-  phone_number: string;
-  avatar: AddedFileBody[];
+  full_name?: string;
+  address?: string;
+  phone_number?: string;
+  avatar?: AddedFileBody[];
 };
 
 export type ResetPasswordBody = {
