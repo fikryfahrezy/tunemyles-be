@@ -1,12 +1,9 @@
-import type {
-  FastifyRequest,
-  FastifyInstance,
-  FastifyPluginOptions,
-  HookHandlerDoneFunction,
-} from 'fastify';
-import type { PostRequestBody } from '../../types/schema';
+import type { FastifyInstance, FastifyPluginOptions, HookHandlerDoneFunction } from 'fastify';
+import type { Request } from '../../types/fasitify';
+import type { PostRequestBody, FileRequestBody } from '../../types/schema';
 import { controllerWrapper, handlerWrapper } from '../../utils/serverfn-wrapper';
 import { schemaValidationError } from '../../utils/error-handler';
+import { renameFiles } from '../../utils/file-management';
 import { exampleProtect } from '../../middlewares/protect-route';
 import { requestBody, requestHeader, requestParams, responses } from './schemas';
 import { getExample, postExample, getIdExample, postFileExample } from './controllers';
@@ -30,7 +27,7 @@ const routes = function routes(
     controllerWrapper(getExample),
   );
 
-  fastify.post(
+  fastify.post<Request<PostRequestBody>>(
     '/example',
     {
       attachValidation: true,
@@ -42,7 +39,7 @@ const routes = function routes(
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preHandler: (req: FastifyRequest<{ Body: PostRequestBody }>, res, done) => {
+      preHandler: (req, res, done) => {
         const validation = req.validationError;
         if (validation) schemaValidationError(validation, res);
         done();
@@ -66,7 +63,7 @@ const routes = function routes(
     controllerWrapper(getIdExample),
   );
 
-  fastify.post(
+  fastify.post<Request<FileRequestBody>>(
     '/example/file',
     {
       schema: {
@@ -76,6 +73,13 @@ const routes = function routes(
           '4xx': { $ref: '#ApiResponse' },
           '5xx': { $ref: '#ApiResponse' },
         },
+      },
+      preValidation: (req, __, done) => {
+        req.body = {
+          ...req.body,
+          file: renameFiles(req.url, req.body.file) ?? req.body.file,
+        };
+        done();
       },
     },
     controllerWrapper(postFileExample),
@@ -94,12 +98,12 @@ const routes = function routes(
         },
       },
       preHandler: [
-        (req: FastifyRequest<{ Headers: unknown }>, res, done) => {
+        handlerWrapper(exampleProtect),
+        (req, res, done) => {
           const validation = req.validationError;
           if (validation) schemaValidationError(validation, res);
           done();
         },
-        handlerWrapper(exampleProtect),
       ],
     },
     controllerWrapper(getExample),

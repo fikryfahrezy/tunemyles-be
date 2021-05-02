@@ -1,9 +1,11 @@
+import { Config } from '@jest/types';
+
 /*
  * For a detailed explanation regarding each configuration property and type check, visit:
  * https://jestjs.io/docs/en/configuration.html
  */
 
-export default {
+export default async (): Promise<Config.InitialOptions> => ({
   // All imported modules in your tests should be mocked automatically
   // automock: false,
 
@@ -189,4 +191,4 @@ export default {
 
   // Whether to use watchman for file crawling
   // watchman: true,
-};
+});

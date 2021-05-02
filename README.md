@@ -64,9 +64,9 @@ src                                 ->  Application main folder.
 
 ```
 
-- Naming file using `kebab-case` style like on [Google JavaScript Style Guide](https://google.github.io/styleguide/jsguide.html#file-name)
-- Naming import usgin `lowerCamelCase` style like on [Google JavaScript Style Guide](https://google.github.io/styleguide/jsguide.html#file-es-modules)
 - The `API` folder is expected to change the most, so this folder will become a hot area, and getting hotter inside.
+- Naming file using `kebab-case` style like on [Google JavaScript Style Guide](https://google.github.io/styleguide/jsguide.html#file-name)
+- Naming import using `lowerCamelCase` style like on [Google JavaScript Style Guide](https://google.github.io/styleguide/jsguide.html#file-es-modules)
 - Other references [airbnb / javascript](https://github.com/airbnb/javascript) & [google / styleguide](https://github.com/google/styleguide). Most of code style follow the Airbnb one
 
 ## [Application Code Style](#code-style)

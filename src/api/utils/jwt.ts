@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import type { JwtPayload } from '../types/util';
+import type CustModelType from '../types/model';
 import { ErrorResponse } from './error-handler';
 
 const { JWT_TEMP_TOKEN, JWT_TEMP_TOKEN_EXP } = process.env;
@@ -45,4 +46,30 @@ export const verifyJwt: (
   }
 
   return { userId, utilId, type };
+};
+
+export const verifyToken: (
+  who: string,
+  token?: string,
+) => CustModelType['UserToken'] = function userUtility(who, token) {
+  if (!token) throw new ErrorResponse('forbidden', 403);
+
+  const user = verifyJwt(token);
+  if (!user) throw new ErrorResponse('forbidden', 403);
+  else {
+    switch (who) {
+      case 'user':
+        if (user.type && user.type >= 3) throw new ErrorResponse('forbidden', 403);
+        break;
+      case 'admin':
+        if (user.type !== 2 || user.type >= 3) throw new ErrorResponse('forbidden', 403);
+        break;
+      case 'merchant':
+        if (user.type >= 3 || user.type < 1) throw new ErrorResponse('forbidden', 403);
+        break;
+      default:
+        throw new ErrorResponse('forbidden', 403);
+    }
+  }
+  return user;
 };

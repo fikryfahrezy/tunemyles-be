@@ -64,6 +64,9 @@ const app = function app(opts: FastifyServerOptions = {}): FastifyInstance {
     throwFileSizeLimit: true,
     addToBody: true,
     sharedSchemaId: '#MultiPartSchema',
+    limits: {
+      fileSize: 5000000,
+    },
   });
   fastifyApp.register(fastifyRequestContextPlugin, {
     defaultStoreValues: {

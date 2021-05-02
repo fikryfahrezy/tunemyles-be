@@ -18,3 +18,6 @@ https://stackoverflow.com/questions/12018245/regular-expression-to-validate-user
 
 Validate phone number with JavaScript
 https://stackoverflow.com/questions/4338267/validate-phone-number-with-javascript
+
+Remove all occurrences except last?
+https://stackoverflow.com/a/28673744/12976234

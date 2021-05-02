@@ -13,30 +13,40 @@ export const createUser: (data: RegisterBody) => Promise<ModelType['User']> = (
 export const createUserUtility: (
   token: string,
   userId: number,
-) => Promise<ModelType['UserUtility']> = (token, userId) =>
-  UserUtility.create({ api_token: token, id_m_users: userId });
+) => Promise<ModelType['UserUtility']> = function createUserUtility(token, userId) {
+  return UserUtility.create({ api_token: token, id_m_users: userId });
+};
 
-export const createUserWallet = (userUtilityId: number): Promise<ModelType['UserWallet']> =>
-  UserWallet.create({ id_u_user: userUtilityId });
+export const createUserWallet: (
+  userUtilityId: number,
+) => Promise<ModelType['UserWallet']> = function createUserWallet(userUtilityId) {
+  return UserWallet.create({ id_u_user: userUtilityId });
+};
 
-export const createUserImg: (imgName: string) => Promise<ModelType['Media']> = (label) =>
-  Media.create({ label, uri: `/img/${label}` });
+export const createUserImg: (
+  imgName: string,
+) => Promise<ModelType['Media']> = function createUserImg(label) {
+  return Media.create({ label, uri: `/img/${label}` });
+};
 
 export const updateUser: (
   userId: number,
   data: UpdateProfileBody & { id_photo?: number },
-) => Promise<[number, ModelType['User'][]]> = (id, data) => User.update(data, { where: { id } });
+) => Promise<[number, ModelType['User'][]]> = function updateUser(id, data) {
+  return User.update(data, { where: { id } });
+};
 
 export const updateUserImg: (
   imgId: number,
   imgName: string,
-) => Promise<[number, ModelType['Media'][]]> = (id, label) =>
-  Media.update({ label, uri: `/img/${label}` }, { where: { id } });
+) => Promise<[number, ModelType['Media'][]]> = function getUpdateUserImg(id, label) {
+  return Media.update({ label, uri: `/img/${label}` }, { where: { id } });
+};
 
 export const getUser: (
   by: 'USERNAME' | 'ID',
   val: string | number,
-) => Promise<CustModelType['User'] | null> = (by, val) => {
+) => Promise<CustModelType['User'] | null> = function getUser(by, val) {
   let sqlQuery = `
         SELECT
             id,
@@ -64,9 +74,9 @@ export const getUser: (
   });
 };
 
-export const getUserUtility: (userId: number) => Promise<CustModelType['UserUtility']> = (
-  userId,
-) => {
+export const getUserUtility: (
+  userId: number,
+) => Promise<CustModelType['UserUtility']> = function getUserUtility(userId) {
   const sqlQuery = `
         SELECT
             id,
@@ -85,9 +95,9 @@ export const getUserUtility: (userId: number) => Promise<CustModelType['UserUtil
   });
 };
 
-export const getUserAccount: (userId: number) => Promise<CustModelType['UserAccount']> = (
-  userId,
-) => {
+export const getUserAccount: (
+  userId: number,
+) => Promise<CustModelType['UserAccount']> = function getUserAccount(userId) {
   const sqlQuery = ` 
         SELECT
             mu.full_name,
@@ -109,9 +119,9 @@ export const getUserAccount: (userId: number) => Promise<CustModelType['UserAcco
   });
 };
 
-export const getUserWallets: (userId: number) => Promise<CustModelType['UserWallet'][]> = (
-  userId,
-) => {
+export const getUserWallets: (
+  userId: number,
+) => Promise<CustModelType['UserWallet'][]> = function getUserWallets(userId) {
   const sqlQuery = `
         SELECT
             uuw.balance,

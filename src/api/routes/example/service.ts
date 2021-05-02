@@ -20,8 +20,6 @@ export const getIdService: (id: number) => DummyDataType | Error = (id) => {
   return data;
 };
 
-export const postFileService: (files: AddedFileBody[]) => Promise<void> = async (
-  files: AddedFileBody[],
-) => {
+export const postFileService: (files: AddedFileBody[]) => Promise<void> = async (files) => {
   await saveFiles(files);
 };

@@ -21,8 +21,7 @@ export const postExample: RequestHandler<Request<PostRequestBody>> = function po
   req: FastifyRequest<{ Body: PostRequestBody }>,
   res: FastifyReply,
 ): void {
-  const { name } = req.body;
-  postService(name);
+  postService(req.body.name);
 
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
@@ -37,9 +36,7 @@ export const getIdExample: RequestHandler<
   req: FastifyRequest<{ Params: GetIdRequestParams }>,
   res: FastifyReply,
 ): void {
-  const { id } = req.params;
-  const paramId = Number(id);
-  const data = getIdService(paramId);
+  const data = getIdService(Number(req.params.id));
 
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
@@ -55,8 +52,7 @@ export const postFileExample: RequestHandler<
   req: FastifyRequest<{ Body: FileRequestBody }>,
   res: FastifyReply,
 ): Promise<void> {
-  const { file } = req.body;
-  await postFileService(file);
+  await postFileService(req.body.file);
 
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,

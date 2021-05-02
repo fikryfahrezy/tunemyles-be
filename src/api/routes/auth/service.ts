@@ -3,6 +3,7 @@ import type { RegisterBody, LoginBody, UpdateProfileBody } from '../../types/sch
 import type CustModelType from '../../types/model';
 import { ErrorResponse } from '../../utils/error-handler';
 import { issueJwt } from '../../utils/jwt';
+import { saveFiles } from '../../utils/file-management';
 import {
   getUser,
   getUserUtility,
@@ -14,7 +15,7 @@ import {
   createUser,
   createUserUtility,
   createUserWallet,
-} from '../../repositories/AuthRepository';
+} from '../../repositories/UserRepository';
 
 export const userRegistration: (data: RegisterBody) => Promise<CustModelType['UserAuth']> = async (
   data,
@@ -75,11 +76,13 @@ export const updateUserProfile: (
 
   const { id, id_photo: imgId } = user;
 
-  if (avatar && imgId)
+  if (avatar && imgId) {
     await Promise.all([updateUser(id, userData), updateUserImg(imgId, avatar[0].filename)]);
-  else if (avatar && !imgId) {
+    await saveFiles(avatar);
+  } else if (avatar && !imgId) {
     const img = await createUserImg(avatar[0].filename);
     await updateUser(id, { ...userData, id_photo: img.id });
+    await saveFiles(avatar);
   } else await updateUser(id, userData);
 };
 

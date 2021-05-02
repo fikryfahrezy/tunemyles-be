@@ -16,8 +16,7 @@ export const register: RequestHandler<Request<RegisterBody>> = async function re
   req: FastifyRequest<{ Body: RegisterBody }>,
   res: FastifyReply,
 ): Promise<void> {
-  const { body } = req;
-  const data = await userRegistration(body);
+  const data = await userRegistration(req.body);
 
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
@@ -31,8 +30,7 @@ export const login: RequestHandler<Request<LoginBody>> = async function login(
   req: FastifyRequest<{ Body: LoginBody }>,
   res: FastifyReply,
 ): Promise<void> {
-  const { body } = req;
-  const data = await userLogin(body);
+  const data = await userLogin(req.body);
 
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
