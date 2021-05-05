@@ -3,11 +3,10 @@ import type { RegisterBody, LoginBody, UpdateProfileBody } from '../../types/sch
 import type CustModelType from '../../types/model';
 import { ErrorResponse } from '../../utils/error-handler';
 import { issueJwt } from '../../utils/jwt';
-import { saveFiles } from '../../utils/file-management';
+import { saveFiles, deleteLocalFile } from '../../utils/file-management';
 import {
   getUser,
   getUserUtility,
-  getUserAccount,
   getUserWallets,
   updateUser,
   updateUserImg,
@@ -57,11 +56,17 @@ export const userLogin: (data: LoginBody) => Promise<CustModelType['UserAuth']> 
 };
 
 export const userProfile: (userId: number) => Promise<unknown> = async (userId) => {
-  const { id, ...user } = await getUserAccount(userId);
-  const wallets = await getUserWallets(id as number);
+  const user = await getUser('ID', userId);
+  if (!user) throw new ErrorResponse('invalid credential', 400);
+
+  const userWallets = await getUserWallets(user.utilId);
   const data = {
-    ...user,
-    wallets,
+    full_name: user.full_name,
+    username: user.address,
+    address: user.address,
+    phone_number: user.phone_number,
+    face: user.face,
+    wallets: userWallets,
   };
   return data;
 };
@@ -74,15 +79,18 @@ export const updateUserProfile: (
 
   if (!user) throw new ErrorResponse('no user available', 404);
 
-  const { id, id_photo: imgId } = user;
+  const { id, imgId, face } = user;
 
   if (avatar && imgId) {
-    await Promise.all([updateUser(id, userData), updateUserImg(imgId, avatar[0].filename)]);
-    await saveFiles(avatar);
+    await Promise.all([
+      updateUser(id, userData),
+      updateUserImg(imgId, avatar[0].filename),
+      saveFiles(avatar),
+    ]);
+    deleteLocalFile(face as string);
   } else if (avatar && !imgId) {
     const img = await createUserImg(avatar[0].filename);
-    await updateUser(id, { ...userData, id_photo: img.id });
-    await saveFiles(avatar);
+    await Promise.all([updateUser(id, { ...userData, id_photo: img.id }), saveFiles(avatar)]);
   } else await updateUser(id, userData);
 };
 

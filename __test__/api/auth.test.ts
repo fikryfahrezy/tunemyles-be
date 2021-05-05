@@ -4,7 +4,8 @@ import fs from 'fs';
 import supertest from 'supertest';
 import app from '../../src/config/app';
 import sequelize from '../../src/databases/sequelize';
-import { userRegistration, userLogin } from '../../src/api/routes/auth/service';
+import { verifyToken } from '../../src/api/utils/jwt';
+import { userRegistration, userLogin, updateUserProfile } from '../../src/api/routes/auth/service';
 
 const setUpServer = async function setUpServer() {
   const appServer = app();
@@ -14,28 +15,30 @@ const setUpServer = async function setUpServer() {
   return { appServer, server };
 };
 
-const register = (
+const register = function register(
   server: Server,
   payload: {
-    full_name: string;
-    username: string;
-    password: string;
-    phone_number: string;
-    address: string;
+    full_name?: string;
+    username?: string;
+    password?: string;
+    phone_number?: string;
+    address?: string;
   },
-) =>
-  supertest(server)
+) {
+  return supertest(server)
     .post('/api/v2/auth/register')
     .set('Content-Type', 'application/json')
     .send(payload);
+};
 
-const login = (server: Server, payload: { username: string; password: string }) =>
-  supertest(server)
+const login = function login(server: Server, payload: { username?: string; password?: string }) {
+  return supertest(server)
     .post('/api/v2/auth/login')
     .set('Content-Type', 'application/json')
     .send(payload);
+};
 
-const getProfile = (server: Server, token?: string) => {
+const getProfile = function getProfile(server: Server, token?: string) {
   const req = supertest(server).get('/api/v2/auth/me');
 
   if (token) req.set('authorization', `Bearer ${token}`);
@@ -43,14 +46,14 @@ const getProfile = (server: Server, token?: string) => {
   return req;
 };
 
-const updateUser = (
+const updateUser = function updateUser(
   server: Server,
   payload: {
     token?: string;
     fields?: { full_name?: string; address?: string; phone_number?: string };
     files?: { field: string; file: ReadStream }[];
   } = {},
-) => {
+) {
   const {
     token,
     fields = {
@@ -79,6 +82,24 @@ const updateUser = (
   return req;
 };
 
+const forgotPassword = function forgotPassword(server: Server, payload: { phone_number?: string }) {
+  return supertest(server).post('/api/v2/auth/forgot-password').send(payload);
+};
+
+const registerPayload = function registerPayload() {
+  /**
+   * NOTE: Generate random string/characters in JavaScript
+   * https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript
+   */
+  return {
+    full_name: 'Name',
+    username: Math.random().toString(36).substring(2),
+    password: 'password',
+    phone_number: Date.now().toString(),
+    address: 'address',
+  };
+};
+
 beforeAll(() => sequelize.authenticate());
 
 afterAll(() => sequelize.close());
@@ -86,18 +107,7 @@ afterAll(() => sequelize.close());
 describe('Registration', () => {
   test('Register Success', async () => {
     const { appServer, server } = await setUpServer();
-
-    /**
-     * NOTE: Generate random string/characters in JavaScript
-     * https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript
-     */
-    const payload = {
-      full_name: 'Name',
-      username: Math.random().toString(36).substring(2),
-      password: 'password',
-      phone_number: Date.now().toString(),
-      address: 'address',
-    };
+    const payload = registerPayload();
 
     const { status, headers, body } = await register(server, payload);
 
@@ -110,15 +120,9 @@ describe('Registration', () => {
 
   test('Register Fail, Phone Number Already Exist', async () => {
     const { appServer, server } = await setUpServer();
+    const payload = registerPayload();
     const phone_number = Date.now().toString();
-    const payload = {
-      phone_number,
-      full_name: 'Name',
-      username: Math.random().toString(36).substring(2),
-      password: 'password',
-      address: 'address',
-    };
-    await userRegistration(payload);
+    await userRegistration({ ...payload, phone_number });
 
     const newPayload = {
       ...payload,
@@ -136,21 +140,15 @@ describe('Registration', () => {
 
   test('Register Fail, Username Already Exist', async () => {
     const { appServer, server } = await setUpServer();
-    const username = Math.random().toString(36).substring(2);
-    const payload = {
-      username,
-      full_name: 'Name',
-      password: 'password',
-      phone_number: Date.now().toString(),
-      address: 'address',
-    };
+    const payload = registerPayload();
+    const { username } = payload;
     await userRegistration(payload);
-
     const newPayload = {
       ...payload,
       username,
       phone_number: Date.now().toString(),
     };
+
     const { status, headers, body } = await register(server, newPayload);
 
     expect(status).toBe(400);
@@ -162,15 +160,10 @@ describe('Registration', () => {
 
   test('Register Fail, Empty Name', async () => {
     const { appServer, server } = await setUpServer();
-    const payload = {
-      full_name: '',
-      username: Math.random().toString(36).substring(2),
-      password: 'password',
-      phone_number: Date.now().toString(),
-      address: 'address',
-    };
+    const payload = registerPayload();
+    const full_name = '';
 
-    const { status, headers, body } = await register(server, payload);
+    const { status, headers, body } = await register(server, { ...payload, full_name });
 
     expect(status).toBe(422);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -181,15 +174,10 @@ describe('Registration', () => {
 
   test('Register Fail, Empty Address', async () => {
     const { appServer, server } = await setUpServer();
-    const payload = {
-      full_name: 'Name',
-      username: Math.random().toString(36).substring(2),
-      password: 'password',
-      phone_number: Date.now().toString(),
-      address: '',
-    };
+    const payload = registerPayload();
+    const address = '';
 
-    const { status, headers, body } = await register(server, payload);
+    const { status, headers, body } = await register(server, { ...payload, address });
 
     expect(status).toBe(422);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -200,15 +188,10 @@ describe('Registration', () => {
 
   test('Register Fail, Name too Short', async () => {
     const { appServer, server } = await setUpServer();
-    const payload = {
-      full_name: 'x',
-      username: Math.random().toString(36).substring(2),
-      password: 'password',
-      phone_number: Date.now().toString(),
-      address: 'address',
-    };
+    const payload = registerPayload();
+    const full_name = 'x';
 
-    const { status, headers, body } = await register(server, payload);
+    const { status, headers, body } = await register(server, { ...payload, full_name });
 
     expect(status).toBe(422);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -219,15 +202,10 @@ describe('Registration', () => {
 
   test('Register Fail, Name too Long', async () => {
     const { appServer, server } = await setUpServer();
-    const payload = {
-      full_name: Array(257).toString(),
-      username: Math.random().toString(36).substring(2),
-      password: 'password',
-      phone_number: Date.now().toString(),
-      address: 'address',
-    };
+    const payload = registerPayload();
+    const full_name = Array(257).toString();
 
-    const { status, headers, body } = await register(server, payload);
+    const { status, headers, body } = await register(server, { ...payload, full_name });
 
     expect(status).toBe(422);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -238,15 +216,10 @@ describe('Registration', () => {
 
   test('Register Fail, Username too Short', async () => {
     const { appServer, server } = await setUpServer();
-    const payload = {
-      full_name: 'Name',
-      username: Math.random().toString(36).substring(7),
-      password: 'password',
-      phone_number: Date.now().toString(),
-      address: 'address',
-    };
+    const payload = registerPayload();
+    const username = Math.random().toString(36).substring(7);
 
-    const { status, headers, body } = await register(server, payload);
+    const { status, headers, body } = await register(server, { ...payload, username });
 
     expect(status).toBe(422);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -257,15 +230,10 @@ describe('Registration', () => {
 
   test('Register Fail, Username too Long', async () => {
     const { appServer, server } = await setUpServer();
-    const payload = {
-      full_name: 'Name',
-      username: Array(22).toString(),
-      password: 'password',
-      phone_number: Date.now().toString(),
-      address: 'address',
-    };
+    const payload = registerPayload();
+    const username = Array(22).toString();
 
-    const { status, headers, body } = await register(server, payload);
+    const { status, headers, body } = await register(server, { ...payload, username });
 
     expect(status).toBe(422);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -276,15 +244,10 @@ describe('Registration', () => {
 
   test('Register Fail, Phone Number too Short', async () => {
     const { appServer, server } = await setUpServer();
-    const payload = {
-      full_name: 'Name',
-      username: Math.random().toString(36).substring(2),
-      password: 'password',
-      phone_number: '1234',
-      address: 'address',
-    };
+    const payload = registerPayload();
+    const phone_number = '1234';
 
-    const { status, headers, body } = await register(server, payload);
+    const { status, headers, body } = await register(server, { ...payload, phone_number });
 
     expect(status).toBe(422);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -295,15 +258,10 @@ describe('Registration', () => {
 
   test('Register Fail, Phone Number too Long', async () => {
     const { appServer, server } = await setUpServer();
-    const payload = {
-      full_name: 'Name',
-      username: Math.random().toString(36).substring(2),
-      password: 'password',
-      phone_number: '123456789012345',
-      address: 'address',
-    };
+    const payload = registerPayload();
+    const phone_number = '123456789012345';
 
-    const { status, headers, body } = await register(server, payload);
+    const { status, headers, body } = await register(server, { ...payload, phone_number });
 
     expect(status).toBe(422);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -314,15 +272,10 @@ describe('Registration', () => {
 
   test('Register Fail, Address too Short', async () => {
     const { appServer, server } = await setUpServer();
-    const payload = {
-      full_name: 'Name',
-      username: Math.random().toString(36).substring(2),
-      password: 'password',
-      phone_number: Date.now().toString(),
-      address: 'addr',
-    };
+    const payload = registerPayload();
+    const address = 'addr';
 
-    const { status, headers, body } = await register(server, payload);
+    const { status, headers, body } = await register(server, { ...payload, address });
 
     expect(status).toBe(422);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -333,15 +286,22 @@ describe('Registration', () => {
 
   test('Register Fail, Address too Long', async () => {
     const { appServer, server } = await setUpServer();
-    const payload = {
-      full_name: 'Name',
-      username: Math.random().toString(36).substring(2),
-      password: 'password',
-      phone_number: Date.now().toString(),
-      address: Array(1002).toString(),
-    };
+    const payload = registerPayload();
+    const address = Array(1002).toString();
 
-    const { status, headers, body } = await register(server, payload);
+    const { status, headers, body } = await register(server, { ...payload, address });
+
+    expect(status).toBe(422);
+    expect(headers['content-type']).toBe('application/json; charset=utf-8');
+    expect(body.success).toBe(false);
+
+    appServer.close();
+  });
+
+  test('Register Fail, No Data Provided', async () => {
+    const { appServer, server } = await setUpServer();
+
+    const { status, headers, body } = await register(server, {});
 
     expect(status).toBe(422);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -354,16 +314,9 @@ describe('Registration', () => {
 describe('Login', () => {
   test('Login Success', async () => {
     const { appServer, server } = await setUpServer();
-    const username = Math.random().toString(36).substring(2);
-    const password = 'password';
-    const payload = {
-      username,
-      password,
-      full_name: 'Name',
-      phone_number: Date.now().toString(),
-      address: 'address',
-    };
-    await userRegistration(payload);
+    const regPayload = registerPayload();
+    const { username, password } = regPayload;
+    await userRegistration(regPayload);
 
     const { status, headers, body } = await login(server, {
       username,
@@ -379,20 +332,14 @@ describe('Login', () => {
 
   test('Login Failed, Wrong Password', async () => {
     const { appServer, server } = await setUpServer();
-    const username = Math.random().toString(36).substring(2);
-    const payload = {
-      username,
-      full_name: 'Name',
-      password: 'password',
-      phone_number: Date.now().toString(),
-      address: 'address',
-    };
-    await userRegistration(payload);
+    const regPayload = registerPayload();
+    const { username } = regPayload;
+    await userRegistration(regPayload);
+    const password = 'wrong-password';
 
-    const wrongPassword = 'wrong-password';
     const { status, headers, body } = await login(server, {
       username,
-      password: wrongPassword,
+      password,
     });
 
     expect(status).toBe(400);
@@ -404,15 +351,27 @@ describe('Login', () => {
 
   test('Login Failed, User Not Registered', async () => {
     const { appServer, server } = await setUpServer();
-    const wrongUsername = 'this-username-doesnt-exist';
-    const wrongPasssword = 'just-random-password';
+    const username = 'this-username-doesnt-exist';
+    const password = 'just-random-password';
 
     const { status, headers, body } = await login(server, {
-      username: wrongUsername,
-      password: wrongPasssword,
+      username,
+      password,
     });
 
     expect(status).toBe(400);
+    expect(headers['content-type']).toBe('application/json; charset=utf-8');
+    expect(body.success).toBe(false);
+
+    appServer.close();
+  });
+
+  test('Login Failed, No Data Provided', async () => {
+    const { appServer, server } = await setUpServer();
+
+    const { status, headers, body } = await login(server, {});
+
+    expect(status).toBe(422);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
     expect(body.success).toBe(false);
 
@@ -423,16 +382,9 @@ describe('Login', () => {
 describe('Get Profile', () => {
   test('Get Profile Success', async () => {
     const { appServer, server } = await setUpServer();
-    const username = Math.random().toString(36).substring(2);
-    const password = 'password';
-    const payload = {
-      username,
-      password,
-      full_name: 'Name',
-      phone_number: Date.now().toString(),
-      address: 'address',
-    };
-    await userRegistration(payload);
+    const regPayload = registerPayload();
+    const { username, password } = regPayload;
+    await userRegistration(regPayload);
     const { token } = await userLogin({ username, password });
 
     const { status, headers, body } = await getProfile(server, token);
@@ -472,17 +424,10 @@ describe('Get Profile', () => {
 });
 
 describe('Update Profile', () => {
-  test('Update Profile Success', async () => {
+  test('Update Profile Success, and Add New Profile Image', async () => {
     const { appServer, server } = await setUpServer();
-    const username = Math.random().toString(36).substring(2);
-    const password = 'password';
-    const regPayload = {
-      username,
-      password,
-      full_name: 'Name',
-      phone_number: Date.now().toString(),
-      address: 'address',
-    };
+    const regPayload = registerPayload();
+    const { username, password } = regPayload;
     const file = fs.createReadStream('./__test__/image-test.png');
     await userRegistration(regPayload);
     const { token } = await userLogin({ username, password });
@@ -495,6 +440,44 @@ describe('Update Profile', () => {
       },
       files: [{ file, field: 'avatar' }],
     };
+
+    const { status, headers, body } = await updateUser(server, updatePayload);
+
+    expect(status).toBe(200);
+    expect(headers['content-type']).toBe('application/json; charset=utf-8');
+    expect(body.success).toBe(true);
+
+    appServer.close();
+  });
+
+  test('Update Profile Success, and Update Profile Image', async () => {
+    const { appServer, server } = await setUpServer();
+    const regPayload = registerPayload();
+    const { username, password } = regPayload;
+    await userRegistration(regPayload);
+    const { token } = await userLogin({ username, password });
+    const file = fs.createReadStream('./__test__/image-test.png');
+    const updatePayload = {
+      token,
+      fields: {
+        full_name: 'New Full Name',
+        address: 'New Address',
+        phone_number: Date.now().toString(),
+      },
+      files: [{ file, field: 'avatar' }],
+    };
+    await updateUserProfile(verifyToken('USER', `Bearer ${token}`), {
+      ...updatePayload.fields,
+      avatar: [
+        {
+          data: fs.readFileSync('./__test__/image-test.png'),
+          limit: false,
+          encoding: '7bit',
+          filename: 'image-test.png',
+          mimetype: 'image/png',
+        },
+      ],
+    });
 
     const { status, headers, body } = await updateUser(server, updatePayload);
 
@@ -536,15 +519,8 @@ describe('Update Profile', () => {
 
   test('Update Profile Failed, Name too Short', async () => {
     const { appServer, server } = await setUpServer();
-    const username = Math.random().toString(36).substring(2);
-    const password = 'password';
-    const regPayload = {
-      full_name: 'Name',
-      username,
-      password,
-      phone_number: Date.now().toString(),
-      address: 'address',
-    };
+    const regPayload = registerPayload();
+    const { username, password } = regPayload;
     await userRegistration(regPayload);
     const { token } = await userLogin({ username, password });
     const updatePayload = {
@@ -565,15 +541,8 @@ describe('Update Profile', () => {
 
   test('Update Profile Failed, Name too Long', async () => {
     const { appServer, server } = await setUpServer();
-    const username = Math.random().toString(36).substring(2);
-    const password = 'password';
-    const regPayload = {
-      full_name: 'Name',
-      username,
-      password,
-      phone_number: Date.now().toString(),
-      address: 'address',
-    };
+    const regPayload = registerPayload();
+    const { username, password } = regPayload;
     await userRegistration(regPayload);
     const { token } = await userLogin({ username, password });
     const updatePayload = {
@@ -594,15 +563,8 @@ describe('Update Profile', () => {
 
   test('Update Profile Failed, Phone Number too Short', async () => {
     const { appServer, server } = await setUpServer();
-    const username = Math.random().toString(36).substring(2);
-    const password = 'password';
-    const regPayload = {
-      full_name: 'Name',
-      username,
-      password,
-      phone_number: Date.now().toString(),
-      address: 'address',
-    };
+    const regPayload = registerPayload();
+    const { username, password } = regPayload;
     await userRegistration(regPayload);
     const { token } = await userLogin({ username, password });
     const updatePayload = {
@@ -623,15 +585,8 @@ describe('Update Profile', () => {
 
   test('Update Profile Failed, Phone Number too Long', async () => {
     const { appServer, server } = await setUpServer();
-    const username = Math.random().toString(36).substring(2);
-    const password = 'password';
-    const regPayload = {
-      full_name: 'Name',
-      username,
-      password,
-      phone_number: Date.now().toString(),
-      address: 'address',
-    };
+    const regPayload = registerPayload();
+    const { username, password } = regPayload;
     await userRegistration(regPayload);
     const { token } = await userLogin({ username, password });
     const updatePayload = {
@@ -652,15 +607,8 @@ describe('Update Profile', () => {
 
   test('Update Profile Failed, Address too Short', async () => {
     const { appServer, server } = await setUpServer();
-    const username = Math.random().toString(36).substring(2);
-    const password = 'password';
-    const regPayload = {
-      full_name: 'Name',
-      username,
-      password,
-      phone_number: Date.now().toString(),
-      address: 'address',
-    };
+    const regPayload = registerPayload();
+    const { username, password } = regPayload;
     await userRegistration(regPayload);
     const { token } = await userLogin({ username, password });
     const updatePayload = {
@@ -681,15 +629,8 @@ describe('Update Profile', () => {
 
   test('Update Profile Failed, Address too Long', async () => {
     const { appServer, server } = await setUpServer();
-    const username = Math.random().toString(36).substring(2);
-    const password = 'password';
-    const regPayload = {
-      full_name: 'Name',
-      username,
-      password,
-      phone_number: Date.now().toString(),
-      address: 'address',
-    };
+    const regPayload = registerPayload();
+    const { username, password } = regPayload;
     await userRegistration(regPayload);
     const { token } = await userLogin({ username, password });
     const updatePayload = {
@@ -709,7 +650,49 @@ describe('Update Profile', () => {
   });
 });
 
-//describe('Forgot Password', () => {});
+describe('Forgot Password', () => {
+  test('Request Forgot Password Success', async () => {
+    const { appServer, server } = await setUpServer();
+    const regPayload = registerPayload();
+    const { username, password, phone_number } = regPayload;
+    await userRegistration(regPayload);
+    await userLogin({ username, password });
+    const payload = { phone_number };
+
+    const { status, headers, body } = await forgotPassword(server, payload);
+
+    expect(status).toBe(200);
+    expect(headers['content-type']).toBe('application/json; charset=utf-8');
+    expect(body.success).toBe(true);
+
+    appServer.close();
+  });
+
+  test('Request Forgot Failed, Number not Registered', async () => {
+    const { appServer, server } = await setUpServer();
+    const payload = { phone_number: '6991224220261' };
+
+    const { status, headers, body } = await forgotPassword(server, payload);
+
+    expect(status).toBe(200);
+    expect(headers['content-type']).toBe('application/json; charset=utf-8');
+    expect(body.success).toBe(true);
+
+    appServer.close();
+  });
+
+  test('Request Forgot Password, Request Empty', async () => {
+    const { appServer, server } = await setUpServer();
+
+    const { status, headers, body } = await forgotPassword(server, {});
+
+    expect(status).toBe(422);
+    expect(headers['content-type']).toBe('application/json; charset=utf-8');
+    expect(body.success).toBe(false);
+
+    appServer.close();
+  });
+});
 
 //describe('Verify Token', () => {});
 

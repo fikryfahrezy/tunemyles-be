@@ -6,8 +6,8 @@
 .idea
 logs/*
 !logs/.gitkeep
-public/image/*
-!public/image/.gitkeep
+public/img/*
+!public/img/.gitkeep
 build
 coverage
 node_modules

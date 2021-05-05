@@ -49,22 +49,22 @@ export const verifyJwt: (
 };
 
 export const verifyToken: (
-  who: string,
+  who: 'USER' | 'ADMIN' | 'MERCHANT',
   token?: string,
-) => CustModelType['UserToken'] = function userUtility(who, token) {
+) => CustModelType['UserToken'] = function verifyToken(who, token) {
   if (!token) throw new ErrorResponse('forbidden', 403);
 
   const user = verifyJwt(token);
   if (!user) throw new ErrorResponse('forbidden', 403);
   else {
     switch (who) {
-      case 'user':
+      case 'USER':
         if (user.type && user.type >= 3) throw new ErrorResponse('forbidden', 403);
         break;
-      case 'admin':
+      case 'ADMIN':
         if (user.type !== 2 || user.type >= 3) throw new ErrorResponse('forbidden', 403);
         break;
-      case 'merchant':
+      case 'MERCHANT':
         if (user.type >= 3 || user.type < 1) throw new ErrorResponse('forbidden', 403);
         break;
       default:

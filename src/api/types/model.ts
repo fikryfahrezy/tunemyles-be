@@ -3,9 +3,11 @@ type User = {
   full_name: string;
   username: string;
   password: string;
-  phone_number: string;
   address: string;
-  id_photo?: number;
+  phone_number: string;
+  face: string | null;
+  imgId: number | null;
+  utilId: number;
 };
 
 type UserUtility = {
@@ -16,20 +18,11 @@ type UserUtility = {
   previous_type: number;
 };
 
-type UserAccount = {
-  fullName: string;
-  username: string;
-  address: string;
-  phoneNumber: string;
-  face: string | null;
-  id?: number;
-};
-
 type UserWallet = {
   balance: string;
-  isVisible: number;
-  walletName: string | null;
-  walletDescription: string | null;
+  is_visible: number;
+  wallet_name: string | null;
+  wallet_description: string | null;
   uri: string | null;
   label: string | null;
 };
@@ -48,7 +41,6 @@ type UserAuth = {
 type CustModelType = {
   User: User;
   UserToken: UserToken;
-  UserAccount: UserAccount;
   UserWallet: UserWallet;
   UserUtility: UserUtility;
   UserAuth: UserAuth;

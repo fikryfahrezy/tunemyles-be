@@ -1,12 +1,14 @@
 import pmp from 'pump';
 import stream from 'stream';
 import fs from 'fs';
+import path from 'path';
 import util from 'util';
+import slugify from 'slugify';
 import type { AddedFileBody } from '../types/schema';
 
 const pump = util.promisify(pmp) as (...streams: Array<pmp.Stream | pmp.Callback>) => Promise<void>;
 
-export const randomFilename: (filename: string) => string = (filename) => {
+export const randomFilename: (filename: string) => string = function randomFilename(filename) {
   const randomString = Math.random().toString(36).substring(2);
   const currTime = Date.now();
 
@@ -16,12 +18,16 @@ export const randomFilename: (filename: string) => string = (filename) => {
 export const renameFiles: (
   fromUrl: string,
   files?: AddedFileBody[],
-) => AddedFileBody[] | undefined = (fromUrl, files) => {
+) => AddedFileBody[] | undefined = function renameFiles(fromUrl, files) {
   if (!files) return undefined;
 
   return files.map(({ filename, ...data }) => {
+    /**
+     * Remove all occurances except las
+     * https://stackoverflow.com/questions/9694930/remove-all-occurrences-except-last
+     */
     const [name, ext] = filename.replace(/[.](?=.*[.])/g, '').split('.');
-    let newName = name;
+    let newName = slugify(name, { lower: true });
 
     if (fromUrl.includes('banks') || fromUrl.includes('wallets'))
       newName = `${newName}_logo.${ext}`;
@@ -33,8 +39,10 @@ export const renameFiles: (
   });
 };
 
-export const saveFiles: (files: AddedFileBody[]) => Promise<void> = async (files) => {
-  const dir = './public/image/';
+export const saveFiles: (files: AddedFileBody[]) => Promise<void> = async function saveFiles(
+  files,
+) {
+  const dir = './public/img/';
 
   await Promise.all(
     files.map(({ filename, data }) => {
@@ -47,52 +55,6 @@ export const saveFiles: (files: AddedFileBody[]) => Promise<void> = async (files
   );
 };
 
-// "use strict";
-
-// const multer = require("@koa/multer");
-// const slugify = require("slugify");
-// const path = require("path");
-// const ErrorResponse = require("./ErrorResponse");
-
-// // https://github.com/expressjs/multer/issues/170
-// const storage = multer.diskStorage({
-//   destination: function (req, file, cb) {
-//     cb(null, "./public/img");
-//   },
-//   filename: (req, file, cb) => {
-//     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-//     let name = slugify(file.originalname, { lower: true });
-
-//     // https://stackoverflow.com/questions/9694930/remove-all-occurrences-except-last
-//     name = name.replace(/[.](?=.*[.])/g, "");
-//     const [originalName, ext] = name.split(".");
-//     if (req.url.includes("banks") || req.url.includes("wallets")) {
-//       name = `${originalName}_logo.${ext}`;
-//     } else if (req.url.includes("categories")) {
-//       name = `${originalName}_icon.${ext}`;
-//     } else if (req.url.includes("medias")) {
-//       name = `${originalName}_medias.${ext}`;
-//     }
-
-//     cb(null, `${uniqueSuffix}-${name}`);
-//   },
-// });
-
-// const fileFilter = function (_, file, cb) {
-//   const filetypes = /jpeg|jpg|png/;
-//   const mimetype = filetypes.test(file.mimetype);
-//   const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-
-//   if (mimetype && extname) {
-//     cb(null, true);
-//   } else {
-//     cb(new ErrorResponse("please upload an image file", 400), false);
-//   }
-// };
-
-// const upload = multer({
-//   fileFilter,
-//   storage: storage,
-// });
-
-// module.exports = upload;
+export const deleteLocalFile: (filepath: string) => void = function deleteLocalFile(filepath) {
+  fs.unlink(path.resolve('./', 'public', `./${filepath}`), () => {});
+};

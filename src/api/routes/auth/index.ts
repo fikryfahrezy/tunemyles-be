@@ -76,7 +76,7 @@ const routes = function routes(
         },
       },
       preHandler: [
-        handlerWrapper(protect('user')),
+        handlerWrapper(protect('USER')),
         (req, res, done) => {
           const validation = req.validationError;
           if (validation) schemaValidationError(validation, res);
@@ -105,7 +105,7 @@ const routes = function routes(
         done();
       },
       preHandler: [
-        handlerWrapper(protect('user')),
+        handlerWrapper(protect('USER')),
         (req, res, done) => {
           const validation = req.validationError;
           if (validation) schemaValidationError(validation, res);
@@ -121,7 +121,7 @@ const routes = function routes(
     {
       attachValidation: true,
       schema: {
-        body: {},
+        body: requestBody.forgotPassword,
         response: {
           200: { $ref: '#ApiResponse' },
           '4xx': { $ref: '#ApiResponse' },

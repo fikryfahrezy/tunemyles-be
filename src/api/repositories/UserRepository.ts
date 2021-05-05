@@ -47,24 +47,28 @@ export const getUser: (
   by: 'USERNAME' | 'ID',
   val: string | number,
 ) => Promise<CustModelType['User'] | null> = function getUser(by, val) {
-  let sqlQuery = `
+  let sqlQuery = ` 
         SELECT
-            id,
-            full_name,
-            username,
-            password,
-            phone_number,
-            address,
-            id_photo
-        FROM m_users
+            mu.id,
+            mu.full_name,
+            mu.username,
+            mu.password,
+            mu.address,
+            mu.phone_number,
+            mm.uri AS face,
+            mm.id AS imgId,
+            uu.id AS utilId
+        FROM m_users mu
+        LEFT JOIN m_medias mm ON mu.id_photo = mm.id
+        LEFT JOIN u_user uu ON mu.id = uu.id_m_users
     `;
 
   switch (by) {
     case 'USERNAME':
-      sqlQuery += ' WHERE username = :val';
+      sqlQuery += ' WHERE mu.username = :val';
       break;
     default:
-      sqlQuery += ' WHERE id = :val';
+      sqlQuery += ' WHERE mu.id = :val';
   }
 
   return sequelize.query<CustModelType['User']>(sqlQuery, {
@@ -89,30 +93,6 @@ export const getUserUtility: (
     `;
 
   return sequelize.query<CustModelType['UserUtility']>(sqlQuery, {
-    replacements: { userId },
-    type: QueryTypes.SELECT,
-    plain: true,
-  });
-};
-
-export const getUserAccount: (
-  userId: number,
-) => Promise<CustModelType['UserAccount']> = function getUserAccount(userId) {
-  const sqlQuery = ` 
-        SELECT
-            mu.full_name,
-            mu.username,
-            mu.address,
-            mu.phone_number,
-            mm.uri AS face,
-            uu.id
-        FROM m_users mu
-        LEFT JOIN m_medias mm ON mu.id_photo = mm.id
-        LEFT JOIN u_user uu ON mu.id = uu.id_m_users
-        WHERE mu.id = :userId;
-    `;
-
-  return sequelize.query<CustModelType['UserAccount']>(sqlQuery, {
     replacements: { userId },
     type: QueryTypes.SELECT,
     plain: true,

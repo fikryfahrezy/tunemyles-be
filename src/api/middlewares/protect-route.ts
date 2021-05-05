@@ -4,7 +4,7 @@ import { ErrorResponse } from '../utils/error-handler';
 import { verifyToken } from '../utils/jwt';
 
 export const protect: (
-  who: 'user' | 'merchant' | 'admin',
+  who: 'USER' | 'MERCHANT' | 'ADMIN',
 ) => (req: FastifyRequest<{ Headers: ApiKeyHeader | unknown }>, res: FastifyReply) => void = (
   who,
 ) => (req) => {

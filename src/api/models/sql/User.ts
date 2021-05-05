@@ -338,7 +338,10 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
           },
           validate: {
             is: {
-              // https://stackoverflow.com/questions/12018245/regular-expression-to-validate-username/12019115
+              /**
+               * Regular expression to validate username
+               * https://stackoverflow.com/questions/12018245/regular-expression-to-validate-username/12019115
+               */
               args: /^(?=[a-zA-Z0-9._]{8,20}$)(?!.*[_.]{2})[^_.].*[^_.]$/i,
               msg: 'please input proper username',
             },
@@ -362,7 +365,10 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
           },
           validate: {
             is: {
-              // https://stackoverflow.com/questions/4338267/validate-phone-number-with-javascript
+              /**
+               * Validate phone number with JavaScript
+               * https://stackoverflow.com/questions/4338267/validate-phone-number-with-javascript
+               */
               args: /^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,13}$/im,
               msg: 'please input proper phone number',
             },
