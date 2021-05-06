@@ -1,25 +1,21 @@
-import type { FastifyRequest, FastifyReply } from 'fastify';
 import type { PostRequestBody, GetIdRequestParams, FileRequestBody } from '../../types/schema';
 import type { Request, RequestHandler } from '../../types/fasitify';
 import { getIdService, getService, postFileService, postService } from './service';
 
-export const getExample: RequestHandler<Request> = function getExample(
-  _: FastifyRequest,
-  res: FastifyReply,
-): void {
-  const data = getService();
+export const getExample: RequestHandler<Request> = function getExample(_, res): void {
+  const resData = getService();
 
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
     success: true,
     message: 'get success',
-    data,
+    data: resData,
   });
 };
 
-export const postExample: RequestHandler<Request<PostRequestBody>> = function postExample(
-  req: FastifyRequest<{ Body: PostRequestBody }>,
-  res: FastifyReply,
+export const postExample: RequestHandler<Request<{ Body: PostRequestBody }>> = function postExample(
+  req,
+  res,
 ): void {
   postService(req.body.name);
 
@@ -31,27 +27,21 @@ export const postExample: RequestHandler<Request<PostRequestBody>> = function po
 };
 
 export const getIdExample: RequestHandler<
-  Request<unknown, unknown, GetIdRequestParams>
-> = function getIdExample(
-  req: FastifyRequest<{ Params: GetIdRequestParams }>,
-  res: FastifyReply,
-): void {
-  const data = getIdService(Number(req.params.id));
+  Request<{ Params: GetIdRequestParams }>
+> = function getIdExample(req, res): void {
+  const resData = getIdService(Number(req.params.id));
 
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
     success: true,
     message: 'get success',
-    data,
+    data: resData,
   });
 };
 
 export const postFileExample: RequestHandler<
-  Request<FileRequestBody>
-> = async function postFileExample(
-  req: FastifyRequest<{ Body: FileRequestBody }>,
-  res: FastifyReply,
-): Promise<void> {
+  Request<{ Body: FileRequestBody }>
+> = async function postFileExample(req, res): Promise<void> {
   await postFileService(req.body.file);
 
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({

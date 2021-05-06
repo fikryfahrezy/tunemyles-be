@@ -1,6 +1,14 @@
 import type { FastifyInstance, FastifyPluginOptions, HookHandlerDoneFunction } from 'fastify';
 import type { Request } from '../../types/fasitify';
-import type { RegisterBody, LoginBody, ApiKeyHeader, UpdateProfileBody } from '../../types/schema';
+import type {
+  ApiKeyHeader,
+  VerifyTokenParams,
+  RegisterBody,
+  LoginBody,
+  UpdateProfileBody,
+  ForgotPasswordBody,
+  ResetPasswordBody,
+} from '../../types/schema';
 import { controllerWrapper, handlerWrapper } from '../../utils/serverfn-wrapper';
 import { schemaValidationError } from '../../utils/error-handler';
 import { renameFiles } from '../../utils/file-management';
@@ -21,7 +29,7 @@ const routes = function routes(
   _: FastifyPluginOptions,
   donePlugin: HookHandlerDoneFunction,
 ): void {
-  fastify.post<Request<RegisterBody>>(
+  fastify.post<Request<{ Body: RegisterBody }>>(
     '/auth/register',
     {
       attachValidation: true,
@@ -42,7 +50,7 @@ const routes = function routes(
     controllerWrapper(register),
   );
 
-  fastify.post<Request<LoginBody>>(
+  fastify.post<Request<{ Body: LoginBody }>>(
     '/auth/login',
     {
       attachValidation: true,
@@ -63,7 +71,7 @@ const routes = function routes(
     controllerWrapper(login),
   );
 
-  fastify.get<Request<unknown, unknown, unknown, ApiKeyHeader>>(
+  fastify.get<Request<{ Headers: ApiKeyHeader }>>(
     '/auth/me',
     {
       attachValidation: true,
@@ -87,7 +95,7 @@ const routes = function routes(
     controllerWrapper(getProfile),
   );
 
-  fastify.put<Request<UpdateProfileBody, unknown, unknown, ApiKeyHeader>>(
+  fastify.put<Request<{ Body: UpdateProfileBody; Headers: ApiKeyHeader }>>(
     '/auth/update-profile',
     {
       attachValidation: true,
@@ -116,7 +124,7 @@ const routes = function routes(
     controllerWrapper(updateProfile),
   );
 
-  fastify.post<Request>(
+  fastify.post<Request<{ Body: ForgotPasswordBody }>>(
     '/auth/forgot-password',
     {
       attachValidation: true,
@@ -137,14 +145,13 @@ const routes = function routes(
     controllerWrapper(forgotPassword),
   );
 
-  fastify.get<Request>(
-    '/auth/verify-token',
+  fastify.get<Request<{ Params: VerifyTokenParams }>>(
+    '/auth/verify-token/:token',
     {
       attachValidation: true,
       schema: {
-        body: {},
         response: {
-          200: { $ref: '#ApiResponse' },
+          200: responses.verifyToken,
           '4xx': { $ref: '#ApiResponse' },
           '5xx': { $ref: '#ApiResponse' },
         },
@@ -158,12 +165,12 @@ const routes = function routes(
     controllerWrapper(verifyToken),
   );
 
-  fastify.put<Request>(
+  fastify.put<Request<{ Body: ResetPasswordBody }>>(
     '/auth/reset-password',
     {
       attachValidation: true,
       schema: {
-        body: {},
+        body: requestBody.resetPassword,
         response: {
           200: { $ref: '#ApiResponse' },
           '4xx': { $ref: '#ApiResponse' },

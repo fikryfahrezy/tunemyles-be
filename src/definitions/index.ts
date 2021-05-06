@@ -3,7 +3,6 @@ export default {
     schemas: {
       RequestToken: {
         $id: '#RequestToken',
-        required: ['token'],
         type: 'object',
         properties: {
           token: { type: 'string' },
@@ -16,7 +15,6 @@ export default {
         properties: {
           authorization: { type: 'string' },
         },
-        additionalProperties: false,
         required: ['authorization'],
       },
       RouteIdParam: {

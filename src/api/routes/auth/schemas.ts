@@ -2,14 +2,6 @@ export const requestHeader = {
   private: { $ref: '#ApiKeyHeader' },
 };
 
-export const requestParams = {
-  verifyToken: { $ref: '#RequestToken' },
-};
-
-export const requestQuery = {
-  resetPassword: { $ref: '#RequestToken' },
-};
-
 export const requestBody = {
   login: {
     required: ['password', 'username'],
@@ -66,6 +58,11 @@ export const requestBody = {
         minLength: 5,
         maxLength: 14,
       },
+      password: {
+        type: 'string',
+        minLength: 1,
+        maxLength: 255,
+      },
       avatar: { type: 'array', items: { $ref: '#MultiPartSchema' } },
     },
     additionalProperties: false,
@@ -76,10 +73,10 @@ export const requestBody = {
     properties: { phone_number: { type: 'string' } },
     additionalProperties: false,
   },
-  resetData: {
-    required: ['new_password'],
+  resetPassword: {
+    required: ['token', 'new_password'],
     type: 'object',
-    properties: { new_password: { type: 'string' } },
+    properties: { token: { type: 'string' }, new_password: { type: 'string' } },
     additionalProperties: false,
   },
 };
@@ -134,11 +131,14 @@ export const responses = {
   },
   verifyToken: {
     type: 'object',
-    properties: {
-      ApiResponse: {
-        $ref: '#ApiResponse',
+    allOf: [
+      { $ref: '#ApiResponse' },
+      {
+        type: 'object',
+        properties: {
+          data: { $ref: '#GetToken' },
+        },
       },
-      data: { $ref: '#GetToken' },
-    },
+    ],
   },
 };

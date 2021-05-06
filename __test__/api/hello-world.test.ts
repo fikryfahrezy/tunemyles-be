@@ -31,7 +31,7 @@ test('test not found route', async () => {
 
   const { status, headers, body } = await supertest(server).get('/not-found');
 
-  expect(status).toBe(200);
+  expect(status).toBe(404);
   expect(headers['content-type']).toBe('application/json; charset=utf-8');
   expect(body.message).toBe('not found');
 

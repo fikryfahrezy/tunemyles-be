@@ -81,7 +81,7 @@ const app = function app(opts: FastifyServerOptions = {}): FastifyInstance {
       success: false,
       message: 'not found',
     };
-    reply.header('Content-Type', 'application/json; charset=utf-8').send(data);
+    reply.status(404).header('Content-Type', 'application/json; charset=utf-8').send(data);
   });
 
   fastifyApp.setErrorHandler(function callback(err, _, reply) {

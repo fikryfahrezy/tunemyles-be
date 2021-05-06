@@ -59,7 +59,7 @@ export const verifyToken: (
   else {
     switch (who) {
       case 'USER':
-        if (user.type && user.type >= 3) throw new ErrorResponse('forbidden', 403);
+        if (user.type >= 3) throw new ErrorResponse('forbidden', 403);
         break;
       case 'ADMIN':
         if (user.type !== 2 || user.type >= 3) throw new ErrorResponse('forbidden', 403);

@@ -13,12 +13,16 @@ export type AddedFileBody = {
   mimetype: string;
 };
 
+export type ApiKeyHeader = {
+  authorization: string;
+};
+
 export type GetIdRequestParams = {
   id: string;
 };
 
-export type ApiKeyHeader = {
-  authorization: string;
+export type VerifyTokenParams = {
+  token: string;
 };
 
 export type LoginBody = {
@@ -46,12 +50,19 @@ export type UpdateProfileBody = {
   full_name?: string;
   address?: string;
   phone_number?: string;
+  password?: string;
   avatar?: AddedFileBody[];
 };
 
+export type ForgotPasswordBody = {
+  phone_number: string;
+};
+
 export type ResetPasswordBody = {
+  token: string;
   new_password: string;
 };
+
 export type AddBankStepBody = {
   step: string;
 };
@@ -78,10 +89,6 @@ export type BindProductCategoryBody = {
 
 export type CheckoutBody = {
   price_total: number;
-};
-
-export type ForgotPasswordBody = {
-  phone_number: string;
 };
 
 export type ReviewTransactionBody = {

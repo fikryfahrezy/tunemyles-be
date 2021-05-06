@@ -8,14 +8,15 @@ type User = {
   face: string | null;
   imgId: number | null;
   utilId: number;
+  type: number;
 };
 
 type UserUtility = {
   id: number;
-  user_id: number;
+  userId: number;
   token: string;
   type: number;
-  previous_type: number;
+  previousType: number;
 };
 
 type UserWallet = {
@@ -38,12 +39,17 @@ type UserAuth = {
   token: string;
 };
 
+type UserForgotToken = {
+  userId: number;
+};
+
 type CustModelType = {
   User: User;
   UserToken: UserToken;
   UserWallet: UserWallet;
   UserUtility: UserUtility;
   UserAuth: UserAuth;
+  UserForgotToken: UserForgotToken;
 };
 
 export default CustModelType;

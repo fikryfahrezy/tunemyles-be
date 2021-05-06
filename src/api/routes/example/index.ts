@@ -27,7 +27,7 @@ const routes = function routes(
     controllerWrapper(getExample),
   );
 
-  fastify.post<Request<PostRequestBody>>(
+  fastify.post<Request<{ Body: PostRequestBody }>>(
     '/example',
     {
       attachValidation: true,
@@ -63,7 +63,7 @@ const routes = function routes(
     controllerWrapper(getIdExample),
   );
 
-  fastify.post<Request<FileRequestBody>>(
+  fastify.post<Request<{ Body: FileRequestBody }>>(
     '/example/file',
     {
       schema: {

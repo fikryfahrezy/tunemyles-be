@@ -73,8 +73,6 @@
                   "    pm.test('Post Success', () => {\r",
                   "        const { code, headers } = response;\r",
                   "\r",
-                  "        console.log(response.json());\r",
-                  "\r",
                   "        pm.expect(code).to.eql(200);\r",
                   "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
                   "        pm.expect(response.json().success).to.eql(true);\r",
@@ -361,7 +359,6 @@
                   "    pm.test('Register Success', () => {\r",
                   "        const { code, headers } = response;\r",
                   "\r",
-                  "        console.log(response.json());\r",
                   "        pm.expect(code).to.eql(200);\r",
                   "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
                   "        pm.expect(response.json().success).to.eql(true);\r",
@@ -537,10 +534,6 @@
                 "exec": [
                   "const { Request } = require('postman-collection');\r",
                   "\r",
-                  "const reqBody = JSON.parse(pm.request.body.raw);\r",
-                  "pm.environment.set('USER_USERNAME', reqBody.username);\r",
-                  "pm.environment.set('USER_PASSWORD', reqBody.password);\r",
-                  "\r",
                   "const token = pm.response.json()?.data?.token;\r",
                   "if (token) pm.environment.set('TOKEN', token);\r",
                   "\r",
@@ -572,7 +565,7 @@
                   "});\r",
                   "\r",
                   "pm.sendRequest(makeRequest({ username, password: \"wrong-password\" }), (_, response) => {\r",
-                  "    pm.test('Login Failed, Wrong Password', () => {\r",
+                  "    pm.test('Login Fail, Wrong Password', () => {\r",
                   "        const { code, headers } = response;\r",
                   "\r",
                   "        pm.expect(code).to.eql(400);\r",
@@ -585,7 +578,7 @@
                   "    username: 'no-user-here',\r",
                   "    password: 'wrong-password',\r",
                   "}), (_, response) => {\r",
-                  "    pm.test('Login Failed, User Not Registered', () => {\r",
+                  "    pm.test('Login Fail, User Not Registered', () => {\r",
                   "        const { code, headers } = response;\r",
                   "\r",
                   "        pm.expect(code).to.eql(400);\r",
@@ -595,7 +588,7 @@
                   "});\r",
                   "\r",
                   "pm.sendRequest(makeRequest({}), (_, response) => {\r",
-                  "    pm.test('Login Failed, No Data Provided', () => {\r",
+                  "    pm.test('Login Fail, No Data Provided', () => {\r",
                   "        const { code, headers } = response;\r",
                   "\r",
                   "        pm.expect(code).to.eql(422);\r",
@@ -663,7 +656,7 @@
                   "});\r",
                   "\r",
                   "pm.sendRequest(makeRequest('this-is-wrong'), (_, response) => {\r",
-                  "    pm.test('Get Profile Failed, Wrong API Key', () => {\r",
+                  "    pm.test('Get Profile Fail, Wrong API Key', () => {\r",
                   "        const { code, headers } = response;\r",
                   "\r",
                   "        pm.expect(code).to.eql(403);\r",
@@ -674,7 +667,7 @@
                   "\r",
                   "\r",
                   "pm.sendRequest(makeRequest(), (_, response) => {\r",
-                  "    pm.test('Get Profile Failed, API Key Not Given', () => {\r",
+                  "    pm.test('Get Profile Fail, API Key Not Given', () => {\r",
                   "        const { code, headers } = response;\r",
                   "\r",
                   "        pm.expect(code).to.eql(403);\r",
@@ -722,7 +715,6 @@
               "listen": "test",
               "script": {
                 "exec": [
-                  "console.log(pm.request.body);\r",
                   "const { Request } = require('postman-collection');\r",
                   "\r",
                   "const makeRequest = function makeRequest(formdata, token) {\r",
@@ -762,7 +754,7 @@
                   "});\r",
                   "\r",
                   "pm.sendRequest(makeRequest(pm.request.body.formdata, 'this-is-wrong'), (_, response) => {\r",
-                  "    pm.test('Update Profile Failed, Wrong API Key', () => {\r",
+                  "    pm.test('Update Profile Fail, Wrong API Key', () => {\r",
                   "        const { code, headers } = response;\r",
                   "\r",
                   "        pm.expect(code).to.eql(403);\r",
@@ -772,7 +764,7 @@
                   "});\r",
                   "\r",
                   "pm.sendRequest(makeRequest(pm.request.body.formdata), (_, response) => {\r",
-                  "    pm.test('Update Profile Failed, API Key Not Given', () => {\r",
+                  "    pm.test('Update Profile Fail, API Key Not Given', () => {\r",
                   "        const { code, headers } = response;\r",
                   "\r",
                   "        pm.expect(code).to.eql(403);\r",
@@ -921,26 +913,27 @@
                 {
                   "key": "avatar",
                   "type": "file",
-                  "src": "Bliss.png",
-                  "disabled": true
+                  "src": "Bliss.png"
                 },
                 {
                   "key": "full_name",
                   "value": "New Name",
-                  "type": "text",
-                  "disabled": true
+                  "type": "text"
                 },
                 {
                   "key": "address",
                   "value": "New Address",
-                  "type": "text",
-                  "disabled": true
+                  "type": "text"
                 },
                 {
                   "key": "phone_number",
                   "value": "123142135423",
-                  "type": "text",
-                  "disabled": true
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "newpassword",
+                  "type": "text"
                 }
               ]
             },
@@ -986,15 +979,15 @@
                   "});\r",
                   "\r",
                   "pm.sendRequest(makeRequest({ phone_number: '6991224220261' }), (_, response) => {\r",
-                  "    pm.test('Request Forgot Password Failed, Number not Registered', () => {\r",
-                  "        pm.expect(response.code).to.eql(200);\r",
+                  "    pm.test('Request Forgot Password Fail, Number not Registered', () => {\r",
+                  "        pm.expect(response.code).to.eql(404);\r",
                   "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(response.json().success).to.eql(true);\r",
+                  "        pm.expect(response.json().success).to.eql(false);\r",
                   "    })\r",
                   "});\r",
                   "\r",
                   "pm.sendRequest(makeRequest({}), (_, response) => {\r",
-                  "    pm.test('Request Forgot Password Failed, Request Empty', () => {\r",
+                  "    pm.test('Request Forgot Password Fail, No Data Provided', () => {\r",
                   "        pm.expect(response.code).to.eql(422);\r",
                   "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
                   "        pm.expect(response.json().success).to.eql(false);\r",
@@ -1018,7 +1011,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"phone_number\": \"1234567890\"\r\n}"
+              "raw": "{\r\n    \"phone_number\": \"12345678931232\"\r\n}"
             },
             "url": {
               "raw": "{{URL}}/auth/forgot-password",
@@ -1037,17 +1030,32 @@
                 "exec": [
                   "const { Request } = require('postman-collection')\r",
                   "\r",
-                  "const sendRequestOne = new Request({\r",
-                  "    method: pm.request.method,\r",
-                  "    url: pm.request.url.toString()\r",
-                  "})\r",
-                  "pm.sendRequest(sendRequestOne, (_, response) => {\r",
-                  "    pm.test('test success', () => {\r",
-                  "        pm.expect(response.code).to.eql(200);\r",
+                  "const makeRequest = function makeRequest(token) {\r",
+                  "    let url = pm.environment.replaceIn('{{URL}}/auth/verify-token/');\r",
+                  "    url += token ? token : '';\r",
+                  "\r",
+                  "    return new Request({\r",
+                  "        url,\r",
+                  "        method: 'GET',\r",
+                  "    });\r",
+                  "};\r",
+                  "\r",
+                  "pm.sendRequest(makeRequest('this-token-not-exists'), (_, response) => {\r",
+                  "    pm.test('Verify Forgot Password Token Fail, Token Invalid', () => {\r",
+                  "        pm.expect(response.code).to.eql(404);\r",
                   "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(response.json().success).to.eql(true);\r",
+                  "        pm.expect(response.json().success).to.eql(false);\r",
                   "    })\r",
-                  "});"
+                  "});\r",
+                  "\r",
+                  "pm.sendRequest(makeRequest(), (_, response) => {\r",
+                  "    pm.test('Verify Forgot Password Token Fail, No Token Provided', () => {\r",
+                  "        pm.expect(response.code).to.eql(404);\r",
+                  "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(false);\r",
+                  "    })\r",
+                  "});\r",
+                  ""
                 ],
                 "type": "text/javascript"
               }
@@ -1070,8 +1078,7 @@
               "variable": [
                 {
                   "key": "token",
-                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjU0NTUzNTg0OGJjZmE5NDdlODMwMzY3YzRiNDZmNDAxIiwiaWF0IjoxNjAwMDAzNTMyLCJleHAiOjE2MDAwMDcxMzJ9.Q1nFS_ZIC-YHjZr_oHuCD7mJOw28Y-czD8rcljDaHnI",
-                  "type": "string"
+                  "value": "ffa62652d6eabbcc5d763494f456a5685b0e80e468f6b61e230cb56bb7e7c256"
                 }
               ]
             }
@@ -1087,18 +1094,46 @@
                 "exec": [
                   "const { Request } = require('postman-collection')\r",
                   "\r",
-                  "const sendRequestOne = new Request({\r",
-                  "    method: pm.request.method,\r",
-                  "    url: pm.request.url.toString(),\r",
-                  "    body: pm.request.body\r",
-                  "})\r",
-                  "pm.sendRequest(sendRequestOne, (_, response) => {\r",
-                  "    pm.test('test success', () => {\r",
-                  "        pm.expect(response.code).to.eql(200);\r",
+                  "const makeRequest = function makeRequest(payload) {\r",
+                  "    let url = pm.environment.replaceIn('{{URL}}/auth/reset-password');\r",
+                  "\r",
+                  "    return new Request({\r",
+                  "        url,\r",
+                  "        method: 'PUT',\r",
+                  "        header: {\r",
+                  "            'Content-Type': 'application/json',\r",
+                  "        },\r",
+                  "        body: {\r",
+                  "            mode: 'raw',\r",
+                  "            raw: JSON.stringify(payload),\r",
+                  "        },\r",
+                  "    });\r",
+                  "};\r",
+                  "\r",
+                  "pm.sendRequest(makeRequest({ token: 'this-token-not-exists', new_password: 'newpassword' }), (_, response) => {\r",
+                  "    pm.test('Reset Password Fail, Token Invalid', () => {\r",
+                  "        pm.expect(response.code).to.eql(404);\r",
                   "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(response.json().success).to.eql(true);\r",
+                  "        pm.expect(response.json().success).to.eql(false);\r",
                   "    })\r",
-                  "});"
+                  "});\r",
+                  "\r",
+                  "pm.sendRequest(makeRequest({ new_password: 'newpassword' }), (_, response) => {\r",
+                  "    pm.test('VReset Password Fail, No Token Provided', () => {\r",
+                  "        pm.expect(response.code).to.eql(422);\r",
+                  "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(false);\r",
+                  "    })\r",
+                  "});\r",
+                  "\r",
+                  "pm.sendRequest(makeRequest({ token: 'this-token-not-exists' }), (_, response) => {\r",
+                  "    pm.test('VReset Password Fail, No Data Provided', () => {\r",
+                  "        pm.expect(response.code).to.eql(422);\r",
+                  "        pm.expect(response.headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(false);\r",
+                  "    })\r",
+                  "});\r",
+                  ""
                 ],
                 "type": "text/javascript"
               }
@@ -1116,18 +1151,12 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"new_password\": \"newpassword\"\r\n}"
+              "raw": "{\r\n    \"token\": \"ffa62652d6eabbcc5d763494f456a5685b0e80e468f6b61e230cb56bb7e7c256\",\r\n    \"new_password\": \"newpassword\"\r\n}"
             },
             "url": {
-              "raw": "{{URL}}/auth/reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjU0NTUzNTg0OGJjZmE5NDdlODMwMzY3YzRiNDZmNDAxIiwiaWF0IjoxNjAwMDAzNTMyLCJleHAiOjE2MDAwMDcxMzJ9.Q1nFS_ZIC-YHjZr_oHuCD7mJOw28Y-czD8rcljDaHnI",
+              "raw": "{{URL}}/auth/reset-password",
               "host": ["{{URL}}"],
-              "path": ["auth", "reset-password"],
-              "query": [
-                {
-                  "key": "token",
-                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjU0NTUzNTg0OGJjZmE5NDdlODMwMzY3YzRiNDZmNDAxIiwiaWF0IjoxNjAwMDAzNTMyLCJleHAiOjE2MDAwMDcxMzJ9.Q1nFS_ZIC-YHjZr_oHuCD7mJOw28Y-czD8rcljDaHnI"
-                }
-              ]
+              "path": ["auth", "reset-password"]
             }
           },
           "response": []

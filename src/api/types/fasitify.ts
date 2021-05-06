@@ -10,11 +10,11 @@ import type {
   HookHandlerDoneFunction,
 } from 'fastify';
 
-export type Request<B = unknown, Q = unknown, P = unknown, H = unknown> = {
-  Body: B;
-  Querystring: Q;
-  Params: P;
-  Headers: H;
+export type Request<T extends RequestGenericInterface = Record<string, unknown>> = {
+  Body: T['Body'];
+  Querystring: T['Querystring'];
+  Params: T['Params'];
+  Headers: T['Headers'];
 };
 
 export type SyncHookFn = (

@@ -1,5 +1,12 @@
 import bcrypt from 'bcrypt';
-import type { RegisterBody, LoginBody, UpdateProfileBody } from '../../types/schema';
+import type {
+  VerifyTokenParams,
+  RegisterBody,
+  LoginBody,
+  UpdateProfileBody,
+  ForgotPasswordBody,
+  ResetPasswordBody,
+} from '../../types/schema';
 import type CustModelType from '../../types/model';
 import { ErrorResponse } from '../../utils/error-handler';
 import { issueJwt } from '../../utils/jwt';
@@ -8,29 +15,31 @@ import {
   getUser,
   getUserUtility,
   getUserWallets,
-  updateUser,
-  updateUserImg,
+  getUserForgotToken,
   createUserImg,
   createUser,
   createUserUtility,
   createUserWallet,
+  createForgotPassword,
+  updateUser,
+  updateUserImg,
+  updateForgotTokenStatus,
 } from '../../repositories/UserRepository';
 
 export const userRegistration: (data: RegisterBody) => Promise<CustModelType['UserAuth']> = async (
-  data,
+  regData,
 ) => {
-  const user = await createUser(data);
-  const { id, type } = await createUserUtility(data.password, user.id);
+  const user = await createUser(regData);
+  const { id, type } = await createUserUtility(regData.password, user.id);
   await createUserWallet(id);
 
   const userType = type as number;
   const token = issueJwt(user.id, id, userType);
-  const returnData = {
+
+  return {
     token,
     type: userType,
   };
-
-  return returnData;
 };
 
 export const userLogin: (data: LoginBody) => Promise<CustModelType['UserAuth']> = async ({
@@ -47,12 +56,10 @@ export const userLogin: (data: LoginBody) => Promise<CustModelType['UserAuth']> 
   if (type >= 3) throw new ErrorResponse('account already banned', 403);
 
   const token = issueJwt(user.id, id, type);
-  const data = {
+  return {
     type,
     token,
   };
-
-  return data;
 };
 
 export const userProfile: (userId: number) => Promise<unknown> = async (userId) => {
@@ -60,7 +67,7 @@ export const userProfile: (userId: number) => Promise<unknown> = async (userId) 
   if (!user) throw new ErrorResponse('invalid credential', 400);
 
   const userWallets = await getUserWallets(user.utilId);
-  const data = {
+  return {
     full_name: user.full_name,
     username: user.address,
     address: user.address,
@@ -68,7 +75,6 @@ export const userProfile: (userId: number) => Promise<unknown> = async (userId) 
     face: user.face,
     wallets: userWallets,
   };
-  return data;
 };
 
 export const updateUserProfile: (
@@ -79,7 +85,12 @@ export const updateUserProfile: (
 
   if (!user) throw new ErrorResponse('no user available', 404);
 
-  const { id, imgId, face } = user;
+  const { id, imgId, face, password } = user;
+
+  if (userData.password) {
+    const isSame = await bcrypt.compare(password, userData.password);
+    if (!isSame) throw new ErrorResponse('invalid credentials', 400);
+  }
 
   if (avatar && imgId) {
     await Promise.all([
@@ -94,17 +105,39 @@ export const updateUserProfile: (
   } else await updateUser(id, userData);
 };
 
-export const forgotUserPassword: (userId: number) => Promise<boolean> = async (userId) => {
-  const test = userId === 1;
-  return Promise.resolve(test);
+export const forgotUserPassword: (data: ForgotPasswordBody) => Promise<void> = async ({
+  phone_number,
+}) => {
+  const user = await getUser('PHONE', phone_number);
+  if (!user) throw new ErrorResponse('no user available', 404);
+  else if (user.type >= 3) throw new ErrorResponse('user banned', 403);
+
+  await createForgotPassword({
+    utilId: user.utilId,
+    phone: phone_number,
+  });
 };
 
-export const verifyUserToken: (userId: number) => Promise<boolean> = async (userId) => {
-  const test = userId === 1;
-  return Promise.resolve(test);
+export const verifyUserToken: (data: VerifyTokenParams) => Promise<{ token: string }> = async ({
+  token,
+}) => {
+  const [affectedRows] = await updateForgotTokenStatus(token, 0, 1);
+  if (affectedRows < 1) throw new ErrorResponse('verify failed', 404);
+
+  return { token };
 };
 
-export const resetUserPassword: (userId: number) => Promise<boolean> = async (userId) => {
-  const test = userId === 1;
-  return Promise.resolve(test);
+export const resetUserPassword: (data: ResetPasswordBody) => Promise<void> = async ({
+  token,
+  new_password: newPassword,
+}) => {
+  const [user, [affectedRows]] = await Promise.all([
+    getUserForgotToken(token),
+    updateForgotTokenStatus(token, 1, 2),
+  ]);
+  if (!user) throw new ErrorResponse('reset failed', 404);
+  else if (affectedRows < 1) throw new ErrorResponse('verify failed', 404);
+
+  const { userId } = await getUserUtility(user.userId);
+  await updateUser(userId, { password: newPassword });
 };

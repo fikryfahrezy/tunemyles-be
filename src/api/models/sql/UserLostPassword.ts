@@ -1,5 +1,5 @@
+import { createHash } from 'crypto';
 import md5 from 'md5';
-import jwt from 'jsonwebtoken';
 import Sequelize, { DataTypes, Model, Optional } from 'sequelize';
 import type { UserUtility, UserUtilityId } from './UserUtility';
 
@@ -64,13 +64,9 @@ export class UserLostPassword
           type: DataTypes.STRING(255),
           allowNull: false,
           set(value: string) {
-            const jwtToken = process.env.JWT_TEMP_TOKEN as string;
-            const expiresIn = process.env.JWT_TEMP_TOKEN_EXP as string;
             const token = md5(`${Date.now()}${value}`);
-            const generatedToken = jwt.sign({ token }, jwtToken, {
-              expiresIn,
-            });
-            this.setDataValue('verification_token', generatedToken);
+            const hash = createHash('sha256').update(token).digest('hex');
+            this.setDataValue('verification_token', hash);
           },
         },
         status: {
