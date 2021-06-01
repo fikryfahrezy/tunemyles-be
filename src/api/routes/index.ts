@@ -2,6 +2,7 @@ import { FastifyInstance, FastifyPluginOptions, HookHandlerDoneFunction } from '
 import helloWorld from './hello-world';
 import example from './example';
 import auth from './auth';
+import master from './master';
 
 const routeV2 = function routeV2(
   instance: FastifyInstance,
@@ -9,8 +10,9 @@ const routeV2 = function routeV2(
   donePlugin: HookHandlerDoneFunction,
 ): void {
   instance.register(helloWorld);
-  instance.register(example);
-  instance.register(auth);
+  instance.register(example, { prefix: '/example' });
+  instance.register(auth, { prefix: '/auth' });
+  instance.register(master, { prefix: '/masters' });
   donePlugin();
 };
 

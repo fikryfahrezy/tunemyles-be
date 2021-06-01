@@ -1,4 +1,4 @@
-export const requestHeader = {
+export const requestHeaders = {
   private: { $ref: '#ApiKeyHeader' },
 };
 
@@ -16,17 +16,16 @@ export const requestBody = {
     required: ['address', 'full_name', 'password', 'phone_number', 'username'],
     type: 'object',
     properties: {
-      full_name: {
-        type: 'string',
-        minLength: 2,
-        maxLength: 255,
-      },
       username: {
         type: 'string',
         minLength: 8,
         maxLength: 20,
       },
-      password: { type: 'string' },
+      full_name: {
+        type: 'string',
+        minLength: 2,
+        maxLength: 255,
+      },
       phone_number: {
         type: 'string',
         minLength: 5,
@@ -36,6 +35,11 @@ export const requestBody = {
         type: 'string',
         minLength: 5,
         maxLength: 1000,
+      },
+      password: {
+        type: 'string',
+        minLength: 8,
+        maxLength: 255,
       },
     },
     additionalProperties: false,
@@ -48,19 +52,19 @@ export const requestBody = {
         minLength: 2,
         maxLength: 255,
       },
-      address: {
-        type: 'string',
-        minLength: 5,
-        maxLength: 1000,
-      },
       phone_number: {
         type: 'string',
         minLength: 5,
         maxLength: 14,
       },
+      address: {
+        type: 'string',
+        minLength: 5,
+        maxLength: 1000,
+      },
       password: {
         type: 'string',
-        minLength: 1,
+        minLength: 8,
         maxLength: 255,
       },
       avatar: { type: 'array', items: { $ref: '#MultiPartSchema' } },

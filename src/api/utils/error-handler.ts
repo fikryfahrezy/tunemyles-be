@@ -33,16 +33,12 @@ export const errorHandler: (err: ErrorResponse | unknown, res: FastifyReply) => 
       default:
         res.internalServerError('server error');
     }
-  } else if (err instanceof UniqueConstraintError) {
-    const errValue = err.errors[0].value;
-    const errMsg = `${errValue} already used`;
-    res.badRequest(errMsg);
-  } else if (err instanceof ValidationError) {
-    const errMsg = err.errors[0].message;
-    res.unprocessableEntity(errMsg);
-  } else if (err instanceof JsonWebTokenError) {
-    res.forbidden();
-  } else throw new Error('...');
+  } else if (err instanceof UniqueConstraintError)
+    res.badRequest(`${err.errors[0].value} already used`);
+  else if (err instanceof ValidationError) res.unprocessableEntity(err.errors[0].message);
+  else if (err instanceof JsonWebTokenError) res.forbidden();
+  else if (err instanceof Error) res.unprocessableEntity(err.message);
+  else throw new Error('...');
 };
 
 export const schemaValidationError: (

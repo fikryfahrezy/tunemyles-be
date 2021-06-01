@@ -2,7 +2,7 @@ import type { Server } from 'http';
 import type { ReadStream } from 'fs';
 import fs from 'fs';
 import supertest from 'supertest';
-import bcrypt from 'bcrypt';
+// import bcrypt from 'bcrypt';
 import app from '../../src/config/app';
 import sequelize from '../../src/databases/sequelize';
 import {
@@ -11,7 +11,12 @@ import {
   updateUser,
   getUser,
 } from '../../src/api/repositories/UserRepository';
-import { userLogin, userRegistration, verifyUserToken } from '../../src/api/routes/auth/service';
+import {
+  userLogin,
+  resetUserPassword,
+  userRegistration,
+  verifyUserToken,
+} from '../../src/api/routes/auth/service';
 
 const setUpServer = async function setUpServer() {
   const appServer = app();
@@ -56,7 +61,7 @@ const updateProfile = function updateProfile(
   server: Server,
   payload: {
     token?: string;
-    fields?: { full_name?: string; address?: string; phone_number?: string };
+    fields?: { full_name?: string; address?: string; phone_number?: string; password?: string };
     files?: { field: string; file: ReadStream }[];
   } = {},
 ) {
@@ -449,7 +454,7 @@ describe('Get Profile', () => {
 });
 
 describe('Update Profile', () => {
-  test('Update Profile Success, and Add New Profile Image', async () => {
+  test('Update Profile Success, Add New Profile Image', async () => {
     const { appServer, server } = await setUpServer();
     const regPayload = registerPayload();
     const { username, password } = regPayload;
@@ -475,7 +480,7 @@ describe('Update Profile', () => {
     appServer.close();
   });
 
-  test('Update Profile Success, and Update Profile Image', async () => {
+  test('Update Profile Success, Update Profile Image', async () => {
     const { appServer, server } = await setUpServer();
     const regPayload = registerPayload();
     const { username, password } = regPayload;
@@ -493,6 +498,7 @@ describe('Update Profile', () => {
         full_name: 'New Full Name',
         address: 'New Address',
         phone_number: Date.now().toString(),
+        password: 'newpassword',
       },
       files: [{ file, field: 'avatar' }],
     };
@@ -666,6 +672,50 @@ describe('Update Profile', () => {
 
     appServer.close();
   });
+
+  test('Update Profile Fail, Password too Short', async () => {
+    const { appServer, server } = await setUpServer();
+    const regPayload = registerPayload();
+    const { username, password } = regPayload;
+    await userRegistration(regPayload);
+    const { token } = await userLogin({ username, password });
+    const updatePayload = {
+      token,
+      fields: {
+        password: 'pass',
+      },
+    };
+
+    const { status, headers, body } = await updateProfile(server, updatePayload);
+
+    expect(status).toBe(422);
+    expect(headers['content-type']).toBe('application/json; charset=utf-8');
+    expect(body.success).toBe(false);
+
+    appServer.close();
+  });
+
+  test('Update Profile Fail, Password too Long', async () => {
+    const { appServer, server } = await setUpServer();
+    const regPayload = registerPayload();
+    const { username, password } = regPayload;
+    await userRegistration(regPayload);
+    const { token } = await userLogin({ username, password });
+    const updatePayload = {
+      token,
+      fields: {
+        password: Array(257).toString(),
+      },
+    };
+
+    const { status, headers, body } = await updateProfile(server, updatePayload);
+
+    expect(status).toBe(422);
+    expect(headers['content-type']).toBe('application/json; charset=utf-8');
+    expect(body.success).toBe(false);
+
+    appServer.close();
+  });
 });
 
 describe('Forgot Password', () => {
@@ -773,15 +823,40 @@ describe('Reset Password', () => {
       token: verification_token,
       new_password: 'newpassword',
     };
+    await resetUserPassword(payload);
 
-    const { status, headers, body } = await resetPassword(server, payload);
-    const { password } = await getUser('USERNAME', regPayload.username);
-    const isSame = await bcrypt.compare(regPayload.password, password);
+    const { status, headers, body } = await login(server, {
+      username: regPayload.username,
+      password: payload.new_password,
+    });
 
     expect(status).toBe(200);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
     expect(body.success).toBe(true);
-    expect(isSame).toBe(true);
+
+    appServer.close();
+  });
+
+  test('Reset Password Fail, Password too Short', async () => {
+    const { appServer, server } = await setUpServer();
+    const regPayload = registerPayload();
+    await userRegistration(regPayload);
+    const { utilId } = await getUser('USERNAME', regPayload.username);
+    const { verification_token } = await createForgotPassword({
+      utilId,
+      phone: regPayload.phone_number,
+    });
+    await verifyUserToken({ token: verification_token });
+    const payload = {
+      token: verification_token,
+      new_password: 'short',
+    };
+
+    const { status, headers, body } = await resetPassword(server, payload);
+
+    expect(status).toBe(422);
+    expect(headers['content-type']).toBe('application/json; charset=utf-8');
+    expect(body.success).toBe(false);
 
     appServer.close();
   });

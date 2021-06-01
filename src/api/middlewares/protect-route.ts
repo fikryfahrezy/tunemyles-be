@@ -5,16 +5,19 @@ import { verifyToken } from '../utils/jwt';
 
 export const protect: (
   who: 'USER' | 'MERCHANT' | 'ADMIN',
-) => (req: FastifyRequest<{ Headers: ApiKeyHeader | unknown }>, res: FastifyReply) => void = (
-  who,
-) => (req) => {
-  req.requestContext.set('user', verifyToken(who, req.headers.authorization));
+) => (
+  req: FastifyRequest<{ Headers: ApiKeyHeader | unknown }>,
+  res: FastifyReply,
+) => void = function protect(who) {
+  return function protectHandler(req) {
+    req.requestContext.set('user', verifyToken(who, req.headers.authorization));
+  };
 };
 
 export const exampleProtect: (
   req: FastifyRequest<{ Headers: ApiKeyHeader | unknown }>,
   res: FastifyReply,
-) => void = (req) => {
+) => void = function exampleProtect(req) {
   if (req.headers.authorization && req.headers.authorization === '2')
     throw new ErrorResponse('forbidden', 403);
 };

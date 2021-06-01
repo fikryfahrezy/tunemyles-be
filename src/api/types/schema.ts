@@ -1,12 +1,12 @@
-export type ModelQuery = {
-  offset: number;
-  limit: number;
-  order: [[string, string]];
-  availableFields: string[];
+export type GetQuery = {
+  page?: string;
+  orderBy?: string;
+  orderDirection?: string;
+  limit?: string;
 };
 
 export type AddedFileBody = {
-  data: Iterable<unknown> | AsyncIterable<unknown>;
+  data?: Iterable<unknown> | AsyncIterable<unknown>;
   encoding: string;
   filename: string;
   limit: boolean;
@@ -17,7 +17,7 @@ export type ApiKeyHeader = {
   authorization: string;
 };
 
-export type GetIdRequestParams = {
+export type IdRequestParams = {
   id: string;
 };
 
@@ -63,26 +63,79 @@ export type ResetPasswordBody = {
   new_password: string;
 };
 
-export type AddBankStepBody = {
-  step: string;
+export type PostBankBody = {
+  logo?: AddedFileBody[];
+  bank_name: string;
 };
 
-export type AddBankUserBody = {
-  id_m_banks: number;
+export type UpdateBankBody = {
+  bank_name?: string;
+  is_visible?: number;
+};
+
+export type UpdateBankLogoBody = {
+  logo: AddedFileBody[];
+};
+
+export type UpdateBankDetailBody = {
   account_number: string;
   account_name: string;
 };
 
-export type AddFaqBody = {
+export type PostBankStepBody = {
+  step: string;
+};
+
+export type PostCategoryBody = {
+  logo?: AddedFileBody[];
+  category: string;
+  slug: string;
+  description: string;
+};
+
+export type UpdateCategoryBody = {
+  category?: string;
+  slug?: string;
+  description?: string;
+  is_visible?: number;
+};
+
+export type PostMediaBody = {
+  image: AddedFileBody[];
+};
+
+export type PostWalletBody = {
+  logo?: AddedFileBody[];
+  wallet_name: string;
+  wallet_description: string;
+};
+
+export type UpdateWalletBody = {
+  wallet_name?: string;
+  wallet_description?: string;
+  is_visible?: number;
+};
+
+export type UpdateWalletLogoBody = {
+  logo: AddedFileBody[];
+};
+
+export type PostFaqBody = {
   question: string;
   answer: string;
 };
 
-export type AddToCartBody = {
+export type UpdateFaqBody = {
+  question?: string;
+  answer?: string;
+};
+
+export type PostToCartBody = {
   qty: number;
   id_merchant: number;
   id_m_products: number;
 };
+
 export type BindProductCategoryBody = {
   id_category: number;
 };
@@ -100,34 +153,6 @@ export type TopUpBody = {
   id_m_banks: number;
   balance_request: number;
   balance_transfer: number;
-};
-
-export type UpdateBankBody = {
-  bank_name?: string;
-  is_visible?: number;
-};
-
-export type UpdateBankDetailBody = {
-  account_number: string;
-  account_name: string;
-};
-
-export type UpdateBankUserBody = {
-  id_m_banks?: number;
-  account_number?: string;
-  account_name?: string;
-};
-
-export type UpdateCategoryBody = {
-  category?: string;
-  slug?: string;
-  description?: string;
-  is_visible?: number;
-};
-
-export type UpdateFaqBody = {
-  question?: string;
-  answer?: string;
 };
 
 export type UpdateMerchantOperation = {
@@ -160,12 +185,6 @@ export type UpdateTopUpStatusBody = {
   status?: number;
 };
 
-export type UpdateWalletBody = {
-  wallet_name?: string;
-  wallet_description?: string;
-  is_visible?: number;
-};
-
 export type UpdateWithdrawStatusBody = {
   status?: number;
 };
@@ -183,4 +202,16 @@ export type UserUtility = {
   type_before_banned: number;
   created_at: string;
   updated_at: string;
+};
+
+export type UpdateBankUserBody = {
+  id_m_banks?: number;
+  account_number?: string;
+  account_name?: string;
+};
+
+export type PostBankUserBody = {
+  id_m_banks: number;
+  account_number: string;
+  account_name: string;
 };

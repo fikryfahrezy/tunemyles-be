@@ -13,7 +13,7 @@ import { controllerWrapper, handlerWrapper } from '../../utils/serverfn-wrapper'
 import { schemaValidationError } from '../../utils/error-handler';
 import { renameFiles } from '../../utils/file-management';
 import { protect } from '../../middlewares/protect-route';
-import { requestHeader, requestBody, responses } from './schemas';
+import { requestHeaders, requestBody, responses } from './schemas';
 import {
   register,
   login,
@@ -30,7 +30,7 @@ const routes = function routes(
   donePlugin: HookHandlerDoneFunction,
 ): void {
   fastify.post<Request<{ Body: RegisterBody }>>(
-    '/auth/register',
+    '/register',
     {
       attachValidation: true,
       schema: {
@@ -51,7 +51,7 @@ const routes = function routes(
   );
 
   fastify.post<Request<{ Body: LoginBody }>>(
-    '/auth/login',
+    '/login',
     {
       attachValidation: true,
       schema: {
@@ -72,11 +72,11 @@ const routes = function routes(
   );
 
   fastify.get<Request<{ Headers: ApiKeyHeader }>>(
-    '/auth/me',
+    '/me',
     {
       attachValidation: true,
       schema: {
-        headers: requestHeader.private,
+        headers: requestHeaders.private,
         response: {
           200: responses.me,
           '4xx': { $ref: '#ApiResponse' },
@@ -84,23 +84,23 @@ const routes = function routes(
         },
       },
       preHandler: [
-        handlerWrapper(protect('USER')),
         (req, res, done) => {
           const validation = req.validationError;
           if (validation) schemaValidationError(validation, res);
           done();
         },
+        handlerWrapper(protect('USER')),
       ],
     },
     controllerWrapper(getProfile),
   );
 
   fastify.put<Request<{ Body: UpdateProfileBody; Headers: ApiKeyHeader }>>(
-    '/auth/update-profile',
+    '/update-profile',
     {
       attachValidation: true,
       schema: {
-        headers: requestHeader.private,
+        headers: requestHeaders.private,
         body: requestBody.updateProfile,
         response: {
           200: { $ref: '#ApiResponse' },
@@ -113,19 +113,19 @@ const routes = function routes(
         done();
       },
       preHandler: [
-        handlerWrapper(protect('USER')),
         (req, res, done) => {
           const validation = req.validationError;
           if (validation) schemaValidationError(validation, res);
           done();
         },
+        handlerWrapper(protect('USER')),
       ],
     },
     controllerWrapper(updateProfile),
   );
 
   fastify.post<Request<{ Body: ForgotPasswordBody }>>(
-    '/auth/forgot-password',
+    '/forgot-password',
     {
       attachValidation: true,
       schema: {
@@ -146,7 +146,7 @@ const routes = function routes(
   );
 
   fastify.get<Request<{ Params: VerifyTokenParams }>>(
-    '/auth/verify-token/:token',
+    '/verify-token/:token',
     {
       attachValidation: true,
       schema: {
@@ -166,7 +166,7 @@ const routes = function routes(
   );
 
   fastify.put<Request<{ Body: ResetPasswordBody }>>(
-    '/auth/reset-password',
+    '/reset-password',
     {
       attachValidation: true,
       schema: {

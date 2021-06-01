@@ -85,12 +85,7 @@ export const updateUserProfile: (
 
   if (!user) throw new ErrorResponse('no user available', 404);
 
-  const { id, imgId, face, password } = user;
-
-  if (userData.password) {
-    const isSame = await bcrypt.compare(password, userData.password);
-    if (!isSame) throw new ErrorResponse('invalid credentials', 400);
-  }
+  const { id, imgId, face } = user;
 
   if (avatar && imgId) {
     await Promise.all([

@@ -351,9 +351,14 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
           type: DataTypes.STRING(255),
           allowNull: false,
           set(value) {
-            const saltRounds = 10;
-            const hash = bcrypt.hashSync(value, saltRounds);
-            this.setDataValue('password', hash);
+            let length = 0;
+
+            if (typeof value === 'string') length = value.length;
+            else length = String(value).length;
+
+            if (length < 8 || length > 255) throw new Error('password is too short or too long');
+
+            this.setDataValue('password', bcrypt.hashSync(value, 10));
           },
         },
         phone_number: {

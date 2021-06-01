@@ -21,6 +21,9 @@ export const renameFiles: (
 ) => AddedFileBody[] | undefined = function renameFiles(fromUrl, files) {
   if (!files) return undefined;
 
+  const isLimit = files.reduce((_, { limit }) => limit, false);
+  if (isLimit) throw Error('limit');
+
   return files.map(({ filename, ...data }) => {
     /**
      * Remove all occurances except las
@@ -45,7 +48,9 @@ export const saveFiles: (files: AddedFileBody[]) => Promise<void> = async functi
   const dir = './public/img/';
 
   await Promise.all(
-    files.map(({ filename, data }) => {
+    files.filter(({ filename, data }) => {
+      if (!data) return false;
+
       const destFile = `${dir}${filename}`;
       const streamFile = stream.Readable.from(data);
       const dest = fs.createWriteStream(destFile);

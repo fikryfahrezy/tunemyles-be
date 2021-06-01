@@ -1,4 +1,4 @@
-import type { PostRequestBody, GetIdRequestParams, FileRequestBody } from '../../types/schema';
+import type { PostRequestBody, IdRequestParams, FileRequestBody } from '../../types/schema';
 import type { Request, RequestHandler } from '../../types/fasitify';
 import { getIdService, getService, postFileService, postService } from './service';
 
@@ -27,7 +27,7 @@ export const postExample: RequestHandler<Request<{ Body: PostRequestBody }>> = f
 };
 
 export const getIdExample: RequestHandler<
-  Request<{ Params: GetIdRequestParams }>
+  Request<{ Params: IdRequestParams }>
 > = function getIdExample(req, res): void {
   const resData = getIdService(Number(req.params.id));
 

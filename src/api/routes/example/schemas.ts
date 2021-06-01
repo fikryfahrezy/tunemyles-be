@@ -1,15 +1,9 @@
-export const requestHeader = {
+export const requestHeaders = {
   private: { $ref: '#ApiKeyHeader' },
 };
 
 export const requestParams = {
-  routeId: {
-    required: ['id'],
-    type: 'object',
-    properties: {
-      id: { type: 'string' },
-    },
-  },
+  routeId: { $ref: '#RouteIdParam' },
 };
 
 export const requestBody = {

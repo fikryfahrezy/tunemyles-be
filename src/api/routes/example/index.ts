@@ -5,7 +5,7 @@ import { controllerWrapper, handlerWrapper } from '../../utils/serverfn-wrapper'
 import { schemaValidationError } from '../../utils/error-handler';
 import { renameFiles } from '../../utils/file-management';
 import { exampleProtect } from '../../middlewares/protect-route';
-import { requestBody, requestHeader, requestParams, responses } from './schemas';
+import { requestBody, requestHeaders, requestParams, responses } from './schemas';
 import { getExample, postExample, getIdExample, postFileExample } from './controllers';
 
 const routes = function routes(
@@ -14,7 +14,7 @@ const routes = function routes(
   donePlugin: HookHandlerDoneFunction,
 ): void {
   fastify.get(
-    '/example',
+    '/',
     {
       schema: {
         response: {
@@ -28,7 +28,7 @@ const routes = function routes(
   );
 
   fastify.post<Request<{ Body: PostRequestBody }>>(
-    '/example',
+    '/',
     {
       attachValidation: true,
       schema: {
@@ -49,7 +49,7 @@ const routes = function routes(
   );
 
   fastify.get(
-    '/example/:id',
+    '/:id',
     {
       schema: {
         params: requestParams.routeId,
@@ -64,7 +64,7 @@ const routes = function routes(
   );
 
   fastify.post<Request<{ Body: FileRequestBody }>>(
-    '/example/file',
+    '/file',
     {
       schema: {
         body: requestBody.postFile,
@@ -85,12 +85,12 @@ const routes = function routes(
     controllerWrapper(postFileExample),
   );
 
-  fastify.get(
-    '/example/private',
+  fastify.get<Request>(
+    '/private',
     {
       attachValidation: true,
       schema: {
-        headers: requestHeader.private,
+        headers: requestHeaders.private,
         response: {
           200: responses.datas,
           '4xx': { $ref: '#ApiResponse' },
@@ -98,12 +98,12 @@ const routes = function routes(
         },
       },
       preHandler: [
-        handlerWrapper(exampleProtect),
         (req, res, done) => {
           const validation = req.validationError;
           if (validation) schemaValidationError(validation, res);
           done();
         },
+        handlerWrapper(exampleProtect),
       ],
     },
     controllerWrapper(getExample),

@@ -43,6 +43,16 @@ type UserForgotToken = {
   userId: number;
 };
 
+type SearchQuery = {
+  offset: number;
+  limit: number;
+  availableFields: string[];
+  order: {
+    field: string;
+    direction: string;
+  };
+};
+
 type CustModelType = {
   User: User;
   UserToken: UserToken;
@@ -50,6 +60,7 @@ type CustModelType = {
   UserUtility: UserUtility;
   UserAuth: UserAuth;
   UserForgotToken: UserForgotToken;
+  SearchQuery: SearchQuery;
 };
 
 export default CustModelType;

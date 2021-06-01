@@ -30,20 +30,20 @@ export const verifyJwt: (
   utilId: number;
   type: number;
 } = function verifyJwt(token) {
-  const tokenPrefix = 'Bearer ';
-  if (!token.startsWith(tokenPrefix)) {
-    throw new ErrorResponse('forbidden', 403);
-  }
+  /**
+   * Ref: How to properly use Bearer tokens?
+   * https://stackoverflow.com/a/42983914/12976234
+   */
+  const foundToken = RegExp(/Bearer\s((.*)\.(.*)\.(.*))/).exec(token);
+  if (!foundToken) throw new ErrorResponse('forbidden', 403);
 
-  const jwtToken = token.slice(tokenPrefix.length);
+  const jwtToken = foundToken[1];
   if (!jwtToken) throw new ErrorResponse('forbidden', 403);
 
   const decoded = jwt.verify(jwtToken, JWT_TEMP_TOKEN as string);
   const { user_id: userId, util_id: utilId, type, exp } = decoded as JwtPayload;
 
-  if (exp < Math.floor(Date.now() / 1000)) {
-    throw new ErrorResponse('forbidden', 403);
-  }
+  if (exp < Math.floor(Date.now() / 1000)) throw new ErrorResponse('forbidden', 403);
 
   return { userId, utilId, type };
 };

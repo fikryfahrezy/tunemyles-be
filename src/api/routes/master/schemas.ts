@@ -1,8 +1,34 @@
-const requestParams = {
+export const requestHeaders = {
+  private: { $ref: '#ApiKeyHeader' },
+};
+
+export const requestParams = {
   id: { $ref: '#RouteIdParam' },
 };
 
-const requestQuery = {
+export const requestQuery = {
+  getBanks: {
+    type: 'object',
+    properties: {
+      page: { $ref: '#PageQuery' },
+      search: { $ref: '#SearchQuery' },
+      orderBy: {
+        allOf: [{ $ref: '#OrderByQuery' }, { enum: ['created_at', 'bank_name'] }],
+      },
+      orderDirection: { $ref: '#OrderDirectionQuery' },
+    },
+  },
+  getCategories: {
+    type: 'object',
+    properties: {
+      page: { $ref: '#PageQuery' },
+      search: { $ref: '#SearchQuery' },
+      orderBy: {
+        allOf: [{ $ref: '#OrderByQuery' }, { enum: ['category', 'description'] }],
+      },
+      orderDirection: { $ref: '#OrderDirectionQuery' },
+    },
+  },
   getMedias: {
     type: 'object',
     properties: {
@@ -30,73 +56,10 @@ const requestQuery = {
       orderDirection: { $ref: '#OrderDirectionQuery' },
     },
   },
-  getBanks: {
-    type: 'object',
-    properties: {
-      page: { $ref: '#PageQuery' },
-      search: { $ref: '#SearchQuery' },
-      orderBy: {
-        allOf: [{ $ref: '#OrderByQuery' }, { enum: ['created_at', 'bank_name'] }],
-      },
-      orderDirection: { $ref: '#OrderDirectionQuery' },
-    },
-  },
-  getCategories: {
-    type: 'object',
-    properties: {
-      page: { $ref: '#PageQuery' },
-      search: { $ref: '#SearchQuery' },
-      orderBy: {
-        allOf: [{ $ref: '#OrderByQuery' }, { enum: ['category', 'description'] }],
-      },
-      orderDirection: { $ref: '#OrderDirectionQuery' },
-    },
-  },
 };
 
-const requestBody = {
-  addMedia: {
-    required: ['image'],
-    type: 'object',
-    properties: {
-      image: { $ref: '#MultiPartSchema' },
-    },
-    additionalProperties: false,
-  },
-  updateMedia: {
-    required: ['image'],
-    type: 'object',
-    properties: {
-      image: { $ref: '#MultiPartSchema' },
-    },
-    additionalProperties: false,
-  },
-  addWallet: {
-    required: ['wallet_description', 'wallet_name'],
-    type: 'object',
-    properties: {
-      logo: { $ref: '#MultiPartSchema' },
-      wallet_name: { type: 'string' },
-      wallet_description: { type: 'string' },
-    },
-  },
-  updateWalletLogo: {
-    required: ['logo'],
-    type: 'object',
-    properties: {
-      logo: { $ref: '#MultiPartSchema' },
-    },
-  },
-  updateWallet: {
-    type: 'object',
-    properties: {
-      wallet_name: { type: 'string' },
-      wallet_description: { type: 'string' },
-      is_visible: { type: 'integer' },
-    },
-    additionalProperties: false,
-  },
-  addBank: {
+export const requestBody = {
+  postBank: {
     required: ['bank_name'],
     type: 'object',
     properties: {
@@ -136,7 +99,7 @@ const requestBody = {
     properties: { step: { type: 'string' } },
     additionalProperties: false,
   },
-  addCategory: {
+  postCategory: {
     required: ['category', 'description', 'slug'],
     type: 'object',
     properties: {
@@ -165,6 +128,39 @@ const requestBody = {
     },
     additionalProperties: false,
   },
+  postMedia: {
+    required: ['image'],
+    type: 'object',
+    properties: {
+      image: { $ref: '#MultiPartSchema' },
+    },
+    additionalProperties: false,
+  },
+  postWallet: {
+    required: ['wallet_description', 'wallet_name'],
+    type: 'object',
+    properties: {
+      logo: { $ref: '#MultiPartSchema' },
+      wallet_name: { type: 'string' },
+      wallet_description: { type: 'string' },
+    },
+  },
+  updateWallet: {
+    type: 'object',
+    properties: {
+      wallet_name: { type: 'string' },
+      wallet_description: { type: 'string' },
+      is_visible: { type: 'integer' },
+    },
+    additionalProperties: false,
+  },
+  updateWalletLogo: {
+    required: ['logo'],
+    type: 'object',
+    properties: {
+      logo: { $ref: '#MultiPartSchema' },
+    },
+  },
   postFaq: {
     required: ['answer', 'question'],
     type: 'object',
@@ -184,34 +180,7 @@ const requestBody = {
   },
 };
 
-const responses = {
-  medias: {
-    type: 'object',
-    allOf: [
-      { $ref: '#ApiResponse' },
-      {
-        type: 'object',
-        properties: {
-          data: {
-            type: 'array',
-            items: { $ref: '#GetMedia' },
-          },
-        },
-      },
-    ],
-  },
-  wallets: {
-    type: 'object',
-    allOf: [
-      { $ref: '#ApiResponse' },
-      {
-        type: 'object',
-        properties: {
-          data: { $ref: '#GetUserWallet' },
-        },
-      },
-    ],
-  },
+export const responses = {
   banks: {
     type: 'object',
     allOf: [
@@ -295,6 +264,33 @@ const responses = {
       },
     ],
   },
+  medias: {
+    type: 'object',
+    allOf: [
+      { $ref: '#ApiResponse' },
+      {
+        type: 'object',
+        properties: {
+          data: {
+            type: 'array',
+            items: { $ref: '#GetMedia' },
+          },
+        },
+      },
+    ],
+  },
+  wallets: {
+    type: 'object',
+    allOf: [
+      { $ref: '#ApiResponse' },
+      {
+        type: 'object',
+        properties: {
+          data: { $ref: '#GetUserWallet' },
+        },
+      },
+    ],
+  },
   faqs: {
     type: 'object',
     allOf: [
@@ -310,11 +306,4 @@ const responses = {
       },
     ],
   },
-};
-
-export default {
-  requestBody,
-  requestQuery,
-  requestParams,
-  responses,
 };
