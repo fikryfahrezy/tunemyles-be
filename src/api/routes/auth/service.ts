@@ -24,13 +24,15 @@ import {
   updateUser,
   updateUserImg,
   updateForgotTokenStatus,
+  updateUserToAdmin,
 } from '../../repositories/UserRepository';
 
-export const userRegistration: (data: RegisterBody) => Promise<CustModelType['UserAuth']> = async (
-  regData,
-) => {
+export const userRegistration: (
+  data: RegisterBody,
+) => Promise<CustModelType['UserAuth']> = async function userRegistration(regData) {
   const user = await createUser(regData);
   const { id, type } = await createUserUtility(regData.password, user.id);
+
   await createUserWallet(id);
 
   const userType = type as number;
@@ -42,17 +44,19 @@ export const userRegistration: (data: RegisterBody) => Promise<CustModelType['Us
   };
 };
 
-export const userLogin: (data: LoginBody) => Promise<CustModelType['UserAuth']> = async ({
-  username,
-  password,
-}) => {
+export const userLogin: (
+  data: LoginBody,
+) => Promise<CustModelType['UserAuth']> = async function userLogin({ username, password }) {
   const user = await getUser('USERNAME', username);
+
   if (!user) throw new ErrorResponse('invalid credential', 400);
 
   const isSame = await bcrypt.compare(password, user.password);
+
   if (!isSame) throw new ErrorResponse('invalid credentials', 400);
 
   const { id, type } = await getUserUtility(user.id);
+
   if (type >= 3) throw new ErrorResponse('account already banned', 403);
 
   const token = issueJwt(user.id, id, type);
@@ -62,11 +66,15 @@ export const userLogin: (data: LoginBody) => Promise<CustModelType['UserAuth']> 
   };
 };
 
-export const userProfile: (userId: number) => Promise<unknown> = async (userId) => {
+export const userProfile: (userId: number) => Promise<unknown> = async function userProfile(
+  userId,
+) {
   const user = await getUser('ID', userId);
+
   if (!user) throw new ErrorResponse('invalid credential', 400);
 
   const userWallets = await getUserWallets(user.utilId);
+
   return {
     full_name: user.full_name,
     username: user.address,
@@ -80,7 +88,7 @@ export const userProfile: (userId: number) => Promise<unknown> = async (userId) 
 export const updateUserProfile: (
   userUtility: CustModelType['UserToken'],
   data: UpdateProfileBody,
-) => Promise<void> = async ({ userId }, { avatar, ...userData }) => {
+) => Promise<void> = async function updateUserProfile({ userId }, { avatar, ...userData }) {
   const user = await getUser('ID', userId);
 
   if (!user) throw new ErrorResponse('no user available', 404);
@@ -96,14 +104,16 @@ export const updateUserProfile: (
     deleteLocalFile(face as string);
   } else if (avatar && !imgId) {
     const img = await createUserImg(avatar[0].filename);
+
     await Promise.all([updateUser(id, { ...userData, id_photo: img.id }), saveFiles(avatar)]);
   } else await updateUser(id, userData);
 };
 
-export const forgotUserPassword: (data: ForgotPasswordBody) => Promise<void> = async ({
-  phone_number,
-}) => {
+export const forgotUserPassword: (
+  data: ForgotPasswordBody,
+) => Promise<void> = async function forgotUserPassword({ phone_number }) {
   const user = await getUser('PHONE', phone_number);
+
   if (!user) throw new ErrorResponse('no user available', 404);
   else if (user.type >= 3) throw new ErrorResponse('user banned', 403);
 
@@ -113,26 +123,35 @@ export const forgotUserPassword: (data: ForgotPasswordBody) => Promise<void> = a
   });
 };
 
-export const verifyUserToken: (data: VerifyTokenParams) => Promise<{ token: string }> = async ({
-  token,
-}) => {
+export const verifyUserToken: (
+  data: VerifyTokenParams,
+) => Promise<{ token: string }> = async function verifyUserToken({ token }) {
   const [affectedRows] = await updateForgotTokenStatus(token, 0, 1);
+
   if (affectedRows < 1) throw new ErrorResponse('verify failed', 404);
 
   return { token };
 };
 
-export const resetUserPassword: (data: ResetPasswordBody) => Promise<void> = async ({
-  token,
-  new_password: newPassword,
-}) => {
+export const resetUserPassword: (
+  data: ResetPasswordBody,
+) => Promise<void> = async function resetUserPassword({ token, new_password: newPassword }) {
   const [user, [affectedRows]] = await Promise.all([
     getUserForgotToken(token),
     updateForgotTokenStatus(token, 1, 2),
   ]);
+
   if (!user) throw new ErrorResponse('reset failed', 404);
   else if (affectedRows < 1) throw new ErrorResponse('verify failed', 404);
 
   const { userId } = await getUserUtility(user.userId);
   await updateUser(userId, { password: newPassword });
+};
+
+export const makeUserAdmin: (utilId: number) => Promise<void> = async function makeUserAdmin(
+  utilId,
+) {
+  const [affectedRows] = await updateUserToAdmin(utilId);
+
+  if (affectedRows < 1) throw new ErrorResponse('update failed', 404);
 };

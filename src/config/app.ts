@@ -29,6 +29,7 @@ const app = function app(opts: FastifyServerOptions = {}): FastifyInstance {
   fastifyApp.register(fastifyRateLimit, {
     max: 100,
     timeWindow: '1 minute',
+    allowList: () => ENV === 'test' || ENV === 'development',
   });
   fastifyApp.register(fastifyCors);
   fastifyApp.register(fastifyHelmet, {

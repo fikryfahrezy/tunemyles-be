@@ -24,7 +24,7 @@ export const requestQuery = {
       page: { $ref: '#PageQuery' },
       search: { $ref: '#SearchQuery' },
       orderBy: {
-        allOf: [{ $ref: '#OrderByQuery' }, { enum: ['category', 'description'] }],
+        allOf: [{ $ref: '#OrderByQuery' }, { enum: ['created_at', 'category', 'description'] }],
       },
       orderDirection: { $ref: '#OrderDirectionQuery' },
     },
@@ -85,7 +85,6 @@ export const requestBody = {
     additionalProperties: false,
   },
   updateBankdetail: {
-    required: ['account_name', 'account_number'],
     type: 'object',
     properties: {
       account_number: { type: 'string' },
@@ -103,7 +102,7 @@ export const requestBody = {
     required: ['category', 'description', 'slug'],
     type: 'object',
     properties: {
-      logo: { $ref: '#MultiPartSchema' },
+      icon: { $ref: '#MultiPartSchema' },
       category: { type: 'string' },
       slug: { type: 'string' },
       description: { type: 'string' },

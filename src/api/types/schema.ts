@@ -87,7 +87,7 @@ export type PostBankStepBody = {
 };
 
 export type PostCategoryBody = {
-  logo?: AddedFileBody[];
+  icon?: AddedFileBody[];
   category: string;
   slug: string;
   description: string;

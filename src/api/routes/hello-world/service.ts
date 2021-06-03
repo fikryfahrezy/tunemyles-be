@@ -1,7 +1,8 @@
 import getText from './repository';
 
-const helloWorld: (random: number) => string = (random: number) => {
+const helloWorld: (random: number) => string = function helloWorld(random: number) {
   if (random > 0.5) return getText();
+
   return getText();
 };
 

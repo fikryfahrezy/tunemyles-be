@@ -21,3 +21,6 @@ https://stackoverflow.com/questions/4338267/validate-phone-number-with-javascrip
 
 Remove all occurrences except last?
 https://stackoverflow.com/a/28673744/12976234
+
+How to properly use Bearer tokens?
+https://stackoverflow.com/a/42983914/12976234

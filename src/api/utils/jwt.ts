@@ -23,7 +23,7 @@ export const issueJwt: (
   return token;
 };
 
-export const verifyJwt: (
+const verifyJwt: (
   token: string,
 ) => {
   userId: number;
@@ -62,7 +62,7 @@ export const verifyToken: (
         if (user.type >= 3) throw new ErrorResponse('forbidden', 403);
         break;
       case 'ADMIN':
-        if (user.type !== 2 || user.type >= 3) throw new ErrorResponse('forbidden', 403);
+        if (user.type >= 3 || user.type !== 2) throw new ErrorResponse('forbidden', 403);
         break;
       case 'MERCHANT':
         if (user.type >= 3 || user.type < 1) throw new ErrorResponse('forbidden', 403);

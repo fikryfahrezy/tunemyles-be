@@ -22,6 +22,7 @@ import {
   verifyToken,
   resetPassword,
   forgotPassword,
+  createAdmin,
 } from './controllers';
 
 const routes = function routes(
@@ -36,14 +37,14 @@ const routes = function routes(
       schema: {
         body: requestBody.register,
         response: {
-          200: responses.authenticated,
+          201: responses.authenticated,
           '4xx': { $ref: '#ApiResponse' },
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preHandler: (req, res, done) => {
-        const validation = req.validationError;
-        if (validation) schemaValidationError(validation, res);
+      preHandler: ({ validationError }, res, done) => {
+        if (validationError) schemaValidationError(validationError, res);
+
         done();
       },
     },
@@ -62,9 +63,9 @@ const routes = function routes(
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preHandler: (req, res, done) => {
-        const validation = req.validationError;
-        if (validation) schemaValidationError(validation, res);
+      preHandler: ({ validationError }, res, done) => {
+        if (validationError) schemaValidationError(validationError, res);
+
         done();
       },
     },
@@ -84,9 +85,9 @@ const routes = function routes(
         },
       },
       preHandler: [
-        (req, res, done) => {
-          const validation = req.validationError;
-          if (validation) schemaValidationError(validation, res);
+        ({ validationError }, res, done) => {
+          if (validationError) schemaValidationError(validationError, res);
+
           done();
         },
         handlerWrapper(protect('USER')),
@@ -95,7 +96,7 @@ const routes = function routes(
     controllerWrapper(getProfile),
   );
 
-  fastify.put<Request<{ Body: UpdateProfileBody; Headers: ApiKeyHeader }>>(
+  fastify.patch<Request<{ Body: UpdateProfileBody; Headers: ApiKeyHeader }>>(
     '/update-profile',
     {
       attachValidation: true,
@@ -113,9 +114,9 @@ const routes = function routes(
         done();
       },
       preHandler: [
-        (req, res, done) => {
-          const validation = req.validationError;
-          if (validation) schemaValidationError(validation, res);
+        ({ validationError }, res, done) => {
+          if (validationError) schemaValidationError(validationError, res);
+
           done();
         },
         handlerWrapper(protect('USER')),
@@ -131,21 +132,21 @@ const routes = function routes(
       schema: {
         body: requestBody.forgotPassword,
         response: {
-          200: { $ref: '#ApiResponse' },
+          201: { $ref: '#ApiResponse' },
           '4xx': { $ref: '#ApiResponse' },
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preHandler: (req, res, done) => {
-        const validation = req.validationError;
-        if (validation) schemaValidationError(validation, res);
+      preHandler: ({ validationError }, res, done) => {
+        if (validationError) schemaValidationError(validationError, res);
+
         done();
       },
     },
     controllerWrapper(forgotPassword),
   );
 
-  fastify.get<Request<{ Params: VerifyTokenParams }>>(
+  fastify.patch<Request<{ Params: VerifyTokenParams }>>(
     '/verify-token/:token',
     {
       attachValidation: true,
@@ -156,16 +157,16 @@ const routes = function routes(
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preHandler: (req, res, done) => {
-        const validation = req.validationError;
-        if (validation) schemaValidationError(validation, res);
+      preHandler: ({ validationError }, res, done) => {
+        if (validationError) schemaValidationError(validationError, res);
+
         done();
       },
     },
     controllerWrapper(verifyToken),
   );
 
-  fastify.put<Request<{ Body: ResetPasswordBody }>>(
+  fastify.patch<Request<{ Body: ResetPasswordBody }>>(
     '/reset-password',
     {
       attachValidation: true,
@@ -177,13 +178,33 @@ const routes = function routes(
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preHandler: (req, res, done) => {
-        const validation = req.validationError;
-        if (validation) schemaValidationError(validation, res);
+      preHandler: ({ validationError }, res, done) => {
+        if (validationError) schemaValidationError(validationError, res);
+
         done();
       },
     },
     controllerWrapper(resetPassword),
+  );
+
+  fastify.patch<Request>(
+    '/admin',
+    {
+      schema: {
+        response: {
+          200: { $ref: '#ApiResponse' },
+          '4xx': { $ref: '#ApiResponse' },
+          '5xx': { $ref: '#ApiResponse' },
+        },
+      },
+      onRequest: (__, res, done) => {
+        if (process.env.NODE_ENV !== 'test') res.methodNotAllowed();
+
+        done();
+      },
+      preHandler: handlerWrapper(protect('USER')),
+    },
+    controllerWrapper(createAdmin),
   );
 
   donePlugin();

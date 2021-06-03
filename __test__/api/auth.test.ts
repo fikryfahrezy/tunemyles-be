@@ -75,7 +75,7 @@ const updateProfile = function updateProfile(
     files,
   } = payload;
   const req = supertest(server)
-    .put('/api/v2/auth/update-profile')
+    .patch('/api/v2/auth/update-profile')
     .set('authorization', `Bearer ${token}`)
     .set('Content-Type', 'multipart/form-data');
 
@@ -108,7 +108,7 @@ const resetPassword = function forgotPassword(
   server: Server,
   payload: { token?: string; new_password?: string },
 ) {
-  return supertest(server).put('/api/v2/auth/reset-password').send(payload);
+  return supertest(server).patch('/api/v2/auth/reset-password').send(payload);
 };
 
 const registerPayload = function registerPayload() {
@@ -136,7 +136,7 @@ describe('Registration', () => {
 
     const { status, headers, body } = await register(server, payload);
 
-    expect(status).toBe(200);
+    expect(status).toBe(201);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
     expect(body.success).toBe(true);
 
@@ -397,6 +397,30 @@ describe('Login', () => {
     appServer.close();
   });
 
+  test('Login Fail, No `username` Provided', async () => {
+    const { appServer, server } = await setUpServer();
+
+    const { status, headers, body } = await login(server, { username: 'username' });
+
+    expect(status).toBe(422);
+    expect(headers['content-type']).toBe('application/json; charset=utf-8');
+    expect(body.success).toBe(false);
+
+    appServer.close();
+  });
+
+  test('Login Fail, No `password` Provided', async () => {
+    const { appServer, server } = await setUpServer();
+
+    const { status, headers, body } = await login(server, { password: 'password' });
+
+    expect(status).toBe(422);
+    expect(headers['content-type']).toBe('application/json; charset=utf-8');
+    expect(body.success).toBe(false);
+
+    appServer.close();
+  });
+
   test('Login Fail, No Data Provided', async () => {
     const { appServer, server } = await setUpServer();
 
@@ -508,35 +532,6 @@ describe('Update Profile', () => {
     expect(status).toBe(200);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
     expect(body.success).toBe(true);
-
-    appServer.close();
-  });
-
-  test('Update Profile Fail, Wrong API Key', async () => {
-    const { appServer, server } = await setUpServer();
-    const authorization = 'this-is-wrong-token';
-
-    const { status, headers, body } = await updateProfile(server, {
-      token: authorization,
-    });
-
-    const contenType = headers['content-type'];
-    const isSuccess = body.success;
-    expect(status).toBe(403);
-    expect(contenType).toBe('application/json; charset=utf-8');
-    expect(isSuccess).toBe(false);
-
-    appServer.close();
-  });
-
-  test('Update Profile Fail, API Key Not Given', async () => {
-    const { appServer, server } = await setUpServer();
-
-    const { status, headers, body } = await updateProfile(server);
-
-    expect(status).toBe(403);
-    expect(headers['content-type']).toBe('application/json; charset=utf-8');
-    expect(body.success).toBe(false);
 
     appServer.close();
   });
@@ -716,6 +711,35 @@ describe('Update Profile', () => {
 
     appServer.close();
   });
+
+  test('Update Profile Fail, Wrong API Key', async () => {
+    const { appServer, server } = await setUpServer();
+    const authorization = 'this-is-wrong-token';
+
+    const { status, headers, body } = await updateProfile(server, {
+      token: authorization,
+    });
+
+    const contenType = headers['content-type'];
+    const isSuccess = body.success;
+    expect(status).toBe(403);
+    expect(contenType).toBe('application/json; charset=utf-8');
+    expect(isSuccess).toBe(false);
+
+    appServer.close();
+  });
+
+  test('Update Profile Fail, API Key Not Given', async () => {
+    const { appServer, server } = await setUpServer();
+
+    const { status, headers, body } = await updateProfile(server);
+
+    expect(status).toBe(403);
+    expect(headers['content-type']).toBe('application/json; charset=utf-8');
+    expect(body.success).toBe(false);
+
+    appServer.close();
+  });
 });
 
 describe('Forgot Password', () => {
@@ -837,6 +861,22 @@ describe('Reset Password', () => {
     appServer.close();
   });
 
+  test('Reset Password Fail, Token Invalid', async () => {
+    const { appServer, server } = await setUpServer();
+    const payload = {
+      token: 'this-token-not-exists',
+      new_password: 'newpassword',
+    };
+
+    const { status, headers, body } = await resetPassword(server, payload);
+
+    expect(status).toBe(404);
+    expect(headers['content-type']).toBe('application/json; charset=utf-8');
+    expect(body.success).toBe(false);
+
+    appServer.close();
+  });
+
   test('Reset Password Fail, Password too Short', async () => {
     const { appServer, server } = await setUpServer();
     const regPayload = registerPayload();
@@ -855,22 +895,6 @@ describe('Reset Password', () => {
     const { status, headers, body } = await resetPassword(server, payload);
 
     expect(status).toBe(422);
-    expect(headers['content-type']).toBe('application/json; charset=utf-8');
-    expect(body.success).toBe(false);
-
-    appServer.close();
-  });
-
-  test('Reset Password Fail, Token Invalid', async () => {
-    const { appServer, server } = await setUpServer();
-    const payload = {
-      token: 'this-token-not-exists',
-      new_password: 'newpassword',
-    };
-
-    const { status, headers, body } = await resetPassword(server, payload);
-
-    expect(status).toBe(404);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
     expect(body.success).toBe(false);
 

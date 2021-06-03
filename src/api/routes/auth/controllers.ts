@@ -17,6 +17,7 @@ import {
   verifyUserToken,
   resetUserPassword,
   forgotUserPassword,
+  makeUserAdmin,
 } from './service';
 
 export const register: RequestHandler<Request<{ Body: RegisterBody }>> = async function register(
@@ -25,8 +26,8 @@ export const register: RequestHandler<Request<{ Body: RegisterBody }>> = async f
 ): Promise<void> {
   const resData = await userRegistration(req.body);
 
-  res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
-    code: 200,
+  res.status(201).header('Content-Type', 'application/json; charset=utf-8').send({
+    code: 201,
     success: true,
     message: 'registration success',
     data: resData,
@@ -65,6 +66,7 @@ export const updateProfile: RequestHandler<
   Request<{ Body: UpdateProfileBody; Headers: ApiKeyHeader }>
 > = async function updateProfile(req, res): Promise<void> {
   const userToken = this.requestContext.get('user') as CustModelType['UserToken'];
+
   await updateUserProfile(userToken, req.body);
 
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
@@ -79,8 +81,8 @@ export const forgotPassword: RequestHandler<
 > = async function forgotPassword(req, res): Promise<void> {
   await forgotUserPassword(req.body);
 
-  res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
-    code: 200,
+  res.status(201).header('Content-Type', 'application/json; charset=utf-8').send({
+    code: 201,
     success: true,
     message: 'request sent',
   });
@@ -108,5 +110,20 @@ export const resetPassword: RequestHandler<
     code: 200,
     success: true,
     message: 'password successfully changed',
+  });
+};
+
+export const createAdmin: RequestHandler<Request> = async function createAdmin(
+  _,
+  res,
+): Promise<void> {
+  const { utilId } = this.requestContext.get('user') as CustModelType['UserToken'];
+
+  await makeUserAdmin(utilId);
+
+  res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
+    code: 200,
+    success: true,
+    message: 'success make user as an admin',
   });
 };

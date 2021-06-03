@@ -65,6 +65,12 @@ export const updateForgotTokenStatus: (
   );
 };
 
+export const updateUserToAdmin: (
+  utilId: number,
+) => Promise<[number, ModelType['UserUtility'][]]> = function updateUserToAdmin(utilId) {
+  return UserUtility.update({ type: 2 }, { where: { id: utilId } });
+};
+
 export const getUser: (
   by: 'ID' | 'USERNAME' | 'PHONE',
   val: string | number,

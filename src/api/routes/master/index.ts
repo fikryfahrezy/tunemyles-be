@@ -16,6 +16,7 @@ import type {
   UpdateWalletBody,
   UpdateWalletLogoBody,
   PostFaqBody,
+  UpdateFaqBody,
 } from '../../types/schema';
 import { controllerWrapper, handlerWrapper } from '../../utils/serverfn-wrapper';
 import { schemaValidationError } from '../../utils/error-handler';
@@ -43,17 +44,17 @@ const routes = function routes(
         },
       },
       preHandler: [
-        (req, res, done) => {
-          const validation = req.validationError;
-          if (validation) schemaValidationError(validation, res);
+        ({ validationError }, res, done) => {
+          if (validationError) schemaValidationError(validationError, res);
+
           done();
         },
         handlerWrapper(protect('USER')),
         handlerWrapper(dbQuerying('BANK')),
       ],
     },
-    controllerWrapper((req, res) => {
-      res.status(200).send({ test: 'hi' });
+    controllerWrapper((__, res) => {
+      res.header('Content-Type', 'application/json; charset=utf-8').send({ success: true });
     }),
   );
 
@@ -75,16 +76,16 @@ const routes = function routes(
         done();
       },
       preHandler: [
-        (req, res, done) => {
-          const validation = req.validationError;
-          if (validation) schemaValidationError(validation, res);
+        ({ validationError }, res, done) => {
+          if (validationError) schemaValidationError(validationError, res);
+
           done();
         },
         handlerWrapper(protect('ADMIN')),
       ],
     },
     controllerWrapper((__, res) => {
-      res.send('hi');
+      res.header('Content-Type', 'application/json; charset=utf-8').send({ success: true });
     }),
   );
 
@@ -102,20 +103,20 @@ const routes = function routes(
         },
       },
       preHandler: [
-        (req, res, done) => {
-          const validation = req.validationError;
-          if (validation) schemaValidationError(validation, res);
+        ({ validationError }, res, done) => {
+          if (validationError) schemaValidationError(validationError, res);
+
           done();
         },
         handlerWrapper(protect('ADMIN')),
       ],
     },
     controllerWrapper((__, res) => {
-      res.send('hi');
+      res.header('Content-Type', 'application/json; charset=utf-8').send({ success: true });
     }),
   );
 
-  fastify.put<Request<{ Headers: ApiKeyHeader; Params: IdRequestParams; Body: UpdateBankBody }>>(
+  fastify.patch<Request<{ Headers: ApiKeyHeader; Params: IdRequestParams; Body: UpdateBankBody }>>(
     '/banks/:id',
     {
       attachValidation: true,
@@ -139,7 +140,7 @@ const routes = function routes(
       ],
     },
     controllerWrapper((__, res) => {
-      res.send('hi');
+      res.header('Content-Type', 'application/json; charset=utf-8').send({ success: true });
     }),
   );
 
@@ -157,20 +158,22 @@ const routes = function routes(
         },
       },
       preHandler: [
-        (req, res, done) => {
-          const validation = req.validationError;
-          if (validation) schemaValidationError(validation, res);
+        ({ validationError }, res, done) => {
+          if (validationError) schemaValidationError(validationError, res);
+
           done();
         },
         handlerWrapper(protect('ADMIN')),
       ],
     },
     controllerWrapper((__, res) => {
-      res.send('hi');
+      res.header('Content-Type', 'application/json; charset=utf-8').send({ success: true });
     }),
   );
 
-  fastify.put<Request<{ Header: ApiKeyHeader; Params: IdRequestParams; Body: UpdateBankLogoBody }>>(
+  fastify.patch<
+    Request<{ Header: ApiKeyHeader; Params: IdRequestParams; Body: UpdateBankLogoBody }>
+  >(
     '/banks/:id/logo',
     {
       attachValidation: true,
@@ -189,20 +192,20 @@ const routes = function routes(
         done();
       },
       preHandler: [
-        (req, res, done) => {
-          const validation = req.validationError;
-          if (validation) schemaValidationError(validation, res);
+        ({ validationError }, res, done) => {
+          if (validationError) schemaValidationError(validationError, res);
+
           done();
         },
         handlerWrapper(protect('ADMIN')),
       ],
     },
     controllerWrapper((__, res) => {
-      res.send('hi');
+      res.header('Content-Type', 'application/json; charset=utf-8').send({ success: true });
     }),
   );
 
-  fastify.put<
+  fastify.patch<
     Request<{ Headers: ApiKeyHeader; Params: IdRequestParams; Body: UpdateBankDetailBody }>
   >(
     '/banks/:id/detail',
@@ -219,16 +222,16 @@ const routes = function routes(
         },
       },
       preHandler: [
-        (req, res, done) => {
-          const validation = req.validationError;
-          if (validation) schemaValidationError(validation, res);
+        ({ validationError }, res, done) => {
+          if (validationError) schemaValidationError(validationError, res);
+
           done();
         },
         handlerWrapper(protect('ADMIN')),
       ],
     },
     controllerWrapper((__, res) => {
-      res.send('hi');
+      res.header('Content-Type', 'application/json; charset=utf-8').send({ success: true });
     }),
   );
 
@@ -247,21 +250,21 @@ const routes = function routes(
         },
       },
       preHandler: [
-        (req, res, done) => {
-          const validation = req.validationError;
-          if (validation) schemaValidationError(validation, res);
+        ({ validationError }, res, done) => {
+          if (validationError) schemaValidationError(validationError, res);
+
           done();
         },
         handlerWrapper(protect('ADMIN')),
       ],
     },
     controllerWrapper((__, res) => {
-      res.send('hi');
+      res.header('Content-Type', 'application/json; charset=utf-8').send({ success: true });
     }),
   );
 
   fastify.delete<Request<{ Headers: ApiKeyHeader; Params: IdRequestParams }>>(
-    '/banks/:id/steps',
+    '/banks/steps/:id',
     {
       attachValidation: true,
       schema: {
@@ -274,16 +277,16 @@ const routes = function routes(
         },
       },
       preHandler: [
-        (req, res, done) => {
-          const validation = req.validationError;
-          if (validation) schemaValidationError(validation, res);
+        ({ validationError }, res, done) => {
+          if (validationError) schemaValidationError(validationError, res);
+
           done();
         },
         handlerWrapper(protect('ADMIN')),
       ],
     },
     controllerWrapper((__, res) => {
-      res.send('hi');
+      res.header('Content-Type', 'application/json; charset=utf-8').send({ success: true });
     }),
   );
 
@@ -301,9 +304,9 @@ const routes = function routes(
         },
       },
       preHandler: [
-        (req, res, done) => {
-          const validation = req.validationError;
-          if (validation) schemaValidationError(validation, res);
+        ({ validationError }, res, done) => {
+          if (validationError) schemaValidationError(validationError, res);
+
           done();
         },
         handlerWrapper(protect('USER')),
@@ -311,7 +314,7 @@ const routes = function routes(
       ],
     },
     controllerWrapper((__, res) => {
-      res.send('hi');
+      res.header('Content-Type', 'application/json; charset=utf-8').send({ success: true });
     }),
   );
 
@@ -328,21 +331,27 @@ const routes = function routes(
           '5xx': { $ref: '#ApiResponse' },
         },
       },
+      preValidation: (req, __, done) => {
+        req.body = { ...req.body, icon: renameFiles(req.url, req.body.icon) ?? req.body.icon };
+        done();
+      },
       preHandler: [
-        (req, res, done) => {
-          const validation = req.validationError;
-          if (validation) schemaValidationError(validation, res);
+        ({ validationError }, res, done) => {
+          if (validationError) schemaValidationError(validationError, res);
+
           done();
         },
         handlerWrapper(protect('ADMIN')),
       ],
     },
     controllerWrapper((__, res) => {
-      res.send('hi');
+      res.header('Content-Type', 'application/json; charset=utf-8').send({ success: true });
     }),
   );
 
-  fastify.put<Request<{ Header: ApiKeyHeader; Params: IdRequestParams; Body: UpdateCategoryBody }>>(
+  fastify.patch<
+    Request<{ Header: ApiKeyHeader; Params: IdRequestParams; Body: UpdateCategoryBody }>
+  >(
     '/categories/:id',
     {
       attachValidation: true,
@@ -357,16 +366,16 @@ const routes = function routes(
         },
       },
       preHandler: [
-        (req, res, done) => {
-          const validation = req.validationError;
-          if (validation) schemaValidationError(validation, res);
+        ({ validationError }, res, done) => {
+          if (validationError) schemaValidationError(validationError, res);
+
           done();
         },
         handlerWrapper(protect('ADMIN')),
       ],
     },
     controllerWrapper((__, res) => {
-      res.send('');
+      res.header('Content-Type', 'application/json; charset=utf-8').send({ success: true });
     }),
   );
 
@@ -384,20 +393,20 @@ const routes = function routes(
         },
       },
       preHandler: [
-        (req, res, done) => {
-          const validation = req.validationError;
-          if (validation) schemaValidationError(validation, res);
+        ({ validationError }, res, done) => {
+          if (validationError) schemaValidationError(validationError, res);
+
           done();
         },
         handlerWrapper(protect('ADMIN')),
       ],
     },
     controllerWrapper((__, res) => {
-      res.send('hi');
+      res.header('Content-Type', 'application/json; charset=utf-8').send({ success: true });
     }),
   );
 
-  fastify.put<Request<{ Headers: ApiKeyHeader; Params: IdRequestParams }>>(
+  fastify.patch<Request<{ Headers: ApiKeyHeader; Params: IdRequestParams }>>(
     '/categories/:id/icon',
     {
       attachValidation: true,
@@ -411,21 +420,21 @@ const routes = function routes(
         },
       },
       preHandler: [
-        (req, res, done) => {
-          const validation = req.validationError;
-          if (validation) schemaValidationError(validation, res);
+        ({ validationError }, res, done) => {
+          if (validationError) schemaValidationError(validationError, res);
+
           done();
         },
         handlerWrapper(protect('ADMIN')),
       ],
     },
     controllerWrapper((__, res) => {
-      res.send('hi');
+      res.header('Content-Type', 'application/json; charset=utf-8').send({ success: true });
     }),
   );
 
   fastify.get<Request<{ Headers: ApiKeyHeader; Querystring: GetQuery }>>(
-    '/media',
+    '/medias',
     {
       attachValidation: true,
       schema: {
@@ -438,16 +447,16 @@ const routes = function routes(
         },
       },
       preHandler: [
-        (req, res, done) => {
-          const validation = req.validationError;
-          if (validation) schemaValidationError(validation, res);
+        ({ validationError }, res, done) => {
+          if (validationError) schemaValidationError(validationError, res);
+
           done();
         },
         handlerWrapper(protect('USER')),
       ],
     },
     controllerWrapper((__, res) => {
-      res.send('hi');
+      res.header('Content-Type', 'application/json; charset=utf-8').send({ success: true });
     }),
   );
 
@@ -469,20 +478,20 @@ const routes = function routes(
         done();
       },
       preHandler: [
-        (req, res, done) => {
-          const validation = req.validationError;
-          if (validation) schemaValidationError(validation, res);
+        ({ validationError }, res, done) => {
+          if (validationError) schemaValidationError(validationError, res);
+
           done();
         },
         handlerWrapper(protect('ADMIN')),
       ],
     },
     controllerWrapper((__, res) => {
-      res.send('hi');
+      res.header('Content-Type', 'application/json; charset=utf-8').send({ success: true });
     }),
   );
 
-  fastify.put<Request<{ Headers: ApiKeyHeader; Params: IdRequestParams; Body: PostMediaBody }>>(
+  fastify.patch<Request<{ Headers: ApiKeyHeader; Params: IdRequestParams; Body: PostMediaBody }>>(
     '/medias/:id',
     {
       attachValidation: true,
@@ -496,17 +505,21 @@ const routes = function routes(
           '5xx': { $ref: '#ApiResponse' },
         },
       },
+      preValidation: (req, __, done) => {
+        req.body = { ...req.body, image: renameFiles(req.url, req.body.image) ?? req.body.image };
+        done();
+      },
       preHandler: [
-        (req, res, done) => {
-          const validation = req.validationError;
-          if (validation) schemaValidationError(validation, res);
+        ({ validationError }, res, done) => {
+          if (validationError) schemaValidationError(validationError, res);
+
           done();
         },
         handlerWrapper(protect('ADMIN')),
       ],
     },
     controllerWrapper((__, res) => {
-      res.send('hi');
+      res.header('Content-Type', 'application/json; charset=utf-8').send({ success: true });
     }),
   );
 
@@ -524,16 +537,16 @@ const routes = function routes(
         },
       },
       preHandler: [
-        (req, res, done) => {
-          const validation = req.validationError;
-          if (validation) schemaValidationError(validation, res);
+        ({ validationError }, res, done) => {
+          if (validationError) schemaValidationError(validationError, res);
+
           done();
         },
         handlerWrapper(protect('ADMIN')),
       ],
     },
     controllerWrapper((__, res) => {
-      res.send('hi');
+      res.header('Content-Type', 'application/json; charset=utf-8').send({ success: true });
     }),
   );
 
@@ -551,9 +564,9 @@ const routes = function routes(
         },
       },
       preHandler: [
-        (req, res, done) => {
-          const validation = req.validationError;
-          if (validation) schemaValidationError(validation, res);
+        ({ validationError }, res, done) => {
+          if (validationError) schemaValidationError(validationError, res);
+
           done();
         },
         handlerWrapper(protect('USER')),
@@ -561,7 +574,7 @@ const routes = function routes(
       ],
     },
     controllerWrapper((__, res) => {
-      res.send('hi');
+      res.header('Content-Type', 'application/json; charset=utf-8').send({ success: true });
     }),
   );
 
@@ -583,20 +596,22 @@ const routes = function routes(
         done();
       },
       preHandler: [
-        (req, res, done) => {
-          const validation = req.validationError;
-          if (validation) schemaValidationError(validation, res);
+        ({ validationError }, res, done) => {
+          if (validationError) schemaValidationError(validationError, res);
+
           done();
         },
         handlerWrapper(protect('ADMIN')),
       ],
     },
     controllerWrapper((__, res) => {
-      res.send('hi');
+      res.header('Content-Type', 'application/json; charset=utf-8').send({ success: true });
     }),
   );
 
-  fastify.put<Request<{ Headers: ApiKeyHeader; Params: IdRequestParams; Body: UpdateWalletBody }>>(
+  fastify.patch<
+    Request<{ Headers: ApiKeyHeader; Params: IdRequestParams; Body: UpdateWalletBody }>
+  >(
     '/wallets/:id',
     {
       attachValidation: true,
@@ -611,16 +626,16 @@ const routes = function routes(
         },
       },
       preHandler: [
-        (req, res, done) => {
-          const validation = req.validationError;
-          if (validation) schemaValidationError(validation, res);
+        ({ validationError }, res, done) => {
+          if (validationError) schemaValidationError(validationError, res);
+
           done();
         },
         handlerWrapper(protect('ADMIN')),
       ],
     },
     controllerWrapper((__, res) => {
-      res.send('hi');
+      res.header('Content-Type', 'application/json; charset=utf-8').send({ success: true });
     }),
   );
 
@@ -638,20 +653,20 @@ const routes = function routes(
         },
       },
       preHandler: [
-        (req, res, done) => {
-          const validation = req.validationError;
-          if (validation) schemaValidationError(validation, res);
+        ({ validationError }, res, done) => {
+          if (validationError) schemaValidationError(validationError, res);
+
           done();
         },
         handlerWrapper(protect('ADMIN')),
       ],
     },
     controllerWrapper((__, res) => {
-      res.send('hi');
+      res.header('Content-Type', 'application/json; charset=utf-8').send({ success: true });
     }),
   );
 
-  fastify.put<
+  fastify.patch<
     Request<{ Headers: ApiKeyHeader; Params: IdRequestParams; Body: UpdateWalletLogoBody }>
   >(
     '/wallets/:id/logo',
@@ -672,16 +687,16 @@ const routes = function routes(
         done();
       },
       preHandler: [
-        (req, res, done) => {
-          const validation = req.validationError;
-          if (validation) schemaValidationError(validation, res);
+        ({ validationError }, res, done) => {
+          if (validationError) schemaValidationError(validationError, res);
+
           done();
         },
         handlerWrapper(protect('ADMIN')),
       ],
     },
     controllerWrapper((__, res) => {
-      res.send('hi');
+      res.header('Content-Type', 'application/json; charset=utf-8').send({ success: true });
     }),
   );
 
@@ -698,7 +713,7 @@ const routes = function routes(
       },
     },
     controllerWrapper((__, res) => {
-      res.send('hi');
+      res.header('Content-Type', 'application/json; charset=utf-8').send({ success: true });
     }),
   );
 
@@ -716,16 +731,16 @@ const routes = function routes(
         },
       },
       preHandler: [
-        (req, res, done) => {
-          const validation = req.validationError;
-          if (validation) schemaValidationError(validation, res);
+        ({ validationError }, res, done) => {
+          if (validationError) schemaValidationError(validationError, res);
+
           done();
         },
         handlerWrapper(protect('ADMIN')),
       ],
     },
     controllerWrapper((__, res) => {
-      res.send('hi');
+      res.header('Content-Type', 'application/json; charset=utf-8').send({ success: true });
     }),
   );
 
@@ -743,26 +758,27 @@ const routes = function routes(
         },
       },
       preHandler: [
-        (req, res, done) => {
-          const validation = req.validationError;
-          if (validation) schemaValidationError(validation, res);
+        ({ validationError }, res, done) => {
+          if (validationError) schemaValidationError(validationError, res);
+
           done();
         },
         handlerWrapper(protect('ADMIN')),
       ],
     },
     controllerWrapper((__, res) => {
-      res.send('hi');
+      res.header('Content-Type', 'application/json; charset=utf-8').send({ success: true });
     }),
   );
 
-  fastify.put<Request<{ Header: ApiKeyHeader; Params: IdRequestParams }>>(
+  fastify.patch<Request<{ Header: ApiKeyHeader; Params: IdRequestParams; Body: UpdateFaqBody }>>(
     '/faqs/:id',
     {
       attachValidation: true,
       schema: {
         headers: requestHeaders.private,
         params: requestParams.id,
+        body: requestBody.updateFaq,
         response: {
           200: { $ref: '#ApiResponse' },
           '4xx': { $ref: '#ApiResponse' },
@@ -770,16 +786,16 @@ const routes = function routes(
         },
       },
       preHandler: [
-        (req, res, done) => {
-          const validation = req.validationError;
-          if (validation) schemaValidationError(validation, res);
+        ({ validationError }, res, done) => {
+          if (validationError) schemaValidationError(validationError, res);
+
           done();
         },
         handlerWrapper(protect('ADMIN')),
       ],
     },
     controllerWrapper((__, res) => {
-      res.send('hi');
+      res.header('Content-Type', 'application/json; charset=utf-8').send({ success: true });
     }),
   );
 

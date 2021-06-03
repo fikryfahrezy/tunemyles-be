@@ -39,9 +39,8 @@ const routes = function routes(
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preHandler: (req, res, done) => {
-        const validation = req.validationError;
-        if (validation) schemaValidationError(validation, res);
+      preHandler: ({ validationError }, res, done) => {
+        if (validationError) schemaValidationError(validationError, res);
         done();
       },
     },
@@ -98,9 +97,9 @@ const routes = function routes(
         },
       },
       preHandler: [
-        (req, res, done) => {
-          const validation = req.validationError;
-          if (validation) schemaValidationError(validation, res);
+        ({ validationError }, res, done) => {
+          if (validationError) schemaValidationError(validationError, res);
+
           done();
         },
         handlerWrapper(exampleProtect),

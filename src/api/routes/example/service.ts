@@ -4,19 +4,23 @@ import { ErrorResponse } from '../../utils/error-handler';
 import { exampleMultipleData, exampleSingleData } from './repository';
 import { saveFiles } from '../../utils/file-management';
 
-export const getService: () => DummyArrayDataType = () => {
+export const getService: () => DummyArrayDataType = function getService() {
   const data = exampleMultipleData();
+
   return data;
 };
 
-export const postService: (text: string) => boolean = (text: string) => {
+export const postService: (text: string) => boolean = function postService(text: string) {
   const isSuccess = typeof text === 'string' && true;
+
   return isSuccess;
 };
 
-export const getIdService: (id: number) => DummyDataType | Error = (id) => {
+export const getIdService: (id: number) => DummyDataType | Error = function getIdService(id) {
   const data = exampleSingleData(id);
+
   if (!data) throw new ErrorResponse(`data with id ${id} not found`, 404);
+
   return data;
 };
 
