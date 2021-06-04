@@ -46,6 +46,7 @@ export const schemaValidationError: (
   res: FastifyReply,
 ) => void = (err, res) => {
   const context = err.validationContext;
+
   if (context === 'headers') res.forbidden();
 
   res.unprocessableEntity();

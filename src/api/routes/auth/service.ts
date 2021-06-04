@@ -60,6 +60,7 @@ export const userLogin: (
   if (type >= 3) throw new ErrorResponse('account already banned', 403);
 
   const token = issueJwt(user.id, id, type);
+
   return {
     type,
     token,
@@ -148,10 +149,18 @@ export const resetUserPassword: (
   await updateUser(userId, { password: newPassword });
 };
 
-export const makeUserAdmin: (utilId: number) => Promise<void> = async function makeUserAdmin(
-  utilId,
+export const makeUserAdmin: (userId: number) => Promise<string> = async function makeUserAdmin(
+  userId,
 ) {
-  const [affectedRows] = await updateUserToAdmin(utilId);
+  const [affectedRows] = await updateUserToAdmin(userId);
 
   if (affectedRows < 1) throw new ErrorResponse('update failed', 404);
+
+  const { id, type } = await getUserUtility(userId);
+
+  if (type >= 3) throw new ErrorResponse('account already banned', 403);
+
+  const token = issueJwt(userId, id, type);
+
+  return token;
 };

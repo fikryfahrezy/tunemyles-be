@@ -2,21 +2,7 @@
 
 ## [Description](#description)
 
-Version 2 of Tunemyles Back End (not sure if it's supposed to be v2 or not because there is no additional feature or something else, it's just re-write the code, and restructure the code). This application is `monolithic`. Built with functional paradigm.
-
-## [What has changed?](#what-has-changed)
-
-### [`Language`](#language)
-
-On this v2, the application uses `TypeScript`, while the v1 uses `JavaScript`.
-
-### [`Framework`](#framework)
-
-On this v2, the application uses [Fastify](https://www.fastify.io/), while the v1 uses [Koa](https://koajs.com/).
-
-### [`REST API`](#rest-api)
-
-Some responses for the `GET` method are restructured.
+Tunemyles Back End. This application is `monolithic`. Built with functional paradigm.
 
 ## [Design Pattern](#design-pattern)
 

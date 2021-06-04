@@ -41,6 +41,7 @@ const routes = function routes(
       },
       preHandler: ({ validationError }, res, done) => {
         if (validationError) schemaValidationError(validationError, res);
+
         done();
       },
     },
@@ -65,6 +66,7 @@ const routes = function routes(
   fastify.post<Request<{ Body: FileRequestBody }>>(
     '/file',
     {
+      attachValidation: true,
       schema: {
         body: requestBody.postFile,
         response: {
@@ -78,8 +80,16 @@ const routes = function routes(
           ...req.body,
           file: renameFiles(req.url, req.body.file) ?? req.body.file,
         };
+
         done();
       },
+      preHandler: [
+        ({ validationError }, res, done) => {
+          if (validationError) schemaValidationError(validationError, res);
+
+          done();
+        },
+      ],
     },
     controllerWrapper(postFileExample),
   );

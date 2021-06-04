@@ -1,14 +1,6 @@
 import supertest from 'supertest';
-import app from '../../src/config/app';
 import sequelize from '../../src/databases/sequelize';
-
-const setUpServer = async function setUpServer() {
-  const appServer = app();
-  await appServer.ready();
-  const server = appServer.server;
-
-  return { appServer, server };
-};
+import { setUpServer } from '../component';
 
 beforeAll(() => sequelize.authenticate());
 

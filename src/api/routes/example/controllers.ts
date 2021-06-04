@@ -19,8 +19,8 @@ export const postExample: RequestHandler<Request<{ Body: PostRequestBody }>> = f
 ): void {
   postService(req.body.name);
 
-  res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
-    code: 200,
+  res.status(201).header('Content-Type', 'application/json; charset=utf-8').send({
+    code: 201,
     success: true,
     message: 'post success',
   });
@@ -44,8 +44,8 @@ export const postFileExample: RequestHandler<
 > = async function postFileExample(req, res): Promise<void> {
   await postFileService(req.body.file);
 
-  res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
-    code: 200,
+  res.status(201).header('Content-Type', 'application/json; charset=utf-8').send({
+    code: 201,
     success: true,
     message: 'post success',
   });

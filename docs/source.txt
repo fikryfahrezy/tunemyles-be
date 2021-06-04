@@ -24,3 +24,6 @@ https://stackoverflow.com/a/28673744/12976234
 
 How to properly use Bearer tokens?
 https://stackoverflow.com/a/42983914/12976234
+
+How to add file in a pre-request script using form data
+https://community.postman.com/t/how-to-add-file-in-a-pre-request-script-using-form-data/18236

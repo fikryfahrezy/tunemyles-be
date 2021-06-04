@@ -111,6 +111,7 @@ const routes = function routes(
       },
       preValidation: (req, __, done) => {
         req.body = { ...req.body, avatar: renameFiles(req.url, req.body.avatar) };
+
         done();
       },
       preHandler: [
@@ -190,13 +191,6 @@ const routes = function routes(
   fastify.patch<Request>(
     '/admin',
     {
-      schema: {
-        response: {
-          200: { $ref: '#ApiResponse' },
-          '4xx': { $ref: '#ApiResponse' },
-          '5xx': { $ref: '#ApiResponse' },
-        },
-      },
       onRequest: (__, res, done) => {
         if (process.env.NODE_ENV !== 'test') res.methodNotAllowed();
 

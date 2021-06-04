@@ -1,135 +1,34 @@
-import type { Server } from 'http';
-import type { ReadStream } from 'fs';
 import fs from 'fs';
-import supertest from 'supertest';
-// import bcrypt from 'bcrypt';
-import app from '../../src/config/app';
 import sequelize from '../../src/databases/sequelize';
 import {
+  getUser,
+  updateUser,
   createForgotPassword,
   createUserImg,
-  updateUser,
-  getUser,
 } from '../../src/api/repositories/UserRepository';
 import {
+  userRegistration,
   userLogin,
   resetUserPassword,
-  userRegistration,
   verifyUserToken,
 } from '../../src/api/routes/auth/service';
-
-const setUpServer = async function setUpServer() {
-  const appServer = app();
-  await appServer.ready();
-  const server = appServer.server;
-
-  return { appServer, server };
-};
-
-const register = function register(
-  server: Server,
-  payload: {
-    full_name?: string;
-    username?: string;
-    password?: string;
-    phone_number?: string;
-    address?: string;
-  },
-) {
-  return supertest(server)
-    .post('/api/v2/auth/register')
-    .set('Content-Type', 'application/json')
-    .send(payload);
-};
-
-const login = function login(server: Server, payload: { username?: string; password?: string }) {
-  return supertest(server)
-    .post('/api/v2/auth/login')
-    .set('Content-Type', 'application/json')
-    .send(payload);
-};
-
-const getProfile = function getProfile(server: Server, token?: string) {
-  const req = supertest(server).get('/api/v2/auth/me');
-
-  if (token) req.set('authorization', `Bearer ${token}`);
-
-  return req;
-};
-
-const updateProfile = function updateProfile(
-  server: Server,
-  payload: {
-    token?: string;
-    fields?: { full_name?: string; address?: string; phone_number?: string; password?: string };
-    files?: { field: string; file: ReadStream }[];
-  } = {},
-) {
-  const {
-    token,
-    fields = {
-      full_name: 'Name',
-      address: 'Address',
-      phone_number: '12345678901234',
-    },
-    files,
-  } = payload;
-  const req = supertest(server)
-    .patch('/api/v2/auth/update-profile')
-    .set('authorization', `Bearer ${token}`)
-    .set('Content-Type', 'multipart/form-data');
-
-  if (fields) {
-    Object.entries(fields).forEach(([key, value]) => {
-      if (Object.prototype.hasOwnProperty.call(fields, key)) req.field(key, value);
-    });
-  }
-
-  if (files)
-    files.forEach(({ field, file }) => {
-      req.attach(field, file);
-    });
-
-  return req;
-};
-
-const forgotPassword = function forgotPassword(server: Server, payload: { phone_number?: string }) {
-  return supertest(server).post('/api/v2/auth/forgot-password').send(payload);
-};
-
-const verifyForgotToken = function verifyForgotToken(server: Server, token?: string) {
-  let url = '/api/v2/auth/verify-token/';
-  url += token ? token : '';
-
-  return supertest(server).get(url);
-};
-
-const resetPassword = function forgotPassword(
-  server: Server,
-  payload: { token?: string; new_password?: string },
-) {
-  return supertest(server).patch('/api/v2/auth/reset-password').send(payload);
-};
-
-const registerPayload = function registerPayload() {
-  /**
-   * NOTE: Generate random string/characters in JavaScript
-   * https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript
-   */
-  return {
-    full_name: 'Name',
-    username: Math.random().toString(36).substring(2),
-    password: 'password',
-    phone_number: Date.now().toString(),
-    address: 'address',
-  };
-};
+import {
+  setUpServer,
+  registerPayload,
+  register,
+  login,
+  getProfile,
+  updateProfile,
+  forgotPassword,
+  verifyForgotToken,
+  resetPassword,
+} from '../component';
 
 beforeAll(() => sequelize.authenticate());
 
 afterAll(() => sequelize.close());
 
-describe('Registration', () => {
+describe('Register', () => {
   test('Register Success', async () => {
     const { appServer, server } = await setUpServer();
     const payload = registerPayload();
@@ -456,6 +355,7 @@ describe('Get Profile', () => {
     const authorization = 'this-is-wrong-token';
 
     const { status, headers, body } = await getProfile(server, authorization);
+
     expect(status).toBe(403);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
     expect(body.success).toBe(false);
@@ -720,11 +620,9 @@ describe('Update Profile', () => {
       token: authorization,
     });
 
-    const contenType = headers['content-type'];
-    const isSuccess = body.success;
     expect(status).toBe(403);
-    expect(contenType).toBe('application/json; charset=utf-8');
-    expect(isSuccess).toBe(false);
+    expect(headers['content-type']).toBe('application/json; charset=utf-8');
+    expect(body.success).toBe(false);
 
     appServer.close();
   });
@@ -753,14 +651,14 @@ describe('Forgot Password', () => {
 
     const { status, headers, body } = await forgotPassword(server, payload);
 
-    expect(status).toBe(200);
+    expect(status).toBe(201);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
     expect(body.success).toBe(true);
 
     appServer.close();
   });
 
-  test('Request Forgot Fail, Number not Registered', async () => {
+  test('Request Forgot Password Fail, Number Not Registered', async () => {
     const { appServer, server } = await setUpServer();
     const payload = { phone_number: '6991224220261' };
 
@@ -773,7 +671,7 @@ describe('Forgot Password', () => {
     appServer.close();
   });
 
-  test('Request Forgot Password, Request Empty', async () => {
+  test('Request Forgot Password Fail, No Data Provided', async () => {
     const { appServer, server } = await setUpServer();
 
     const { status, headers, body } = await forgotPassword(server, {});

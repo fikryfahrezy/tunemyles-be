@@ -73,6 +73,7 @@ const routes = function routes(
       },
       preValidation: (req, __, done) => {
         req.body = { ...req.body, logo: renameFiles(req.url, req.body.logo) };
+
         done();
       },
       preHandler: [
@@ -85,7 +86,10 @@ const routes = function routes(
       ],
     },
     controllerWrapper((__, res) => {
-      res.header('Content-Type', 'application/json; charset=utf-8').send({ success: true });
+      res
+        .status(201)
+        .header('Content-Type', 'application/json; charset=utf-8')
+        .send({ success: true });
     }),
   );
 
@@ -259,7 +263,10 @@ const routes = function routes(
       ],
     },
     controllerWrapper((__, res) => {
-      res.header('Content-Type', 'application/json; charset=utf-8').send({ success: true });
+      res
+        .status(201)
+        .header('Content-Type', 'application/json; charset=utf-8')
+        .send({ success: true });
     }),
   );
 
@@ -345,7 +352,10 @@ const routes = function routes(
       ],
     },
     controllerWrapper((__, res) => {
-      res.header('Content-Type', 'application/json; charset=utf-8').send({ success: true });
+      res
+        .status(201)
+        .header('Content-Type', 'application/json; charset=utf-8')
+        .send({ success: true });
     }),
   );
 
@@ -487,7 +497,10 @@ const routes = function routes(
       ],
     },
     controllerWrapper((__, res) => {
-      res.header('Content-Type', 'application/json; charset=utf-8').send({ success: true });
+      res
+        .status(201)
+        .header('Content-Type', 'application/json; charset=utf-8')
+        .send({ success: true });
     }),
   );
 
@@ -605,7 +618,10 @@ const routes = function routes(
       ],
     },
     controllerWrapper((__, res) => {
-      res.header('Content-Type', 'application/json; charset=utf-8').send({ success: true });
+      res
+        .status(201)
+        .header('Content-Type', 'application/json; charset=utf-8')
+        .send({ success: true });
     }),
   );
 
@@ -740,7 +756,10 @@ const routes = function routes(
       ],
     },
     controllerWrapper((__, res) => {
-      res.header('Content-Type', 'application/json; charset=utf-8').send({ success: true });
+      res
+        .status(201)
+        .header('Content-Type', 'application/json; charset=utf-8')
+        .send({ success: true });
     }),
   );
 

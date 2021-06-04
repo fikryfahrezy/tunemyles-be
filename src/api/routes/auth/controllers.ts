@@ -117,13 +117,13 @@ export const createAdmin: RequestHandler<Request> = async function createAdmin(
   _,
   res,
 ): Promise<void> {
-  const { utilId } = this.requestContext.get('user') as CustModelType['UserToken'];
-
-  await makeUserAdmin(utilId);
+  const { userId } = this.requestContext.get('user') as CustModelType['UserToken'];
+  const token = await makeUserAdmin(userId);
 
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
     success: true,
     message: 'success make user as an admin',
+    data: token,
   });
 };

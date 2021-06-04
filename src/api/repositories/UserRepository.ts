@@ -66,9 +66,9 @@ export const updateForgotTokenStatus: (
 };
 
 export const updateUserToAdmin: (
-  utilId: number,
-) => Promise<[number, ModelType['UserUtility'][]]> = function updateUserToAdmin(utilId) {
-  return UserUtility.update({ type: 2 }, { where: { id: utilId } });
+  userId: number,
+) => Promise<[number, ModelType['UserUtility'][]]> = function updateUserToAdmin(userId) {
+  return UserUtility.update({ type: 2 }, { where: { id_m_users: userId } });
 };
 
 export const getUser: (

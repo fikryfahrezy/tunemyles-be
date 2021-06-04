@@ -63,7 +63,7 @@ export const requestBody = {
     required: ['bank_name'],
     type: 'object',
     properties: {
-      logo: { $ref: '#MultiPartSchema' },
+      logo: { type: 'array', items: { $ref: '#MultiPartSchema' } },
       bank_name: { type: 'string' },
     },
     additionalProperties: false,
@@ -80,7 +80,7 @@ export const requestBody = {
     required: ['logo'],
     type: 'object',
     properties: {
-      logo: { $ref: '#MultiPartSchema' },
+      logo: { type: 'array', items: { $ref: '#MultiPartSchema' } },
     },
     additionalProperties: false,
   },
@@ -102,7 +102,7 @@ export const requestBody = {
     required: ['category', 'description', 'slug'],
     type: 'object',
     properties: {
-      icon: { $ref: '#MultiPartSchema' },
+      icon: { type: 'array', items: { $ref: '#MultiPartSchema' } },
       category: { type: 'string' },
       slug: { type: 'string' },
       description: { type: 'string' },
@@ -123,7 +123,7 @@ export const requestBody = {
     required: ['icon'],
     type: 'object',
     properties: {
-      icon: { $ref: '#MultiPartSchema' },
+      icon: { type: 'array', items: { $ref: '#MultiPartSchema' } },
     },
     additionalProperties: false,
   },
@@ -131,7 +131,7 @@ export const requestBody = {
     required: ['image'],
     type: 'object',
     properties: {
-      image: { $ref: '#MultiPartSchema' },
+      image: { type: 'array', items: { $ref: '#MultiPartSchema' } },
     },
     additionalProperties: false,
   },
@@ -139,7 +139,7 @@ export const requestBody = {
     required: ['wallet_description', 'wallet_name'],
     type: 'object',
     properties: {
-      logo: { $ref: '#MultiPartSchema' },
+      logo: { type: 'array', items: { $ref: '#MultiPartSchema' } },
       wallet_name: { type: 'string' },
       wallet_description: { type: 'string' },
     },
@@ -157,7 +157,7 @@ export const requestBody = {
     required: ['logo'],
     type: 'object',
     properties: {
-      logo: { $ref: '#MultiPartSchema' },
+      logo: { type: 'array', items: { $ref: '#MultiPartSchema' } },
     },
   },
   postFaq: {
