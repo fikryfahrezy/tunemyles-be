@@ -6,6 +6,10 @@ export const requestParams = {
   id: { $ref: '#RouteIdParam' },
 };
 
+/**
+ * The order of the keys is following the order of the GET
+ * routes in Postman
+ */
 export const requestQuery = {
   getBanks: {
     type: 'object',
@@ -58,6 +62,10 @@ export const requestQuery = {
   },
 };
 
+/**
+ * The order of the keys is following the order of the POST / PATCH
+ * routes in Postman
+ */
 export const requestBody = {
   postBank: {
     required: ['bank_name'],
@@ -72,7 +80,7 @@ export const requestBody = {
     type: 'object',
     properties: {
       bank_name: { type: 'string' },
-      is_visible: { type: 'integer' },
+      status: { type: 'integer' },
     },
     additionalProperties: false,
   },
@@ -115,7 +123,7 @@ export const requestBody = {
       category: { type: 'string' },
       slug: { type: 'string' },
       description: { type: 'string' },
-      is_visible: { type: 'integer' },
+      visibility: { type: 'integer' },
     },
     additionalProperties: false,
   },
@@ -149,7 +157,7 @@ export const requestBody = {
     properties: {
       wallet_name: { type: 'string' },
       wallet_description: { type: 'string' },
-      is_visible: { type: 'integer' },
+      visibility: { type: 'integer' },
     },
     additionalProperties: false,
   },
@@ -179,6 +187,9 @@ export const requestBody = {
   },
 };
 
+/**
+ * The order of the keys is following the order of the routes in Postman
+ */
 export const responses = {
   banks: {
     type: 'object',

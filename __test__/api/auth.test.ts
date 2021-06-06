@@ -1,14 +1,8 @@
 import fs from 'fs';
 import sequelize from '../../src/databases/sequelize';
-import {
-  getUser,
-  updateUser,
-  createForgotPassword,
-  createUserImg,
-} from '../../src/api/repositories/UserRepository';
+import { getUser, updateUser, createUserImg } from '../../src/api/repositories/UserRepository';
 import {
   userRegistration,
-  userLogin,
   resetUserPassword,
   verifyUserToken,
 } from '../../src/api/routes/auth/service';
@@ -22,6 +16,9 @@ import {
   forgotPassword,
   verifyForgotToken,
   resetPassword,
+  registration,
+  registerThenLogin,
+  registerThenForgotPass,
 } from '../component';
 
 beforeAll(() => sequelize.authenticate());
@@ -29,7 +26,7 @@ beforeAll(() => sequelize.authenticate());
 afterAll(() => sequelize.close());
 
 describe('Register', () => {
-  test('Register Success', async () => {
+  test('Success', async () => {
     const { appServer, server } = await setUpServer();
     const payload = registerPayload();
 
@@ -42,7 +39,7 @@ describe('Register', () => {
     appServer.close();
   });
 
-  test('Register Fail, Phone Number Already Exist', async () => {
+  test('Fail, `phone_number` Already Exist', async () => {
     const { appServer, server } = await setUpServer();
     const payload = registerPayload();
     const phoneNumber = Date.now().toString();
@@ -62,7 +59,7 @@ describe('Register', () => {
     appServer.close();
   });
 
-  test('Register Fail, Username Already Exist', async () => {
+  test('Fail, `username` Already Exist', async () => {
     const { appServer, server } = await setUpServer();
     const payload = registerPayload();
     const { username } = payload;
@@ -82,7 +79,7 @@ describe('Register', () => {
     appServer.close();
   });
 
-  test('Register Fail, Empty Name', async () => {
+  test('Fail, Empty `full_name`', async () => {
     const { appServer, server } = await setUpServer();
     const payload = registerPayload();
     const fullName = '';
@@ -96,7 +93,7 @@ describe('Register', () => {
     appServer.close();
   });
 
-  test('Register Fail, Empty Address', async () => {
+  test('Fail, Empty `address`', async () => {
     const { appServer, server } = await setUpServer();
     const payload = registerPayload();
     const address = '';
@@ -110,7 +107,7 @@ describe('Register', () => {
     appServer.close();
   });
 
-  test('Register Fail, Name too Short', async () => {
+  test('Fail, `full_name` too Short', async () => {
     const { appServer, server } = await setUpServer();
     const payload = registerPayload();
     const fullName = 'x';
@@ -124,7 +121,7 @@ describe('Register', () => {
     appServer.close();
   });
 
-  test('Register Fail, Name too Long', async () => {
+  test('Fail, `full_name` too Long', async () => {
     const { appServer, server } = await setUpServer();
     const payload = registerPayload();
     const fullName = Array(257).toString();
@@ -138,7 +135,7 @@ describe('Register', () => {
     appServer.close();
   });
 
-  test('Register Fail, Username too Short', async () => {
+  test('Fail, `username` too Short', async () => {
     const { appServer, server } = await setUpServer();
     const payload = registerPayload();
     const username = Math.random().toString(36).substring(7);
@@ -152,7 +149,7 @@ describe('Register', () => {
     appServer.close();
   });
 
-  test('Register Fail, Username too Long', async () => {
+  test('Fail, `username` too Long', async () => {
     const { appServer, server } = await setUpServer();
     const payload = registerPayload();
     const username = Array(22).toString();
@@ -166,7 +163,7 @@ describe('Register', () => {
     appServer.close();
   });
 
-  test('Register Fail, Phone Number too Short', async () => {
+  test('Fail, `phone_number` too Short', async () => {
     const { appServer, server } = await setUpServer();
     const payload = registerPayload();
     const phoneNumber = '1234';
@@ -183,7 +180,7 @@ describe('Register', () => {
     appServer.close();
   });
 
-  test('Register Fail, Phone Number too Long', async () => {
+  test('Fail, `phone_number` too Long', async () => {
     const { appServer, server } = await setUpServer();
     const payload = registerPayload();
     const phoneNumber = '123456789012345';
@@ -200,7 +197,7 @@ describe('Register', () => {
     appServer.close();
   });
 
-  test('Register Fail, Address too Short', async () => {
+  test('Fail, `address` too Short', async () => {
     const { appServer, server } = await setUpServer();
     const payload = registerPayload();
     const address = 'addr';
@@ -214,7 +211,7 @@ describe('Register', () => {
     appServer.close();
   });
 
-  test('Register Fail, Address too Long', async () => {
+  test('Fail, `address` too Long', async () => {
     const { appServer, server } = await setUpServer();
     const payload = registerPayload();
     const address = Array(1002).toString();
@@ -228,7 +225,7 @@ describe('Register', () => {
     appServer.close();
   });
 
-  test('Register Fail, No Data Provided', async () => {
+  test('Fail, No Data Provided', async () => {
     const { appServer, server } = await setUpServer();
 
     const { status, headers, body } = await register(server, {});
@@ -242,11 +239,9 @@ describe('Register', () => {
 });
 
 describe('Login', () => {
-  test('Login Success', async () => {
+  test('Success', async () => {
     const { appServer, server } = await setUpServer();
-    const regPayload = registerPayload();
-    const { username, password } = regPayload;
-    await userRegistration(regPayload);
+    const { username, password } = await registration();
 
     const { status, headers, body } = await login(server, {
       username,
@@ -260,11 +255,9 @@ describe('Login', () => {
     appServer.close();
   });
 
-  test('Login Fail, Wrong Password', async () => {
+  test('Fail, Wrong `password`', async () => {
     const { appServer, server } = await setUpServer();
-    const regPayload = registerPayload();
-    const { username } = regPayload;
-    await userRegistration(regPayload);
+    const { username } = await registration();
     const password = 'wrong-password';
 
     const { status, headers, body } = await login(server, {
@@ -279,7 +272,7 @@ describe('Login', () => {
     appServer.close();
   });
 
-  test('Login Fail, User Not Registered', async () => {
+  test('Fail, User Not Registered', async () => {
     const { appServer, server } = await setUpServer();
     const username = 'this-username-doesnt-exist';
     const password = 'just-random-password';
@@ -296,7 +289,7 @@ describe('Login', () => {
     appServer.close();
   });
 
-  test('Login Fail, No `username` Provided', async () => {
+  test('Fail, No `username` Provided', async () => {
     const { appServer, server } = await setUpServer();
 
     const { status, headers, body } = await login(server, { username: 'username' });
@@ -308,7 +301,7 @@ describe('Login', () => {
     appServer.close();
   });
 
-  test('Login Fail, No `password` Provided', async () => {
+  test('Fail, No `password` Provided', async () => {
     const { appServer, server } = await setUpServer();
 
     const { status, headers, body } = await login(server, { password: 'password' });
@@ -319,27 +312,12 @@ describe('Login', () => {
 
     appServer.close();
   });
-
-  test('Login Fail, No Data Provided', async () => {
-    const { appServer, server } = await setUpServer();
-
-    const { status, headers, body } = await login(server, {});
-
-    expect(status).toBe(422);
-    expect(headers['content-type']).toBe('application/json; charset=utf-8');
-    expect(body.success).toBe(false);
-
-    appServer.close();
-  });
 });
 
 describe('Get Profile', () => {
-  test('Get Profile Success', async () => {
+  test('Success', async () => {
     const { appServer, server } = await setUpServer();
-    const regPayload = registerPayload();
-    const { username, password } = regPayload;
-    await userRegistration(regPayload);
-    const { token } = await userLogin({ username, password });
+    const { token } = await registerThenLogin();
 
     const { status, headers, body } = await getProfile(server, token);
 
@@ -350,7 +328,7 @@ describe('Get Profile', () => {
     appServer.close();
   });
 
-  test('Get Profile Fail, Wrong API Key', async () => {
+  test('Fail, Wrong API Key', async () => {
     const { appServer, server } = await setUpServer();
     const authorization = 'this-is-wrong-token';
 
@@ -363,7 +341,7 @@ describe('Get Profile', () => {
     appServer.close();
   });
 
-  test('Get Profile Fail, API Key Not Given', async () => {
+  test('Fail, API Key Not Given', async () => {
     const { appServer, server } = await setUpServer();
     const authorization = undefined;
 
@@ -378,13 +356,10 @@ describe('Get Profile', () => {
 });
 
 describe('Update Profile', () => {
-  test('Update Profile Success, Add New Profile Image', async () => {
+  test('Success, Add New Profile Image', async () => {
     const { appServer, server } = await setUpServer();
-    const regPayload = registerPayload();
-    const { username, password } = regPayload;
+    const { token } = await registerThenLogin();
     const file = fs.createReadStream('./__test__/image-test.png');
-    await userRegistration(regPayload);
-    const { token } = await userLogin({ username, password });
     const updatePayload = {
       token,
       fields: {
@@ -404,17 +379,14 @@ describe('Update Profile', () => {
     appServer.close();
   });
 
-  test('Update Profile Success, Update Profile Image', async () => {
+  test('Success, Update Profile Image', async () => {
     const { appServer, server } = await setUpServer();
-    const regPayload = registerPayload();
-    const { username, password } = regPayload;
-    await userRegistration(regPayload);
+    const { token, username } = await registerThenLogin();
     const [{ id: userId }, { id: imgId }] = await Promise.all([
       getUser('USERNAME', username),
       createUserImg(`${username}-not-valid.jpg`),
     ]);
     await updateUser(userId, { id_photo: imgId });
-    const { token } = await userLogin({ username, password });
     const file = fs.createReadStream('./__test__/image-test.png');
     const updatePayload = {
       token,
@@ -436,12 +408,9 @@ describe('Update Profile', () => {
     appServer.close();
   });
 
-  test('Update Profile Fail, Name too Short', async () => {
+  test('Fail, `full_name` too Short', async () => {
     const { appServer, server } = await setUpServer();
-    const regPayload = registerPayload();
-    const { username, password } = regPayload;
-    await userRegistration(regPayload);
-    const { token } = await userLogin({ username, password });
+    const { token } = await registerThenLogin();
     const updatePayload = {
       token,
       fields: {
@@ -458,12 +427,9 @@ describe('Update Profile', () => {
     appServer.close();
   });
 
-  test('Update Profile Fail, Name too Long', async () => {
+  test('Fail, `full_name` too Long', async () => {
     const { appServer, server } = await setUpServer();
-    const regPayload = registerPayload();
-    const { username, password } = regPayload;
-    await userRegistration(regPayload);
-    const { token } = await userLogin({ username, password });
+    const { token } = await registerThenLogin();
     const updatePayload = {
       token,
       fields: {
@@ -480,12 +446,9 @@ describe('Update Profile', () => {
     appServer.close();
   });
 
-  test('Update Profile Fail, Phone Number too Short', async () => {
+  test('Fail, `phone_number` too Short', async () => {
     const { appServer, server } = await setUpServer();
-    const regPayload = registerPayload();
-    const { username, password } = regPayload;
-    await userRegistration(regPayload);
-    const { token } = await userLogin({ username, password });
+    const { token } = await registerThenLogin();
     const updatePayload = {
       token,
       fields: {
@@ -502,12 +465,9 @@ describe('Update Profile', () => {
     appServer.close();
   });
 
-  test('Update Profile Fail, Phone Number too Long', async () => {
+  test('Fail, `phone_number` too Long', async () => {
     const { appServer, server } = await setUpServer();
-    const regPayload = registerPayload();
-    const { username, password } = regPayload;
-    await userRegistration(regPayload);
-    const { token } = await userLogin({ username, password });
+    const { token } = await registerThenLogin();
     const updatePayload = {
       token,
       fields: {
@@ -524,12 +484,9 @@ describe('Update Profile', () => {
     appServer.close();
   });
 
-  test('Update Profile Fail, Address too Short', async () => {
+  test('Fail, `address` too Short', async () => {
     const { appServer, server } = await setUpServer();
-    const regPayload = registerPayload();
-    const { username, password } = regPayload;
-    await userRegistration(regPayload);
-    const { token } = await userLogin({ username, password });
+    const { token } = await registerThenLogin();
     const updatePayload = {
       token,
       fields: {
@@ -546,12 +503,9 @@ describe('Update Profile', () => {
     appServer.close();
   });
 
-  test('Update Profile Fail, Address too Long', async () => {
+  test('Fail, `address` too Long', async () => {
     const { appServer, server } = await setUpServer();
-    const regPayload = registerPayload();
-    const { username, password } = regPayload;
-    await userRegistration(regPayload);
-    const { token } = await userLogin({ username, password });
+    const { token } = await registerThenLogin();
     const updatePayload = {
       token,
       fields: {
@@ -568,12 +522,9 @@ describe('Update Profile', () => {
     appServer.close();
   });
 
-  test('Update Profile Fail, Password too Short', async () => {
+  test('Fail, `password` too Short', async () => {
     const { appServer, server } = await setUpServer();
-    const regPayload = registerPayload();
-    const { username, password } = regPayload;
-    await userRegistration(regPayload);
-    const { token } = await userLogin({ username, password });
+    const { token } = await registerThenLogin();
     const updatePayload = {
       token,
       fields: {
@@ -590,12 +541,9 @@ describe('Update Profile', () => {
     appServer.close();
   });
 
-  test('Update Profile Fail, Password too Long', async () => {
+  test('Fail, `password` too Long', async () => {
     const { appServer, server } = await setUpServer();
-    const regPayload = registerPayload();
-    const { username, password } = regPayload;
-    await userRegistration(regPayload);
-    const { token } = await userLogin({ username, password });
+    const { token } = await registerThenLogin();
     const updatePayload = {
       token,
       fields: {
@@ -612,7 +560,7 @@ describe('Update Profile', () => {
     appServer.close();
   });
 
-  test('Update Profile Fail, Wrong API Key', async () => {
+  test('Fail, Wrong API Key', async () => {
     const { appServer, server } = await setUpServer();
     const authorization = 'this-is-wrong-token';
 
@@ -627,7 +575,7 @@ describe('Update Profile', () => {
     appServer.close();
   });
 
-  test('Update Profile Fail, API Key Not Given', async () => {
+  test('Fail, API Key Not Given', async () => {
     const { appServer, server } = await setUpServer();
 
     const { status, headers, body } = await updateProfile(server);
@@ -641,13 +589,10 @@ describe('Update Profile', () => {
 });
 
 describe('Forgot Password', () => {
-  test('Request Forgot Password Success', async () => {
+  test('Success', async () => {
     const { appServer, server } = await setUpServer();
-    const regPayload = registerPayload();
-    const { username, password, phone_number: phoneNumber } = regPayload;
-    await userRegistration(regPayload);
-    await userLogin({ username, password });
-    const payload = { phone_number: phoneNumber };
+    const { phone_number } = await registerThenLogin();
+    const payload = { phone_number };
 
     const { status, headers, body } = await forgotPassword(server, payload);
 
@@ -658,7 +603,7 @@ describe('Forgot Password', () => {
     appServer.close();
   });
 
-  test('Request Forgot Password Fail, Number Not Registered', async () => {
+  test('Fail, `phone_number` Not Registered', async () => {
     const { appServer, server } = await setUpServer();
     const payload = { phone_number: '6991224220261' };
 
@@ -671,7 +616,7 @@ describe('Forgot Password', () => {
     appServer.close();
   });
 
-  test('Request Forgot Password Fail, No Data Provided', async () => {
+  test('Fail, No `phone_number` Provided', async () => {
     const { appServer, server } = await setUpServer();
 
     const { status, headers, body } = await forgotPassword(server, {});
@@ -685,16 +630,9 @@ describe('Forgot Password', () => {
 });
 
 describe('Verify Forgot Password Token', () => {
-  test('Verify Forgot Password Token Success', async () => {
+  test('Success', async () => {
     const { appServer, server } = await setUpServer();
-    const regPayload = registerPayload();
-    await userRegistration(regPayload);
-    const { utilId } = await getUser('USERNAME', regPayload.username);
-    const { verification_token } = await createForgotPassword({
-      utilId,
-      phone: regPayload.phone_number,
-    });
-
+    const { verification_token } = await registerThenForgotPass();
     const { status, headers, body } = await verifyForgotToken(server, verification_token);
 
     expect(status).toBe(200);
@@ -704,7 +642,7 @@ describe('Verify Forgot Password Token', () => {
     appServer.close();
   });
 
-  test('Verify Forgot Password Token Fail, Token Invalid', async () => {
+  test('Fail, Token Invalid', async () => {
     const { appServer, server } = await setUpServer();
     const wrongToken = 'this-token-not-exist';
 
@@ -717,7 +655,7 @@ describe('Verify Forgot Password Token', () => {
     appServer.close();
   });
 
-  test('Verify Forgot Password Token Fail, No Token Provided', async () => {
+  test('Fail, No Token Provided', async () => {
     const { appServer, server } = await setUpServer();
 
     const { status, headers, body } = await verifyForgotToken(server);
@@ -731,15 +669,9 @@ describe('Verify Forgot Password Token', () => {
 });
 
 describe('Reset Password', () => {
-  test('Reset Password Success', async () => {
+  test('Success', async () => {
     const { appServer, server } = await setUpServer();
-    const regPayload = registerPayload();
-    await userRegistration(regPayload);
-    const { utilId } = await getUser('USERNAME', regPayload.username);
-    const { verification_token } = await createForgotPassword({
-      utilId,
-      phone: regPayload.phone_number,
-    });
+    const { username, verification_token } = await registerThenForgotPass();
     await verifyUserToken({ token: verification_token });
     const payload = {
       token: verification_token,
@@ -748,7 +680,7 @@ describe('Reset Password', () => {
     await resetUserPassword(payload);
 
     const { status, headers, body } = await login(server, {
-      username: regPayload.username,
+      username: username,
       password: payload.new_password,
     });
 
@@ -759,7 +691,7 @@ describe('Reset Password', () => {
     appServer.close();
   });
 
-  test('Reset Password Fail, Token Invalid', async () => {
+  test('Fail, `token` Invalid', async () => {
     const { appServer, server } = await setUpServer();
     const payload = {
       token: 'this-token-not-exists',
@@ -775,15 +707,9 @@ describe('Reset Password', () => {
     appServer.close();
   });
 
-  test('Reset Password Fail, Password too Short', async () => {
+  test('Fail, `password` too Short', async () => {
     const { appServer, server } = await setUpServer();
-    const regPayload = registerPayload();
-    await userRegistration(regPayload);
-    const { utilId } = await getUser('USERNAME', regPayload.username);
-    const { verification_token } = await createForgotPassword({
-      utilId,
-      phone: regPayload.phone_number,
-    });
+    const { verification_token } = await registerThenForgotPass();
     await verifyUserToken({ token: verification_token });
     const payload = {
       token: verification_token,
@@ -799,9 +725,14 @@ describe('Reset Password', () => {
     appServer.close();
   });
 
-  test('Reset Password Fail, No Data Provided', async () => {
+  test('Fail, `new_password` too Long', async () => {
     const { appServer, server } = await setUpServer();
-    const payload = { token: 'this-token-not-exists' };
+    const { verification_token } = await registerThenForgotPass();
+    await verifyUserToken({ token: verification_token });
+    const payload = {
+      token: verification_token,
+      new_password: Array(257).toString(),
+    };
 
     const { status, headers, body } = await resetPassword(server, payload);
 
@@ -812,9 +743,22 @@ describe('Reset Password', () => {
     appServer.close();
   });
 
-  test('Reset Password Fail, No Token Provided', async () => {
+  test('Fail, No `token` Provided', async () => {
     const { appServer, server } = await setUpServer();
     const payload = { new_password: 'newpassword' };
+
+    const { status, headers, body } = await resetPassword(server, payload);
+
+    expect(status).toBe(422);
+    expect(headers['content-type']).toBe('application/json; charset=utf-8');
+    expect(body.success).toBe(false);
+
+    appServer.close();
+  });
+
+  test('Fail, No `new_password` Provided', async () => {
+    const { appServer, server } = await setUpServer();
+    const payload = { token: 'this-token-not-exists' };
 
     const { status, headers, body } = await resetPassword(server, payload);
 

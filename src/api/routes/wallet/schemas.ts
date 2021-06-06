@@ -1,8 +1,12 @@
-const requestParams = {
+export const requestParams = {
   id: { $ref: '#RouteIdParam' },
 };
 
-const requestQuery = {
+/**
+ * The order of the keys is following the order of the GET
+ * routes in Postman
+ */
+export const requestQuery = {
   topUp: {
     type: 'object',
     properties: {
@@ -38,14 +42,27 @@ const requestQuery = {
   },
 };
 
-const requestBody = {
+/**
+ * The order of the keys is following the order of the POST / PATCH
+ * routes in Postman
+ */
+export const requestBody = {
   topUp: {
-    required: ['balance_request', 'balance_transfer', 'id_m_banks'],
+    required: ['balance_request', 'balance_transfer', 'bank_id'],
     type: 'object',
     properties: {
-      id_m_banks: { type: 'integer' },
+      bank_id: { type: 'integer' },
       balance_request: { type: 'integer' },
       balance_transfer: { type: 'integer' },
+    },
+    additionalProperties: false,
+  },
+  withdraw: {
+    required: ['balance_request', 'user_bank_id'],
+    type: 'object',
+    properties: {
+      user_bank_id: { type: 'integer' },
+      balance_request: { type: 'integer' },
     },
     additionalProperties: false,
   },
@@ -57,28 +74,21 @@ const requestBody = {
     },
     additionalProperties: false,
   },
-  withdraw: {
-    required: ['balance_request', 'id_u_user_bank_account'],
-    type: 'object',
-    properties: {
-      id_u_user_bank_account: { type: 'integer' },
-      balance_request: { type: 'integer' },
-    },
-    additionalProperties: false,
-  },
   updateTopUpStatus: {
+    required: ['status'],
     type: 'object',
     properties: { status: { type: 'integer' } },
     additionalProperties: false,
   },
   updateWithdrawStatus: {
+    required: ['status'],
     type: 'object',
     properties: { status: { type: 'integer' } },
     additionalProperties: false,
   },
 };
 
-const responses = {
+export const responses = {
   wallets: {
     type: 'object',
     allOf: [
@@ -305,11 +315,4 @@ const responses = {
       },
     ],
   },
-};
-
-export default {
-  requestBody,
-  requestParams,
-  requestQuery,
-  responses,
 };

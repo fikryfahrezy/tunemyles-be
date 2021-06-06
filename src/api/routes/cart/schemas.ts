@@ -1,15 +1,19 @@
-const requestParam = {
+export const requestParam = {
   id: { $ref: '#RouteIdParam' },
 };
 
-const requestBody = {
+/**
+ * The order of the keys is following the order of the POST / PATCH
+ * routes in Postman
+ */
+export const requestBody = {
   addToCart: {
-    required: ['id_m_products', 'id_merchant', 'qty'],
+    required: ['product_id', 'merchant_id', 'qty'],
     type: 'object',
     properties: {
       qty: { type: 'integer' },
-      id_merchant: { type: 'integer' },
-      id_m_products: { type: 'integer' },
+      merchant_id: { type: 'integer' },
+      product_id: { type: 'integer' },
     },
     additionalProperties: false,
   },
@@ -27,7 +31,10 @@ const requestBody = {
   },
 };
 
-const responses = {
+/**
+ * The order of the keys is following the order of the routes in Postman
+ */
+export const responses = {
   carts: {
     type: 'object',
     allOf: [
@@ -44,5 +51,3 @@ const responses = {
     ],
   },
 };
-
-export default { requestParam, requestBody, responses };

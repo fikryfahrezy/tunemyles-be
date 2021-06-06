@@ -1,16 +1,24 @@
-export type GetQuery = {
-  page?: string;
-  orderBy?: string;
-  orderDirection?: string;
-  limit?: string;
-};
-
 export type AddedFileBody = {
   data?: Iterable<unknown> | AsyncIterable<unknown>;
   encoding: string;
   filename: string;
   limit: boolean;
   mimetype: string;
+};
+
+export type PostRequestBody = {
+  name: string;
+};
+
+export type FileRequestBody = {
+  file: AddedFileBody[];
+};
+
+export type GetQuery = {
+  page?: string;
+  orderBy?: string;
+  orderDirection?: string;
+  limit?: string;
 };
 
 export type ApiKeyHeader = {
@@ -25,25 +33,20 @@ export type VerifyTokenParams = {
   token: string;
 };
 
-export type LoginBody = {
-  username: string;
-  password: string;
-};
-
-export type PostRequestBody = {
-  name: string;
-};
-
-export type FileRequestBody = {
-  file: AddedFileBody[];
-};
-
+/**
+ * The order of the types is following the order of the routes in Postman
+ */
 export type RegisterBody = {
   full_name: string;
   username: string;
   password: string;
   phone_number: string;
   address: string;
+};
+
+export type LoginBody = {
+  username: string;
+  password: string;
 };
 
 export type UpdateProfileBody = {
@@ -70,7 +73,7 @@ export type PostBankBody = {
 
 export type UpdateBankBody = {
   bank_name?: string;
-  is_visible?: number;
+  status?: number;
 };
 
 export type UpdateBankLogoBody = {
@@ -97,7 +100,7 @@ export type UpdateCategoryBody = {
   category?: string;
   slug?: string;
   description?: string;
-  is_visible?: number;
+  visibility?: number;
 };
 
 export type PostMediaBody = {
@@ -113,7 +116,7 @@ export type PostWalletBody = {
 export type UpdateWalletBody = {
   wallet_name?: string;
   wallet_description?: string;
-  is_visible?: number;
+  visbility?: number;
 };
 
 export type UpdateWalletLogoBody = {
@@ -130,33 +133,39 @@ export type UpdateFaqBody = {
   answer?: string;
 };
 
-export type PostToCartBody = {
+export type ActivateMerchantBody = {
+  no_identity: string;
+  identity_photo: AddedFileBody[];
+  market_photo: AddedFileBody[];
+  market_name: string;
+  market_address: string;
+  market_lat: number;
+  market_lon: number;
+  market_close_time: string;
+};
+
+export type UpdateMerchantProfileBody = {
+  market_photo?: AddedFileBody[];
+  no_identity?: string;
+  market_name?: string;
+  market_address?: number;
+  market_lat?: number;
+  market_lon?: number;
+};
+
+export type UpdateMerchantClosetimeBody = {
+  close_time: string;
+};
+
+export type PostProductBody = {
+  product_name: string;
+  description: string;
+  cover?: AddedFileBody[];
+  price_default: number;
+  price_selling: number;
   qty: number;
-  id_merchant: number;
-  id_m_products: number;
-};
-
-export type BindProductCategoryBody = {
-  id_category: number;
-};
-
-export type CheckoutBody = {
-  price_total: number;
-};
-
-export type ReviewTransactionBody = {
-  rating: number;
-  review: string;
-};
-
-export type TopUpBody = {
-  id_m_banks: number;
-  balance_request: number;
-  balance_transfer: number;
-};
-
-export type UpdateMerchantOperation = {
-  market_close_time?: string;
+  discount: number;
+  is_visible?: number;
 };
 
 export type UpdateProductBody = {
@@ -169,49 +178,89 @@ export type UpdateProductBody = {
   is_visible?: number;
 };
 
-export type UpdateProductOrderStatusBody = {
-  status?: number;
-};
-
-export type UpdateProductQtyBody = {
-  qty: number;
+export type UpdateProductCoverBody = {
+  cover: AddedFileBody[];
 };
 
 export type UpdateProductStatusBody = {
-  is_visible?: number;
+  status: number;
 };
 
-export type UpdateTopUpStatusBody = {
-  status?: number;
+export type BindProductCategoryBody = {
+  category_id: number;
 };
 
-export type UpdateWithdrawStatusBody = {
-  status?: number;
+export type PostProductImageBody = {
+  image: AddedFileBody[];
 };
 
-export type WithdrawBody = {
-  id_u_user_bank_account: number;
-  balance_request: number;
+export type DeleteProductCategoryParams = {
+  productId: string;
+  categoryId: string;
 };
 
-export type UserUtility = {
-  id: number;
-  id_m_user: number;
-  api_token: string;
-  type: number;
-  type_before_banned: number;
-  created_at: string;
-  updated_at: string;
+export type UpdateOrderStatusBody = {
+  status: number;
+};
+
+export type GetRandomMerchantsQuery = {
+  limit: string;
+};
+
+export type GetMerchantTransactionHistoriesQuery = {
+  date: string;
+};
+
+export type GetMerchantIncomeHistoriesQuery = {
+  year: string;
+};
+
+export type AddToCartBody = {
+  qty: number;
+  id_merchant: number;
+  id_m_products: number;
+};
+
+export type UpdateCartItemQtyBody = {
+  qty: number;
+};
+
+export type CheckoutBody = {
+  price_total: number;
+};
+
+export type ReviewTransactionBody = {
+  rating: number;
+  review: string;
+};
+
+export type PostBankUserBody = {
+  bank_id: number;
+  account_number: string;
+  account_name: string;
 };
 
 export type UpdateBankUserBody = {
-  id_m_banks?: number;
+  bank_id: number;
   account_number?: string;
   account_name?: string;
 };
 
-export type PostBankUserBody = {
-  id_m_banks: number;
-  account_number: string;
-  account_name: string;
+export type TopUpBody = {
+  bank_id: number;
+  balance_request: number;
+  balance_transfer: number;
+};
+
+export type WithdrawBody = {
+  user_bank_id: number;
+  balance_request: number;
+};
+
+export type UpdateTopUpStatusBody = {
+  status: number;
+};
+
+export type UpdateWithdrawStatusBody = {
+  status: number;
 };

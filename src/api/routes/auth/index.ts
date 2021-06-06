@@ -30,6 +30,10 @@ const routes = function routes(
   _: FastifyPluginOptions,
   donePlugin: HookHandlerDoneFunction,
 ): void {
+  /**
+   * The order of the keys is following the order of the routes in Postman
+   */
+
   fastify.post<Request<{ Body: RegisterBody }>>(
     '/register',
     {

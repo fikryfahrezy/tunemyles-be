@@ -13,6 +13,10 @@ const routes = function routes(
   _: FastifyPluginOptions,
   donePlugin: HookHandlerDoneFunction,
 ): void {
+  /**
+   * The order of the keys is following the order of the routes in Postman
+   */
+
   fastify.get(
     '/',
     {
@@ -52,7 +56,7 @@ const routes = function routes(
     '/:id',
     {
       schema: {
-        params: requestParams.routeId,
+        params: requestParams.id,
         response: {
           200: responses.data,
           '4xx': { $ref: '#ApiResponse' },

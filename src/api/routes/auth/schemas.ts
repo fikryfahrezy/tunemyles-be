@@ -2,6 +2,10 @@ export const requestHeaders = {
   private: { $ref: '#ApiKeyHeader' },
 };
 
+/**
+ * The order of the keys is following the order of the POST / PATCH
+ * routes in Postman
+ */
 export const requestBody = {
   login: {
     required: ['password', 'username'],
@@ -80,11 +84,21 @@ export const requestBody = {
   resetPassword: {
     required: ['token', 'new_password'],
     type: 'object',
-    properties: { token: { type: 'string' }, new_password: { type: 'string' } },
+    properties: {
+      token: { type: 'string' },
+      new_password: {
+        type: 'string',
+        minLength: 8,
+        maxLength: 255,
+      },
+    },
     additionalProperties: false,
   },
 };
 
+/**
+ * The order of the keys is following the order of the routes in Postman
+ */
 export const responses = {
   authenticated: {
     type: 'object',

@@ -1,11 +1,25 @@
-const requestParams = {
-  id: { $ref: '#RouteIdParam' },
-  productId: { $ref: '#RouteIdParam' },
-  categoryId: { $ref: '#RouteIdParam' },
+export const requestHeaders = {
+  private: { $ref: '#ApiKeyHeader' },
 };
 
-const requestQuery = {
-  getProduct: {
+export const requestParams = {
+  id: { $ref: '#RouteIdParam' },
+  deleteProductCategory: {
+    required: ['productId', 'categoryId'],
+    type: 'object',
+    properties: {
+      productId: { type: 'string' },
+      categoryId: { type: 'string' },
+    },
+  },
+};
+
+/**
+ * The order of the keys is following the order of the GET
+ * routes in Postman
+ */
+export const requestQuery = {
+  getProducts: {
     type: 'object',
     properties: {
       page: { $ref: '#PageQuery' },
@@ -21,7 +35,7 @@ const requestQuery = {
       orderDirection: { $ref: '#OrderDirectionQuery' },
     },
   },
-  getOrder: {
+  getOrders: {
     type: 'object',
     properties: {
       page: { $ref: '#PageQuery' },
@@ -37,7 +51,7 @@ const requestQuery = {
       orderDirection: { $ref: '#OrderDirectionQuery' },
     },
   },
-  merchantList: {
+  getMerchantList: {
     type: 'object',
     properties: {
       page: { $ref: '#PageQuery' },
@@ -53,39 +67,41 @@ const requestQuery = {
       orderDirection: { $ref: '#OrderDirectionQuery' },
     },
   },
-  merchantRandom: {
+  getRandomMerchants: {
     type: 'object',
     properties: { limit: { $ref: '#LimitQuery' } },
   },
-  merchantTransactions: {
+  getMerchantTransactionHistories: {
     type: 'object',
     properties: { date: { $ref: '#DateQuery' } },
   },
-  merchantIncomes: {
+  getMerchantIncomeHistories: {
     type: 'object',
     properties: { $ref: '#YearQuery' },
   },
 };
 
-const requestBody = {
-  updateMerchant: {
-    type: 'object',
-    properties: {
-      market_photo: { $ref: '#MultiPartSchema' },
-      no_identity: { type: 'string' },
-      market_name: { type: 'string' },
-      market_address: { type: 'integer', format: 'int32' },
-      market_lat: { type: 'number' },
-      market_lon: { type: 'number' },
-    },
-    additionalProperties: false,
-  },
+/**
+ * The order of the keys is following the order of the POST / PATCH
+ * routes in Postman
+ */
+export const requestBody = {
   activateMerchant: {
+    required: [
+      'no_identity',
+      'identity_photo',
+      'market_photo',
+      'market_name',
+      'market_address',
+      'market_lat',
+      'market_lon',
+      'market_close_time',
+    ],
     type: 'object',
     properties: {
       no_identity: { type: 'string' },
-      identity_photo: { $ref: '#MultiPartSchema' },
-      market_photo: { $ref: '#MultiPartSchema' },
+      identity_photo: { type: 'array', items: { $ref: '#MultiPartSchema' } },
+      market_photo: { type: 'array', items: { $ref: '#MultiPartSchema' } },
       market_name: { type: 'string' },
       market_address: { type: 'string' },
       market_lat: { type: 'number' },
@@ -94,12 +110,30 @@ const requestBody = {
     },
     additionalProperties: false,
   },
+  updateMerchantProfile: {
+    type: 'object',
+    properties: {
+      market_photo: { type: 'array', items: { $ref: '#MultiPartSchema' } },
+      no_identity: { type: 'string' },
+      market_name: { type: 'string' },
+      market_address: { type: 'integer', format: 'int32' },
+      market_lat: { type: 'number' },
+      market_lon: { type: 'number' },
+    },
+    additionalProperties: false,
+  },
+  updateMerchantClosetime: {
+    required: ['close_time'],
+    type: 'object',
+    properties: { close_time: { type: 'string' } },
+    additionalProperties: false,
+  },
   postProduct: {
     required: ['description', 'discount', 'price_default', 'price_selling', 'product_name', 'qty'],
     properties: {
       product_name: { type: 'string' },
       description: { type: 'string' },
-      cover: { $ref: '#MultiPartSchema' },
+      cover: { type: 'array', items: { $ref: '#MultiPartSchema' } },
       price_default: { type: 'integer', format: 'int32' },
       price_selling: { type: 'integer', format: 'int32' },
       qty: { type: 'integer', format: 'int32' },
@@ -128,41 +162,43 @@ const requestBody = {
   updateProductCover: {
     required: ['cover'],
     properties: {
-      cover: { $ref: '#MultiPartSchema' },
+      cover: { type: 'array', items: { $ref: '#MultiPartSchema' } },
     },
+    additionalProperties: false,
   },
   updateProductStatus: {
+    required: ['status'],
     type: 'object',
-    properties: { is_visible: { type: 'integer' } },
+    properties: { status: { type: 'integer' } },
     additionalProperties: false,
   },
   bindProductCategory: {
-    required: ['id_category'],
+    required: ['category_id'],
     type: 'object',
-    properties: { id_category: { type: 'integer' } },
+    properties: { category_id: { type: 'integer' } },
     additionalProperties: false,
   },
-  addProductImage: {
+  postProductImage: {
     type: 'object',
     required: ['image'],
     properties: {
-      image: { $ref: '#MultiPartSchema' },
+      image: { type: 'array', items: { $ref: '#MultiPartSchema' } },
     },
-  },
-  updateProductOrderStatus: {
-    type: 'object',
-    properties: { is_visible: { type: 'integer' } },
     additionalProperties: false,
   },
-  updateMerchantOperation: {
+  updateOrderStatus: {
+    required: ['status'],
     type: 'object',
-    properties: { market_close_time: { type: 'string' } },
+    properties: { status: { type: 'integer' } },
     additionalProperties: false,
   },
 };
 
-const responses = {
-  merchants: {
+/**
+ * The order of the keys is following the order of the routes in Postman
+ */
+export const responses = {
+  merchant: {
     type: 'object',
     allOf: [
       { $ref: '#ApiResponse' },
@@ -170,21 +206,6 @@ const responses = {
         type: 'object',
         properties: {
           data: { $ref: '#GetMerchant' },
-        },
-      },
-    ],
-  },
-  merchantProduct: {
-    type: 'object',
-    allOf: [
-      { $ref: '#ApiResponse' },
-      {
-        type: 'object',
-        properties: {
-          data: {
-            type: 'array',
-            items: { $ref: '#GetProduct' },
-          },
         },
       },
     ],
@@ -201,6 +222,21 @@ const responses = {
       },
     ],
   },
+  merchantProducts: {
+    type: 'object',
+    allOf: [
+      { $ref: '#ApiResponse' },
+      {
+        type: 'object',
+        properties: {
+          data: {
+            type: 'array',
+            items: { $ref: '#GetProduct' },
+          },
+        },
+      },
+    ],
+  },
   merchantSingleProduct: {
     type: 'object',
     allOf: [
@@ -213,7 +249,7 @@ const responses = {
       },
     ],
   },
-  merchantOrder: {
+  merchantOrders: {
     type: 'object',
     allOf: [
       { $ref: '#ApiResponse' },
@@ -294,11 +330,4 @@ const responses = {
       },
     ],
   },
-};
-
-export default {
-  requestQuery,
-  requestParams,
-  requestBody,
-  responses,
 };

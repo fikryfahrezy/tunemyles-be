@@ -1,8 +1,12 @@
-const requestParams = {
+export const requestParams = {
   id: { $ref: '#RouteIdParam' },
 };
 
-const requestQuery = {
+/**
+ * The order of the keys is following the order of the GET
+ * routes in Postman
+ */
+export const requestQuery = {
   getTransaction: {
     type: 'object',
     properties: {
@@ -24,7 +28,11 @@ const requestQuery = {
   },
 };
 
-const requestBody = {
+/**
+ * The order of the keys is following the order of the POST / PATCH
+ * routes in Postman
+ */
+export const requestBody = {
   reviewTransaction: {
     required: ['rating', 'review'],
     type: 'object',
@@ -36,7 +44,10 @@ const requestBody = {
   },
 };
 
-const responses = {
+/**
+ * The order of the keys is following the order of the routes in Postman
+ */
+export const responses = {
   transactions: {
     type: 'object',
     allOf: [
@@ -80,11 +91,4 @@ const responses = {
       },
     ],
   },
-};
-
-export default {
-  requestBody,
-  requestQuery,
-  requestParams,
-  responses,
 };

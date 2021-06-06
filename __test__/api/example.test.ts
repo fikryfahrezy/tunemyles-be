@@ -8,7 +8,7 @@ beforeAll(() => sequelize.authenticate());
 afterAll(() => sequelize.close());
 
 describe('Get Data', () => {
-  test('Get Success', async () => {
+  test('Success', async () => {
     const { appServer, server } = await setUpServer();
 
     const { status, headers, body } = await supertest(server).get('/api/v2/example');
@@ -48,7 +48,7 @@ describe('Get Single Data', () => {
 });
 
 describe('Post Data', () => {
-  test('Post Success', async () => {
+  test('Success', async () => {
     const { appServer, server } = await setUpServer();
 
     const { status, headers, body } = await supertest(server)
@@ -63,7 +63,7 @@ describe('Post Data', () => {
     appServer.close();
   });
 
-  test('Post Fail, Validation Fail', async () => {
+  test('Fail, Validation Fail', async () => {
     const { appServer, server } = await setUpServer();
 
     const { status, headers, body } = await supertest(server)
@@ -80,7 +80,7 @@ describe('Post Data', () => {
 });
 
 describe('Post File', () => {
-  test('Post File Success', async () => {
+  test('Success', async () => {
     const { appServer, server } = await setUpServer();
     const file = fs.createReadStream('./__test__/image-test.png');
 
@@ -98,7 +98,7 @@ describe('Post File', () => {
 });
 
 describe('Get Private Data', () => {
-  test('Get Private Data Success', async () => {
+  test('Success', async () => {
     const { appServer, server } = await setUpServer();
 
     const { status, headers, body } = await supertest(server)
@@ -112,7 +112,7 @@ describe('Get Private Data', () => {
     appServer.close();
   });
 
-  test('Get Private Data Fail, Header Authorization Not Given', async () => {
+  test('Fail, Header Authorization Not Given', async () => {
     const { appServer, server } = await setUpServer();
 
     const { status, headers, body } = await supertest(server).get('/api/v2/example/private');
@@ -124,7 +124,7 @@ describe('Get Private Data', () => {
     appServer.close();
   });
 
-  test('Get Private Data Fail, Wrong Header Authorization', async () => {
+  test('Fail, Wrong Header Authorization', async () => {
     const { appServer, server } = await setUpServer();
 
     const { status, headers, body } = await supertest(server)

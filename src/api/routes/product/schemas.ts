@@ -1,8 +1,12 @@
-const requestParams = {
+export const requestParams = {
   id: { $ref: '#RouteIdParam' },
 };
 
-const requestQuery = {
+/**
+ * The order of the keys is following the order of the GET
+ * routes in Postman
+ */
+export const requestQuery = {
   getProduct: {
     type: 'object',
     properties: {
@@ -21,7 +25,10 @@ const requestQuery = {
   },
 };
 
-const responses = {
+/**
+ * The order of the keys is following the order of the routes in Postman
+ */
+export const responses = {
   products: {
     type: 'object',
     allOf: [
@@ -38,5 +45,3 @@ const responses = {
     ],
   },
 };
-
-export default { requestQuery, requestParams, responses };

@@ -3,9 +3,13 @@ export const requestHeaders = {
 };
 
 export const requestParams = {
-  routeId: { $ref: '#RouteIdParam' },
+  id: { $ref: '#RouteIdParam' },
 };
 
+/**
+ * The order of the keys is following the order of the POST / PATCH
+ * routes in Postman
+ */
 export const requestBody = {
   postBody: {
     required: ['name'],
@@ -25,6 +29,9 @@ export const requestBody = {
   },
 };
 
+/**
+ * The order of the keys is following the order of the routes in Postman
+ */
 export const responses = {
   datas: {
     type: 'object',

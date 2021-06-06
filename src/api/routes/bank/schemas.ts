@@ -1,19 +1,24 @@
-const requestParams = {
+export const requestParams = {
   id: { $ref: '#RouteIdParam' },
 };
 
-const requestBody = {
+/**
+ * The order of the keys is following the order of the POST / PATCH
+ * routes in Postman
+ */
+export const requestBody = {
   postBankUser: {
-    required: ['account_name', 'account_number', 'id_m_banks'],
+    required: ['account_name', 'account_number', 'bank_id'],
     type: 'object',
     properties: {
-      id_m_banks: { type: 'integer' },
+      bank_id: { type: 'integer' },
       account_number: { type: 'string' },
       account_name: { type: 'string' },
     },
     additionalProperties: false,
   },
   updateBankUser: {
+    required: ['bank_id'],
     type: 'object',
     properties: {
       id_m_banks: { type: 'integer' },
@@ -24,7 +29,10 @@ const requestBody = {
   },
 };
 
-const responses = {
+/**
+ * The order of the keys is following the order of the routes in Postman
+ */
+export const responses = {
   bank: {
     type: 'object',
     allOf: [
@@ -133,5 +141,3 @@ const responses = {
     ],
   },
 };
-
-export default { requestBody, requestParams, responses };
