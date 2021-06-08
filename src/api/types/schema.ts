@@ -247,14 +247,18 @@ export type UpdateBankUserBody = {
 };
 
 export type TopUpBody = {
-  bank_id: number;
+  wallet_id: number;
   balance_request: number;
   balance_transfer: number;
 };
 
 export type WithdrawBody = {
-  user_bank_id: number;
+  wallet_id: number;
   balance_request: number;
+};
+
+export type TopUpProofBody = {
+  image: AddedFileBody[];
 };
 
 export type UpdateTopUpStatusBody = {

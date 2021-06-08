@@ -77,7 +77,7 @@ export const requestQuery = {
   },
   getMerchantIncomeHistories: {
     type: 'object',
-    properties: { $ref: '#YearQuery' },
+    properties: { year: { $ref: '#YearQuery' } },
   },
 };
 
@@ -116,7 +116,7 @@ export const requestBody = {
       market_photo: { type: 'array', items: { $ref: '#MultiPartSchema' } },
       no_identity: { type: 'string' },
       market_name: { type: 'string' },
-      market_address: { type: 'integer', format: 'int32' },
+      market_address: { type: 'integer' },
       market_lat: { type: 'number' },
       market_lon: { type: 'number' },
     },
@@ -134,15 +134,11 @@ export const requestBody = {
       product_name: { type: 'string' },
       description: { type: 'string' },
       cover: { type: 'array', items: { $ref: '#MultiPartSchema' } },
-      price_default: { type: 'integer', format: 'int32' },
-      price_selling: { type: 'integer', format: 'int32' },
-      qty: { type: 'integer', format: 'int32' },
-      discount: { type: 'integer', format: 'int32' },
-      is_visible: {
-        type: 'integer',
-        format: 'int32',
-        default: 1,
-      },
+      price_default: { type: 'integer' },
+      price_selling: { type: 'integer' },
+      qty: { type: 'integer' },
+      discount: { type: 'integer' },
+      is_visible: { type: 'integer', default: 1 },
     },
     additionalProperties: false,
   },

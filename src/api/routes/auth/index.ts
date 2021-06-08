@@ -10,9 +10,9 @@ import type {
   ResetPasswordBody,
 } from '../../types/schema';
 import { controllerWrapper, handlerWrapper } from '../../utils/serverfn-wrapper';
-import { schemaValidationError } from '../../utils/error-handler';
 import { renameFiles } from '../../utils/file-management';
 import { protect } from '../../middlewares/protect-route';
+import schemaValidation from '../../middlewares/schema-validation';
 import { requestHeaders, requestBody, responses } from './schemas';
 import {
   register,
@@ -46,11 +46,7 @@ const routes = function routes(
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preHandler: ({ validationError }, res, done) => {
-        if (validationError) schemaValidationError(validationError, res);
-
-        done();
-      },
+      preHandler: schemaValidation,
     },
     controllerWrapper(register),
   );
@@ -67,11 +63,7 @@ const routes = function routes(
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preHandler: ({ validationError }, res, done) => {
-        if (validationError) schemaValidationError(validationError, res);
-
-        done();
-      },
+      preHandler: schemaValidation,
     },
     controllerWrapper(login),
   );
@@ -88,14 +80,7 @@ const routes = function routes(
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preHandler: [
-        ({ validationError }, res, done) => {
-          if (validationError) schemaValidationError(validationError, res);
-
-          done();
-        },
-        handlerWrapper(protect('USER')),
-      ],
+      preHandler: [schemaValidation, handlerWrapper(protect('USER'))],
     },
     controllerWrapper(getProfile),
   );
@@ -118,14 +103,7 @@ const routes = function routes(
 
         done();
       },
-      preHandler: [
-        ({ validationError }, res, done) => {
-          if (validationError) schemaValidationError(validationError, res);
-
-          done();
-        },
-        handlerWrapper(protect('USER')),
-      ],
+      preHandler: [schemaValidation, handlerWrapper(protect('USER'))],
     },
     controllerWrapper(updateProfile),
   );
@@ -142,11 +120,7 @@ const routes = function routes(
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preHandler: ({ validationError }, res, done) => {
-        if (validationError) schemaValidationError(validationError, res);
-
-        done();
-      },
+      preHandler: schemaValidation,
     },
     controllerWrapper(forgotPassword),
   );
@@ -162,11 +136,7 @@ const routes = function routes(
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preHandler: ({ validationError }, res, done) => {
-        if (validationError) schemaValidationError(validationError, res);
-
-        done();
-      },
+      preHandler: schemaValidation,
     },
     controllerWrapper(verifyToken),
   );
@@ -183,11 +153,7 @@ const routes = function routes(
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preHandler: ({ validationError }, res, done) => {
-        if (validationError) schemaValidationError(validationError, res);
-
-        done();
-      },
+      preHandler: schemaValidation,
     },
     controllerWrapper(resetPassword),
   );

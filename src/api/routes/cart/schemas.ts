@@ -1,4 +1,8 @@
-export const requestParam = {
+export const requestHeaders = {
+  private: { $ref: '#ApiKeyHeader' },
+};
+
+export const requestParams = {
   id: { $ref: '#RouteIdParam' },
 };
 

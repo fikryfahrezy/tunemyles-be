@@ -1,3 +1,7 @@
+export const requestHeaders = {
+  private: { $ref: '#ApiKeyHeader' },
+};
+
 export const requestParams = {
   id: { $ref: '#RouteIdParam' },
 };
@@ -48,25 +52,25 @@ export const requestQuery = {
  */
 export const requestBody = {
   topUp: {
-    required: ['balance_request', 'balance_transfer', 'bank_id'],
+    required: ['balance_request', 'balance_transfer', 'wallet_id'],
     type: 'object',
     properties: {
-      bank_id: { type: 'integer' },
+      wallet_id: { type: 'integer' },
       balance_request: { type: 'integer' },
       balance_transfer: { type: 'integer' },
     },
     additionalProperties: false,
   },
   withdraw: {
-    required: ['balance_request', 'user_bank_id'],
+    required: ['balance_request', 'wallet_id'],
     type: 'object',
     properties: {
-      user_bank_id: { type: 'integer' },
+      wallet_id: { type: 'integer' },
       balance_request: { type: 'integer' },
     },
     additionalProperties: false,
   },
-  topUpImage: {
+  topUpProof: {
     required: ['image'],
     type: 'object',
     properties: {

@@ -1,7 +1,6 @@
 import type { FastifyReply } from 'fastify';
 import { UniqueConstraintError, ValidationError } from 'sequelize';
 import { JsonWebTokenError } from 'jsonwebtoken';
-import type { Validation } from '../types/util';
 
 export class ErrorResponse extends Error {
   status: number;
@@ -39,15 +38,4 @@ export const errorHandler: (err: ErrorResponse | unknown, res: FastifyReply) => 
   else if (err instanceof JsonWebTokenError) res.forbidden();
   else if (err instanceof Error) res.unprocessableEntity(err.message);
   else throw new Error('...');
-};
-
-export const schemaValidationError: (
-  err: Error & { validation: Validation[]; validationContext: string },
-  res: FastifyReply,
-) => void = (err, res) => {
-  const context = err.validationContext;
-
-  if (context === 'headers') res.forbidden();
-
-  res.unprocessableEntity();
 };

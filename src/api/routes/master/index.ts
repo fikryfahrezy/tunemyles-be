@@ -2,12 +2,12 @@ import type { FastifyInstance, FastifyPluginOptions, HookHandlerDoneFunction } f
 import type { Request } from '../../types/fasitify';
 import type {
   ApiKeyHeader,
-  GetQuery,
   IdRequestParams,
+  GetQuery,
   PostBankBody,
   UpdateBankBody,
-  UpdateBankLogoBody,
   UpdateBankDetailBody,
+  UpdateBankLogoBody,
   PostBankStepBody,
   PostCategoryBody,
   UpdateCategoryBody,
@@ -19,11 +19,40 @@ import type {
   UpdateFaqBody,
 } from '../../types/schema';
 import { controllerWrapper, handlerWrapper } from '../../utils/serverfn-wrapper';
-import { schemaValidationError } from '../../utils/error-handler';
 import { renameFiles } from '../../utils/file-management';
 import { protect } from '../../middlewares/protect-route';
 import dbQuerying from '../../middlewares/db-querying';
+import schemaValidation from '../../middlewares/schema-validation';
 import { requestHeaders, requestQuery, requestBody, requestParams, responses } from './schemas';
+import {
+  postMasterBank,
+  getMasterBanks,
+  getMasterBankDetail,
+  updateMasterBank,
+  updateMasterBankDetail,
+  changeMasterBankLogo,
+  postMasterBankStep,
+  deleteMasterBankStep,
+  deleteMasterBank,
+  postCategory,
+  getCategories,
+  updateCategory,
+  changeCategoryIcon,
+  deleteCategory,
+  postMedia,
+  getMedias,
+  updateMedia,
+  deleteMedia,
+  postMasterWallet,
+  getMasterWallets,
+  udpateMasterWallet,
+  changeMasterWalletLogo,
+  deleteMasterWallet,
+  postFaq,
+  getFaqs,
+  updateFaq,
+  deleteFaq,
+} from './controller';
 
 const routes = function routes(
   fastify: FastifyInstance,
@@ -52,21 +81,9 @@ const routes = function routes(
 
         done();
       },
-      preHandler: [
-        ({ validationError }, res, done) => {
-          if (validationError) schemaValidationError(validationError, res);
-
-          done();
-        },
-        handlerWrapper(protect('ADMIN')),
-      ],
+      preHandler: [schemaValidation, handlerWrapper(protect('ADMIN'))],
     },
-    controllerWrapper((__, res) => {
-      res
-        .status(201)
-        .header('Content-Type', 'application/json; charset=utf-8')
-        .send({ success: true });
-    }),
+    controllerWrapper(postMasterBank),
   );
 
   fastify.get<Request<{ Headers: ApiKeyHeader; Querystring: GetQuery }>>(
@@ -83,21 +100,12 @@ const routes = function routes(
         },
       },
       preHandler: [
-        ({ validationError }, res, done) => {
-          if (validationError) schemaValidationError(validationError, res);
-
-          done();
-        },
+        schemaValidation,
         handlerWrapper(protect('USER')),
         handlerWrapper(dbQuerying('BANK')),
       ],
     },
-    controllerWrapper((__, res) => {
-      res
-        .status(200)
-        .header('Content-Type', 'application/json; charset=utf-8')
-        .send({ success: true });
-    }),
+    controllerWrapper(getMasterBanks),
   );
 
   fastify.get<Request<{ Headers: ApiKeyHeader; Params: IdRequestParams }>>(
@@ -113,21 +121,9 @@ const routes = function routes(
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preHandler: [
-        ({ validationError }, res, done) => {
-          if (validationError) schemaValidationError(validationError, res);
-
-          done();
-        },
-        handlerWrapper(protect('ADMIN')),
-      ],
+      preHandler: [schemaValidation, handlerWrapper(protect('ADMIN'))],
     },
-    controllerWrapper((__, res) => {
-      res
-        .status(200)
-        .header('Content-Type', 'application/json; charset=utf-8')
-        .send({ success: true });
-    }),
+    controllerWrapper(getMasterBankDetail),
   );
 
   fastify.patch<Request<{ Headers: ApiKeyHeader; Params: IdRequestParams; Body: UpdateBankBody }>>(
@@ -144,21 +140,9 @@ const routes = function routes(
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preHandler: [
-        (req, res, done) => {
-          const validation = req.validationError;
-          if (validation) schemaValidationError(validation, res);
-          done();
-        },
-        handlerWrapper(protect('ADMIN')),
-      ],
+      preHandler: [schemaValidation, handlerWrapper(protect('ADMIN'))],
     },
-    controllerWrapper((__, res) => {
-      res
-        .status(200)
-        .header('Content-Type', 'application/json; charset=utf-8')
-        .send({ success: true });
-    }),
+    controllerWrapper(updateMasterBank),
   );
 
   fastify.patch<
@@ -177,25 +161,13 @@ const routes = function routes(
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preHandler: [
-        ({ validationError }, res, done) => {
-          if (validationError) schemaValidationError(validationError, res);
-
-          done();
-        },
-        handlerWrapper(protect('ADMIN')),
-      ],
+      preHandler: [schemaValidation, handlerWrapper(protect('ADMIN'))],
     },
-    controllerWrapper((__, res) => {
-      res
-        .status(200)
-        .header('Content-Type', 'application/json; charset=utf-8')
-        .send({ success: true });
-    }),
+    controllerWrapper(updateMasterBankDetail),
   );
 
   fastify.patch<
-    Request<{ Header: ApiKeyHeader; Params: IdRequestParams; Body: UpdateBankLogoBody }>
+    Request<{ Headers: ApiKeyHeader; Params: IdRequestParams; Body: UpdateBankLogoBody }>
   >(
     '/banks/:id/logo',
     {
@@ -214,21 +186,9 @@ const routes = function routes(
         req.body = { ...req.body, logo: renameFiles(req.url, req.body.logo) ?? req.body.logo };
         done();
       },
-      preHandler: [
-        ({ validationError }, res, done) => {
-          if (validationError) schemaValidationError(validationError, res);
-
-          done();
-        },
-        handlerWrapper(protect('ADMIN')),
-      ],
+      preHandler: [schemaValidation, handlerWrapper(protect('ADMIN'))],
     },
-    controllerWrapper((__, res) => {
-      res
-        .status(200)
-        .header('Content-Type', 'application/json; charset=utf-8')
-        .send({ success: true });
-    }),
+    controllerWrapper(changeMasterBankLogo),
   );
 
   fastify.post<Request<{ Headers: ApiKeyHeader; Params: IdRequestParams; Body: PostBankStepBody }>>(
@@ -245,21 +205,9 @@ const routes = function routes(
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preHandler: [
-        ({ validationError }, res, done) => {
-          if (validationError) schemaValidationError(validationError, res);
-
-          done();
-        },
-        handlerWrapper(protect('ADMIN')),
-      ],
+      preHandler: [schemaValidation, handlerWrapper(protect('ADMIN'))],
     },
-    controllerWrapper((__, res) => {
-      res
-        .status(201)
-        .header('Content-Type', 'application/json; charset=utf-8')
-        .send({ success: true });
-    }),
+    controllerWrapper(postMasterBankStep),
   );
 
   fastify.delete<Request<{ Headers: ApiKeyHeader; Params: IdRequestParams }>>(
@@ -275,21 +223,9 @@ const routes = function routes(
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preHandler: [
-        ({ validationError }, res, done) => {
-          if (validationError) schemaValidationError(validationError, res);
-
-          done();
-        },
-        handlerWrapper(protect('ADMIN')),
-      ],
+      preHandler: [schemaValidation, handlerWrapper(protect('ADMIN'))],
     },
-    controllerWrapper((__, res) => {
-      res
-        .status(200)
-        .header('Content-Type', 'application/json; charset=utf-8')
-        .send({ success: true });
-    }),
+    controllerWrapper(deleteMasterBankStep),
   );
 
   fastify.delete<Request<{ Headers: ApiKeyHeader; Params: IdRequestParams }>>(
@@ -305,21 +241,9 @@ const routes = function routes(
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preHandler: [
-        ({ validationError }, res, done) => {
-          if (validationError) schemaValidationError(validationError, res);
-
-          done();
-        },
-        handlerWrapper(protect('ADMIN')),
-      ],
+      preHandler: [schemaValidation, handlerWrapper(protect('ADMIN'))],
     },
-    controllerWrapper((__, res) => {
-      res
-        .status(200)
-        .header('Content-Type', 'application/json; charset=utf-8')
-        .send({ success: true });
-    }),
+    controllerWrapper(deleteMasterBank),
   );
 
   fastify.post<Request<{ Headers: ApiKeyHeader; Body: PostCategoryBody }>>(
@@ -339,21 +263,9 @@ const routes = function routes(
         req.body = { ...req.body, icon: renameFiles(req.url, req.body.icon) ?? req.body.icon };
         done();
       },
-      preHandler: [
-        ({ validationError }, res, done) => {
-          if (validationError) schemaValidationError(validationError, res);
-
-          done();
-        },
-        handlerWrapper(protect('ADMIN')),
-      ],
+      preHandler: [schemaValidation, handlerWrapper(protect('ADMIN'))],
     },
-    controllerWrapper((__, res) => {
-      res
-        .status(201)
-        .header('Content-Type', 'application/json; charset=utf-8')
-        .send({ success: true });
-    }),
+    controllerWrapper(postCategory),
   );
 
   fastify.get<Request<{ Headers: ApiKeyHeader; Querystring: GetQuery }>>(
@@ -370,25 +282,16 @@ const routes = function routes(
         },
       },
       preHandler: [
-        ({ validationError }, res, done) => {
-          if (validationError) schemaValidationError(validationError, res);
-
-          done();
-        },
+        schemaValidation,
         handlerWrapper(protect('USER')),
         handlerWrapper(dbQuerying('CATEGORY')),
       ],
     },
-    controllerWrapper((__, res) => {
-      res
-        .status(200)
-        .header('Content-Type', 'application/json; charset=utf-8')
-        .send({ success: true });
-    }),
+    controllerWrapper(getCategories),
   );
 
   fastify.patch<
-    Request<{ Header: ApiKeyHeader; Params: IdRequestParams; Body: UpdateCategoryBody }>
+    Request<{ Headers: ApiKeyHeader; Params: IdRequestParams; Body: UpdateCategoryBody }>
   >(
     '/categories/:id',
     {
@@ -403,21 +306,9 @@ const routes = function routes(
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preHandler: [
-        ({ validationError }, res, done) => {
-          if (validationError) schemaValidationError(validationError, res);
-
-          done();
-        },
-        handlerWrapper(protect('ADMIN')),
-      ],
+      preHandler: [schemaValidation, handlerWrapper(protect('ADMIN'))],
     },
-    controllerWrapper((__, res) => {
-      res
-        .status(200)
-        .header('Content-Type', 'application/json; charset=utf-8')
-        .send({ success: true });
-    }),
+    controllerWrapper(updateCategory),
   );
 
   fastify.patch<Request<{ Headers: ApiKeyHeader; Params: IdRequestParams }>>(
@@ -434,21 +325,9 @@ const routes = function routes(
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preHandler: [
-        ({ validationError }, res, done) => {
-          if (validationError) schemaValidationError(validationError, res);
-
-          done();
-        },
-        handlerWrapper(protect('ADMIN')),
-      ],
+      preHandler: [schemaValidation, handlerWrapper(protect('ADMIN'))],
     },
-    controllerWrapper((__, res) => {
-      res
-        .status(200)
-        .header('Content-Type', 'application/json; charset=utf-8')
-        .send({ success: true });
-    }),
+    controllerWrapper(changeCategoryIcon),
   );
 
   fastify.delete<Request<{ Headers: ApiKeyHeader; Params: IdRequestParams }>>(
@@ -464,21 +343,9 @@ const routes = function routes(
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preHandler: [
-        ({ validationError }, res, done) => {
-          if (validationError) schemaValidationError(validationError, res);
-
-          done();
-        },
-        handlerWrapper(protect('ADMIN')),
-      ],
+      preHandler: [schemaValidation, handlerWrapper(protect('ADMIN'))],
     },
-    controllerWrapper((__, res) => {
-      res
-        .status(200)
-        .header('Content-Type', 'application/json; charset=utf-8')
-        .send({ success: true });
-    }),
+    controllerWrapper(deleteCategory),
   );
 
   fastify.post<Request<{ Headers: ApiKeyHeader; Body: PostMediaBody }>>(
@@ -498,21 +365,9 @@ const routes = function routes(
         req.body = { ...req.body, image: renameFiles(req.url, req.body.image) ?? req.body.image };
         done();
       },
-      preHandler: [
-        ({ validationError }, res, done) => {
-          if (validationError) schemaValidationError(validationError, res);
-
-          done();
-        },
-        handlerWrapper(protect('ADMIN')),
-      ],
+      preHandler: [schemaValidation, handlerWrapper(protect('ADMIN'))],
     },
-    controllerWrapper((__, res) => {
-      res
-        .status(201)
-        .header('Content-Type', 'application/json; charset=utf-8')
-        .send({ success: true });
-    }),
+    controllerWrapper(postMedia),
   );
 
   fastify.get<Request<{ Headers: ApiKeyHeader; Querystring: GetQuery }>>(
@@ -528,21 +383,9 @@ const routes = function routes(
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preHandler: [
-        ({ validationError }, res, done) => {
-          if (validationError) schemaValidationError(validationError, res);
-
-          done();
-        },
-        handlerWrapper(protect('USER')),
-      ],
+      preHandler: [schemaValidation, handlerWrapper(protect('USER'))],
     },
-    controllerWrapper((__, res) => {
-      res
-        .status(200)
-        .header('Content-Type', 'application/json; charset=utf-8')
-        .send({ success: true });
-    }),
+    controllerWrapper(getMedias),
   );
 
   fastify.patch<Request<{ Headers: ApiKeyHeader; Params: IdRequestParams; Body: PostMediaBody }>>(
@@ -563,21 +406,9 @@ const routes = function routes(
         req.body = { ...req.body, image: renameFiles(req.url, req.body.image) ?? req.body.image };
         done();
       },
-      preHandler: [
-        ({ validationError }, res, done) => {
-          if (validationError) schemaValidationError(validationError, res);
-
-          done();
-        },
-        handlerWrapper(protect('ADMIN')),
-      ],
+      preHandler: [schemaValidation, handlerWrapper(protect('ADMIN'))],
     },
-    controllerWrapper((__, res) => {
-      res
-        .status(200)
-        .header('Content-Type', 'application/json; charset=utf-8')
-        .send({ success: true });
-    }),
+    controllerWrapper(updateMedia),
   );
 
   fastify.delete<Request<{ Headers: ApiKeyHeader; Params: IdRequestParams }>>(
@@ -593,21 +424,9 @@ const routes = function routes(
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preHandler: [
-        ({ validationError }, res, done) => {
-          if (validationError) schemaValidationError(validationError, res);
-
-          done();
-        },
-        handlerWrapper(protect('ADMIN')),
-      ],
+      preHandler: [schemaValidation, handlerWrapper(protect('ADMIN'))],
     },
-    controllerWrapper((__, res) => {
-      res
-        .status(200)
-        .header('Content-Type', 'application/json; charset=utf-8')
-        .send({ success: true });
-    }),
+    controllerWrapper(deleteMedia),
   );
 
   fastify.post<Request<{ Headers: ApiKeyHeader; Body: PostWalletBody }>>(
@@ -627,21 +446,9 @@ const routes = function routes(
         req.body = { ...req.body, logo: renameFiles(req.url, req.body.logo) ?? req.body.logo };
         done();
       },
-      preHandler: [
-        ({ validationError }, res, done) => {
-          if (validationError) schemaValidationError(validationError, res);
-
-          done();
-        },
-        handlerWrapper(protect('ADMIN')),
-      ],
+      preHandler: [schemaValidation, handlerWrapper(protect('ADMIN'))],
     },
-    controllerWrapper((__, res) => {
-      res
-        .status(201)
-        .header('Content-Type', 'application/json; charset=utf-8')
-        .send({ success: true });
-    }),
+    controllerWrapper(postMasterWallet),
   );
 
   fastify.get<Request<{ Headers: ApiKeyHeader; Querystring: GetQuery }>>(
@@ -658,21 +465,12 @@ const routes = function routes(
         },
       },
       preHandler: [
-        ({ validationError }, res, done) => {
-          if (validationError) schemaValidationError(validationError, res);
-
-          done();
-        },
+        schemaValidation,
         handlerWrapper(protect('USER')),
         handlerWrapper(dbQuerying('WALLET')),
       ],
     },
-    controllerWrapper((__, res) => {
-      res
-        .status(200)
-        .header('Content-Type', 'application/json; charset=utf-8')
-        .send({ success: true });
-    }),
+    controllerWrapper(getMasterWallets),
   );
 
   fastify.patch<
@@ -691,21 +489,9 @@ const routes = function routes(
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preHandler: [
-        ({ validationError }, res, done) => {
-          if (validationError) schemaValidationError(validationError, res);
-
-          done();
-        },
-        handlerWrapper(protect('ADMIN')),
-      ],
+      preHandler: [schemaValidation, handlerWrapper(protect('ADMIN'))],
     },
-    controllerWrapper((__, res) => {
-      res
-        .status(200)
-        .header('Content-Type', 'application/json; charset=utf-8')
-        .send({ success: true });
-    }),
+    controllerWrapper(udpateMasterWallet),
   );
 
   fastify.patch<
@@ -728,24 +514,12 @@ const routes = function routes(
         req.body = { ...req.body, logo: renameFiles(req.url, req.body.logo) ?? req.body.logo };
         done();
       },
-      preHandler: [
-        ({ validationError }, res, done) => {
-          if (validationError) schemaValidationError(validationError, res);
-
-          done();
-        },
-        handlerWrapper(protect('ADMIN')),
-      ],
+      preHandler: [schemaValidation, handlerWrapper(protect('ADMIN'))],
     },
-    controllerWrapper((__, res) => {
-      res
-        .status(200)
-        .header('Content-Type', 'application/json; charset=utf-8')
-        .send({ success: true });
-    }),
+    controllerWrapper(changeMasterWalletLogo),
   );
 
-  fastify.delete<Request<{ Header: ApiKeyHeader; Params: IdRequestParams }>>(
+  fastify.delete<Request<{ Headers: ApiKeyHeader; Params: IdRequestParams }>>(
     '/wallets/:id',
     {
       attachValidation: true,
@@ -758,24 +532,12 @@ const routes = function routes(
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preHandler: [
-        ({ validationError }, res, done) => {
-          if (validationError) schemaValidationError(validationError, res);
-
-          done();
-        },
-        handlerWrapper(protect('ADMIN')),
-      ],
+      preHandler: [schemaValidation, handlerWrapper(protect('ADMIN'))],
     },
-    controllerWrapper((__, res) => {
-      res
-        .status(200)
-        .header('Content-Type', 'application/json; charset=utf-8')
-        .send({ success: true });
-    }),
+    controllerWrapper(deleteMasterWallet),
   );
 
-  fastify.post<Request<{ Header: ApiKeyHeader; Body: PostFaqBody }>>(
+  fastify.post<Request<{ Headers: ApiKeyHeader; Body: PostFaqBody }>>(
     '/faqs',
     {
       attachValidation: true,
@@ -788,21 +550,9 @@ const routes = function routes(
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preHandler: [
-        ({ validationError }, res, done) => {
-          if (validationError) schemaValidationError(validationError, res);
-
-          done();
-        },
-        handlerWrapper(protect('ADMIN')),
-      ],
+      preHandler: [schemaValidation, handlerWrapper(protect('ADMIN'))],
     },
-    controllerWrapper((__, res) => {
-      res
-        .status(201)
-        .header('Content-Type', 'application/json; charset=utf-8')
-        .send({ success: true });
-    }),
+    controllerWrapper(postFaq),
   );
 
   fastify.get<Request>(
@@ -817,15 +567,10 @@ const routes = function routes(
         },
       },
     },
-    controllerWrapper((__, res) => {
-      res
-        .status(200)
-        .header('Content-Type', 'application/json; charset=utf-8')
-        .send({ success: true });
-    }),
+    controllerWrapper(getFaqs),
   );
 
-  fastify.patch<Request<{ Header: ApiKeyHeader; Params: IdRequestParams; Body: UpdateFaqBody }>>(
+  fastify.patch<Request<{ Headers: ApiKeyHeader; Params: IdRequestParams; Body: UpdateFaqBody }>>(
     '/faqs/:id',
     {
       attachValidation: true,
@@ -839,24 +584,12 @@ const routes = function routes(
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preHandler: [
-        ({ validationError }, res, done) => {
-          if (validationError) schemaValidationError(validationError, res);
-
-          done();
-        },
-        handlerWrapper(protect('ADMIN')),
-      ],
+      preHandler: [schemaValidation, handlerWrapper(protect('ADMIN'))],
     },
-    controllerWrapper((__, res) => {
-      res
-        .status(200)
-        .header('Content-Type', 'application/json; charset=utf-8')
-        .send({ success: true });
-    }),
+    controllerWrapper(updateFaq),
   );
 
-  fastify.delete<Request<{ Header: ApiKeyHeader; Params: IdRequestParams }>>(
+  fastify.delete<Request<{ Headers: ApiKeyHeader; Params: IdRequestParams }>>(
     '/faqs/:id',
     {
       attachValidation: true,
@@ -869,21 +602,9 @@ const routes = function routes(
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preHandler: [
-        ({ validationError }, res, done) => {
-          if (validationError) schemaValidationError(validationError, res);
-
-          done();
-        },
-        handlerWrapper(protect('ADMIN')),
-      ],
+      preHandler: [schemaValidation, handlerWrapper(protect('ADMIN'))],
     },
-    controllerWrapper((__, res) => {
-      res
-        .status(200)
-        .header('Content-Type', 'application/json; charset=utf-8')
-        .send({ success: true });
-    }),
+    controllerWrapper(deleteFaq),
   );
 
   donePlugin();

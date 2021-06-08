@@ -2,12 +2,12 @@ import type { FastifyInstance, FastifyPluginOptions, HookHandlerDoneFunction } f
 import type { Request } from '../../types/fasitify';
 import type {
   ApiKeyHeader,
+  IdRequestParams,
   GetQuery,
   ActivateMerchantBody,
   UpdateMerchantProfileBody,
   UpdateMerchantClosetimeBody,
   PostProductBody,
-  IdRequestParams,
   UpdateProductBody,
   UpdateProductCoverBody,
   UpdateProductStatusBody,
@@ -20,11 +20,36 @@ import type {
   GetMerchantIncomeHistoriesQuery,
 } from '../../types/schema';
 import { controllerWrapper, handlerWrapper } from '../../utils/serverfn-wrapper';
-import { schemaValidationError } from '../../utils/error-handler';
 import { renameFiles } from '../../utils/file-management';
 import { protect } from '../../middlewares/protect-route';
 import dbQuerying from '../../middlewares/db-querying';
+import schemaValidation from '../../middlewares/schema-validation';
 import { requestHeaders, requestQuery, requestBody, requestParams } from './schemas';
+import {
+  activateMerchant,
+  updateMerchantProfile,
+  updateMerchantClosetime,
+  getMerchantProfile,
+  postMerchantProduct,
+  getMerchantProducts,
+  updateMerchantProduct,
+  updateMerchantProductCover,
+  updateMerchantProductStatus,
+  bindMerchantProductCategory,
+  getMerchantProductDetail,
+  postMerchantProductImage,
+  deleteMerchantProductCategory,
+  deleteMerchantProductImage,
+  deleteMerchantProduct,
+  getMerchantOrders,
+  getMerchantOrderDetail,
+  updateMerchantOrderStatus,
+  getMerchantList,
+  getMerchantProductList,
+  getRandomMerchants,
+  getMerchantTransactionHistories,
+  getMerchantIncomeHistories,
+} from './controller';
 
 const routes = function routes(
   fastify: FastifyInstance,
@@ -57,21 +82,9 @@ const routes = function routes(
 
         done();
       },
-      preHandler: [
-        ({ validationError }, res, done) => {
-          if (validationError) schemaValidationError(validationError, res);
-
-          done();
-        },
-        handlerWrapper(protect('USER')),
-      ],
+      preHandler: [schemaValidation, handlerWrapper(protect('USER'))],
     },
-    controllerWrapper((__, res) => {
-      res
-        .status(201)
-        .header('Content-Type', 'application/json; charset=utf-8')
-        .send({ success: true });
-    }),
+    controllerWrapper(activateMerchant),
   );
 
   fastify.patch<Request<{ Headers: ApiKeyHeader; Body: UpdateMerchantProfileBody }>>(
@@ -95,21 +108,9 @@ const routes = function routes(
 
         done();
       },
-      preHandler: [
-        ({ validationError }, res, done) => {
-          if (validationError) schemaValidationError(validationError, res);
-
-          done();
-        },
-        handlerWrapper(protect('MERCHANT')),
-      ],
+      preHandler: [schemaValidation, handlerWrapper(protect('MERCHANT'))],
     },
-    controllerWrapper((__, res) => {
-      res
-        .status(200)
-        .header('Content-Type', 'application/json; charset=utf-8')
-        .send({ success: true });
-    }),
+    controllerWrapper(updateMerchantProfile),
   );
 
   fastify.patch<Request<{ Headers: ApiKeyHeader; Body: UpdateMerchantClosetimeBody }>>(
@@ -125,21 +126,9 @@ const routes = function routes(
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preHandler: [
-        ({ validationError }, res, done) => {
-          if (validationError) schemaValidationError(validationError, res);
-
-          done();
-        },
-        handlerWrapper(protect('MERCHANT')),
-      ],
+      preHandler: [schemaValidation, handlerWrapper(protect('MERCHANT'))],
     },
-    controllerWrapper((__, res) => {
-      res
-        .status(200)
-        .header('Content-Type', 'application/json; charset=utf-8')
-        .send({ success: true });
-    }),
+    controllerWrapper(updateMerchantClosetime),
   );
 
   fastify.get<Request<{ Headers: ApiKeyHeader }>>(
@@ -154,21 +143,9 @@ const routes = function routes(
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preHandler: [
-        ({ validationError }, res, done) => {
-          if (validationError) schemaValidationError(validationError, res);
-
-          done();
-        },
-        handlerWrapper(protect('MERCHANT')),
-      ],
+      preHandler: [schemaValidation, handlerWrapper(protect('MERCHANT'))],
     },
-    controllerWrapper((__, res) => {
-      res
-        .status(200)
-        .header('Content-Type', 'application/json; charset=utf-8')
-        .send({ success: true });
-    }),
+    controllerWrapper(getMerchantProfile),
   );
 
   fastify.post<Request<{ Headers: ApiKeyHeader; Body: PostProductBody }>>(
@@ -189,21 +166,9 @@ const routes = function routes(
 
         done();
       },
-      preHandler: [
-        ({ validationError }, res, done) => {
-          if (validationError) schemaValidationError(validationError, res);
-
-          done();
-        },
-        handlerWrapper(protect('MERCHANT')),
-      ],
+      preHandler: [schemaValidation, handlerWrapper(protect('MERCHANT'))],
     },
-    controllerWrapper((__, res) => {
-      res
-        .status(200)
-        .header('Content-Type', 'application/json; charset=utf-8')
-        .send({ success: true });
-    }),
+    controllerWrapper(postMerchantProduct),
   );
 
   fastify.get<Request<{ Headers: ApiKeyHeader; Querystring: GetQuery }>>(
@@ -220,21 +185,12 @@ const routes = function routes(
         },
       },
       preHandler: [
-        ({ validationError }, res, done) => {
-          if (validationError) schemaValidationError(validationError, res);
-
-          done();
-        },
+        schemaValidation,
         handlerWrapper(protect('MERCHANT')),
         handlerWrapper(dbQuerying('PRODUCT')),
       ],
     },
-    controllerWrapper((__, res) => {
-      res
-        .status(200)
-        .header('Content-Type', 'application/json; charset=utf-8')
-        .send({ success: true });
-    }),
+    controllerWrapper(getMerchantProducts),
   );
 
   fastify.patch<
@@ -253,21 +209,9 @@ const routes = function routes(
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preHandler: [
-        ({ validationError }, res, done) => {
-          if (validationError) schemaValidationError(validationError, res);
-
-          done();
-        },
-        handlerWrapper(protect('MERCHANT')),
-      ],
+      preHandler: [schemaValidation, handlerWrapper(protect('MERCHANT'))],
     },
-    controllerWrapper((__, res) => {
-      res
-        .status(200)
-        .header('Content-Type', 'application/json; charset=utf-8')
-        .send({ success: true });
-    }),
+    controllerWrapper(updateMerchantProduct),
   );
 
   fastify.patch<
@@ -291,21 +235,9 @@ const routes = function routes(
 
         done();
       },
-      preHandler: [
-        ({ validationError }, res, done) => {
-          if (validationError) schemaValidationError(validationError, res);
-
-          done();
-        },
-        handlerWrapper(protect('MERCHANT')),
-      ],
+      preHandler: [schemaValidation, handlerWrapper(protect('MERCHANT'))],
     },
-    controllerWrapper((__, res) => {
-      res
-        .status(200)
-        .header('Content-Type', 'application/json; charset=utf-8')
-        .send({ success: true });
-    }),
+    controllerWrapper(updateMerchantProductCover),
   );
 
   fastify.patch<
@@ -324,21 +256,9 @@ const routes = function routes(
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preHandler: [
-        ({ validationError }, res, done) => {
-          if (validationError) schemaValidationError(validationError, res);
-
-          done();
-        },
-        handlerWrapper(protect('MERCHANT')),
-      ],
+      preHandler: [schemaValidation, handlerWrapper(protect('MERCHANT'))],
     },
-    controllerWrapper((__, res) => {
-      res
-        .status(200)
-        .header('Content-Type', 'application/json; charset=utf-8')
-        .send({ success: true });
-    }),
+    controllerWrapper(updateMerchantProductStatus),
   );
 
   fastify.patch<
@@ -357,21 +277,9 @@ const routes = function routes(
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preHandler: [
-        ({ validationError }, res, done) => {
-          if (validationError) schemaValidationError(validationError, res);
-
-          done();
-        },
-        handlerWrapper(protect('MERCHANT')),
-      ],
+      preHandler: [schemaValidation, handlerWrapper(protect('MERCHANT'))],
     },
-    controllerWrapper((__, res) => {
-      res
-        .status(200)
-        .header('Content-Type', 'application/json; charset=utf-8')
-        .send({ success: true });
-    }),
+    controllerWrapper(bindMerchantProductCategory),
   );
 
   fastify.get<Request<{ Headers: ApiKeyHeader; Params: IdRequestParams }>>(
@@ -387,21 +295,9 @@ const routes = function routes(
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preHandler: [
-        ({ validationError }, res, done) => {
-          if (validationError) schemaValidationError(validationError, res);
-
-          done();
-        },
-        handlerWrapper(protect('USER')),
-      ],
+      preHandler: [schemaValidation, handlerWrapper(protect('USER'))],
     },
-    controllerWrapper((__, res) => {
-      res
-        .status(200)
-        .header('Content-Type', 'application/json; charset=utf-8')
-        .send({ success: true });
-    }),
+    controllerWrapper(getMerchantProductDetail),
   );
 
   fastify.post<
@@ -425,21 +321,9 @@ const routes = function routes(
 
         done();
       },
-      preHandler: [
-        ({ validationError }, res, done) => {
-          if (validationError) schemaValidationError(validationError, res);
-
-          done();
-        },
-        handlerWrapper(protect('MERCHANT')),
-      ],
+      preHandler: [schemaValidation, handlerWrapper(protect('MERCHANT'))],
     },
-    controllerWrapper((__, res) => {
-      res
-        .status(200)
-        .header('Content-Type', 'application/json; charset=utf-8')
-        .send({ success: true });
-    }),
+    controllerWrapper(postMerchantProductImage),
   );
 
   fastify.delete<Request<{ Headers: ApiKeyHeader; Params: DeleteProductCategoryParams }>>(
@@ -455,21 +339,9 @@ const routes = function routes(
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preHandler: [
-        ({ validationError }, res, done) => {
-          if (validationError) schemaValidationError(validationError, res);
-
-          done();
-        },
-        handlerWrapper(protect('MERCHANT')),
-      ],
+      preHandler: [schemaValidation, handlerWrapper(protect('MERCHANT'))],
     },
-    controllerWrapper((__, res) => {
-      res
-        .status(200)
-        .header('Content-Type', 'application/json; charset=utf-8')
-        .send({ success: true });
-    }),
+    controllerWrapper(deleteMerchantProductCategory),
   );
 
   fastify.delete<Request<{ Headers: ApiKeyHeader; Params: IdRequestParams }>>(
@@ -485,21 +357,9 @@ const routes = function routes(
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preHandler: [
-        ({ validationError }, res, done) => {
-          if (validationError) schemaValidationError(validationError, res);
-
-          done();
-        },
-        handlerWrapper(protect('MERCHANT')),
-      ],
+      preHandler: [schemaValidation, handlerWrapper(protect('MERCHANT'))],
     },
-    controllerWrapper((__, res) => {
-      res
-        .status(200)
-        .header('Content-Type', 'application/json; charset=utf-8')
-        .send({ success: true });
-    }),
+    controllerWrapper(deleteMerchantProductImage),
   );
 
   fastify.delete<Request<{ Headers: ApiKeyHeader; Params: IdRequestParams }>>(
@@ -515,21 +375,9 @@ const routes = function routes(
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preHandler: [
-        ({ validationError }, res, done) => {
-          if (validationError) schemaValidationError(validationError, res);
-
-          done();
-        },
-        handlerWrapper(protect('MERCHANT')),
-      ],
+      preHandler: [schemaValidation, handlerWrapper(protect('MERCHANT'))],
     },
-    controllerWrapper((__, res) => {
-      res
-        .status(200)
-        .header('Content-Type', 'application/json; charset=utf-8')
-        .send({ success: true });
-    }),
+    controllerWrapper(deleteMerchantProduct),
   );
 
   fastify.get<Request<{ Headers: ApiKeyHeader; Querystring: GetQuery }>>(
@@ -545,21 +393,9 @@ const routes = function routes(
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preHandler: [
-        ({ validationError }, res, done) => {
-          if (validationError) schemaValidationError(validationError, res);
-
-          done();
-        },
-        handlerWrapper(protect('MERCHANT')),
-      ],
+      preHandler: [schemaValidation, handlerWrapper(protect('MERCHANT'))],
     },
-    controllerWrapper((__, res) => {
-      res
-        .status(200)
-        .header('Content-Type', 'application/json; charset=utf-8')
-        .send({ success: true });
-    }),
+    controllerWrapper(getMerchantOrders),
   );
 
   fastify.get<Request<{ Headers: ApiKeyHeader; Params: IdRequestParams }>>(
@@ -575,27 +411,15 @@ const routes = function routes(
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preHandler: [
-        ({ validationError }, res, done) => {
-          if (validationError) schemaValidationError(validationError, res);
-
-          done();
-        },
-        handlerWrapper(protect('MERCHANT')),
-      ],
+      preHandler: [schemaValidation, handlerWrapper(protect('MERCHANT'))],
     },
-    controllerWrapper((__, res) => {
-      res
-        .status(200)
-        .header('Content-Type', 'application/json; charset=utf-8')
-        .send({ success: true });
-    }),
+    controllerWrapper(getMerchantOrderDetail),
   );
 
   fastify.patch<
     Request<{ Headers: ApiKeyHeader; Params: IdRequestParams; Body: UpdateOrderStatusBody }>
   >(
-    '/',
+    '/orders/:id',
     {
       attachValidation: true,
       schema: {
@@ -608,21 +432,9 @@ const routes = function routes(
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preHandler: [
-        ({ validationError }, res, done) => {
-          if (validationError) schemaValidationError(validationError, res);
-
-          done();
-        },
-        handlerWrapper(protect('MERCHANT')),
-      ],
+      preHandler: [schemaValidation, handlerWrapper(protect('MERCHANT'))],
     },
-    controllerWrapper((__, res) => {
-      res
-        .status(200)
-        .header('Content-Type', 'application/json; charset=utf-8')
-        .send({ success: true });
-    }),
+    controllerWrapper(updateMerchantOrderStatus),
   );
 
   fastify.get<Request<{ Headers: ApiKeyHeader; Querystring: GetQuery }>>(
@@ -638,21 +450,9 @@ const routes = function routes(
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preHandler: [
-        ({ validationError }, res, done) => {
-          if (validationError) schemaValidationError(validationError, res);
-
-          done();
-        },
-        handlerWrapper(protect('MERCHANT')),
-      ],
+      preHandler: [schemaValidation, handlerWrapper(protect('MERCHANT'))],
     },
-    controllerWrapper((__, res) => {
-      res
-        .status(200)
-        .header('Content-Type', 'application/json; charset=utf-8')
-        .send({ success: true });
-    }),
+    controllerWrapper(getMerchantList),
   );
 
   fastify.get<Request<{ Headers: ApiKeyHeader; Params: IdRequestParams }>>(
@@ -668,21 +468,9 @@ const routes = function routes(
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preHandler: [
-        ({ validationError }, res, done) => {
-          if (validationError) schemaValidationError(validationError, res);
-
-          done();
-        },
-        handlerWrapper(protect('MERCHANT')),
-      ],
+      preHandler: [schemaValidation, handlerWrapper(protect('MERCHANT'))],
     },
-    controllerWrapper((__, res) => {
-      res
-        .status(200)
-        .header('Content-Type', 'application/json; charset=utf-8')
-        .send({ success: true });
-    }),
+    controllerWrapper(getMerchantProductList),
   );
 
   fastify.get<Request<{ Headers: ApiKeyHeader; Querystring: GetRandomMerchantsQuery }>>(
@@ -698,21 +486,9 @@ const routes = function routes(
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preHandler: [
-        ({ validationError }, res, done) => {
-          if (validationError) schemaValidationError(validationError, res);
-
-          done();
-        },
-        handlerWrapper(protect('MERCHANT')),
-      ],
+      preHandler: [schemaValidation, handlerWrapper(protect('MERCHANT'))],
     },
-    controllerWrapper((__, res) => {
-      res
-        .status(200)
-        .header('Content-Type', 'application/json; charset=utf-8')
-        .send({ success: true });
-    }),
+    controllerWrapper(getRandomMerchants),
   );
 
   fastify.get<
@@ -730,21 +506,9 @@ const routes = function routes(
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preHandler: [
-        ({ validationError }, res, done) => {
-          if (validationError) schemaValidationError(validationError, res);
-
-          done();
-        },
-        handlerWrapper(protect('MERCHANT')),
-      ],
+      preHandler: [schemaValidation, handlerWrapper(protect('MERCHANT'))],
     },
-    controllerWrapper((__, res) => {
-      res
-        .status(200)
-        .header('Content-Type', 'application/json; charset=utf-8')
-        .send({ success: true });
-    }),
+    controllerWrapper(getMerchantTransactionHistories),
   );
 
   fastify.get<Request<{ Headers: ApiKeyHeader; Querystring: GetMerchantIncomeHistoriesQuery }>>(
@@ -760,21 +524,9 @@ const routes = function routes(
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preHandler: [
-        ({ validationError }, res, done) => {
-          if (validationError) schemaValidationError(validationError, res);
-
-          done();
-        },
-        handlerWrapper(protect('MERCHANT')),
-      ],
+      preHandler: [schemaValidation, handlerWrapper(protect('MERCHANT'))],
     },
-    controllerWrapper((__, res) => {
-      res
-        .status(200)
-        .header('Content-Type', 'application/json; charset=utf-8')
-        .send({ success: true });
-    }),
+    controllerWrapper(getMerchantIncomeHistories),
   );
 
   donePlugin();

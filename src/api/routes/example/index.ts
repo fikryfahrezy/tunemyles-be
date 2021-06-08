@@ -2,9 +2,9 @@ import type { FastifyInstance, FastifyPluginOptions, HookHandlerDoneFunction } f
 import type { Request } from '../../types/fasitify';
 import type { PostRequestBody, FileRequestBody } from '../../types/schema';
 import { controllerWrapper, handlerWrapper } from '../../utils/serverfn-wrapper';
-import { schemaValidationError } from '../../utils/error-handler';
 import { renameFiles } from '../../utils/file-management';
 import { exampleProtect } from '../../middlewares/protect-route';
+import schemaValidation from '../../middlewares/schema-validation';
 import { requestBody, requestHeaders, requestParams, responses } from './schemas';
 import { getExample, postExample, getIdExample, postFileExample } from './controllers';
 
@@ -43,11 +43,7 @@ const routes = function routes(
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preHandler: ({ validationError }, res, done) => {
-        if (validationError) schemaValidationError(validationError, res);
-
-        done();
-      },
+      preHandler: schemaValidation,
     },
     controllerWrapper(postExample),
   );
@@ -87,13 +83,7 @@ const routes = function routes(
 
         done();
       },
-      preHandler: [
-        ({ validationError }, res, done) => {
-          if (validationError) schemaValidationError(validationError, res);
-
-          done();
-        },
-      ],
+      preHandler: schemaValidation,
     },
     controllerWrapper(postFileExample),
   );
@@ -110,14 +100,7 @@ const routes = function routes(
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preHandler: [
-        ({ validationError }, res, done) => {
-          if (validationError) schemaValidationError(validationError, res);
-
-          done();
-        },
-        handlerWrapper(exampleProtect),
-      ],
+      preHandler: [schemaValidation, handlerWrapper(exampleProtect)],
     },
     controllerWrapper(getExample),
   );
