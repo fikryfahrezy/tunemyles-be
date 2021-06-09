@@ -22,49 +22,49 @@ export const requestQuery = {
   getProducts: {
     type: 'object',
     properties: {
-      page: { $ref: '#PageQuery' },
-      search: { $ref: '#SearchQuery' },
+      orderDirection: { $ref: '#OrderDirectionQuery' },
       orderBy: {
         allOf: [
           { $ref: '#OrderByQuery' },
-          {
-            enum: ['created_at', 'product_name', 'market_name', 'market_address'],
-          },
+          { enum: ['created_at', 'product_name', 'market_name', 'market_address'] },
         ],
       },
-      orderDirection: { $ref: '#OrderDirectionQuery' },
+      search: { $ref: '#SearchQuery' },
+      page: { $ref: '#PageQuery' },
+      limit: { $ref: '#LimitQuery' },
     },
   },
   getOrders: {
     type: 'object',
     properties: {
-      page: { $ref: '#PageQuery' },
-      search: { $ref: '#SearchQuery' },
+      orderDirection: { $ref: '#OrderDirectionQuery' },
       orderBy: {
         allOf: [
           { $ref: '#OrderByQuery' },
-          {
-            enum: ['created_at', 'full_name', 'phone_number', 'address'],
-          },
+          { enum: ['created_at', 'full_name', 'phone_number', 'address'] },
         ],
       },
-      orderDirection: { $ref: '#OrderDirectionQuery' },
+      search: { $ref: '#SearchQuery' },
+      page: { $ref: '#PageQuery' },
+      limit: { $ref: '#LimitQuery' },
+      status: {
+        allOf: [{ $ref: '#StatusQuery' }, { enum: ['0', '1', '2'] }],
+      },
     },
   },
   getMerchantList: {
     type: 'object',
     properties: {
-      page: { $ref: '#PageQuery' },
-      search: { $ref: '#SearchQuery' },
+      orderDirection: { $ref: '#OrderDirectionQuery' },
       orderBy: {
         allOf: [
           { $ref: '#OrderByQuery' },
-          {
-            enum: ['created_at', 'full_name', 'phone_number', 'market_name', 'market_address'],
-          },
+          { enum: ['created_at', 'full_name', 'phone_number', 'market_name', 'market_address'] },
         ],
       },
-      orderDirection: { $ref: '#OrderDirectionQuery' },
+      search: { $ref: '#SearchQuery' },
+      page: { $ref: '#PageQuery' },
+      limit: { $ref: '#LimitQuery' },
     },
   },
   getRandomMerchants: {
@@ -86,37 +86,13 @@ export const requestQuery = {
  * routes in Postman
  */
 export const requestBody = {
-  activateMerchant: {
-    required: [
-      'no_identity',
-      'identity_photo',
-      'market_photo',
-      'market_name',
-      'market_address',
-      'market_lat',
-      'market_lon',
-      'market_close_time',
-    ],
-    type: 'object',
-    properties: {
-      no_identity: { type: 'string' },
-      identity_photo: { type: 'array', items: { $ref: '#MultiPartSchema' } },
-      market_photo: { type: 'array', items: { $ref: '#MultiPartSchema' } },
-      market_name: { type: 'string' },
-      market_address: { type: 'string' },
-      market_lat: { type: 'number' },
-      market_lon: { type: 'number' },
-      market_close_time: { type: 'string' },
-    },
-    additionalProperties: false,
-  },
   updateMerchantProfile: {
     type: 'object',
     properties: {
       market_photo: { type: 'array', items: { $ref: '#MultiPartSchema' } },
       no_identity: { type: 'string' },
       market_name: { type: 'string' },
-      market_address: { type: 'integer' },
+      market_address: { type: 'string' },
       market_lat: { type: 'number' },
       market_lon: { type: 'number' },
     },

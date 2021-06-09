@@ -14,17 +14,16 @@ export const requestQuery = {
   topUp: {
     type: 'object',
     properties: {
-      page: { $ref: '#PageQuery' },
-      search: { $ref: '#SearchQuery' },
+      orderDirection: { $ref: '#OrderDirectionQuery' },
       orderBy: {
         allOf: [
           { $ref: '#OrderByQuery' },
-          {
-            enum: ['created_at', 'balance_request', 'balance_transfer'],
-          },
+          { enum: ['created_at', 'balance_request', 'balance_transfer'] },
         ],
       },
-      orderDirection: { $ref: '#OrderDirectionQuery' },
+      search: { $ref: '#SearchQuery' },
+      page: { $ref: '#PageQuery' },
+      limit: { $ref: '#LimitQuery' },
       status: {
         allOf: [{ $ref: '#StatusQuery' }, { enum: ['0', '1', '2'] }],
       },
@@ -33,12 +32,13 @@ export const requestQuery = {
   withdraw: {
     type: 'object',
     properties: {
-      page: { $ref: '#PageQuery' },
-      search: { $ref: '#SearchQuery' },
+      orderDirection: { $ref: '#OrderDirectionQuery' },
       orderBy: {
         allOf: [{ $ref: '#OrderByQuery' }, { enum: ['created_at', 'balance_request'] }],
       },
-      orderDirection: { $ref: '#OrderDirectionQuery' },
+      search: { $ref: '#SearchQuery' },
+      page: { $ref: '#PageQuery' },
+      limit: { $ref: '#LimitQuery' },
       status: {
         allOf: [{ $ref: '#StatusQuery' }, { enum: ['0', '1', '2'] }],
       },
@@ -74,7 +74,7 @@ export const requestBody = {
     required: ['image'],
     type: 'object',
     properties: {
-      image: { $ref: '#MultiPartSchema' },
+      image: { type: 'array', items: { $ref: '#MultiPartSchema' } },
     },
     additionalProperties: false,
   },

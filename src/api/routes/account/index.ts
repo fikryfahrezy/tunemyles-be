@@ -4,6 +4,7 @@ import type {
   ApiKeyHeader,
   VerifyTokenParams,
   RegisterBody,
+  ActivateMerchantBody,
   LoginBody,
   UpdateProfileBody,
   ForgotPasswordBody,
@@ -16,6 +17,7 @@ import schemaValidation from '../../middlewares/schema-validation';
 import { requestHeaders, requestBody, responses } from './schemas';
 import {
   register,
+  activateMerchant,
   login,
   getProfile,
   updateProfile,
@@ -49,6 +51,33 @@ const routes = function routes(
       preHandler: schemaValidation,
     },
     controllerWrapper(register),
+  );
+
+  fastify.post<Request<{ Headers: ApiKeyHeader; Body: ActivateMerchantBody }>>(
+    '/merchant',
+    {
+      attachValidation: true,
+      schema: {
+        headers: requestHeaders.private,
+        body: requestBody.activateMerchant,
+        response: {
+          200: { $ref: '#ApiResponse' },
+          '4xx': { $ref: '#ApiResponse' },
+          '5xx': { $ref: '#ApiResponse' },
+        },
+      },
+      preValidation: (req, __, done) => {
+        req.body = {
+          ...req.body,
+          market_photo: renameFiles(req.url, req.body.market_photo) ?? req.body.market_photo,
+          identity_photo: renameFiles(req.url, req.body.identity_photo) ?? req.body.identity_photo,
+        };
+
+        done();
+      },
+      preHandler: [schemaValidation, handlerWrapper(protect('USER'))],
+    },
+    controllerWrapper(activateMerchant),
   );
 
   fastify.post<Request<{ Body: LoginBody }>>(
@@ -160,6 +189,19 @@ const routes = function routes(
 
   fastify.patch<Request>(
     '/admin',
+    {
+      onRequest: (__, res, done) => {
+        if (process.env.NODE_ENV !== 'test') res.methodNotAllowed();
+
+        done();
+      },
+      preHandler: handlerWrapper(protect('USER')),
+    },
+    controllerWrapper(createAdmin),
+  );
+
+  fastify.patch<Request>(
+    '/banned',
     {
       onRequest: (__, res, done) => {
         if (process.env.NODE_ENV !== 'test') res.methodNotAllowed();

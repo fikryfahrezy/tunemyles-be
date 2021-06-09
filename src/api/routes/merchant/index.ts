@@ -4,7 +4,6 @@ import type {
   ApiKeyHeader,
   IdRequestParams,
   GetQuery,
-  ActivateMerchantBody,
   UpdateMerchantProfileBody,
   UpdateMerchantClosetimeBody,
   PostProductBody,
@@ -26,7 +25,6 @@ import dbQuerying from '../../middlewares/db-querying';
 import schemaValidation from '../../middlewares/schema-validation';
 import { requestHeaders, requestQuery, requestBody, requestParams } from './schemas';
 import {
-  activateMerchant,
   updateMerchantProfile,
   updateMerchantClosetime,
   getMerchantProfile,
@@ -59,33 +57,6 @@ const routes = function routes(
   /**
    * The order of the keys is following the order of the routes in Postman
    */
-
-  fastify.post<Request<{ Headers: ApiKeyHeader; Body: ActivateMerchantBody }>>(
-    '/activate',
-    {
-      attachValidation: true,
-      schema: {
-        headers: requestHeaders.private,
-        body: requestBody.activateMerchant,
-        response: {
-          200: { $ref: '#ApiResponse' },
-          '4xx': { $ref: '#ApiResponse' },
-          '5xx': { $ref: '#ApiResponse' },
-        },
-      },
-      preValidation: (req, __, done) => {
-        req.body = {
-          ...req.body,
-          market_photo: renameFiles(req.url, req.body.market_photo) ?? req.body.market_photo,
-          identity_photo: renameFiles(req.url, req.body.identity_photo) ?? req.body.identity_photo,
-        };
-
-        done();
-      },
-      preHandler: [schemaValidation, handlerWrapper(protect('USER'))],
-    },
-    controllerWrapper(activateMerchant),
-  );
 
   fastify.patch<Request<{ Headers: ApiKeyHeader; Body: UpdateMerchantProfileBody }>>(
     '/',

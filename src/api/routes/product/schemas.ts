@@ -10,17 +10,16 @@ export const requestQuery = {
   getProduct: {
     type: 'object',
     properties: {
-      page: { $ref: '#PageQuery' },
-      search: { $ref: '#SearchQuery' },
+      orderDirection: { $ref: '#OrderDirectionQuery' },
       orderBy: {
         allOf: [
           { $ref: '#OrderByQuery' },
-          {
-            enum: ['created_at', 'product_name', 'market_name', 'market_address'],
-          },
+          { enum: ['created_at', 'product_name', 'market_name', 'market_address'] },
         ],
       },
-      orderDirection: { $ref: '#OrderDirectionQuery' },
+      search: { $ref: '#SearchQuery' },
+      page: { $ref: '#PageQuery' },
+      limit: { $ref: '#LimitQuery' },
     },
   },
 };

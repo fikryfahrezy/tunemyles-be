@@ -1,15 +1,19 @@
 import fs from 'fs';
 import sequelize from '../../src/databases/sequelize';
-import { getUser, updateUser, createUserImg } from '../../src/api/repositories/UserRepository';
+import { createUserImg, updateUser, getUser } from '../../src/api/repositories/UserRepository';
 import {
   userRegistration,
+  userLogin,
   resetUserPassword,
   verifyUserToken,
-} from '../../src/api/routes/auth/service';
+} from '../../src/api/routes/account/service';
 import {
   setUpServer,
   registerPayload,
+  registerMerchPayload,
+  updateProfilePayload,
   register,
+  registerMerchant,
   login,
   getProfile,
   updateProfile,
@@ -19,7 +23,10 @@ import {
   registration,
   registerThenLogin,
   registerThenForgotPass,
+  createMercUser,
 } from '../component';
+
+const file = fs.createReadStream('./__test__/image-test.png');
 
 beforeAll(() => sequelize.authenticate());
 
@@ -238,6 +245,125 @@ describe('Register', () => {
   });
 });
 
+describe.only('Activate Merchant', () => {
+  test('Success', async () => {
+    const { appServer, server } = await setUpServer();
+    const { token } = await registration();
+    const payload = {
+      token,
+      fields: registerMerchPayload(),
+      files: [
+        { file, field: 'identity_photo' },
+        { file, field: 'market_photo' },
+      ],
+    };
+
+    const { status, headers, body } = await registerMerchant(server, payload);
+
+    expect(status).toBe(201);
+    expect(headers['content-type']).toBe('application/json; charset=utf-8');
+    expect(body.success).toBe(true);
+
+    appServer.close();
+  });
+
+  test('Fail, User Already Merchant Identified by User ID', async () => {
+    const { appServer, server } = await setUpServer();
+    const { token } = await createMercUser();
+    const payload = {
+      token,
+      fields: registerMerchPayload(),
+      files: [
+        { file, field: 'identity_photo' },
+        { file, field: 'market_photo' },
+      ],
+    };
+
+    const { status, headers, body } = await registerMerchant(server, payload);
+
+    expect(status).toBe(400);
+    expect(headers['content-type']).toBe('application/json; charset=utf-8');
+    expect(body.success).toBe(false);
+
+    appServer.close();
+  });
+
+  test('Fail, User Already Merchant Identified by Token Type', async () => {
+    const { appServer, server } = await setUpServer();
+    const { username, password } = await createMercUser();
+    const { token } = await userLogin({ username, password });
+    const payload = {
+      token,
+      fields: registerMerchPayload(),
+      files: [
+        { file, field: 'identity_photo' },
+        { file, field: 'market_photo' },
+      ],
+    };
+
+    const { status, headers, body } = await registerMerchant(server, payload);
+
+    expect(status).toBe(400);
+    expect(headers['content-type']).toBe('application/json; charset=utf-8');
+    expect(body.success).toBe(false);
+
+    appServer.close();
+  });
+
+  test('Fail, No Data Provided', async () => {
+    const { appServer, server } = await setUpServer();
+    const { token } = await registration();
+    const payload = { token };
+
+    const { status, headers, body } = await registerMerchant(server, payload);
+
+    expect(status).toBe(422);
+    expect(headers['content-type']).toBe('application/json; charset=utf-8');
+    expect(body.success).toBe(false);
+
+    appServer.close();
+  });
+
+  test('Fail, Token Invalid', async () => {
+    const { appServer, server } = await setUpServer();
+    const payload = {
+      token: 'invalid-token',
+      fields: registerMerchPayload(),
+      files: [
+        { file, field: 'identity_photo' },
+        { file, field: 'market_photo' },
+      ],
+    };
+
+    const { status, headers, body } = await registerMerchant(server, payload);
+
+    expect(status).toBe(422);
+    expect(headers['content-type']).toBe('application/json; charset=utf-8');
+    expect(body.success).toBe(false);
+
+    appServer.close();
+  });
+
+  test('Fail, No Token Provided', async () => {
+    const { appServer, server } = await setUpServer();
+    const payload = {
+      fields: registerMerchPayload(),
+      files: [
+        { file, field: 'identity_photo' },
+        { file, field: 'market_photo' },
+      ],
+    };
+
+    const { status, headers, body } = await registerMerchant(server, payload);
+
+    expect(status).toBe(422);
+    expect(headers['content-type']).toBe('application/json; charset=utf-8');
+    expect(body.success).toBe(false);
+
+    appServer.close();
+  });
+});
+
 describe('Login', () => {
   test('Success', async () => {
     const { appServer, server } = await setUpServer();
@@ -359,14 +485,9 @@ describe('Update Profile', () => {
   test('Success, Add New Profile Image', async () => {
     const { appServer, server } = await setUpServer();
     const { token } = await registerThenLogin();
-    const file = fs.createReadStream('./__test__/image-test.png');
     const updatePayload = {
       token,
-      fields: {
-        full_name: 'New Full Name',
-        address: 'New Address',
-        phone_number: Date.now().toString(),
-      },
+      fields: updateProfilePayload(),
       files: [{ file, field: 'avatar' }],
     };
 
@@ -387,7 +508,6 @@ describe('Update Profile', () => {
       createUserImg(`${username}-not-valid.jpg`),
     ]);
     await updateUser(userId, { id_photo: imgId });
-    const file = fs.createReadStream('./__test__/image-test.png');
     const updatePayload = {
       token,
       fields: {

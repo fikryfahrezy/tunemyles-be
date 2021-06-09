@@ -15,10 +15,12 @@ export type FileRequestBody = {
 };
 
 export type GetQuery = {
-  page?: string;
-  orderBy?: string;
   orderDirection?: string;
+  orderBy?: string;
+  seach?: string;
+  page?: string;
   limit?: string;
+  status?: string;
 };
 
 export type ApiKeyHeader = {

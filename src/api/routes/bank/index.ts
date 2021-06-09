@@ -82,7 +82,7 @@ const routes = function routes(
   );
 
   fastify.get<Request<{ Headers: ApiKeyHeader }>>(
-    '/get',
+    '/users/get',
     {
       attachValidation: true,
       schema: {

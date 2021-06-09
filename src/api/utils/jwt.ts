@@ -8,8 +8,23 @@ const { JWT_TEMP_TOKEN, JWT_TEMP_TOKEN_EXP } = process.env;
 export const issueJwt: (
   userId: number,
   utilId: number,
-  userType: number,
-) => string = function issueJwt(userId, utilId, userType) {
+  type: number | 'USER' | 'MERCHANT' | 'ADMIN',
+) => string = function issueJwt(userId, utilId, type) {
+  let userType = 0;
+
+  if (typeof type === 'number') userType = type;
+  else
+    switch (type) {
+      case 'MERCHANT':
+        userType = 1;
+        break;
+      case 'ADMIN':
+        userType = 2;
+        break;
+      default:
+        userType = 0;
+    }
+
   const token = jwt.sign(
     {
       user_id: userId,

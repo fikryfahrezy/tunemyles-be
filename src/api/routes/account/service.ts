@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';
 import type {
   VerifyTokenParams,
   RegisterBody,
+  ActivateMerchantBody,
   LoginBody,
   UpdateProfileBody,
   ForgotPasswordBody,
@@ -12,35 +13,73 @@ import { ErrorResponse } from '../../utils/error-handler';
 import { issueJwt } from '../../utils/jwt';
 import { saveFiles, deleteLocalFile } from '../../utils/file-management';
 import {
+  createUser,
+  createUserUtility,
+  createUserWallet,
+  createUserImg,
+  createForgotPassword,
+  createImgs,
+  createMerchant,
+  updateUser,
+  updateUserImg,
+  updateForgotTokenStatus,
+  updateUserType,
   getUser,
   getUserUtility,
   getUserWallets,
   getUserForgotToken,
-  createUserImg,
-  createUser,
-  createUserUtility,
-  createUserWallet,
-  createForgotPassword,
-  updateUser,
-  updateUserImg,
-  updateForgotTokenStatus,
-  updateUserToAdmin,
 } from '../../repositories/UserRepository';
 
 export const userRegistration: (
   data: RegisterBody,
-) => Promise<CustModelType['UserAuth']> = async function userRegistration(regData) {
-  const user = await createUser(regData);
-  const { id, type } = await createUserUtility(regData.password, user.id);
+) => Promise<CustModelType['UserAuth']> = async function userRegistration(data) {
+  const user = await createUser(data);
+  const { id, type } = await createUserUtility(data.password, user.id);
 
   await createUserWallet(id);
 
   const userType = type as number;
-  const token = issueJwt(user.id, id, userType);
+  const jwtToken = issueJwt(user.id, id, 'USER');
 
   return {
-    token,
     type: userType,
+    token: jwtToken,
+  };
+};
+
+export const merchantRegistration: (
+  data: ActivateMerchantBody,
+  userToken: CustModelType['UserToken'],
+) => Promise<CustModelType['UserAuth']> = async function merchantRegistration(
+  { identity_photo: identityPhoto, market_photo: marketPhoto, ...data },
+  { userId, utilId, type },
+) {
+  if (type === 1) throw new ErrorResponse('user already merchant', 400);
+
+  const [identityImg, marketImg] = await createImgs([
+    identityPhoto[0].filename,
+    marketPhoto[0].filename,
+  ]);
+  const [, created] = await createMerchant({
+    ...data,
+    id_identity_photo: identityImg.id,
+    id_market_photo: marketImg.id,
+    id_u_user: utilId,
+  });
+
+  if (!created) throw new ErrorResponse('user already merchant', 400);
+
+  await Promise.all([
+    updateUserType('MERCHANT', userId),
+    saveFiles(identityPhoto),
+    saveFiles(marketPhoto),
+  ]);
+
+  const jwtToken = issueJwt(userId, utilId, 'MERCHANT');
+
+  return {
+    type: 1,
+    token: jwtToken,
   };
 };
 
@@ -149,18 +188,19 @@ export const resetUserPassword: (
   await updateUser(userId, { password: newPassword });
 };
 
-export const makeUserAdmin: (userId: number) => Promise<string> = async function makeUserAdmin(
-  userId,
-) {
-  const [affectedRows] = await updateUserToAdmin(userId);
+export const makeUserAdmin: (
+  userId: number,
+  utilId: number,
+) => Promise<string> = async function makeUserAdmin(userId, utilId) {
+  const [affectedRows] = await updateUserType('ADMIN', userId);
 
   if (affectedRows < 1) throw new ErrorResponse('update failed', 404);
 
-  const { id, type } = await getUserUtility(userId);
-
-  if (type >= 3) throw new ErrorResponse('account already banned', 403);
-
-  const token = issueJwt(userId, id, type);
+  const token = issueJwt(userId, utilId, 'ADMIN');
 
   return token;
+};
+
+export const bannedUser: (userId: number) => Promise<void> = async function bannedUser(userId) {
+  await updateUserType('BANNED', userId);
 };

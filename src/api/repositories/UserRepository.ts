@@ -1,8 +1,9 @@
 import { QueryTypes, Op } from 'sequelize';
 import type CustModelType from '../types/model';
-import type { RegisterBody, UpdateProfileBody } from '../types/schema';
+import type { RegisterBody, ActivateMerchantBody, UpdateProfileBody } from '../types/schema';
 import sequelize from '../../databases/sequelize';
 import initModels, { ModelType } from '../models/sql/init-models';
+import { Merchant } from '../models/sql/Merchant';
 
 const { User, UserUtility, UserWallet, Media, UserLostPassword } = initModels(sequelize);
 
@@ -23,9 +24,9 @@ export const createUserWallet: (
   return UserWallet.create({ id_u_user: userUtilityId });
 };
 
-export const createUserImg: (
-  imgName: string,
-) => Promise<ModelType['Media']> = function createUserImg(label) {
+export const createUserImg: (label: string) => Promise<ModelType['Media']> = function createUserImg(
+  label,
+) {
   return Media.create({ label, uri: `/img/${label}` });
 };
 
@@ -34,6 +35,22 @@ export const createForgotPassword: (data: {
   phone: string;
 }) => Promise<ModelType['UserLostPassword']> = function createForgotPassword({ utilId, phone }) {
   return UserLostPassword.create({ id_u_user: utilId, verification_token: phone });
+};
+
+export const createImgs: (labels: string[]) => Promise<ModelType['Media'][]> = function createImgs(
+  labels,
+) {
+  return Media.bulkCreate(labels.map((label) => ({ label, uri: `/img/${label}` })));
+};
+
+export const createMerchant: (
+  data: Omit<ActivateMerchantBody, 'identity_photo' | 'market_photo'> & {
+    id_u_user: number;
+    id_identity_photo: number;
+    id_market_photo: number;
+  },
+) => Promise<[ModelType['Merchant'], boolean]> = function createMerchant(data) {
+  return Merchant.findOrCreate({ where: { id_u_user: data.id_u_user }, defaults: data });
 };
 
 export const updateUser: (
@@ -65,10 +82,24 @@ export const updateForgotTokenStatus: (
   );
 };
 
-export const updateUserToAdmin: (
+export const updateUserType: (
+  role: 'ADMIN' | 'MERCHANT' | 'BANNED',
   userId: number,
-) => Promise<[number, ModelType['UserUtility'][]]> = function updateUserToAdmin(userId) {
-  return UserUtility.update({ type: 2 }, { where: { id_m_users: userId } });
+) => Promise<[number, ModelType['UserUtility'][]]> = function updateUserType(role, userId) {
+  let type = 0;
+
+  switch (role) {
+    case 'ADMIN':
+      type = 2;
+      break;
+    case 'BANNED':
+      type = 3;
+      break;
+    default:
+      type = 1;
+  }
+
+  return UserUtility.update({ type }, { where: { id_m_users: userId } });
 };
 
 export const getUser: (

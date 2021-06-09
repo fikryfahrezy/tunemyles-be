@@ -7,15 +7,6 @@ export const requestHeaders = {
  * routes in Postman
  */
 export const requestBody = {
-  login: {
-    required: ['password', 'username'],
-    type: 'object',
-    properties: {
-      username: { type: 'string' },
-      password: { type: 'string' },
-    },
-    additionalProperties: false,
-  },
   register: {
     required: ['address', 'full_name', 'password', 'phone_number', 'username'],
     type: 'object',
@@ -45,6 +36,39 @@ export const requestBody = {
         minLength: 8,
         maxLength: 255,
       },
+    },
+    additionalProperties: false,
+  },
+  activateMerchant: {
+    required: [
+      'no_identity',
+      'identity_photo',
+      'market_photo',
+      'market_name',
+      'market_address',
+      'market_lat',
+      'market_lon',
+      'market_close_time',
+    ],
+    type: 'object',
+    properties: {
+      no_identity: { type: 'string' },
+      identity_photo: { type: 'array', items: { $ref: '#MultiPartSchema' } },
+      market_photo: { type: 'array', items: { $ref: '#MultiPartSchema' } },
+      market_name: { type: 'string' },
+      market_address: { type: 'string' },
+      market_lat: { type: 'number' },
+      market_lon: { type: 'number' },
+      market_close_time: { type: 'string' },
+    },
+    additionalProperties: false,
+  },
+  login: {
+    required: ['password', 'username'],
+    type: 'object',
+    properties: {
+      username: { type: 'string' },
+      password: { type: 'string' },
     },
     additionalProperties: false,
   },

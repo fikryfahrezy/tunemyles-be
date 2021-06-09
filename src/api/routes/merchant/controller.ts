@@ -3,7 +3,6 @@ import type {
   ApiKeyHeader,
   IdRequestParams,
   GetQuery,
-  ActivateMerchantBody,
   UpdateMerchantProfileBody,
   UpdateMerchantClosetimeBody,
   PostProductBody,
@@ -19,25 +18,13 @@ import type {
   GetMerchantIncomeHistoriesQuery,
 } from '../../types/schema';
 
-export const activateMerchant: RequestHandler<
-  Request<{ Headers: ApiKeyHeader; Body: ActivateMerchantBody }>
-> = async function activateMerchant(_, res): Promise<void> {
-  await Promise.resolve('hi');
-
-  res.status(201).header('Content-Type', 'application/json; charset=utf-8').send({
-    code: 201,
-    success: true,
-    message: 'success',
-  });
-};
-
 export const updateMerchantProfile: RequestHandler<
   Request<{ Headers: ApiKeyHeader; Body: UpdateMerchantProfileBody }>
 > = async function updateMerchantProfile(_, res): Promise<void> {
   await Promise.resolve('hi');
 
-  res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
-    code: 200,
+  res.status(201).header('Content-Type', 'application/json; charset=utf-8').send({
+    code: 201,
     success: true,
     message: 'success',
   });

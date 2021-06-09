@@ -14,50 +14,52 @@ export const requestQuery = {
   getBanks: {
     type: 'object',
     properties: {
-      page: { $ref: '#PageQuery' },
-      search: { $ref: '#SearchQuery' },
+      orderDirection: { $ref: '#OrderDirectionQuery' },
       orderBy: {
         allOf: [{ $ref: '#OrderByQuery' }, { enum: ['created_at', 'bank_name'] }],
       },
-      orderDirection: { $ref: '#OrderDirectionQuery' },
+      search: { $ref: '#SearchQuery' },
+      page: { $ref: '#PageQuery' },
+      limit: { $ref: '#LimitQuery' },
     },
   },
   getCategories: {
     type: 'object',
     properties: {
-      page: { $ref: '#PageQuery' },
-      search: { $ref: '#SearchQuery' },
+      orderDirection: { $ref: '#OrderDirectionQuery' },
       orderBy: {
         allOf: [{ $ref: '#OrderByQuery' }, { enum: ['created_at', 'category', 'description'] }],
       },
-      orderDirection: { $ref: '#OrderDirectionQuery' },
+      search: { $ref: '#SearchQuery' },
+      page: { $ref: '#PageQuery' },
+      limit: { $ref: '#LimitQuery' },
     },
   },
   getMedias: {
     type: 'object',
     properties: {
-      page: { $ref: '#PageQuery' },
-      search: { $ref: '#SearchQuery' },
+      orderDirection: { $ref: '#OrderDirectionQuery' },
       orderBy: {
         allOf: [{ $ref: '#OrderByQuery' }, { enum: ['created_at', 'label'] }],
       },
-      orderDirection: { $ref: '#OrderDirectionQuery' },
+      search: { $ref: '#SearchQuery' },
+      page: { $ref: '#PageQuery' },
+      limit: { $ref: '#LimitQuery' },
     },
   },
   getWallets: {
     type: 'object',
     properties: {
-      page: { $ref: '#PageQuery' },
-      search: { $ref: '#SearchQuery' },
+      orderDirection: { $ref: '#OrderDirectionQuery' },
       orderBy: {
         allOf: [
           { $ref: '#OrderByQuery' },
-          {
-            enum: ['created_at', 'wallet_name', 'wallet_description'],
-          },
+          { enum: ['created_at', 'wallet_name', 'wallet_description'] },
         ],
       },
-      orderDirection: { $ref: '#OrderDirectionQuery' },
+      search: { $ref: '#SearchQuery' },
+      page: { $ref: '#PageQuery' },
+      limit: { $ref: '#LimitQuery' },
     },
   },
 };

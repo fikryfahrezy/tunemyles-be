@@ -14,17 +14,16 @@ export const requestQuery = {
   getTransaction: {
     type: 'object',
     properties: {
-      page: { $ref: '#PageQuery' },
-      search: { $ref: '#SearchQuery' },
+      orderDirection: { $ref: '#OrderDirectionQuery' },
       orderBy: {
         allOf: [
           { $ref: '#OrderByQuery' },
-          {
-            enum: ['created_at', 'full_name', 'phone_number', 'address'],
-          },
+          { enum: ['created_at', 'full_name', 'phone_number', 'address'] },
         ],
       },
-      orderDirection: { $ref: '#OrderDirectionQuery' },
+      search: { $ref: '#SearchQuery' },
+      page: { $ref: '#PageQuery' },
+      limit: { $ref: '#LimitQuery' },
       status: {
         allOf: [{ $ref: '#StatusQuery' }, { enum: ['0', '1', '2', '3'] }],
       },

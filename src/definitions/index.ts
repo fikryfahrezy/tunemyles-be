@@ -25,30 +25,35 @@ export default {
           id: { type: 'string' },
         },
       },
-      PageQuery: {
-        $id: '#PageQuery',
-        type: 'string',
-        default: '1',
-      },
-      SearchQuery: {
-        $id: '#SearchQuery',
-        type: 'string',
-        default: '',
-      },
-      OrderByQuery: {
-        $id: '#OrderByQuery',
-        type: 'string',
-        default: 'created_at',
-      },
       OrderDirectionQuery: {
         $id: '#OrderDirectionQuery',
         type: 'string',
         default: 'DESC',
         enum: ['ASC', 'DESC'],
       },
+      OrderByQuery: {
+        $id: '#OrderByQuery',
+        type: 'string',
+        default: 'created_at',
+      },
+      SearchQuery: {
+        $id: '#SearchQuery',
+        type: 'string',
+        default: '',
+      },
+      PageQuery: {
+        $id: '#PageQuery',
+        type: 'string',
+        default: '1',
+      },
       LimitQuery: {
         $id: '#LimitQuery',
         limit: { type: 'string', default: '10' },
+      },
+      StatusQuery: {
+        $id: '#StatusQuery',
+        type: 'string',
+        default: '0',
       },
       DateQuery: {
         $id: '#DateQuery',
@@ -57,11 +62,6 @@ export default {
       YearQuery: {
         $id: '#YearQuery',
         type: 'string',
-      },
-      StatusQuery: {
-        $id: '#StatusQuery',
-        type: 'string',
-        default: '0',
       },
       GetToken: {
         $id: '#GetToken',

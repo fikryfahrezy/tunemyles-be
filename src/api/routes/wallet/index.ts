@@ -236,7 +236,7 @@ const routes = function routes(
   fastify.patch<
     Request<{ Headers: ApiKeyHeader; Params: IdRequestParams; Body: UpdateTopUpStatusBody }>
   >(
-    '/wallets/topup/:id/status',
+    '/topup/:id/status',
     {
       attachValidation: true,
       schema: {
@@ -257,7 +257,7 @@ const routes = function routes(
   fastify.patch<
     Request<{ Headers: ApiKeyHeader; Params: IdRequestParams; Body: UpdateWithdrawStatusBody }>
   >(
-    '/wallets/withdraw/:id/status',
+    '/withdraw/:id/status',
     {
       attachValidation: true,
       schema: {

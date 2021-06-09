@@ -3,6 +3,7 @@ import type {
   ApiKeyHeader,
   VerifyTokenParams,
   RegisterBody,
+  ActivateMerchantBody,
   LoginBody,
   UpdateProfileBody,
   ForgotPasswordBody,
@@ -11,6 +12,7 @@ import type {
 import type CustModelType from '../../types/model';
 import {
   userRegistration,
+  merchantRegistration,
   userLogin,
   userProfile,
   updateUserProfile,
@@ -18,6 +20,7 @@ import {
   resetUserPassword,
   forgotUserPassword,
   makeUserAdmin,
+  bannedUser,
 } from './service';
 
 export const register: RequestHandler<Request<{ Body: RegisterBody }>> = async function register(
@@ -30,6 +33,26 @@ export const register: RequestHandler<Request<{ Body: RegisterBody }>> = async f
     code: 201,
     success: true,
     message: 'registration success',
+    data: resData,
+  });
+};
+
+export const activateMerchant: RequestHandler<
+  Request<{ Headers: ApiKeyHeader; Body: ActivateMerchantBody }>
+> = async function activateMerchant(req, res): Promise<void> {
+  const userToken = this.requestContext.get<CustModelType['UserToken']>('user');
+
+  if (!userToken) {
+    res.unauthorized();
+    return;
+  }
+
+  const resData = await merchantRegistration(req.body, userToken);
+
+  res.status(201).header('Content-Type', 'application/json; charset=utf-8').send({
+    code: 201,
+    success: true,
+    message: 'success',
     data: resData,
   });
 };
@@ -91,13 +114,13 @@ export const forgotPassword: RequestHandler<
 export const verifyToken: RequestHandler<
   Request<{ Params: VerifyTokenParams }>
 > = async function verifyToken(req, res): Promise<void> {
-  const resData = await verifyUserToken(req.params);
+  const token = await verifyUserToken(req.params);
 
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
     success: true,
     message: 'verified token success',
-    data: resData,
+    data: token,
   });
 };
 
@@ -117,13 +140,36 @@ export const createAdmin: RequestHandler<Request> = async function createAdmin(
   _,
   res,
 ): Promise<void> {
-  const { userId } = this.requestContext.get('user') as CustModelType['UserToken'];
-  const token = await makeUserAdmin(userId);
+  const userToken = this.requestContext.get<CustModelType['UserToken']>('user');
+
+  if (!userToken) {
+    res.unauthorized();
+    return;
+  }
+
+  const token = await makeUserAdmin(userToken.userId, userToken.utilId);
 
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
     success: true,
-    message: 'success make user as an admin',
+    message: 'success make the user as an admin',
     data: token,
+  });
+};
+
+export const banned: RequestHandler<Request> = async function banned(_, res): Promise<void> {
+  const userToken = this.requestContext.get<CustModelType['UserToken']>('user');
+
+  if (!userToken) {
+    res.unauthorized();
+    return;
+  }
+
+  await bannedUser(userToken.userId);
+
+  res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
+    code: 200,
+    success: true,
+    message: 'successful banning user',
   });
 };
