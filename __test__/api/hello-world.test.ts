@@ -1,31 +1,36 @@
+import type { Server } from 'http';
+import type { FastifyInstance } from 'fastify';
 import supertest from 'supertest';
+import app from '../../src/config/app';
 import sequelize from '../../src/databases/sequelize';
-import { setUpServer } from '../component';
 
-beforeAll(() => sequelize.authenticate());
+let server: Server = null;
+let appServer: FastifyInstance = null;
 
-afterAll(() => sequelize.close());
+beforeAll(async () => {
+  await sequelize.authenticate();
+  appServer = app();
+  await appServer.ready();
+  server = appServer.server;
+});
+
+afterAll(async () => {
+  await appServer.close();
+  await sequelize.close();
+});
 
 test('test server is live', async () => {
-  const { appServer, server } = await setUpServer();
-
   const { status, headers, body } = await supertest(server).get('/api/v2');
 
   expect(status).toBe(200);
   expect(headers['content-type']).toBe('application/json; charset=utf-8');
   expect(body.message).toBe('hello world');
-
-  appServer.close();
 });
 
 test('test not found route', async () => {
-  const { appServer, server } = await setUpServer();
-
   const { status, headers, body } = await supertest(server).get('/not-found');
 
   expect(status).toBe(404);
   expect(headers['content-type']).toBe('application/json; charset=utf-8');
   expect(body.message).toBe('not found');
-
-  appServer.close();
 });

@@ -1,7 +1,5 @@
 import type { Server } from 'http';
-import type { ReadStream } from 'fs';
-import supertest from 'supertest';
-import app from '../../src/config/app';
+import supertest, { Test } from 'supertest';
 import { userRegistration, userLogin } from '../../src/api/routes/account/service';
 import {
   getUser,
@@ -10,12 +8,16 @@ import {
   createMerchant,
 } from '../../src/api/repositories/UserRepository';
 
-export const setUpServer = async function setUpServer() {
-  const appServer = app();
-  await appServer.ready();
-  const server = appServer.server;
+type FilesType = { field: string; fileDir: string }[];
 
-  return { appServer, server };
+type SupertestReqType = {
+  server: Server;
+  type: 'GET' | 'POST' | 'PATCH' | 'DELETE';
+  url: string;
+  payload?:
+    | { obj: Record<string, unknown> }
+    | { fields: Record<string, string | number>; files: FilesType };
+  token?: string;
 };
 
 export const registerPayload = function registerPayload() {
@@ -51,6 +53,54 @@ export const updateProfilePayload = function updateProfilePayload() {
   };
 };
 
+const supertestReq = function supertestReq({
+  server,
+  type,
+  url,
+  payload,
+  token,
+}: SupertestReqType) {
+  const init = supertest(server);
+  let req: Test;
+
+  switch (type) {
+    case 'POST':
+      req = init.post(url);
+      break;
+    case 'PATCH':
+      req = init.patch(url);
+      break;
+    case 'DELETE':
+      req = init.delete(url);
+      break;
+    default:
+      req = init.get(url);
+  }
+
+  if (token) req.set('authorization', `Bearer ${token}`);
+
+  if (payload)
+    if ('obj' in payload) {
+      req.set('Content-Type', 'application/json');
+      req.send(payload.obj);
+    } else {
+      const { fields, files } = payload;
+
+      if (fields) {
+        Object.entries(fields).forEach(([key, value]) => {
+          if (Object.prototype.hasOwnProperty.call(fields, key)) req.field(key, value);
+        });
+      }
+
+      if (files)
+        files.forEach(({ field, fileDir }) => {
+          req.attach(field, fileDir);
+        });
+    }
+
+  return req;
+};
+
 export const register = function register(
   server: Server,
   payload: {
@@ -61,16 +111,17 @@ export const register = function register(
     address?: string;
   },
 ) {
-  return supertest(server)
-    .post('/api/v2/account/register')
-    .set('Content-Type', 'application/json')
-    .send(payload);
+  return supertestReq({
+    server,
+    type: 'POST',
+    url: '/api/v2/account/register',
+    payload: { obj: payload },
+  });
 };
 
 export const registerMerchant = function registerMerchant(
   server: Server,
   payload: {
-    token?: string;
     fields?: {
       no_identity?: string;
       market_name?: string;
@@ -79,93 +130,91 @@ export const registerMerchant = function registerMerchant(
       market_lon?: number;
       market_close_time?: string;
     };
-    files?: { field: string; file: ReadStream }[];
+    files?: FilesType;
   } = {},
+  token?: string,
 ) {
-  const { token, fields = registerMerchPayload(), files } = payload;
-  const req = supertest(server)
-    .post('/api/v2/account/merchant')
-    .set('authorization', `Bearer ${token}`)
-    .set('Content-Type', 'multipart/form-data');
+  const { fields = registerMerchPayload(), files } = payload;
 
-  if (fields) {
-    Object.entries(fields).forEach(([key, value]) => {
-      if (Object.prototype.hasOwnProperty.call(fields, key)) req.field(key, value);
-    });
-  }
-
-  if (files)
-    files.forEach(({ field, file }) => {
-      req.attach(field, file);
-    });
-
-  return req;
+  return supertestReq({
+    server,
+    type: 'POST',
+    url: '/api/v2/account/merchant',
+    payload: { fields, files },
+    token: token,
+  });
 };
 
 export const login = function login(
   server: Server,
   payload: { username?: string; password?: string },
 ) {
-  return supertest(server)
-    .post('/api/v2/account/login')
-    .set('Content-Type', 'application/json')
-    .send(payload);
+  return supertestReq({
+    server,
+    type: 'POST',
+    url: '/api/v2/account/login',
+    payload: { obj: payload },
+  });
 };
 
 export const getProfile = function getProfile(server: Server, token?: string) {
-  const req = supertest(server).get('/api/v2/account/me');
-
-  if (token) req.set('authorization', `Bearer ${token}`);
-
-  return req;
+  return supertestReq({
+    server,
+    token,
+    type: 'GET',
+    url: '/api/v2/account/me',
+  });
 };
 
 export const updateProfile = function updateProfile(
   server: Server,
   payload: {
-    token?: string;
     fields?: { full_name?: string; address?: string; phone_number?: string; password?: string };
-    files?: { field: string; file: ReadStream }[];
+    files?: FilesType;
   } = {},
+  token?: string,
 ) {
-  const { token, fields = updateProfilePayload(), files } = payload;
-  const req = supertest(server)
-    .patch('/api/v2/account/update-profile')
-    .set('authorization', `Bearer ${token}`)
-    .set('Content-Type', 'multipart/form-data');
+  const { fields = updateProfilePayload(), files } = payload;
 
-  if (fields) {
-    Object.entries(fields).forEach(([key, value]) => {
-      if (Object.prototype.hasOwnProperty.call(fields, key)) req.field(key, value);
-    });
-  }
-
-  if (files)
-    files.forEach(({ field, file }) => {
-      req.attach(field, file);
-    });
-
-  return req;
+  return supertestReq({
+    server,
+    type: 'PATCH',
+    url: '/api/v2/account/update-profile',
+    payload: { fields, files },
+    token: token,
+  });
 };
 
 export const forgotPassword = function forgotPassword(
   server: Server,
   payload: { phone_number?: string },
 ) {
-  return supertest(server).post('/api/v2/account/forgot-password').send(payload);
+  return supertestReq({
+    server,
+    type: 'POST',
+    url: '/api/v2/account/forgot-password',
+    payload: { obj: payload },
+  });
 };
 
 export const verifyForgotToken = function verifyForgotToken(server: Server, token?: string) {
-  const url = `/api/v2/account/verify-token/${token ? token : ''}`;
-
-  return supertest(server).patch(url);
+  return supertestReq({
+    server,
+    type: 'PATCH',
+    url: `/api/v2/account/verify-token/${token ? token : ''}`,
+  });
 };
 
 export const resetPassword = function forgotPassword(
   server: Server,
   payload: { token?: string; new_password?: string },
 ) {
-  return supertest(server).patch('/api/v2/account/reset-password').send(payload);
+  return supertestReq({
+    server,
+    type: 'PATCH',
+    url: '/api/v2/account/reset-password',
+    payload: { obj: payload },
+  });
 };
 
 export const registration = async function registration() {

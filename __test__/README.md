@@ -122,13 +122,13 @@
 
 **[JEST]** Fail, Wrong API Key
 
-- Status code should `422`
+- Status code should `403`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `false`
 
 **[JEST]** Fail, API Key Not Given
 
-- Status code should `422`
+- Status code should `403`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `false`
 
