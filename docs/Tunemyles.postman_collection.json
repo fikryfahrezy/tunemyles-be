@@ -621,11 +621,6 @@
               "mode": "formdata",
               "formdata": [
                 {
-                  "key": "no_identity",
-                  "value": "{{NO_IDENTITY}}",
-                  "type": "text"
-                },
-                {
                   "key": "identity_photo",
                   "type": "file",
                   "src": "Bliss.png"
@@ -634,6 +629,11 @@
                   "key": "market_photo",
                   "type": "file",
                   "src": "Bliss.png"
+                },
+                {
+                  "key": "no_identity",
+                  "value": "{{NO_IDENTITY}}",
+                  "type": "text"
                 },
                 {
                   "key": "market_name",
@@ -1580,7 +1580,7 @@
                       "    pm.environment.get('TOKEN'),\r",
                       "    '?orderDirection=DESC&orderBy=created_at&search=&page=&limit=',\r",
                       "), (_, response) => {\r",
-                      "    pm.test('Success, with Query `orderDirection=DESC&orderBy=created_at&search=&page=&limit=`', () => {\r",
+                      "    pm.test('Success, with Query `?orderDirection=DESC&orderBy=created_at&search=&page=&limit=`', () => {\r",
                       "        const { code, headers } = response;\r",
                       "\r",
                       "        pm.expect(code).to.eql(200);\r",
@@ -1593,7 +1593,7 @@
                       "    pm.environment.get('TOKEN'),\r",
                       "    '?orderDirection=DESC&orderBy=bank_name&search=&page=&limit=',\r",
                       "), (_, response) => {\r",
-                      "    pm.test('Success, with Query `orderDirection=DESC&orderBy=bank_name&search=&page=&limit=`', () => {\r",
+                      "    pm.test('Success, with Query `?orderDirection=DESC&orderBy=bank_name&search=&page=&limit=`', () => {\r",
                       "        const { code, headers } = response;\r",
                       "\r",
                       "        pm.expect(code).to.eql(200);\r",
@@ -1606,7 +1606,7 @@
                       "    pm.environment.get('TOKEN'),\r",
                       "    '?orderDirection=ASC&orderBy=created_at&search=&page=&limit=',\r",
                       "), (_, response) => {\r",
-                      "    pm.test('Success, with Query `orderDirection=ASC&orderBy=created_at&search=&page=&limit=`', () => {\r",
+                      "    pm.test('Success, with Query `?orderDirection=ASC&orderBy=created_at&search=&page=&limit=`', () => {\r",
                       "        const { code, headers } = response;\r",
                       "\r",
                       "        pm.expect(code).to.eql(200);\r",
@@ -1619,7 +1619,7 @@
                       "    pm.environment.get('TOKEN'),\r",
                       "    '?orderDirection=ASC&orderBy=bank_name&search=&page=&limit=',\r",
                       "), (_, response) => {\r",
-                      "    pm.test('Success, with Query `orderDirection=ASC&orderBy=bank_name&search=&page=&limit=`', () => {\r",
+                      "    pm.test('Success, with Query `?orderDirection=ASC&orderBy=bank_name&search=&page=&limit=`', () => {\r",
                       "        const { code, headers } = response;\r",
                       "\r",
                       "        pm.expect(code).to.eql(200);\r",
@@ -1632,7 +1632,7 @@
                       "    pm.environment.get('TOKEN'),\r",
                       "    '?orderDirection=DESCs&orderBy=created_at&search=&page=&limit=',\r",
                       "), (_, response) => {\r",
-                      "    pm.test('Fail, with Query `orderDirection=DESCs&orderBy=created_at&search=&page=&limit=`', () => {\r",
+                      "    pm.test('Fail, with Query `?orderDirection=DESCs&orderBy=created_at&search=&page=&limit=`', () => {\r",
                       "        const { code, headers } = response;\r",
                       "\r",
                       "        pm.expect(code).to.eql(422);\r",
@@ -1645,7 +1645,7 @@
                       "    pm.environment.get('TOKEN'),\r",
                       "    '?orderDirection=DESC&orderBy=created_ats&search=&page=&limit=',\r",
                       "), (_, response) => {\r",
-                      "    pm.test('Fail, with Query `orderDirection=DESC&orderBy=created_ats&search=&page=&limit=`', () => {\r",
+                      "    pm.test('Fail, with Query `?orderDirection=DESC&orderBy=created_ats&search=&page=&limit=`', () => {\r",
                       "        const { code, headers } = response;\r",
                       "\r",
                       "        pm.expect(code).to.eql(422);\r",
@@ -1897,20 +1897,6 @@
                       "    })\r",
                       "});\r",
                       "\r",
-                      "pm.sendRequest(makeRequest(\r",
-                      "    {},\r",
-                      "    pm.environment.get('TOKEN'),\r",
-                      "    pm.environment.get('BANK_ID'),\r",
-                      "), (_, response) => {\r",
-                      "    pm.test('Fail, Bank Not Found', () => {\r",
-                      "        const { code, headers } = response;\r",
-                      "\r",
-                      "        pm.expect(code).to.eql(404);\r",
-                      "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                      "        pm.expect(response.json().sjjuccess).to.eql(false);\r",
-                      "    })\r",
-                      "});\r",
-                      "\r",
                       "pm.sendRequest(makeRequest({}, 'this-is-wrong'), (_, response) => {\r",
                       "    pm.test('Fail, Wrong API Key', () => {\r",
                       "        const { code, headers } = response;\r",
@@ -1958,7 +1944,7 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\r\n    \"bank_name\": \"new bank name\",\r\n    \"is_visible\": 2\r\n}"
+                  "raw": "{\r\n    \"bank_name\": \"new bank name\",\r\n    \"visibility\": 2\r\n}"
                 },
                 "url": {
                   "raw": "{{URL}}/masters/banks/:id",
@@ -2674,7 +2660,7 @@
                       "    pm.environment.get('TOKEN'),\r",
                       "    '?limit=1',\r",
                       "), (_, response) => {\r",
-                      "    pm.test('Success, with Query `limit=1`', () => {\r",
+                      "    pm.test('Success, with Query `?limit=1`', () => {\r",
                       "        const { code, headers } = response;\r",
                       "        const body = response.json();\r",
                       "\r",
@@ -2689,7 +2675,7 @@
                       "    pm.environment.get('TOKEN'),\r",
                       "    '?orderDirection=DESC&orderBy=created_at&search=&page=&limit=',\r",
                       "), (_, response) => {\r",
-                      "    pm.test('Success, with Query `orderDirection=DESC&orderBy=created_at&search=&page=&limit=`', () => {\r",
+                      "    pm.test('Success, with Query `?orderDirection=DESC&orderBy=created_at&search=&page=&limit=`', () => {\r",
                       "        const { code, headers } = response;\r",
                       "\r",
                       "        pm.expect(code).to.eql(200);\r",
@@ -2702,7 +2688,7 @@
                       "    pm.environment.get('TOKEN'),\r",
                       "    '?orderDirection=DESC&orderBy=category&search=&page=&limit=',\r",
                       "), (_, response) => {\r",
-                      "    pm.test('Success, with Query `orderDirection=DESC&orderBy=category&search=&page=&limit=`', () => {\r",
+                      "    pm.test('Success, with Query `?orderDirection=DESC&orderBy=category&search=&page=&limit=`', () => {\r",
                       "        const { code, headers } = response;\r",
                       "\r",
                       "        pm.expect(code).to.eql(200);\r",
@@ -2715,7 +2701,7 @@
                       "    pm.environment.get('TOKEN'),\r",
                       "    '?orderDirection=DESC&orderBy=description&search=&page=&limit=',\r",
                       "), (_, response) => {\r",
-                      "    pm.test('Success, with Query `orderDirection=DESC&orderBy=description&search=&page=&limit=`', () => {\r",
+                      "    pm.test('Success, with Query `?orderDirection=DESC&orderBy=description&search=&page=&limit=`', () => {\r",
                       "        const { code, headers } = response;\r",
                       "\r",
                       "        pm.expect(code).to.eql(200);\r",
@@ -2728,7 +2714,7 @@
                       "    pm.environment.get('TOKEN'),\r",
                       "    '?orderDirection=ASC&orderBy=created_at&search=&page=&limit=',\r",
                       "), (_, response) => {\r",
-                      "    pm.test('Success, with Query `orderDirection=ASC&orderBy=created_at&search=&page=&limit=`', () => {\r",
+                      "    pm.test('Success, with Query `?orderDirection=ASC&orderBy=created_at&search=&page=&limit=`', () => {\r",
                       "        const { code, headers } = response;\r",
                       "\r",
                       "        pm.expect(code).to.eql(200);\r",
@@ -2741,7 +2727,7 @@
                       "    pm.environment.get('TOKEN'),\r",
                       "    '?orderDirection=ASC&orderBy=category&search=&page=&limit=',\r",
                       "), (_, response) => {\r",
-                      "    pm.test('Success, with Query `orderDirection=ASC&orderBy=category&search=&page=&limit=`', () => {\r",
+                      "    pm.test('Success, with Query `?orderDirection=ASC&orderBy=category&search=&page=&limit=`', () => {\r",
                       "        const { code, headers } = response;\r",
                       "\r",
                       "        pm.expect(code).to.eql(200);\r",
@@ -2754,7 +2740,7 @@
                       "    pm.environment.get('TOKEN'),\r",
                       "    '?orderDirection=ASC&orderBy=description&search=&page=&limit=',\r",
                       "), (_, response) => {\r",
-                      "    pm.test('Success, with Query `orderDirection=ASC&orderBy=created_at&search=&page=&limit=`', () => {\r",
+                      "    pm.test('Success, with Query `?orderDirection=ASC&orderBy=created_at&search=&page=&limit=`', () => {\r",
                       "        const { code, headers } = response;\r",
                       "\r",
                       "        pm.expect(code).to.eql(200);\r",
@@ -2767,7 +2753,7 @@
                       "    pm.environment.get('TOKEN'),\r",
                       "    '?orderDirection=DESCs&orderBy=created_at&search=&page=&limit=',\r",
                       "), (_, response) => {\r",
-                      "    pm.test('Fail, with Query `orderDirection=DESCs&orderBy=created_at&search=&page=&limit=`', () => {\r",
+                      "    pm.test('Fail, with Query `?orderDirection=DESCs&orderBy=created_at&search=&page=&limit=`', () => {\r",
                       "        const { code, headers } = response;\r",
                       "\r",
                       "        pm.expect(code).to.eql(422);\r",
@@ -2780,7 +2766,7 @@
                       "    pm.environment.get('TOKEN'),\r",
                       "    '?orderDirection=DESC&orderBy=created_ats&search=&page=&limit=',\r",
                       "), (_, response) => {\r",
-                      "    pm.test('Fail, with Query `orderDirection=DESC&orderBy=created_ats&search=&page=&limit=`', () => {\r",
+                      "    pm.test('Fail, with Query `?orderDirection=DESC&orderBy=created_ats&search=&page=&limit=`', () => {\r",
                       "        const { code, headers } = response;\r",
                       "\r",
                       "        pm.expect(code).to.eql(422);\r",
@@ -2930,20 +2916,6 @@
                       "    })\r",
                       "});\r",
                       "\r",
-                      "pm.sendRequest(makeRequest(\r",
-                      "    {},\r",
-                      "    pm.environment.get('TOKEN'),\r",
-                      "    pm.environment.get('CATEGORY_ID'),\r",
-                      "), (_, response) => {\r",
-                      "    pm.test('Success', () => {\r",
-                      "        const { code, headers } = response;\r",
-                      "\r",
-                      "        pm.expect(code).to.eql(200);\r",
-                      "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                      "        pm.expect(response.json().success).to.eql(true);\r",
-                      "    })\r",
-                      "});\r",
-                      "\r",
                       "pm.sendRequest(makeRequest({}, 'this-is-wrong'), (_, response) => {\r",
                       "    pm.test('Fail, Wrong API Key', () => {\r",
                       "        const { code, headers } = response;\r",
@@ -2953,7 +2925,6 @@
                       "        pm.expect(response.json().success).to.eql(false);\r",
                       "    });\r",
                       "});\r",
-                      "\r",
                       "\r",
                       "pm.sendRequest(makeRequest({}), (_, response) => {\r",
                       "    pm.test('Fail, API Key Not Given', () => {\r",
@@ -2992,7 +2963,7 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\r\n    \"category\": \"new category\",\r\n    \"slug\": \"new category slug\",\r\n    \"description\": \"new category description\",\r\n    \"is_visible\": 2\r\n}"
+                  "raw": "{\r\n    \"category\": \"new category\",\r\n    \"slug\": \"new category slug\",\r\n    \"description\": \"new category description\",\r\n    \"visibility\": 2\r\n}"
                 },
                 "url": {
                   "raw": "{{URL}}/masters/categories/:id",
@@ -3315,7 +3286,7 @@
                       "    pm.environment.get('TOKEN'),\r",
                       "    '?limit=1',\r",
                       "), (_, response) => {\r",
-                      "    pm.test('Success, with Query `limit=1`', () => {\r",
+                      "    pm.test('Success, with Query `?limit=1`', () => {\r",
                       "        const { code, headers } = response;\r",
                       "        const body = response.json();\r",
                       "\r",
@@ -3330,7 +3301,7 @@
                       "    pm.environment.get('TOKEN'),\r",
                       "    '?orderDirection=DESC&orderBy=created_at&search=&page=&limit=',\r",
                       "), (_, response) => {\r",
-                      "    pm.test('Success, with Query `orderDirection=DESC&orderBy=created_at&search=&page=&limit=`', () => {\r",
+                      "    pm.test('Success, with Query `?orderDirection=DESC&orderBy=created_at&search=&page=&limit=`', () => {\r",
                       "        const { code, headers } = response;\r",
                       "\r",
                       "        pm.expect(code).to.eql(200);\r",
@@ -3343,7 +3314,7 @@
                       "    pm.environment.get('TOKEN'),\r",
                       "    '?orderDirection=DESC&orderBy=label&search=&page=&limit=',\r",
                       "), (_, response) => {\r",
-                      "    pm.test('Success, with Query `orderDirection=DESC&orderBy=label&search=&page=&limit=`', () => {\r",
+                      "    pm.test('Success, with Query `?orderDirection=DESC&orderBy=label&search=&page=&limit=`', () => {\r",
                       "        const { code, headers } = response;\r",
                       "\r",
                       "        pm.expect(code).to.eql(200);\r",
@@ -3356,7 +3327,7 @@
                       "    pm.environment.get('TOKEN'),\r",
                       "    '?orderDirection=ASC&orderBy=created_at&search=&page=&limit=',\r",
                       "), (_, response) => {\r",
-                      "    pm.test('Success, with Query `orderDirection=ASC&orderBy=created_at&search=&page=&limit=`', () => {\r",
+                      "    pm.test('Success, with Query `?orderDirection=ASC&orderBy=created_at&search=&page=&limit=`', () => {\r",
                       "        const { code, headers } = response;\r",
                       "\r",
                       "        pm.expect(code).to.eql(200);\r",
@@ -3369,7 +3340,7 @@
                       "    pm.environment.get('TOKEN'),\r",
                       "    '?orderDirection=ASC&orderBy=label&search=&page=&limit=',\r",
                       "), (_, response) => {\r",
-                      "    pm.test('Success, with Query `orderDirection=ASC&orderBy=label&search=&page=&limit=`', () => {\r",
+                      "    pm.test('Success, with Query `?orderDirection=ASC&orderBy=label&search=&page=&limit=`', () => {\r",
                       "        const { code, headers } = response;\r",
                       "\r",
                       "        pm.expect(code).to.eql(200);\r",
@@ -3382,7 +3353,7 @@
                       "    pm.environment.get('TOKEN'),\r",
                       "    '?orderDirection=DESCs&orderBy=created_at&search=&page=&limit=',\r",
                       "), (_, response) => {\r",
-                      "    pm.test('Fail, with Query `orderDirection=DESCs&orderBy=created_at&search=&page=&limit=`', () => {\r",
+                      "    pm.test('Fail, with Query `?orderDirection=DESCs&orderBy=created_at&search=&page=&limit=`', () => {\r",
                       "        const { code, headers } = response;\r",
                       "\r",
                       "        pm.expect(code).to.eql(422);\r",
@@ -3395,7 +3366,7 @@
                       "    pm.environment.get('TOKEN'),\r",
                       "    '?orderDirection=DESC&orderBy=created_ats&search=&page=&limit=',\r",
                       "), (_, response) => {\r",
-                      "    pm.test('Fail, with Query `orderDirection=DESC&orderBy=created_ats&search=&page=&limit=`', () => {\r",
+                      "    pm.test('Fail, with Query `?orderDirection=DESC&orderBy=created_ats&search=&page=&limit=`', () => {\r",
                       "        const { code, headers } = response;\r",
                       "\r",
                       "        pm.expect(code).to.eql(422);\r",
@@ -3852,7 +3823,7 @@
                       "    pm.environment.get('TOKEN'),\r",
                       "    '?limit=1',\r",
                       "), (_, response) => {\r",
-                      "    pm.test('Success, with Query `limit=1`', () => {\r",
+                      "    pm.test('Success, with Query `?limit=1`', () => {\r",
                       "        const { code, headers } = response;\r",
                       "        const body = response.json();\r",
                       "\r",
@@ -3867,7 +3838,7 @@
                       "    pm.environment.get('TOKEN'),\r",
                       "    '?orderDirection=DESC&orderBy=created_at&search=&page=&limit=',\r",
                       "), (_, response) => {\r",
-                      "    pm.test('Success, with Query `orderDirection=DESC&orderBy=created_at&search=&page=&limit=`', () => {\r",
+                      "    pm.test('Success, with Query `?orderDirection=DESC&orderBy=created_at&search=&page=&limit=`', () => {\r",
                       "        const { code, headers } = response;\r",
                       "\r",
                       "        pm.expect(code).to.eql(200);\r",
@@ -3880,7 +3851,7 @@
                       "    pm.environment.get('TOKEN'),\r",
                       "    '?orderDirection=DESC&orderBy=wallet_name&search=&page=&limit=',\r",
                       "), (_, response) => {\r",
-                      "    pm.test('Success, with Query `orderDirection=DESC&orderBy=wallet_name&search=&page=&limit=`', () => {\r",
+                      "    pm.test('Success, with Query `?orderDirection=DESC&orderBy=wallet_name&search=&page=&limit=`', () => {\r",
                       "        const { code, headers } = response;\r",
                       "\r",
                       "        pm.expect(code).to.eql(200);\r",
@@ -3893,7 +3864,7 @@
                       "    pm.environment.get('TOKEN'),\r",
                       "    '?orderDirection=DESC&orderBy=wallet_description&search=&page=&limit=',\r",
                       "), (_, response) => {\r",
-                      "    pm.test('Success, with Query `orderDirection=DESC&orderBy=wallet_description&search=&page=&limit=`', () => {\r",
+                      "    pm.test('Success, with Query `?orderDirection=DESC&orderBy=wallet_description&search=&page=&limit=`', () => {\r",
                       "        const { code, headers } = response;\r",
                       "\r",
                       "        pm.expect(code).to.eql(200);\r",
@@ -3906,7 +3877,7 @@
                       "    pm.environment.get('TOKEN'),\r",
                       "    '?orderDirection=ASC&orderBy=created_at&search=&page=&limit=',\r",
                       "), (_, response) => {\r",
-                      "    pm.test('Success, with Query `orderDirection=ASC&orderBy=created_at&search=&page=&limit=`', () => {\r",
+                      "    pm.test('Success, with Query `?orderDirection=ASC&orderBy=created_at&search=&page=&limit=`', () => {\r",
                       "        const { code, headers } = response;\r",
                       "\r",
                       "        pm.expect(code).to.eql(200);\r",
@@ -3919,7 +3890,7 @@
                       "    pm.environment.get('TOKEN'),\r",
                       "    '?orderDirection=ASC&orderBy=wallet_name&search=&page=&limit=',\r",
                       "), (_, response) => {\r",
-                      "    pm.test('Success, with Query `orderDirection=ASC&orderBy=wallet_name&search=&page=&limit=`', () => {\r",
+                      "    pm.test('Success, with Query `?orderDirection=ASC&orderBy=wallet_name&search=&page=&limit=`', () => {\r",
                       "        const { code, headers } = response;\r",
                       "\r",
                       "        pm.expect(code).to.eql(200);\r",
@@ -3932,7 +3903,7 @@
                       "    pm.environment.get('TOKEN'),\r",
                       "    '?orderDirection=ASC&orderBy=wallet_description&search=&page=&limit=',\r",
                       "), (_, response) => {\r",
-                      "    pm.test('Success, with Query `orderDirection=ASC&orderBy=wallet_description&search=&page=&limit=`', () => {\r",
+                      "    pm.test('Success, with Query `?orderDirection=ASC&orderBy=wallet_description&search=&page=&limit=`', () => {\r",
                       "        const { code, headers } = response;\r",
                       "\r",
                       "        pm.expect(code).to.eql(200);\r",
@@ -3945,7 +3916,7 @@
                       "    pm.environment.get('TOKEN'),\r",
                       "    '?orderDirection=DESCs&orderBy=created_at&search=&page=&limit=',\r",
                       "), (_, response) => {\r",
-                      "    pm.test('Fail, with Query `orderDirection=DESCs&orderBy=created_at&search=&page=&limit=`', () => {\r",
+                      "    pm.test('Fail, with Query `?orderDirection=DESCs&orderBy=created_at&search=&page=&limit=`', () => {\r",
                       "        const { code, headers } = response;\r",
                       "\r",
                       "        pm.expect(code).to.eql(422);\r",
@@ -3958,7 +3929,7 @@
                       "    pm.environment.get('TOKEN'),\r",
                       "    '?orderDirection=DESC&orderBy=created_ats&search=&page=&limit=',\r",
                       "), (_, response) => {\r",
-                      "    pm.test('Fail, with Query `orderDirection=DESC&orderBy=created_ats&search=&page=&limit=`', () => {\r",
+                      "    pm.test('Fail, with Query `?orderDirection=DESC&orderBy=created_ats&search=&page=&limit=`', () => {\r",
                       "        const { code, headers } = response;\r",
                       "\r",
                       "        pm.expect(code).to.eql(422);\r",
@@ -4164,7 +4135,7 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\r\n    \"wallet_name\": \"new wallet name\",\r\n    \"wallet_description\": \"new wallet description\",\r\n    \"is_visible\": 2\r\n}"
+                  "raw": "{\r\n    \"wallet_name\": \"new wallet name\",\r\n    \"wallet_description\": \"new wallet description\",\r\n    \"visibility\": 2\r\n}"
                 },
                 "url": {
                   "raw": "{{URL}}/masters/wallets/:id",
@@ -4206,7 +4177,7 @@
                       "    });\r",
                       "};\r",
                       "\r",
-                      "pm.test('Change Wallet Logo Success', () => {\r",
+                      "pm.test('Success', () => {\r",
                       "    const { code, headers } = pm.response;\r",
                       "\r",
                       "    pm.expect(code).to.eql(200);\r",
@@ -4799,6 +4770,13 @@
                     ],
                     "type": "text/javascript"
                   }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": ["pm.environment.set(\"NO_IDENTITY\", Date.now());"],
+                    "type": "text/javascript"
+                  }
                 }
               ],
               "request": {
@@ -4823,8 +4801,13 @@
                       "src": "Bliss.png"
                     },
                     {
+                      "key": "identity_photo",
+                      "type": "file",
+                      "src": "Bliss.png"
+                    },
+                    {
                       "key": "no_identity",
-                      "value": "34212421414",
+                      "value": "{{NO_IDENTITY}}",
                       "type": "text"
                     },
                     {
@@ -4845,6 +4828,11 @@
                     {
                       "key": "market_lon",
                       "value": "122.31",
+                      "type": "text"
+                    },
+                    {
+                      "key": "market_close_time",
+                      "value": "21:00",
                       "type": "text"
                     }
                   ]
@@ -5117,6 +5105,11 @@
                   "mode": "formdata",
                   "formdata": [
                     {
+                      "key": "cover",
+                      "type": "file",
+                      "src": "Bliss.png"
+                    },
+                    {
                       "key": "product_name",
                       "value": "name",
                       "type": "text"
@@ -5125,11 +5118,6 @@
                       "key": "description",
                       "value": "description",
                       "type": "text"
-                    },
-                    {
-                      "key": "cover",
-                      "type": "file",
-                      "src": "Bliss.png"
                     },
                     {
                       "key": "price_default",
@@ -5152,7 +5140,7 @@
                       "type": "text"
                     },
                     {
-                      "key": "is_visible",
+                      "key": "status",
                       "value": "1",
                       "type": "text"
                     }
@@ -5533,7 +5521,7 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\r\n    \"product_name\": \"new name\",\r\n    \"description\": \"new descs\",\r\n    \"price_default\": 2,\r\n    \"price_selling\": 2,\r\n    \"qty\": 2,\r\n    \"discount\": 2,\r\n    \"is_visible\": 2\r\n}",
+                  "raw": "{\r\n    \"product_name\": \"new name\",\r\n    \"description\": \"new descs\",\r\n    \"price_default\": 2,\r\n    \"price_selling\": 2,\r\n    \"qty\": 2,\r\n    \"discount\": 2,\r\n    \"status\": 2\r\n}",
                   "options": {
                     "raw": {
                       "language": "json"

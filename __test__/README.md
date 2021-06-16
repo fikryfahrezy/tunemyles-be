@@ -382,44 +382,44 @@
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `limit=1`
+**[POSTMAN] [JEST]** Success, with Query `?limit=1`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 - Property `data` on the body should have a `length of 1`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=DESC&orderBy=created_at&search=&page=&limit=`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=DESC&orderBy=created_at&search=&page=&limit=`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=DESC&orderBy=bank_name&search=&page=&limit=`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=DESC&orderBy=bank_name&search=&page=&limit=`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=ASC&orderBy=created_at&search=&page=&limit=`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=ASC&orderBy=created_at&search=&page=&limit=`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=ASC&orderBy=bank_name&search=&page=&limit=`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=ASC&orderBy=bank_name&search=&page=&limit=`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Fail, with Query `orderDirection=DESCs&orderBy=created_at&search=&page=&limit=`
+**[POSTMAN] [JEST]** Fail, with Query `?orderDirection=DESCs&orderBy=created_at&search=&page=&limit=`
 
 - Status code should `422`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `false`
 
-**[POSTMAN] [JEST]** Fail, with Query `orderDirection=DESC&orderBy=created_ats&search=&page=&limit=`
+**[POSTMAN] [JEST]** Fail, with Query `?orderDirection=DESC&orderBy=created_ats&search=&page=&limit=`
 
 - Status code should `422`
 - Header `Content-Type` should `application/json; charset=utf-8`
@@ -500,12 +500,6 @@
 **[POSTMAN] [JEST]** Fail, Master Bank Not Found
 
 - Status code should `404`
-- Header `Content-Type` should `application/json; charset=utf-8`
-- Body should object with `success` property `false`
-
-**[POSTMAN] [JEST]** Fail, No Data Provided
-
-- Status code should `422`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `false`
 
@@ -655,56 +649,56 @@
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `limit=1`
+**[POSTMAN] [JEST]** Success, with Query `?limit=1`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 - Property `data` on the body should have a `length of 1`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=DESC&orderBy=created_at&search=&page=&limit=`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=DESC&orderBy=created_at&search=&page=&limit=`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=DESC&orderBy=category&search=&page=&limit=`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=DESC&orderBy=category&search=&page=&limit=`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=DESC&orderBy=description&search=&page=&limit=`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=DESC&orderBy=description&search=&page=&limit=`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=ASC&orderBy=created_at&search=&page=&limit=`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=ASC&orderBy=created_at&search=&page=&limit=`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=ASC&orderBy=category&search=&page=&limit=`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=ASC&orderBy=category&search=&page=&limit=`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=ASC&orderBy=description&search=&page=&limit=`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=ASC&orderBy=description&search=&page=&limit=`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Fail, with Query `orderDirection=DESCs&orderBy=created_at&search=&page=&limit=`
+**[POSTMAN] [JEST]** Fail, with Query `?orderDirection=DESCs&orderBy=created_at&search=&page=&limit=`
 
 - Status code should `422`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `false`
 
-**[POSTMAN] [JEST]** Fail, with Query `orderDirection=DESC&orderBy=created_ats&search=&page=&limit=`
+**[POSTMAN] [JEST]** Fail, with Query `?orderDirection=DESC&orderBy=created_ats&search=&page=&limit=`
 
 - Status code should `422`
 - Header `Content-Type` should `application/json; charset=utf-8`
@@ -812,44 +806,44 @@
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `limit=1`
+**[POSTMAN] [JEST]** Success, with Query `?limit=1`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 - Property `data` on the body should have a `length of 1`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=DESC&orderBy=created_at&search=&page=&limit=`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=DESC&orderBy=created_at&search=&page=&limit=`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=DESC&orderBy=label&search=&page=&limit=`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=DESC&orderBy=label&search=&page=&limit=`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=ASC&orderBy=created_at&search=&page=&limit=`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=ASC&orderBy=created_at&search=&page=&limit=`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=ASC&orderBy=label&search=&page=&limit=`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=ASC&orderBy=label&search=&page=&limit=`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Fail, with Query `orderDirection=DESCs&orderBy=created_at&search=&page=&limit=`
+**[POSTMAN] [JEST]** Fail, with Query `?orderDirection=DESCs&orderBy=created_at&search=&page=&limit=`
 
 - Status code should `422`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `false`
 
-**[POSTMAN] [JEST]** Fail, with Query `orderDirection=DESC&orderBy=created_ats&search=&page=&limit=`
+**[POSTMAN] [JEST]** Fail, with Query `?orderDirection=DESC&orderBy=created_ats&search=&page=&limit=`
 
 - Status code should `422`
 - Header `Content-Type` should `application/json; charset=utf-8`
@@ -949,56 +943,56 @@
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `limit=1`
+**[POSTMAN] [JEST]** Success, with Query `?limit=1`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 - Property `data` on the body should have a `length of 1`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=DESC&orderBy=created_at&search=&page=&limit=`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=DESC&orderBy=created_at&search=&page=&limit=`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=DESC&orderBy=wallet_name&search=&page=&limit=`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=DESC&orderBy=wallet_name&search=&page=&limit=`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=DESC&orderBy=wallet_description&search=&page=&limit=`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=DESC&orderBy=wallet_description&search=&page=&limit=`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=ASC&orderBy=created_at&search=&page=&limit=`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=ASC&orderBy=created_at&search=&page=&limit=`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=ASC&orderBy=wallet_name&search=&page=&limit=`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=ASC&orderBy=wallet_name&search=&page=&limit=`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=ASC&orderBy=wallet_description&search=&page=&limit=`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=ASC&orderBy=wallet_description&search=&page=&limit=`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Fail, with Query `orderDirection=DESCs&orderBy=created_at&search=&page=&limit=`
+**[POSTMAN] [JEST]** Fail, with Query `?orderDirection=DESCs&orderBy=created_at&search=&page=&limit=`
 
 - Status code should `422`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `false`
 
-**[POSTMAN] [JEST]** Fail, with Query `orderDirection=DESC&orderBy=created_at&search=&page=&limit=`
+**[POSTMAN] [JEST]** Fail, with Query `?orderDirection=DESC&orderBy=created_at&search=&page=&limit=`
 
 - Status code should `422`
 - Header `Content-Type` should `application/json; charset=utf-8`
@@ -1266,68 +1260,68 @@
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `limit=1`
+**[POSTMAN] [JEST]** Success, with Query `?limit=1`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 - Property `data` on the body should have a `length of 1`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=DESC&orderBy=created_at&search=&page=&limit=`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=DESC&orderBy=created_at&search=&page=&limit=`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=DESC&orderBy=product_name&search=&page=&limit=`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=DESC&orderBy=product_name&search=&page=&limit=`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=DESC&orderBy=market_name&search=&page=&limit=`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=DESC&orderBy=market_name&search=&page=&limit=`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=DESC&orderBy=market_address&search=&page=&limit=`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=DESC&orderBy=market_address&search=&page=&limit=`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=ASC&orderBy=created_at&search=&page=&limit=`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=ASC&orderBy=created_at&search=&page=&limit=`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=ASC&orderBy=product_name&search=&page=&limit=`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=ASC&orderBy=product_name&search=&page=&limit=`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=ASC&orderBy=market_name&search=&page=&limit=`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=ASC&orderBy=market_name&search=&page=&limit=`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=ASC&orderBy=market_address&search=&page=&limit=`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=ASC&orderBy=market_address&search=&page=&limit=`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Fail, with Query `orderDirection=DESCs&orderBy=created_at&search=&page=&limit=`
+**[POSTMAN] [JEST]** Fail, with Query `?orderDirection=DESCs&orderBy=created_at&search=&page=&limit=`
 
 - Status code should `422`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `false`
 
-**[POSTMAN] [JEST]** Fail, with Query `orderDirection=DESC&orderBy=created_ats&search=&page=&limit=`
+**[POSTMAN] [JEST]** Fail, with Query `?orderDirection=DESC&orderBy=created_ats&search=&page=&limit=`
 
 - Status code should `422`
 - Header `Content-Type` should `application/json; charset=utf-8`
@@ -1589,68 +1583,68 @@
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `limit=1`
+**[POSTMAN] [JEST]** Success, with Query `?limit=1`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 - Property `data` on the body should have a `length of 1`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=DESC&orderBy=created_at&search=&page=&limit=&status=0`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=DESC&orderBy=created_at&search=&page=&limit=&status=0`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=DESC&orderBy=full_name&search=&page=&limit=&status=0`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=DESC&orderBy=full_name&search=&page=&limit=&status=0`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=DESC&orderBy=phone_number&search=&page=&limit=&status=0`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=DESC&orderBy=phone_number&search=&page=&limit=&status=0`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=DESC&orderBy=address&search=&page=&limit=&status=0`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=DESC&orderBy=address&search=&page=&limit=&status=0`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=ASC&orderBy=created_at&search=&page=&limit=&status=0`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=ASC&orderBy=created_at&search=&page=&limit=&status=0`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=ASC&orderBy=full_name&search=&page=&limit=&status=0`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=ASC&orderBy=full_name&search=&page=&limit=&status=0`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=ASC&orderBy=phone_number&search=&page=&limit=&status=0`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=ASC&orderBy=phone_number&search=&page=&limit=&status=0`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=ASC&orderBy=address&search=&page=&limit=&status=0`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=ASC&orderBy=address&search=&page=&limit=&status=0`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Fail, with Query `orderDirection=DESCs&orderBy=created_at&search=&page=&limit=`
+**[POSTMAN] [JEST]** Fail, with Query `?orderDirection=DESCs&orderBy=created_at&search=&page=&limit=`
 
 - Status code should `422`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `false`
 
-**[POSTMAN] [JEST]** Fail, with Query `orderDirection=DESC&orderBy=created_ats&search=&page=&limit=`
+**[POSTMAN] [JEST]** Fail, with Query `?orderDirection=DESC&orderBy=created_ats&search=&page=&limit=`
 
 - Status code should `422`
 - Header `Content-Type` should `application/json; charset=utf-8`
@@ -1736,80 +1730,80 @@
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `limit=1`
+**[POSTMAN] [JEST]** Success, with Query `?limit=1`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 - Property `data` on the body should have a `length of 1`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=DESC&orderBy=created_at&search=&page=&limit=`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=DESC&orderBy=created_at&search=&page=&limit=`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=DESC&orderBy=full_name&search=&page=&limit=`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=DESC&orderBy=full_name&search=&page=&limit=`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=DESC&orderBy=phone_number&search=&page=&limit=`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=DESC&orderBy=phone_number&search=&page=&limit=`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=DESC&orderBy=market_name&search=&page=&limit=`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=DESC&orderBy=market_name&search=&page=&limit=`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=DESC&orderBy=market_address&search=&page=&limit=`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=DESC&orderBy=market_address&search=&page=&limit=`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=ASC&orderBy=created_at&search=&page=&limit=`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=ASC&orderBy=created_at&search=&page=&limit=`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=ASC&orderBy=full_name&search=&page=&limit=`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=ASC&orderBy=full_name&search=&page=&limit=`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=ASC&orderBy=phone_number&search=&page=&limit=`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=ASC&orderBy=phone_number&search=&page=&limit=`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=ASC&orderBy=market_name&search=&page=&limit=`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=ASC&orderBy=market_name&search=&page=&limit=`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=ASC&orderBy=market_address&search=&page=&limit=`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=ASC&orderBy=market_address&search=&page=&limit=`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Fail, with Query `orderDirection=DESCs&orderBy=created_at&search=&page=&limit=`
+**[POSTMAN] [JEST]** Fail, with Query `?orderDirection=DESCs&orderBy=created_at&search=&page=&limit=`
 
 - Status code should `422`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `false`
 
-**[POSTMAN] [JEST]** Fail, with Query `orderDirection=DESC&orderBy=created_ats&search=&page=&limit=`
+**[POSTMAN] [JEST]** Fail, with Query `?orderDirection=DESC&orderBy=created_ats&search=&page=&limit=`
 
 - Status code should `422`
 - Header `Content-Type` should `application/json; charset=utf-8`
@@ -1861,7 +1855,7 @@
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `limit=1`
+**[POSTMAN] [JEST]** Success, with Query `?limit=1`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
@@ -1889,7 +1883,7 @@
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `date=2021-2-3`
+**[POSTMAN] [JEST]** Success, with Query `?date=2021-2-3`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
@@ -1915,7 +1909,7 @@
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `year=2021`
+**[POSTMAN] [JEST]** Success, with Query `?year=2021`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
@@ -1945,68 +1939,68 @@
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `limit=1`
+**[POSTMAN] [JEST]** Success, with Query `?limit=1`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 - Property `data` on the body should have a `length of 1`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=DESC&orderBy=created_at&search=&page=&limit=`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=DESC&orderBy=created_at&search=&page=&limit=`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=DESC&orderBy=product_name&search=&page=&limit=`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=DESC&orderBy=product_name&search=&page=&limit=`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=DESC&orderBy=market_name&search=&page=&limit=`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=DESC&orderBy=market_name&search=&page=&limit=`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=DESC&orderBy=market_address&search=&page=&limit=`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=DESC&orderBy=market_address&search=&page=&limit=`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=ASC&orderBy=created_at&search=&page=&limit=`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=ASC&orderBy=created_at&search=&page=&limit=`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=ASC&orderBy=product_name&search=&page=&limit=`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=ASC&orderBy=product_name&search=&page=&limit=`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=ASC&orderBy=market_name&search=&page=&limit=`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=ASC&orderBy=market_name&search=&page=&limit=`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=ASC&orderBy=market_address&search=&page=&limit=`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=ASC&orderBy=market_address&search=&page=&limit=`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Fail, with Query `orderDirection=DESCs&orderBy=created_at&search=&page=&limit=`
+**[POSTMAN] [JEST]** Fail, with Query `?orderDirection=DESCs&orderBy=created_at&search=&page=&limit=`
 
 - Status code should `422`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `false`
 
-**[POSTMAN] [JEST]** Fail, with Query `orderDirection=DESC&orderBy=created_ats&search=&page=&limit=`
+**[POSTMAN] [JEST]** Fail, with Query `?orderDirection=DESC&orderBy=created_ats&search=&page=&limit=`
 
 - Status code should `422`
 - Header `Content-Type` should `application/json; charset=utf-8`
@@ -2020,7 +2014,7 @@
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `limit=1`
+**[POSTMAN] [JEST]** Success, with Query `?limit=1`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
@@ -2034,61 +2028,61 @@
 - Body should object with `success` property `true`
 - Property `data` on the body should have a `length of 0`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=DESC&orderBy=created_at&search=&page=&limit=`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=DESC&orderBy=created_at&search=&page=&limit=`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=DESC&orderBy=product_name&search=&page=&limit=`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=DESC&orderBy=product_name&search=&page=&limit=`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=DESC&orderBy=market_name&search=&page=&limit=`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=DESC&orderBy=market_name&search=&page=&limit=`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=DESC&orderBy=market_address&search=&page=&limit=`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=DESC&orderBy=market_address&search=&page=&limit=`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=ASC&orderBy=created_at&search=&page=&limit=`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=ASC&orderBy=created_at&search=&page=&limit=`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=ASC&orderBy=product_name&search=&page=&limit=`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=ASC&orderBy=product_name&search=&page=&limit=`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=ASC&orderBy=market_name&search=&page=&limit=`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=ASC&orderBy=market_name&search=&page=&limit=`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=ASC&orderBy=market_address&search=&page=&limit=`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=ASC&orderBy=market_address&search=&page=&limit=`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Fail, with Query `orderDirection=DESCs&orderBy=created_at&search=&page=&limit=`
+**[POSTMAN] [JEST]** Fail, with Query `?orderDirection=DESCs&orderBy=created_at&search=&page=&limit=`
 
 - Status code should `422`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `false`
 
-**[POSTMAN] [JEST]** Fail, with Query `orderDirection=DESC&orderBy=created_ats&search=&page=&limit=`
+**[POSTMAN] [JEST]** Fail, with Query `?orderDirection=DESC&orderBy=created_ats&search=&page=&limit=`
 
 - Status code should `422`
 - Header `Content-Type` should `application/json; charset=utf-8`
@@ -2234,68 +2228,68 @@
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `limit=1`
+**[POSTMAN] [JEST]** Success, with Query `?limit=1`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 - Property `data` on the body should have a `length of 1`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=DESC&orderBy=created_at&search=&page=&limit=&status=0`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=DESC&orderBy=created_at&search=&page=&limit=&status=0`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=DESC&orderBy=full_name&search=&page=&limit=&status=0`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=DESC&orderBy=full_name&search=&page=&limit=&status=0`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=DESC&orderBy=phone_number&search=&page=&limit=&status=0`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=DESC&orderBy=phone_number&search=&page=&limit=&status=0`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=DESC&orderBy=address&search=&page=&limit=&status=0`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=DESC&orderBy=address&search=&page=&limit=&status=0`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=ASC&orderBy=created_at&search=&page=&limit=&status=0`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=ASC&orderBy=created_at&search=&page=&limit=&status=0`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=ASC&orderBy=full_name&search=&page=&limit=&status=0`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=ASC&orderBy=full_name&search=&page=&limit=&status=0`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=ASC&orderBy=phone_number&search=&page=&limit=&status=0`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=ASC&orderBy=phone_number&search=&page=&limit=&status=0`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=ASC&orderBy=address&search=&page=&limit=&status=0`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=ASC&orderBy=address&search=&page=&limit=&status=0`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Fail, with Query `orderDirection=DESCs&orderBy=created_at&search=&page=&limit=`
+**[POSTMAN] [JEST]** Fail, with Query `?orderDirection=DESCs&orderBy=created_at&search=&page=&limit=`
 
 - Status code should `422`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `false`
 
-**[POSTMAN] [JEST]** Fail, with Query `orderDirection=DESC&orderBy=created_ats&search=&page=&limit=`
+**[POSTMAN] [JEST]** Fail, with Query `?orderDirection=DESC&orderBy=created_ats&search=&page=&limit=`
 
 - Status code should `422`
 - Header `Content-Type` should `application/json; charset=utf-8`
@@ -2641,56 +2635,56 @@
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `limit=1`
+**[POSTMAN] [JEST]** Success, with Query `?limit=1`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 - Property `data` on the body should have a `length of 1`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=DESC&orderBy=created_at&search=&page=&limit=&status=0`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=DESC&orderBy=created_at&search=&page=&limit=&status=0`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=DESC&orderBy=balance_request&search=&page=&limit=&status=0`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=DESC&orderBy=balance_request&search=&page=&limit=&status=0`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=DESC&orderBy=balance_transfer&search=&page=&limit=&status=0`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=DESC&orderBy=balance_transfer&search=&page=&limit=&status=0`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=ASC&orderBy=created_at&search=&page=&limit=&status=0`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=ASC&orderBy=created_at&search=&page=&limit=&status=0`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=ASC&orderBy=balance_request&search=&page=&limit=&status=0`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=ASC&orderBy=balance_request&search=&page=&limit=&status=0`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=ASC&orderBy=balance_transfer&search=&page=&limit=&status=0`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=ASC&orderBy=balance_transfer&search=&page=&limit=&status=0`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Fail, with Query `orderDirection=DESCs&orderBy=created_at&search=&page=&limit=`
+**[POSTMAN] [JEST]** Fail, with Query `?orderDirection=DESCs&orderBy=created_at&search=&page=&limit=`
 
 - Status code should `422`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `false`
 
-**[POSTMAN] [JEST]** Fail, with Query `orderDirection=DESC&orderBy=created_ats&search=&page=&limit=`
+**[POSTMAN] [JEST]** Fail, with Query `?orderDirection=DESC&orderBy=created_ats&search=&page=&limit=`
 
 - Status code should `422`
 - Header `Content-Type` should `application/json; charset=utf-8`
@@ -2716,44 +2710,44 @@
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `limit=1`
+**[POSTMAN] [JEST]** Success, with Query `?limit=1`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 - Property `data` on the body should have a `length of 1`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=DESC&orderBy=created_at&search=&page=&limit=&status=0`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=DESC&orderBy=created_at&search=&page=&limit=&status=0`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=DESC&orderBy=balance_request&search=&page=&limit=&status=0`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=DESC&orderBy=balance_request&search=&page=&limit=&status=0`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=ASC&orderBy=created_at&search=&page=&limit=&status=0`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=ASC&orderBy=created_at&search=&page=&limit=&status=0`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=ASC&orderBy=balance_request&search=&page=&limit=&status=0`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=ASC&orderBy=balance_request&search=&page=&limit=&status=0`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Fail, with Query `orderDirection=DESCs&orderBy=created_at&search=&page=&limit=`
+**[POSTMAN] [JEST]** Fail, with Query `?orderDirection=DESCs&orderBy=created_at&search=&page=&limit=`
 
 - Status code should `422`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `false`
 
-**[POSTMAN] [JEST]** Fail, with Query `orderDirection=DESC&orderBy=created_ats&search=&page=&limit=`
+**[POSTMAN] [JEST]** Fail, with Query `?orderDirection=DESC&orderBy=created_ats&search=&page=&limit=`
 
 - Status code should `422`
 - Header `Content-Type` should `application/json; charset=utf-8`
@@ -2831,56 +2825,56 @@
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `limit=1`
+**[POSTMAN] [JEST]** Success, with Query `?limit=1`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 - Property `data` on the body should have a `length of 1`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=DESC&orderBy=created_at&search=&page=&limit=&status=0`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=DESC&orderBy=created_at&search=&page=&limit=&status=0`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=DESC&orderBy=balance_request&search=&page=&limit=&status=0`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=DESC&orderBy=balance_request&search=&page=&limit=&status=0`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=DESC&orderBy=balance_transfer&search=&page=&limit=&status=0`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=DESC&orderBy=balance_transfer&search=&page=&limit=&status=0`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=ASC&orderBy=created_at&search=&page=&limit=&status=0`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=ASC&orderBy=created_at&search=&page=&limit=&status=0`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=ASC&orderBy=balance_request&search=&page=&limit=&status=0`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=ASC&orderBy=balance_request&search=&page=&limit=&status=0`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=ASC&orderBy=balance_transfer&search=&page=&limit=&status=0`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=ASC&orderBy=balance_transfer&search=&page=&limit=&status=0`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Fail, with Query `orderDirection=DESCs&orderBy=created_at&search=&page=&limit=`
+**[POSTMAN] [JEST]** Fail, with Query `?orderDirection=DESCs&orderBy=created_at&search=&page=&limit=`
 
 - Status code should `422`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `false`
 
-**[POSTMAN] [JEST]** Fail, with Query `orderDirection=DESC&orderBy=created_ats&search=&page=&limit=`
+**[POSTMAN] [JEST]** Fail, with Query `?orderDirection=DESC&orderBy=created_ats&search=&page=&limit=`
 
 - Status code should `422`
 - Header `Content-Type` should `application/json; charset=utf-8`
@@ -2894,44 +2888,44 @@
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `limit=1`
+**[POSTMAN] [JEST]** Success, with Query `?limit=1`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 - Property `data` on the body should have a `length of 1`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=DESC&orderBy=created_at&search=&page=&limit=&status=0`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=DESC&orderBy=created_at&search=&page=&limit=&status=0`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=DESC&orderBy=balance_request&search=&page=&limit=&status=0`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=DESC&orderBy=balance_request&search=&page=&limit=&status=0`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=ASC&orderBy=created_at&search=&page=&limit=&status=0`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=ASC&orderBy=created_at&search=&page=&limit=&status=0`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Success, with Query `orderDirection=ASC&orderBy=balance_request&search=&page=&limit=&status=0`
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=ASC&orderBy=balance_request&search=&page=&limit=&status=0`
 
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Fail, with Query `orderDirection=DESCs&orderBy=created_at&search=&page=&limit=`
+**[POSTMAN] [JEST]** Fail, with Query `?orderDirection=DESCs&orderBy=created_at&search=&page=&limit=`
 
 - Status code should `422`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `false`
 
-**[POSTMAN] [JEST]** Fail, with Query `orderDirection=DESC&orderBy=created_ats&search=&page=&limit=`
+**[POSTMAN] [JEST]** Fail, with Query `?orderDirection=DESC&orderBy=created_ats&search=&page=&limit=`
 
 - Status code should `422`
 - Header `Content-Type` should `application/json; charset=utf-8`

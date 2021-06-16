@@ -51,11 +51,7 @@ export type LoginBody = {
   password: string;
 };
 
-export type UpdateProfileBody = {
-  full_name?: string;
-  address?: string;
-  phone_number?: string;
-  password?: string;
+export type UpdateProfileBody = Partial<Omit<RegisterBody, 'username'>> & {
   avatar?: AddedFileBody[];
 };
 
@@ -75,7 +71,7 @@ export type PostBankBody = {
 
 export type UpdateBankBody = {
   bank_name?: string;
-  status?: number;
+  visiblity?: number;
 };
 
 export type UpdateBankLogoBody = {
@@ -98,10 +94,7 @@ export type PostCategoryBody = {
   description: string;
 };
 
-export type UpdateCategoryBody = {
-  category?: string;
-  slug?: string;
-  description?: string;
+export type UpdateCategoryBody = Partial<Omit<PostCategoryBody, 'icon'>> & {
   visibility?: number;
 };
 
@@ -115,30 +108,23 @@ export type PostWalletBody = {
   wallet_description: string;
 };
 
-export type UpdateWalletBody = {
-  wallet_name?: string;
-  wallet_description?: string;
+export type UpdateWalletBody = Partial<Omit<PostWalletBody, 'logo'>> & {
   visbility?: number;
 };
 
-export type UpdateWalletLogoBody = {
-  logo: AddedFileBody[];
-};
+export type UpdateWalletLogoBody = Required<Pick<PostWalletBody, 'logo'>>;
 
 export type PostFaqBody = {
   question: string;
   answer: string;
 };
 
-export type UpdateFaqBody = {
-  question?: string;
-  answer?: string;
-};
+export type UpdateFaqBody = Partial<PostFaqBody>;
 
 export type ActivateMerchantBody = {
-  no_identity: string;
   identity_photo: AddedFileBody[];
   market_photo: AddedFileBody[];
+  no_identity: string;
   market_name: string;
   market_address: string;
   market_lat: number;
@@ -146,43 +132,26 @@ export type ActivateMerchantBody = {
   market_close_time: string;
 };
 
-export type UpdateMerchantProfileBody = {
-  market_photo?: AddedFileBody[];
-  no_identity?: string;
-  market_name?: string;
-  market_address?: number;
-  market_lat?: number;
-  market_lon?: number;
-};
+export type UpdateMerchantProfileBody = Partial<ActivateMerchantBody>;
 
 export type UpdateMerchantClosetimeBody = {
   close_time: string;
 };
 
 export type PostProductBody = {
+  cover?: AddedFileBody[];
   product_name: string;
   description: string;
-  cover?: AddedFileBody[];
   price_default: number;
   price_selling: number;
   qty: number;
   discount: number;
-  is_visible?: number;
+  status?: number;
 };
 
-export type UpdateProductBody = {
-  product_name?: string;
-  description?: string;
-  price_default?: number;
-  price_selling?: number;
-  qty?: number;
-  discount?: number;
-  is_visible?: number;
-};
+export type UpdateProductBody = Partial<Omit<PostProductBody, 'cover'>>;
 
-export type UpdateProductCoverBody = {
-  cover: AddedFileBody[];
-};
+export type UpdateProductCoverBody = Required<Pick<PostProductBody, 'cover'>>;
 
 export type UpdateProductStatusBody = {
   status: number;
@@ -242,10 +211,8 @@ export type PostBankUserBody = {
   account_name: string;
 };
 
-export type UpdateBankUserBody = {
+export type UpdateBankUserBody = Partial<PostBankBody> & {
   bank_id: number;
-  account_number?: string;
-  account_name?: string;
 };
 
 export type TopUpBody = {

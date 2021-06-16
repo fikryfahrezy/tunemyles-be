@@ -40,7 +40,7 @@ export const register: RequestHandler<Request<{ Body: RegisterBody }>> = async f
 export const activateMerchant: RequestHandler<
   Request<{ Headers: ApiKeyHeader; Body: ActivateMerchantBody }>
 > = async function activateMerchant(req, res): Promise<void> {
-  const userToken = this.requestContext.get<CustModelType['UserToken']>('user');
+  const userToken = this.requestContext.get<CustModelType['UserToken']>('usertoken');
 
   if (!userToken) {
     res.unauthorized();
@@ -74,8 +74,14 @@ export const login: RequestHandler<Request<{ Body: LoginBody }>> = async functio
 export const getProfile: RequestHandler<
   Request<{ Headers: ApiKeyHeader }>
 > = async function getProfile(_, res): Promise<void> {
-  const { userId } = this.requestContext.get('user') as CustModelType['UserToken'];
-  const resData = await userProfile(userId);
+  const userToken = this.requestContext.get<CustModelType['UserToken']>('usertoken');
+
+  if (!userToken) {
+    res.unauthorized();
+    return;
+  }
+
+  const resData = await userProfile(userToken.userId);
 
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
@@ -88,7 +94,12 @@ export const getProfile: RequestHandler<
 export const updateProfile: RequestHandler<
   Request<{ Body: UpdateProfileBody; Headers: ApiKeyHeader }>
 > = async function updateProfile(req, res): Promise<void> {
-  const userToken = this.requestContext.get('user') as CustModelType['UserToken'];
+  const userToken = this.requestContext.get<CustModelType['UserToken']>('usertoken');
+
+  if (!userToken) {
+    res.unauthorized();
+    return;
+  }
 
   await updateUserProfile(userToken, req.body);
 
@@ -140,7 +151,7 @@ export const createAdmin: RequestHandler<Request> = async function createAdmin(
   _,
   res,
 ): Promise<void> {
-  const userToken = this.requestContext.get<CustModelType['UserToken']>('user');
+  const userToken = this.requestContext.get<CustModelType['UserToken']>('usertoken');
 
   if (!userToken) {
     res.unauthorized();
@@ -158,7 +169,7 @@ export const createAdmin: RequestHandler<Request> = async function createAdmin(
 };
 
 export const banned: RequestHandler<Request> = async function banned(_, res): Promise<void> {
-  const userToken = this.requestContext.get<CustModelType['UserToken']>('user');
+  const userToken = this.requestContext.get<CustModelType['UserToken']>('usertoken');
 
   if (!userToken) {
     res.unauthorized();

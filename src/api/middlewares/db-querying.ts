@@ -1,5 +1,6 @@
 import type { FastifyRequest, FastifyReply } from 'fastify';
 import type { GetQuery } from '../types/schema';
+import type CustModelType from '../types/model';
 
 const dbQuerying: (
   modelName:
@@ -74,7 +75,7 @@ const dbQuerying: (
 
     if (orderDirection && availableOrder.includes(orderDirection)) order.direction = orderDirection;
 
-    req.requestContext.set('query', {
+    req.requestContext.set<CustModelType['SearchQuery']>('query', {
       ...pagination,
       order,
       availableFields,

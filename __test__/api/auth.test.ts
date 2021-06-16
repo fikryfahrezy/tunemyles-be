@@ -10,6 +10,7 @@ import {
   verifyUserToken,
 } from '../../src/api/routes/account/service';
 import {
+  fileDir,
   registerPayload,
   registerMerchPayload,
   updateProfilePayload,
@@ -29,7 +30,6 @@ import {
 
 let server: Server = null;
 let appServer: FastifyInstance = null;
-const fileDir = './__test__/image-test.png';
 
 beforeAll(async () => {
   await sequelize.authenticate();
@@ -44,9 +44,9 @@ afterAll(async () => {
 });
 
 describe('Register', () => {
-  test('Success', async () => {
-    const payload = registerPayload();
+  const payload = registerPayload();
 
+  test('Success', async () => {
     const { status, headers, body } = await register(server, payload);
 
     expect(status).toBe(201);
@@ -55,7 +55,6 @@ describe('Register', () => {
   });
 
   test('Fail, `phone_number` Already Exist', async () => {
-    const payload = registerPayload();
     const phoneNumber = Date.now().toString();
     await userRegistration({ ...payload, phone_number: phoneNumber });
 
@@ -73,7 +72,6 @@ describe('Register', () => {
   });
 
   test('Fail, `username` Already Exist', async () => {
-    const payload = registerPayload();
     const { username } = payload;
     await userRegistration(payload);
     const newPayload = {
@@ -90,7 +88,6 @@ describe('Register', () => {
   });
 
   test('Fail, Empty `full_name`', async () => {
-    const payload = registerPayload();
     const fullName = '';
 
     const { status, headers, body } = await register(server, { ...payload, full_name: fullName });
@@ -101,7 +98,6 @@ describe('Register', () => {
   });
 
   test('Fail, Empty `address`', async () => {
-    const payload = registerPayload();
     const address = '';
 
     const { status, headers, body } = await register(server, { ...payload, address });
@@ -112,7 +108,6 @@ describe('Register', () => {
   });
 
   test('Fail, `full_name` too Short', async () => {
-    const payload = registerPayload();
     const fullName = 'x';
 
     const { status, headers, body } = await register(server, { ...payload, full_name: fullName });
@@ -123,7 +118,6 @@ describe('Register', () => {
   });
 
   test('Fail, `full_name` too Long', async () => {
-    const payload = registerPayload();
     const fullName = Array(257).toString();
 
     const { status, headers, body } = await register(server, { ...payload, full_name: fullName });
@@ -134,7 +128,6 @@ describe('Register', () => {
   });
 
   test('Fail, `username` too Short', async () => {
-    const payload = registerPayload();
     const username = Math.random().toString(36).substring(7);
 
     const { status, headers, body } = await register(server, { ...payload, username });
@@ -145,7 +138,6 @@ describe('Register', () => {
   });
 
   test('Fail, `username` too Long', async () => {
-    const payload = registerPayload();
     const username = Array(22).toString();
 
     const { status, headers, body } = await register(server, { ...payload, username });
@@ -156,7 +148,6 @@ describe('Register', () => {
   });
 
   test('Fail, `phone_number` too Short', async () => {
-    const payload = registerPayload();
     const phoneNumber = '1234';
 
     const { status, headers, body } = await register(server, {
@@ -170,7 +161,6 @@ describe('Register', () => {
   });
 
   test('Fail, `phone_number` too Long', async () => {
-    const payload = registerPayload();
     const phoneNumber = '123456789012345';
 
     const { status, headers, body } = await register(server, {
@@ -184,7 +174,6 @@ describe('Register', () => {
   });
 
   test('Fail, `address` too Short', async () => {
-    const payload = registerPayload();
     const address = 'addr';
 
     const { status, headers, body } = await register(server, { ...payload, address });
@@ -195,7 +184,6 @@ describe('Register', () => {
   });
 
   test('Fail, `address` too Long', async () => {
-    const payload = registerPayload();
     const address = Array(1002).toString();
 
     const { status, headers, body } = await register(server, { ...payload, address });
@@ -215,14 +203,13 @@ describe('Register', () => {
 });
 
 describe('Activate Merchant', () => {
+  const { fields, files } = registerMerchPayload();
+
   test('Success', async () => {
     const { token } = await registration();
     const payload = {
-      fields: registerMerchPayload(),
-      files: [
-        { fileDir, field: 'identity_photo' },
-        { fileDir, field: 'market_photo' },
-      ],
+      fields,
+      files,
     };
 
     const { status, headers, body } = await registerMerchant(server, payload, token);
@@ -235,11 +222,8 @@ describe('Activate Merchant', () => {
   test('Fail, User Already Merchant Identified by User ID', async () => {
     const { token } = await createMercUser();
     const payload = {
-      fields: registerMerchPayload(),
-      files: [
-        { fileDir, field: 'identity_photo' },
-        { fileDir, field: 'market_photo' },
-      ],
+      fields,
+      files,
     };
 
     const { status, headers, body } = await registerMerchant(server, payload, token);
@@ -253,11 +237,8 @@ describe('Activate Merchant', () => {
     const { username, password } = await createMercUser();
     const { token } = await userLogin({ username, password });
     const payload = {
-      fields: registerMerchPayload(),
-      files: [
-        { fileDir, field: 'identity_photo' },
-        { fileDir, field: 'market_photo' },
-      ],
+      fields,
+      files,
     };
 
     const { status, headers, body } = await registerMerchant(server, payload, token);
@@ -269,8 +250,9 @@ describe('Activate Merchant', () => {
 
   test('Fail, No Data Provided', async () => {
     const { token } = await registration();
+    const fields = {};
 
-    const { status, headers, body } = await registerMerchant(server, {}, token);
+    const { status, headers, body } = await registerMerchant(server, { fields }, token);
 
     expect(status).toBe(422);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -280,11 +262,8 @@ describe('Activate Merchant', () => {
   test('Fail, Token Invalid', async () => {
     const token = 'invalid-token';
     const payload = {
-      fields: registerMerchPayload(),
-      files: [
-        { fileDir, field: 'identity_photo' },
-        { fileDir, field: 'market_photo' },
-      ],
+      fields,
+      files,
     };
 
     const { status, headers, body } = await registerMerchant(server, payload, token);
@@ -296,11 +275,8 @@ describe('Activate Merchant', () => {
 
   test('Fail, No Token Provided', async () => {
     const payload = {
-      fields: registerMerchPayload(),
-      files: [
-        { fileDir, field: 'identity_photo' },
-        { fileDir, field: 'market_photo' },
-      ],
+      fields,
+      files,
     };
 
     const { status, headers, body } = await registerMerchant(server, payload);
@@ -401,11 +377,13 @@ describe('Get Profile', () => {
 });
 
 describe('Update Profile', () => {
+  const { fields, files } = updateProfilePayload();
+
   test('Success, Add New Profile Image', async () => {
     const { token } = await registerThenLogin();
     const updatePayload = {
-      fields: updateProfilePayload(),
-      files: [{ fileDir, field: 'avatar' }],
+      fields,
+      files,
     };
 
     const { status, headers, body } = await updateProfile(server, updatePayload, token);
@@ -423,13 +401,8 @@ describe('Update Profile', () => {
     ]);
     await updateUser(userId, { id_photo: imgId });
     const updatePayload = {
-      fields: {
-        full_name: 'New Full Name',
-        address: 'New Address',
-        phone_number: Date.now().toString(),
-        password: 'newpassword',
-      },
-      files: [{ fileDir, field: 'avatar' }],
+      fields,
+      files,
     };
 
     const { status, headers, body } = await updateProfile(server, updatePayload, token);
@@ -570,7 +543,7 @@ describe('Update Profile', () => {
   });
 
   test('Fail, API Key Not Given', async () => {
-    const { status, headers, body } = await updateProfile(server);
+    const { status, headers, body } = await updateProfile(server, {});
 
     expect(status).toBe(403);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');

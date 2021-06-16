@@ -82,15 +82,7 @@ export const requestBody = {
     type: 'object',
     properties: {
       bank_name: { type: 'string' },
-      status: { type: 'integer' },
-    },
-    additionalProperties: false,
-  },
-  updateBankLogo: {
-    required: ['logo'],
-    type: 'object',
-    properties: {
-      logo: { type: 'array', items: { $ref: '#MultiPartSchema' } },
+      visibility: { type: 'integer' },
     },
     additionalProperties: false,
   },
@@ -99,6 +91,14 @@ export const requestBody = {
     properties: {
       account_number: { type: 'string' },
       account_name: { type: 'string' },
+    },
+    additionalProperties: false,
+  },
+  updateBankLogo: {
+    required: ['logo'],
+    type: 'object',
+    properties: {
+      logo: { type: 'array', items: { $ref: '#MultiPartSchema' } },
     },
     additionalProperties: false,
   },

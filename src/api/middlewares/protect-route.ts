@@ -1,5 +1,6 @@
 import type { FastifyRequest, FastifyReply } from 'fastify';
 import type { ApiKeyHeader } from '../types/schema';
+import type CustModelType from '../types/model';
 import { ErrorResponse } from '../utils/error-handler';
 import { verifyToken } from '../utils/jwt';
 
@@ -10,7 +11,10 @@ export const protect: (
   res: FastifyReply,
 ) => void = function protect(who) {
   return function protectHandler(req) {
-    req.requestContext.set('user', verifyToken(who, req.headers.authorization));
+    req.requestContext.set<CustModelType['UserToken']>(
+      'usertoken',
+      verifyToken(who, req.headers.authorization),
+    );
   };
 };
 
