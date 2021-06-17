@@ -302,7 +302,7 @@ export const getMasterBanks = function getMasterBanks(
 
 export const getMasterBankDetail = function getMasterBankDetail(
   server: Server,
-  bankId: string,
+  bankId: number,
   token?: string,
 ) {
   return supertestReq({
@@ -315,7 +315,7 @@ export const getMasterBankDetail = function getMasterBankDetail(
 
 export const updateMasterBank = function updateMasterBank(
   server: Server,
-  bankId: string,
+  bankId: number,
   payload: UpdateBankBody,
   token?: string,
 ) {
@@ -332,7 +332,7 @@ export const updateMasterBank = function updateMasterBank(
 
 export const updateMasterBankDetail = function updateMasterBankDetail(
   server: Server,
-  bankId: string,
+  bankId: number,
   payload: Partial<UpdateBankDetailBody>,
   token?: string,
 ) {
@@ -349,7 +349,7 @@ export const updateMasterBankDetail = function updateMasterBankDetail(
 
 export const changeMasterBankLogo = function changeMasterBankLogo(
   server: Server,
-  bankId: string,
+  bankId: number,
   payload: {
     files?: FilesType;
   },
@@ -370,7 +370,7 @@ export const changeMasterBankLogo = function changeMasterBankLogo(
 
 export const postMasterBankStep = function postMasterBankStep(
   server: Server,
-  bankId: string,
+  bankId: number,
   payload: Partial<PostBankStepBody> = { step: 'step' },
   token?: string,
 ) {
@@ -387,7 +387,7 @@ export const postMasterBankStep = function postMasterBankStep(
 
 export const deleteMasterBankStep = function deleteMasterBankStep(
   server: Server,
-  bankId: string,
+  bankId: number,
   token?: string,
 ) {
   return supertestReq({
@@ -400,7 +400,7 @@ export const deleteMasterBankStep = function deleteMasterBankStep(
 
 export const deleteMasterBank = function deleteMasterBank(
   server: Server,
-  bankId: string,
+  bankId: number,
   token?: string,
 ) {
   return supertestReq({
@@ -441,7 +441,7 @@ export const getCategories = function getCategories(server: Server, query: strin
 
 export const updateCategory = function updateCategory(
   server: Server,
-  categoryId: string,
+  categoryId: number,
   payload: UpdateCategoryBody,
   token?: string,
 ) {
@@ -458,7 +458,7 @@ export const updateCategory = function updateCategory(
 
 export const changeCategoryIcon = function changeCategoryIcon(
   server: Server,
-  categoryId: string,
+  categoryId: number,
   payload: {
     files?: FilesType;
   },
@@ -479,7 +479,7 @@ export const changeCategoryIcon = function changeCategoryIcon(
 
 export const deleteCategory = function deleteCategory(
   server: Server,
-  categoryId: string,
+  categoryId: number,
   token?: string,
 ) {
   return supertestReq({
@@ -519,7 +519,7 @@ export const getMedias = function getMedias(server: Server, query: string, token
 
 export const updateMedia = function updateMedia(
   server: Server,
-  mediaId: string,
+  mediaId: number,
   payload: {
     files?: FilesType;
   },
@@ -536,7 +536,7 @@ export const updateMedia = function updateMedia(
   });
 };
 
-export const deleteMedia = function deleteMedia(server: Server, mediaId: string, token?: string) {
+export const deleteMedia = function deleteMedia(server: Server, mediaId: number, token?: string) {
   return supertestReq({
     server,
     token,
@@ -579,7 +579,7 @@ export const getMasterWallets = function getMasterWallets(
 
 export const updateMasterWallet = function updateMasterWallet(
   server: Server,
-  walletId: string,
+  walletId: number,
   payload: UpdateWalletBody,
   token?: string,
 ) {
@@ -596,7 +596,7 @@ export const updateMasterWallet = function updateMasterWallet(
 
 export const changeMasterWalletLogo = function changeMasterWalletLogo(
   server: Server,
-  walletId: string,
+  walletId: number,
   payload: {
     files?: FilesType;
   },
@@ -615,7 +615,7 @@ export const changeMasterWalletLogo = function changeMasterWalletLogo(
 
 export const deleteMasterWallet = function deleteMasterWallet(
   server: Server,
-  walletId: string,
+  walletId: number,
   token?: string,
 ) {
   return supertestReq({
@@ -650,7 +650,7 @@ export const getFaqs = function getFaqs(server: Server) {
 
 export const updateFaq = function updateFaq(
   server: Server,
-  faqId: string,
+  faqId: number,
   payload: UpdateFaqBody,
   token?: string,
 ) {
@@ -663,7 +663,7 @@ export const updateFaq = function updateFaq(
   });
 };
 
-export const deleteFaq = function deleteFaq(server: Server, faqId: string, token?: string) {
+export const deleteFaq = function deleteFaq(server: Server, faqId: number, token?: string) {
   return supertestReq({
     server,
     token,
@@ -748,7 +748,7 @@ export const getMerchantProducts = function getMerchantProducts(
 
 export const updateMerchantProduct = function updateMerchantProduct(
   server: Server,
-  productId: string,
+  productId: number,
   payload: UpdateProductBody,
   token?: string,
 ) {
@@ -765,7 +765,7 @@ export const updateMerchantProduct = function updateMerchantProduct(
 
 export const updateMerchantProductCover = function updateMerchantProductCover(
   server: Server,
-  productId: string,
+  productId: number,
   payload: {
     files?: FilesType;
   },
@@ -786,7 +786,7 @@ export const updateMerchantProductCover = function updateMerchantProductCover(
 
 export const updateMerchantProductStatus = function updateMerchantProductStatus(
   server: Server,
-  productId: string,
+  productId: number,
   payload: Partial<UpdateProductStatusBody>,
   token?: string,
 ) {
@@ -803,7 +803,7 @@ export const updateMerchantProductStatus = function updateMerchantProductStatus(
 
 export const bindMerchantProductCategory = function bindMerchantProductCategory(
   server: Server,
-  productId: string,
+  productId: number,
   payload: Partial<BindProductCategoryBody>,
   token?: string,
 ) {
@@ -820,7 +820,7 @@ export const bindMerchantProductCategory = function bindMerchantProductCategory(
 
 export const getMerchantProductDetail = function getMerchantProductDetail(
   server: Server,
-  productId: string,
+  productId: number,
   token?: string,
 ) {
   return supertestReq({
@@ -833,7 +833,7 @@ export const getMerchantProductDetail = function getMerchantProductDetail(
 
 export const postMerchantProductImage = function postMerchantProductImage(
   server: Server,
-  productId: string,
+  productId: number,
   payload: {
     files?: FilesType;
   },
@@ -854,8 +854,8 @@ export const postMerchantProductImage = function postMerchantProductImage(
 
 export const deleteMerchantProductCategory = function deleteMerchantProductCategory(
   server: Server,
-  productId: string,
-  categoryId: string,
+  productId: number,
+  categoryId: number,
   token?: string,
 ) {
   return supertestReq({
@@ -868,7 +868,7 @@ export const deleteMerchantProductCategory = function deleteMerchantProductCateg
 
 export const deleteMerchantProductImage = function deleteMerchantProductImage(
   server: Server,
-  imageId: string,
+  imageId: number,
   token?: string,
 ) {
   return supertestReq({
@@ -881,7 +881,7 @@ export const deleteMerchantProductImage = function deleteMerchantProductImage(
 
 export const deleteMerchantProduct = function deleteMerchantProduc(
   server: Server,
-  productId: string,
+  productId: number,
   token?: string,
 ) {
   return supertestReq({
@@ -907,7 +907,7 @@ export const getMerchantOrders = function getMerchantOrders(
 
 export const getMerchantOrderDetail = function getMerchantOrderDetail(
   server: Server,
-  orderId: string,
+  orderId: number,
   token?: string,
 ) {
   return supertestReq({
@@ -920,7 +920,7 @@ export const getMerchantOrderDetail = function getMerchantOrderDetail(
 
 export const updateMerchantOrderStatus = function updateMerchantOrderStatus(
   server: Server,
-  orderId: string,
+  orderId: number,
   payload: Partial<UpdateOrderStatusBody>,
   token?: string,
 ) {
@@ -950,7 +950,7 @@ export const getMerchantList = function getMerchantList(
 
 export const getMerchantProductList = function getMerchantProductList(
   server: Server,
-  merchantId: string,
+  merchantId: number,
   token?: string,
 ) {
   return supertestReq({
@@ -961,7 +961,7 @@ export const getMerchantProductList = function getMerchantProductList(
   });
 };
 
-export const getMerchantRandom = function getMerchantRandom(
+export const getRandomMerchant = function getRandomMerchant(
   server: Server,
   query: string,
   token?: string,
@@ -1000,10 +1000,9 @@ export const getMerchantIncomHistories = function getMerchantIncomHistories(
   });
 };
 
-export const getProducts = function getProducts(server: Server, query: string, token?: string) {
+export const getProducts = function getProducts(server: Server, query: string) {
   return supertestReq({
     server,
-    token,
     type: 'GET',
     url: `/prducts${query}`,
   });
@@ -1011,13 +1010,11 @@ export const getProducts = function getProducts(server: Server, query: string, t
 
 export const getProductsByCategory = function getProductsByCategory(
   server: Server,
-  categoryId: string,
+  categoryId: number,
   query: string,
-  token?: string,
 ) {
   return supertestReq({
     server,
-    token,
     type: 'GET',
     url: `/prducts/categories/${categoryId}${query}`,
   });
@@ -1050,7 +1047,7 @@ export const getCartItems = function getCartItems(server: Server, token?: string
 
 export const updateCartItemQty = function updateCartItemQty(
   server: Server,
-  cartItemId: string,
+  cartItemId: number,
   payload: Partial<UpdateCartItemQtyBody>,
   token?: string,
 ) {
@@ -1067,7 +1064,7 @@ export const updateCartItemQty = function updateCartItemQty(
 
 export const deleteCartItem = function deleteCartItem(
   server: Server,
-  cartItemId: string,
+  cartItemId: number,
   token?: string,
 ) {
   return supertestReq({
@@ -1109,7 +1106,7 @@ export const getUserProcessedTransactions = function getUserProcessedTransaction
 
 export const getUserTransactionDetail = function getUserTransactionDetail(
   server: Server,
-  transactionId: string,
+  transactionId: number,
   token?: string,
 ) {
   return supertestReq({
@@ -1122,7 +1119,7 @@ export const getUserTransactionDetail = function getUserTransactionDetail(
 
 export const finishTransaction = function finishTransaction(
   server: Server,
-  transactionId: string,
+  transactionId: number,
   token?: string,
 ) {
   return supertestReq({
@@ -1135,7 +1132,7 @@ export const finishTransaction = function finishTransaction(
 
 export const reviewTransaction = function reviewTransaction(
   server: Server,
-  transactionId: string,
+  transactionId: number,
   payload: Partial<ReviewTransactionBody>,
   token?: string,
 ) {
@@ -1177,7 +1174,7 @@ export const getBanks = function getBanks(server: Server, token?: string) {
 
 export const getBankDetail = function getBankDetail(
   server: Server,
-  bankId: string,
+  bankId: number,
   token?: string,
 ) {
   return supertestReq({
@@ -1199,7 +1196,7 @@ export const getBankUsers = function getBankUsers(server: Server, token?: string
 
 export const updateBankUser = function updateBankUser(
   server: Server,
-  userId: string,
+  userId: number,
   payload: Partial<UpdateBankUserBody>,
   token?: string,
 ) {
@@ -1216,7 +1213,7 @@ export const updateBankUser = function updateBankUser(
 
 export const deleteBankUser = function deleteBankUser(
   server: Server,
-  userId: string,
+  userId: number,
   token?: string,
 ) {
   return supertestReq({
@@ -1292,7 +1289,7 @@ export const getWithdrawHistories = function getWithdrawHistories(
 
 export const getTopUpDetail = function getTopUpDetail(
   server: Server,
-  topUpId: string,
+  topUpId: number,
   token?: string,
 ) {
   return supertestReq({
@@ -1305,7 +1302,7 @@ export const getTopUpDetail = function getTopUpDetail(
 
 export const getWithdrawDetail = function getWithdrawDetail(
   server: Server,
-  withdrawId?: string,
+  withdrawId: number,
   token?: string,
 ) {
   return supertestReq({
@@ -1344,7 +1341,7 @@ export const getAllUserWithdraw = function getAllUserWithdraw(
 
 export const uploadTopUpProof = function uploadTopUpProof(
   server: Server,
-  topUpId: string,
+  topUpId: number,
   payload: {
     files?: FilesType;
   },
@@ -1363,7 +1360,7 @@ export const uploadTopUpProof = function uploadTopUpProof(
 
 export const updateTopUpStatus = function updateTopUpStatus(
   server: Server,
-  topUpId: string,
+  topUpId: number,
   payload: Partial<UpdateTopUpStatusBody>,
   token?: string,
 ) {
@@ -1378,7 +1375,7 @@ export const updateTopUpStatus = function updateTopUpStatus(
 
 export const updateWithdrawStatus = function updateWithdrawStatus(
   server: Server,
-  withdrawId: string,
+  withdrawId: number,
   payload: Partial<UpdateWithdrawStatusBody>,
   token?: string,
 ) {

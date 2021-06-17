@@ -2880,6 +2880,18 @@
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `false`
 
+**[POSTMAN] [JEST]** Fail, Wrong API Key
+
+- Status code should `403`
+- Header `Content-Type` should `application/json; charset=utf-8`
+- Body should object with `success` property `false`
+
+**[POSTMAN] [JEST]** Fail, API Key Not Given
+
+- Status code should `403`
+- Header `Content-Type` should `application/json; charset=utf-8`
+- Body should object with `success` property `false`
+
 #### [# Get All User Withdraw](#get-all-user-withdraw)
 
 **[POSTMAN] [JEST]** Success, Without Query
@@ -2965,7 +2977,7 @@
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Fail, Top Up Not Found
+**[POSTMAN] [JEST]** Fail, Top Up Data Not Found
 
 - Status code should `404`
 - Header `Content-Type` should `application/json; charset=utf-8`
@@ -2997,7 +3009,7 @@
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Fail, Withdraw Not Found
+**[POSTMAN] [JEST]** Fail, Withdraw Data Not Found
 
 - Status code should `404`
 - Header `Content-Type` should `application/json; charset=utf-8`
