@@ -196,9 +196,7 @@ export const makeUserAdmin: (
 
   if (affectedRows < 1) throw new ErrorResponse('update failed', 404);
 
-  const token = issueJwt(userId, utilId, 'ADMIN');
-
-  return token;
+  return issueJwt(userId, utilId, 'ADMIN');
 };
 
 export const bannedUser: (userId: number) => Promise<void> = async function bannedUser(userId) {

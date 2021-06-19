@@ -17,7 +17,7 @@ export type FileRequestBody = {
 export type GetQuery = {
   orderDirection?: string;
   orderBy?: string;
-  seach?: string;
+  search?: string;
   page?: string;
   limit?: string;
   status?: string;
@@ -44,6 +44,17 @@ export type RegisterBody = {
   password: string;
   phone_number: string;
   address: string;
+};
+
+export type ActivateMerchantBody = {
+  identity_photo: AddedFileBody[];
+  market_photo: AddedFileBody[];
+  no_identity: string;
+  market_name: string;
+  market_address: string;
+  market_lat: number;
+  market_lon: number;
+  market_close_time: string;
 };
 
 export type LoginBody = {
@@ -74,13 +85,13 @@ export type UpdateBankBody = {
   visiblity?: number;
 };
 
-export type UpdateBankLogoBody = {
-  logo: AddedFileBody[];
-};
-
 export type UpdateBankDetailBody = {
   account_number: string;
   account_name: string;
+};
+
+export type UpdateBankLogoBody = {
+  logo: AddedFileBody[];
 };
 
 export type PostBankStepBody = {
@@ -97,6 +108,8 @@ export type PostCategoryBody = {
 export type UpdateCategoryBody = Partial<Omit<PostCategoryBody, 'icon'>> & {
   visibility?: number;
 };
+
+export type UpdateCategoryIconBody = Pick<PostCategoryBody, 'icon'>;
 
 export type PostMediaBody = {
   image: AddedFileBody[];
@@ -121,17 +134,6 @@ export type PostFaqBody = {
 
 export type UpdateFaqBody = Partial<PostFaqBody>;
 
-export type ActivateMerchantBody = {
-  identity_photo: AddedFileBody[];
-  market_photo: AddedFileBody[];
-  no_identity: string;
-  market_name: string;
-  market_address: string;
-  market_lat: number;
-  market_lon: number;
-  market_close_time: string;
-};
-
 export type UpdateMerchantProfileBody = Partial<ActivateMerchantBody>;
 
 export type UpdateMerchantClosetimeBody = {
@@ -153,9 +155,7 @@ export type UpdateProductBody = Partial<Omit<PostProductBody, 'cover'>>;
 
 export type UpdateProductCoverBody = Required<Pick<PostProductBody, 'cover'>>;
 
-export type UpdateProductStatusBody = {
-  status: number;
-};
+export type UpdateProductStatusBody = Required<Pick<PostProductBody, 'status'>>;
 
 export type BindProductCategoryBody = {
   category_id: number;
@@ -188,8 +188,8 @@ export type GetMerchantIncomeHistoriesQuery = {
 
 export type AddToCartBody = {
   qty: number;
-  id_merchant: number;
-  id_m_products: number;
+  merchant_id: number;
+  product_id: number;
 };
 
 export type UpdateCartItemQtyBody = {

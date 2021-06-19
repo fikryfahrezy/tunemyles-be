@@ -11,6 +11,7 @@ import type {
   PostBankStepBody,
   PostCategoryBody,
   UpdateCategoryBody,
+  UpdateCategoryIconBody,
   PostMediaBody,
   PostWalletBody,
   UpdateWalletBody,
@@ -311,7 +312,9 @@ const routes = function routes(
     controllerWrapper(updateCategory),
   );
 
-  fastify.patch<Request<{ Headers: ApiKeyHeader; Params: IdRequestParams }>>(
+  fastify.patch<
+    Request<{ Headers: ApiKeyHeader; Params: IdRequestParams; Body: UpdateCategoryIconBody }>
+  >(
     '/categories/:id/icon',
     {
       attachValidation: true,

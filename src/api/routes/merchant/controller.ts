@@ -18,6 +18,18 @@ import type {
   GetMerchantIncomeHistoriesQuery,
 } from '../../types/schema';
 
+export const getMerchantProfile: RequestHandler<
+  Request<{ Headers: ApiKeyHeader }>
+> = async function getMerchantProfile(_, res): Promise<void> {
+  await Promise.resolve('hi');
+
+  res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
+    code: 200,
+    success: true,
+    message: 'success',
+  });
+};
+
 export const updateMerchantProfile: RequestHandler<
   Request<{ Headers: ApiKeyHeader; Body: UpdateMerchantProfileBody }>
 > = async function updateMerchantProfile(_, res): Promise<void> {
@@ -33,18 +45,6 @@ export const updateMerchantProfile: RequestHandler<
 export const updateMerchantClosetime: RequestHandler<
   Request<{ Headers: ApiKeyHeader; Body: UpdateMerchantClosetimeBody }>
 > = async function updateMerchantClosetime(_, res): Promise<void> {
-  await Promise.resolve('hi');
-
-  res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
-    code: 200,
-    success: true,
-    message: 'success',
-  });
-};
-
-export const getMerchantProfile: RequestHandler<
-  Request<{ Headers: ApiKeyHeader }>
-> = async function getMerchantProfile(_, res): Promise<void> {
   await Promise.resolve('hi');
 
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({

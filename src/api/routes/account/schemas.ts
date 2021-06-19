@@ -8,14 +8,9 @@ export const requestHeaders = {
  */
 export const requestBody = {
   register: {
-    required: ['address', 'full_name', 'password', 'phone_number', 'username'],
+    required: ['full_name', 'phone_number', 'address', 'username', 'password'],
     type: 'object',
     properties: {
-      username: {
-        type: 'string',
-        minLength: 8,
-        maxLength: 20,
-      },
       full_name: {
         type: 'string',
         minLength: 2,
@@ -31,6 +26,11 @@ export const requestBody = {
         minLength: 5,
         maxLength: 1000,
       },
+      username: {
+        type: 'string',
+        minLength: 8,
+        maxLength: 20,
+      },
       password: {
         type: 'string',
         minLength: 8,
@@ -41,9 +41,9 @@ export const requestBody = {
   },
   activateMerchant: {
     required: [
-      'no_identity',
       'identity_photo',
       'market_photo',
+      'no_identity',
       'market_name',
       'market_address',
       'market_lat',
@@ -52,9 +52,9 @@ export const requestBody = {
     ],
     type: 'object',
     properties: {
-      no_identity: { type: 'string' },
       identity_photo: { type: 'array', items: { $ref: '#MultiPartSchema' } },
       market_photo: { type: 'array', items: { $ref: '#MultiPartSchema' } },
+      no_identity: { type: 'string' },
       market_name: { type: 'string' },
       market_address: { type: 'string' },
       market_lat: { type: 'number' },
@@ -124,22 +124,25 @@ export const requestBody = {
  * The order of the keys is following the order of the routes in Postman
  */
 export const responses = {
-  authenticated: {
+  authorized: {
     type: 'object',
     allOf: [
-      { $ref: '#ApiResponse' },
+      {
+        $ref: '#ApiResponse',
+      },
       {
         type: 'object',
         properties: {
           data: {
             type: 'object',
-            allOf: [
-              {
-                type: 'object',
-                properties: { type: { type: 'integer' } },
+            properties: {
+              type: {
+                type: 'integer',
               },
-              { $ref: '#GetToken' },
-            ],
+              token: {
+                type: 'string',
+              },
+            },
           },
         },
       },
@@ -148,24 +151,62 @@ export const responses = {
   me: {
     type: 'object',
     allOf: [
-      { $ref: '#ApiResponse' },
+      {
+        $ref: '#ApiResponse',
+      },
       {
         type: 'object',
         properties: {
           data: {
             type: 'object',
-            allOf: [
-              { $ref: '#GetProfile' },
-              {
-                type: 'object',
-                properties: {
-                  wallets: {
-                    type: 'array',
-                    items: { $ref: '#GetAccountWallet' },
+            properties: {
+              full_name: {
+                type: 'string',
+              },
+              username: {
+                type: 'string',
+              },
+              address: {
+                type: 'string',
+              },
+              phone_number: {
+                type: 'string',
+              },
+              face: {
+                type: 'string',
+                nullable: true,
+              },
+              wallets: {
+                type: 'array',
+                items: {
+                  type: 'object',
+                  properties: {
+                    balance: {
+                      type: 'integer',
+                    },
+                    is_visible: {
+                      type: 'integer',
+                    },
+                    wallet_name: {
+                      type: 'string',
+                      nullable: true,
+                    },
+                    wallet_description: {
+                      type: 'string',
+                      nullable: true,
+                    },
+                    uri: {
+                      type: 'string',
+                      nullable: true,
+                    },
+                    label: {
+                      type: 'string',
+                      nullable: true,
+                    },
                   },
                 },
               },
-            ],
+            },
           },
         },
       },
@@ -174,11 +215,15 @@ export const responses = {
   verifyToken: {
     type: 'object',
     allOf: [
-      { $ref: '#ApiResponse' },
+      {
+        $ref: '#ApiResponse',
+      },
       {
         type: 'object',
         properties: {
-          data: { $ref: '#GetToken' },
+          data: {
+            $ref: '#GetToken',
+          },
         },
       },
     ],

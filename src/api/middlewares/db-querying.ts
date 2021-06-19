@@ -18,7 +18,6 @@ const dbQuerying: (
   res: FastifyReply,
 ) => void = function dbQuerying(modelName) {
   return function queryHandler(req) {
-    const availableOrder = ['ASC', 'DESC'];
     let availableFields: string[] = [];
 
     switch (modelName) {
@@ -53,12 +52,12 @@ const dbQuerying: (
         availableFields = [];
     }
 
-    const { page, orderBy, orderDirection, limit } = req.query;
+    const { page, orderBy, orderDirection, limit, search } = req.query;
     const pagination: { offset: number; limit: number } = {
       offset: 0,
       limit: 10,
     };
-    const order: { field: string; direction: string } = {
+    const order: CustModelType['SearchQuery']['order'] = {
       field: 'created_at',
       direction: 'DESC',
     };
@@ -73,12 +72,13 @@ const dbQuerying: (
 
     if (orderBy && availableFields.includes(orderBy)) order.field = orderBy;
 
-    if (orderDirection && availableOrder.includes(orderDirection)) order.direction = orderDirection;
+    if (orderDirection?.toLocaleLowerCase() === 'asc') order.direction = 'ASC';
 
     req.requestContext.set<CustModelType['SearchQuery']>('query', {
       ...pagination,
       order,
       availableFields,
+      search: search ?? '',
     });
   };
 };

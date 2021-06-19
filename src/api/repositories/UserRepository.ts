@@ -162,9 +162,9 @@ export const getUserUtility: (
   });
 };
 
-export const getUserWallets: (
-  userId: number,
-) => Promise<CustModelType['UserWallet'][]> = function getUserWallets(userId) {
+export const getUserWallets: (userId: number) => Promise<unknown> = function getUserWallets(
+  userId,
+) {
   const sqlQuery = `
         SELECT
             uuw.balance,
@@ -179,7 +179,7 @@ export const getUserWallets: (
         WHERE uuw.id_u_user = :userId
     `;
 
-  return sequelize.query<CustModelType['UserWallet']>(sqlQuery, {
+  return sequelize.query(sqlQuery, {
     replacements: { userId },
     type: QueryTypes.SELECT,
   });

@@ -196,7 +196,9 @@ export const responses = {
   banks: {
     type: 'object',
     allOf: [
-      { $ref: '#ApiResponse' },
+      {
+        $ref: '#ApiResponse',
+      },
       {
         type: 'object',
         properties: {
@@ -205,7 +207,9 @@ export const responses = {
             items: {
               type: 'object',
               allOf: [
-                { $ref: '#GetBank' },
+                {
+                  $ref: '#GetBank',
+                },
                 {
                   type: 'object',
                   properties: {
@@ -224,7 +228,9 @@ export const responses = {
   bankDetail: {
     type: 'object',
     allOf: [
-      { $ref: '#ApiResponse' },
+      {
+        $ref: '#ApiResponse',
+      },
       {
         type: 'object',
         properties: {
@@ -233,7 +239,9 @@ export const responses = {
             items: {
               type: 'object',
               allOf: [
-                { $ref: '#GetBank' },
+                {
+                  $ref: '#GetBank',
+                },
                 {
                   type: 'object',
                   properties: {
@@ -264,13 +272,51 @@ export const responses = {
   categories: {
     type: 'object',
     allOf: [
-      { $ref: '#ApiResponse' },
+      {
+        $ref: '#ApiResponse',
+      },
       {
         type: 'object',
         properties: {
           data: {
             type: 'array',
-            items: { $ref: '#GetCategory' },
+            items: {
+              type: 'object',
+              properties: {
+                id: {
+                  type: 'integer',
+                },
+                id_icon: {
+                  type: 'integer',
+                },
+                category: {
+                  type: 'string',
+                },
+                slug: {
+                  type: 'string',
+                },
+                description: {
+                  type: 'string',
+                },
+                uri: {
+                  type: 'string',
+                },
+                label: {
+                  type: 'string',
+                },
+                is_visible: {
+                  type: 'integer',
+                },
+                created_at: {
+                  type: 'string',
+                  format: 'date-time',
+                },
+                updated_at: {
+                  type: 'string',
+                  format: 'date-time',
+                },
+              },
+            },
           },
         },
       },
@@ -279,13 +325,17 @@ export const responses = {
   medias: {
     type: 'object',
     allOf: [
-      { $ref: '#ApiResponse' },
+      {
+        $ref: '#ApiResponse',
+      },
       {
         type: 'object',
         properties: {
           data: {
             type: 'array',
-            items: { $ref: '#GetMedia' },
+            items: {
+              $ref: '#GetMedia',
+            },
           },
         },
       },
@@ -294,11 +344,18 @@ export const responses = {
   wallets: {
     type: 'object',
     allOf: [
-      { $ref: '#ApiResponse' },
+      {
+        $ref: '#ApiResponse',
+      },
       {
         type: 'object',
         properties: {
-          data: { $ref: '#GetUserWallet' },
+          data: {
+            type: 'array',
+            items: {
+              $ref: '#GetWallet',
+            },
+          },
         },
       },
     ],
@@ -306,13 +363,17 @@ export const responses = {
   faqs: {
     type: 'object',
     allOf: [
-      { $ref: '#ApiResponse' },
+      {
+        $ref: '#ApiResponse',
+      },
       {
         type: 'object',
         properties: {
           data: {
             type: 'array',
-            items: { $ref: '#GetFaq' },
+            items: {
+              $ref: '#GetFaq',
+            },
           },
         },
       },

@@ -96,11 +96,15 @@ export const responses = {
   wallets: {
     type: 'object',
     allOf: [
-      { $ref: '#ApiResponse' },
+      {
+        $ref: '#ApiResponse',
+      },
       {
         type: 'object',
         properties: {
-          data: { $ref: '#GetUserWallet' },
+          data: {
+            $ref: '#GetUserWallet',
+          },
         },
       },
     ],
@@ -108,13 +112,17 @@ export const responses = {
   topUpHistories: {
     type: 'object',
     allOf: [
-      { $ref: '#ApiResponse' },
+      {
+        $ref: '#ApiResponse',
+      },
       {
         type: 'object',
         properties: {
           data: {
             type: 'array',
-            items: { $ref: '#GetTopUp' },
+            items: {
+              $ref: '#GetTopUp',
+            },
           },
         },
       },
@@ -123,7 +131,9 @@ export const responses = {
   withdrawHistories: {
     type: 'object',
     allOf: [
-      { $ref: '#ApiResponse' },
+      {
+        $ref: '#ApiResponse',
+      },
       {
         type: 'object',
         properties: {
@@ -132,7 +142,9 @@ export const responses = {
             items: {
               type: 'object',
               allOf: [
-                { $ref: '#GetWithdraw' },
+                {
+                  $ref: '#GetWithdraw',
+                },
                 {
                   type: 'object',
                   properties: {
@@ -164,7 +176,9 @@ export const responses = {
   topUpDetail: {
     type: 'object',
     allOf: [
-      { $ref: '#ApiResponse' },
+      {
+        $ref: '#ApiResponse',
+      },
       {
         type: 'object',
         properties: {
@@ -173,14 +187,18 @@ export const responses = {
             items: {
               type: 'object',
               allOf: [
-                { $ref: '#GetTopUp' },
+                {
+                  $ref: '#GetTopUp',
+                },
                 {
                   type: 'object',
                   properties: {
                     Bank: {
                       type: 'object',
                       allOf: [
-                        { $ref: '#GetBank' },
+                        {
+                          $ref: '#GetBank',
+                        },
                         {
                           type: 'object',
                           properties: {
@@ -206,11 +224,15 @@ export const responses = {
                     UserWallet: {
                       type: 'object',
                       properties: {
-                        id_u_user: { type: 'integer' },
+                        id_u_user: {
+                          type: 'integer',
+                        },
                         u_user: {
                           type: 'object',
                           properties: {
-                            id_m_users: { type: 'integer' },
+                            id_m_users: {
+                              type: 'integer',
+                            },
                             m_user: {
                               type: 'object',
                               properties: {
@@ -235,7 +257,9 @@ export const responses = {
   withdrawDetail: {
     type: 'object',
     allOf: [
-      { $ref: '#ApiResponse' },
+      {
+        $ref: '#ApiResponse',
+      },
       {
         type: 'object',
         properties: {
@@ -244,7 +268,9 @@ export const responses = {
             items: {
               type: 'object',
               allOf: [
-                { $ref: '#GetTopUp' },
+                {
+                  $ref: '#GetTopUp',
+                },
                 {
                   type: 'object',
                   properties: {
@@ -292,13 +318,17 @@ export const responses = {
   userTopUp: {
     type: 'object',
     allOf: [
-      { $ref: '#ApiResponse' },
+      {
+        $ref: '#ApiResponse',
+      },
       {
         type: 'object',
         properties: {
           data: {
             type: 'array',
-            items: { $ref: '#GetTopUp' },
+            items: {
+              $ref: '#GetTopUp',
+            },
           },
         },
       },
@@ -307,13 +337,17 @@ export const responses = {
   userWithdraw: {
     type: 'object',
     allOf: [
-      { $ref: '#ApiResponse' },
+      {
+        $ref: '#ApiResponse',
+      },
       {
         type: 'object',
         properties: {
           data: {
             type: 'array',
-            items: { $ref: '#GetWithdraw' },
+            items: {
+              $ref: '#GetWithdraw',
+            },
           },
         },
       },

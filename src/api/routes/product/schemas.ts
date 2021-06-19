@@ -31,13 +31,17 @@ export const responses = {
   products: {
     type: 'object',
     allOf: [
-      { $ref: '#ApiResponse' },
+      {
+        $ref: '#ApiResponse',
+      },
       {
         type: 'object',
         properties: {
           data: {
             type: 'array',
-            items: { $ref: '#GetProduct' },
+            items: {
+              $ref: '#GetProduct',
+            },
           },
         },
       },

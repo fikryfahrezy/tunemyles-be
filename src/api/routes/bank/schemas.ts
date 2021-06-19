@@ -40,7 +40,9 @@ export const responses = {
   bank: {
     type: 'object',
     allOf: [
-      { $ref: '#ApiResponse' },
+      {
+        $ref: '#ApiResponse',
+      },
       {
         type: 'object',
         properties: {
@@ -49,7 +51,9 @@ export const responses = {
             items: {
               type: 'object',
               allOf: [
-                { $ref: '#GetBank' },
+                {
+                  $ref: '#GetBank',
+                },
                 {
                   type: 'object',
                   properties: {
@@ -74,7 +78,9 @@ export const responses = {
   bankDetail: {
     type: 'object',
     allOf: [
-      { $ref: '#ApiResponse' },
+      {
+        $ref: '#ApiResponse',
+      },
       {
         type: 'object',
         properties: {
@@ -83,7 +89,9 @@ export const responses = {
             items: {
               type: 'object',
               allOf: [
-                { $ref: '#GetBank' },
+                {
+                  $ref: '#GetBank',
+                },
                 {
                   type: 'object',
                   properties: {
@@ -108,7 +116,9 @@ export const responses = {
   bankUser: {
     type: 'object',
     allOf: [
-      { $ref: '#ApiResponse' },
+      {
+        $ref: '#ApiResponse',
+      },
       {
         type: 'object',
         properties: {
@@ -117,14 +127,18 @@ export const responses = {
             items: {
               type: 'object',
               allOf: [
-                { $ref: 'GetBankUser' },
+                {
+                  $ref: '#GetBankUser',
+                },
                 {
                   type: 'object',
                   properties: {
                     Bank: {
                       type: 'object',
                       allOf: [
-                        { $ref: '#GetBank' },
+                        {
+                          $ref: '#GetBank',
+                        },
                         {
                           type: 'object',
                           properties: {

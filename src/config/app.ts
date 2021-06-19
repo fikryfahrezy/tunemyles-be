@@ -50,7 +50,7 @@ const app = function app(opts: FastifyServerOptions = {}): FastifyInstance {
     exposeRoute: ENV === 'development',
     mode: 'static',
     specification: {
-      path: './docs/v2docs-3.yaml',
+      path: './docs/swagger-doc.yaml',
       postProcessor(swaggerObject) {
         return swaggerObject;
       },

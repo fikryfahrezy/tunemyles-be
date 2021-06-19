@@ -58,6 +58,23 @@ const routes = function routes(
    * The order of the keys is following the order of the routes in Postman
    */
 
+  fastify.get<Request<{ Headers: ApiKeyHeader }>>(
+    '/',
+    {
+      attachValidation: true,
+      schema: {
+        headers: requestHeaders.private,
+        response: {
+          200: { $ref: '#ApiResponse' },
+          '4xx': { $ref: '#ApiResponse' },
+          '5xx': { $ref: '#ApiResponse' },
+        },
+      },
+      preHandler: [schemaValidation, handlerWrapper(protect('MERCHANT'))],
+    },
+    controllerWrapper(getMerchantProfile),
+  );
+
   fastify.patch<Request<{ Headers: ApiKeyHeader; Body: UpdateMerchantProfileBody }>>(
     '/',
     {
@@ -100,23 +117,6 @@ const routes = function routes(
       preHandler: [schemaValidation, handlerWrapper(protect('MERCHANT'))],
     },
     controllerWrapper(updateMerchantClosetime),
-  );
-
-  fastify.get<Request<{ Headers: ApiKeyHeader }>>(
-    '/',
-    {
-      attachValidation: true,
-      schema: {
-        headers: requestHeaders.private,
-        response: {
-          200: { $ref: '#ApiResponse' },
-          '4xx': { $ref: '#ApiResponse' },
-          '5xx': { $ref: '#ApiResponse' },
-        },
-      },
-      preHandler: [schemaValidation, handlerWrapper(protect('MERCHANT'))],
-    },
-    controllerWrapper(getMerchantProfile),
   );
 
   fastify.post<Request<{ Headers: ApiKeyHeader; Body: PostProductBody }>>(

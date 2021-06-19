@@ -12,7 +12,7 @@ export const requestParams = {
  */
 export const requestBody = {
   addToCart: {
-    required: ['product_id', 'merchant_id', 'qty'],
+    required: ['qty', 'merchant_id', 'product_id'],
     type: 'object',
     properties: {
       qty: { type: 'integer' },
@@ -39,19 +39,21 @@ export const requestBody = {
  * The order of the keys is following the order of the routes in Postman
  */
 export const responses = {
-  carts: {
-    type: 'object',
-    allOf: [
-      { $ref: '#ApiResponse' },
-      {
-        type: 'object',
-        properties: {
-          data: {
-            type: 'array',
-            items: { $ref: '#GetCart' },
+  type: 'object',
+  allOf: [
+    {
+      $ref: '#ApiResponse',
+    },
+    {
+      type: 'object',
+      properties: {
+        data: {
+          type: 'array',
+          items: {
+            $ref: '#GetCart',
           },
         },
       },
-    ],
-  },
+    },
+  ],
 };

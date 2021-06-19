@@ -539,7 +539,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"full_name\": \"Name\",\r\n    \"username\": \"username\",\r\n    \"password\": \"password\",\r\n    \"phone_number\": \"12345678931232\",\r\n    \"address\": \"address\"\r\n}"
+              "raw": "{\r\n    \"full_name\": \"Name\",\r\n    \"phone_number\": \"12345678931232\",\r\n    \"address\": \"address\",\r\n    \"username\": \"username\",\r\n    \"password\": \"password\"\r\n}"
             },
             "url": {
               "raw": "{{URL}}/account/register",
@@ -4713,6 +4713,90 @@
           "name": "profile",
           "item": [
             {
+              "name": "Get Merchant Profile",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const { Request } = require('postman-collection');\r",
+                      "\r",
+                      "const makeRequest = function makeRequest(token = undefined) {\r",
+                      "    const header = {};\r",
+                      "\r",
+                      "    if (token) header.authorization = `Bearer ${token}`;\r",
+                      "\r",
+                      "    return new Request({\r",
+                      "        header,\r",
+                      "        method: 'GET',\r",
+                      "        url: pm.environment.replaceIn('{{URL}}/merchants'),\r",
+                      "    });\r",
+                      "};\r",
+                      "\r",
+                      "pm.sendRequest(makeRequest(pm.environment.get('TOKEN')), (_, response) => {\r",
+                      "    pm.test('Success', () => {\r",
+                      "        const { code, headers } = response;\r",
+                      "\r",
+                      "        pm.expect(code).to.eql(200);\r",
+                      "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "        pm.expect(response.json().success).to.eql(true);\r",
+                      "    });\r",
+                      "});\r",
+                      "\r",
+                      "pm.sendRequest(makeRequest('this-is-wrong'), (_, response) => {\r",
+                      "    pm.test('Fail, Wrong API Key', () => {\r",
+                      "        const { code, headers } = response;\r",
+                      "\r",
+                      "        pm.expect(code).to.eql(403);\r",
+                      "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "        pm.expect(response.json().success).to.eql(false);\r",
+                      "    });\r",
+                      "});\r",
+                      "\r",
+                      "pm.sendRequest(makeRequest(), (_, response) => {\r",
+                      "    pm.test('Fail, API Key Not Given', () => {\r",
+                      "        const { code, headers } = response;\r",
+                      "\r",
+                      "        pm.expect(code).to.eql(403);\r",
+                      "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "        pm.expect(response.json().success).to.eql(false);\r",
+                      "    });\r",
+                      "});\r",
+                      ""
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{URL}}/merchants",
+                  "host": ["{{URL}}"],
+                  "path": ["merchants"]
+                }
+              },
+              "response": []
+            },
+            {
               "name": "Update Merchant Profile",
               "event": [
                 {
@@ -4947,90 +5031,6 @@
                   "raw": "{{URL}}/merchants/operation-time",
                   "host": ["{{URL}}"],
                   "path": ["merchants", "operation-time"]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Get Merchant Profile",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      "const { Request } = require('postman-collection');\r",
-                      "\r",
-                      "const makeRequest = function makeRequest(token = undefined) {\r",
-                      "    const header = {};\r",
-                      "\r",
-                      "    if (token) header.authorization = `Bearer ${token}`;\r",
-                      "\r",
-                      "    return new Request({\r",
-                      "        header,\r",
-                      "        method: 'GET',\r",
-                      "        url: pm.environment.replaceIn('{{URL}}/merchants'),\r",
-                      "    });\r",
-                      "};\r",
-                      "\r",
-                      "pm.sendRequest(makeRequest(pm.environment.get('TOKEN')), (_, response) => {\r",
-                      "    pm.test('Success', () => {\r",
-                      "        const { code, headers } = response;\r",
-                      "\r",
-                      "        pm.expect(code).to.eql(200);\r",
-                      "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                      "        pm.expect(response.json().success).to.eql(true);\r",
-                      "    });\r",
-                      "});\r",
-                      "\r",
-                      "pm.sendRequest(makeRequest('this-is-wrong'), (_, response) => {\r",
-                      "    pm.test('Fail, Wrong API Key', () => {\r",
-                      "        const { code, headers } = response;\r",
-                      "\r",
-                      "        pm.expect(code).to.eql(403);\r",
-                      "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                      "        pm.expect(response.json().success).to.eql(false);\r",
-                      "    });\r",
-                      "});\r",
-                      "\r",
-                      "pm.sendRequest(makeRequest(), (_, response) => {\r",
-                      "    pm.test('Fail, API Key Not Given', () => {\r",
-                      "        const { code, headers } = response;\r",
-                      "\r",
-                      "        pm.expect(code).to.eql(403);\r",
-                      "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                      "        pm.expect(response.json().success).to.eql(false);\r",
-                      "    });\r",
-                      "});\r",
-                      ""
-                    ],
-                    "type": "text/javascript"
-                  }
-                }
-              ],
-              "protocolProfileBehavior": {
-                "disableBodyPruning": true
-              },
-              "request": {
-                "auth": {
-                  "type": "bearer",
-                  "bearer": [
-                    {
-                      "key": "token",
-                      "value": "{{TOKEN}}",
-                      "type": "string"
-                    }
-                  ]
-                },
-                "method": "GET",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": ""
-                },
-                "url": {
-                  "raw": "{{URL}}/merchants",
-                  "host": ["{{URL}}"],
-                  "path": ["merchants"]
                 }
               },
               "response": []

@@ -54,13 +54,17 @@ export const responses = {
   transactions: {
     type: 'object',
     allOf: [
-      { $ref: '#ApiResponse' },
+      {
+        $ref: '#ApiResponse',
+      },
       {
         type: 'object',
         properties: {
           data: {
             type: 'array',
-            items: { $ref: '#GetOrder' },
+            items: {
+              $ref: '#GetOrder',
+            },
           },
         },
       },
@@ -69,14 +73,18 @@ export const responses = {
   transactionDetail: {
     type: 'object',
     allOf: [
-      { $ref: '#ApiResponse' },
+      {
+        $ref: '#ApiResponse',
+      },
       {
         type: 'object',
         properties: {
           data: {
             type: 'object',
             allOf: [
-              { $ref: '#GetOrder' },
+              {
+                $ref: '#GetOrder',
+              },
               {
                 type: 'object',
                 properties: {

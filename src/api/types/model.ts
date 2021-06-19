@@ -46,10 +46,11 @@ type UserForgotToken = {
 type SearchQuery = {
   offset: number;
   limit: number;
+  search: string;
   availableFields: string[];
   order: {
     field: string;
-    direction: string;
+    direction: 'ASC' | 'DESC';
   };
 };
 

@@ -43,7 +43,7 @@ const routes = function routes(
       schema: {
         body: requestBody.register,
         response: {
-          201: responses.authenticated,
+          201: responses.authorized,
           '4xx': { $ref: '#ApiResponse' },
           '5xx': { $ref: '#ApiResponse' },
         },
@@ -87,7 +87,7 @@ const routes = function routes(
       schema: {
         body: requestBody.login,
         response: {
-          200: responses.authenticated,
+          200: responses.authorized,
           '4xx': { $ref: '#ApiResponse' },
           '5xx': { $ref: '#ApiResponse' },
         },

@@ -11,7 +11,7 @@ info:
   license:
     name: Apache 2.0
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
-  version: 2.0.0
+  version: 1.0.0
 externalDocs:
   description: Find out more about Swagger
   url: 'http://swagger.io'
@@ -23,22 +23,22 @@ servers:
 tags:
   - name: check
     description: Checking Server
-  - name: auth
-    description: Auth Route
+  - name: account
+    description: Account Route
+  - name: masters
+    description: Master Route
   - name: merchants
     description: Merchant Route
+  - name: products
+    description: Product RouteG
   - name: carts
     description: Cart Route
   - name: transactions
     description: Transaction Route
-  - name: masters
-    description: Master Route
   - name: banks
     description: Bank Route
   - name: wallets
     description: Wallet Route
-  - name: products
-    description: Product Route
 paths:
   /:
     get:
@@ -57,56 +57,10 @@ paths:
         5XX:
           description: Sever Error
           content: {}
-  /auth/login:
+  /account/register:
     post:
       tags:
-        - auth
-      summary: Login
-      description: Login
-      operationId: loginUser
-      requestBody:
-        description: Request Data
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PostLogin'
-        required: true
-      responses:
-        '200':
-          description: Request Success
-          content:
-            application/json:
-              schema:
-                type: object
-                allOf:
-                  - $ref: '#/components/schemas/ApiResponse'
-                  - type: object
-                    properties:
-                      data:
-                        type: object
-                        allOf:
-                          - type: object
-                            properties:
-                              type:
-                                type: integer
-                          - $ref: '#/components/schemas/GetToken'
-        4XX:
-          description: Request Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        5XX:
-          description: Sever Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-      x-codegen-request-body-name: body
-  /auth/register:
-    post:
-      tags:
-        - auth
+        - account
       summary: Register
       description: Register
       operationId: registerUser
@@ -115,7 +69,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PostRegister'
+              $ref: '#/components/schemas/RegisterBody'
         required: true
       responses:
         '200':
@@ -123,19 +77,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                allOf:
-                  - $ref: '#/components/schemas/ApiResponse'
-                  - type: object
-                    properties:
-                      data:
-                        type: object
-                        allOf:
-                          - type: object
-                            properties:
-                              type:
-                                type: integer
-                          - $ref: '#/components/schemas/GetToken'
+                $ref: '#/components/schemas/UserAuthorizedResponse'
         4XX:
           description: Request Error
           content:
@@ -149,10 +91,78 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApiResponse'
       x-codegen-request-body-name: body
-  /auth/me:
+  /account/merchant:
+    post:
+      tags:
+        - account
+      summary: Activate User Merchant (Route All Roles)
+      description: Activate User Merchant (Route All Roles)
+      operationId: activateMerchant
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ActivateMerchantBody'
+        required: true
+      responses:
+        '200':
+          description: Request Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserAuthorizedResponse'
+        4XX:
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        5XX:
+          description: Sever Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+        - APIKeyHeader: []
+  /account/login:
+    post:
+      tags:
+        - account
+      summary: Login
+      description: Login
+      operationId: loginUser
+      requestBody:
+        description: Request Data
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginBody'
+        required: true
+      responses:
+        '200':
+          description: Request Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserAuthorizedResponse'
+        4XX:
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        5XX:
+          description: Sever Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      x-codegen-request-body-name: body
+  /account/me:
     get:
       tags:
-        - auth
+        - account
       summary: Get Profile (Route All Roles)
       description: Get Profile (Route All Roles)
       operationId: getProfile
@@ -162,21 +172,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                allOf:
-                  - $ref: '#/components/schemas/ApiResponse'
-                  - type: object
-                    properties:
-                      data:
-                        type: object
-                        allOf:
-                          - $ref: '#/components/schemas/GetProfile'
-                          - type: object
-                            properties:
-                              wallets:
-                                type: array
-                                items:
-                                  $ref: '#/components/schemas/GetAccountWallet'
+                $ref: '#/components/schemas/GetProfileResponse'
         4XX:
           description: Request Error
           content:
@@ -191,10 +187,10 @@ paths:
                 $ref: '#/components/schemas/ApiResponse'
       security:
         - APIKeyHeader: []
-  /auth/update-profile:
-    put:
+  /account/update-profile:
+    patch:
       tags:
-        - auth
+        - account
       summary: Update Profile (Route All Roles)
       description: Update Profile (Route All Roles)
       operationId: updateProfile
@@ -202,19 +198,7 @@ paths:
         content:
           multipart/form-data:
             schema:
-              type: 'object'
-              properties:
-                full_name:
-                  type: string
-                address:
-                  type: string
-                phone_number:
-                  type: string
-                password:
-                  type: string
-                avatar:
-                  type: string
-                  format: binary
+              $ref: '#/components/schemas/UpdateProfileBody'
       responses:
         '200':
           description: Request Success
@@ -236,10 +220,10 @@ paths:
                 $ref: '#/components/schemas/ApiResponse'
       security:
         - APIKeyHeader: []
-  /auth/forgot-password:
+  /account/forgot-password:
     post:
       tags:
-        - auth
+        - account
       summary: Forgot Password
       description: Forgot Password
       operationId: forgotPassword
@@ -248,7 +232,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PostForgotPassword'
+              $ref: '#/components/schemas/ForgotPasswordBody'
         required: true
       responses:
         '200':
@@ -270,10 +254,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApiResponse'
       x-codegen-request-body-name: body
-  '/auth/verify-token/{token}':
-    get:
+  '/account/verify-token/{token}':
+    patch:
       tags:
-        - auth
+        - account
       summary: Verify Token
       description: Verify Token
       operationId: verifyToken
@@ -289,13 +273,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                allOf:
-                  - $ref: '#/components/schemas/ApiResponse'
-                  - type: object
-                    properties:
-                      data:
-                        $ref: '#/components/schemas/GetToken'
+                $ref: '#/components/schemas/VerifyTokenResponse'
         4XX:
           description: Request Error
           content:
@@ -308,10 +286,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponse'
-  /auth/reset-password:
-    put:
+  /account/reset-password:
+    patch:
       tags:
-        - auth
+        - account
       summary: Reset Password
       description: Reset Password
       operationId: resetPassword
@@ -326,7 +304,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateResetPassword'
+              $ref: '#/components/schemas/ResetPasswordBody'
         required: true
       responses:
         '200':
@@ -348,6 +326,1039 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApiResponse'
       x-codegen-request-body-name: body
+  /masters/banks:
+    post:
+      tags:
+        - masters
+      summary: Add Bank Data (Admin Route)
+      description: Add Bank Data (Admin Route)
+      operationId: addBank
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PostBankBody'
+        required: true
+      responses:
+        '200':
+          description: Request Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        4XX:
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        5XX:
+          description: Sever Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+        - APIKeyHeader: []
+    get:
+      tags:
+        - masters
+      summary: Get All Bank Data (Route All Roles)
+      description: Get All Bank Data (Route All Roles)
+      operationId: getAllBank
+      parameters:
+        - name: page
+          in: query
+          schema:
+            $ref: '#/components/schemas/PageQuery'
+        - name: search
+          in: query
+          description: Available search field bank_name
+          schema:
+            $ref: '#/components/schemas/SearchQuery'
+        - name: orderBy
+          in: query
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/OrderByQuery'
+              - enum:
+                  - created_at
+                  - bank_name
+        - name: orderDirection
+          in: query
+          schema:
+            $ref: '#/components/schemas/OrderDirectionQuery'
+      responses:
+        '200':
+          description: Request Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetMasterBanksResponse'
+        4XX:
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        5XX:
+          description: Sever Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+        - APIKeyHeader: []
+  '/masters/banks/{id}':
+    get:
+      tags:
+        - masters
+      summary: Get Bank Detail (Admin Route)
+      description: Get Bank Detail (Admin Route)
+      operationId: bankDetail
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Request Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetMasterBankDetailResponse'
+        4XX:
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        5XX:
+          description: Sever Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+        - APIKeyHeader: []
+    patch:
+      tags:
+        - masters
+      summary: Update Bank Data (Admin Route)
+      description: Update Bank Data (Admin Route)
+      operationId: updateBank
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateBankBody'
+        required: true
+      responses:
+        '200':
+          description: Request Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        4XX:
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        5XX:
+          description: Sever Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+        - APIKeyHeader: []
+      x-codegen-request-body-name: body
+    delete:
+      tags:
+        - masters
+      summary: Delete Bank Data (Admin Route)
+      description: Delete Bank Data (Admin Route)
+      operationId: deleteBank
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Request Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        4XX:
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        5XX:
+          description: Sever Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+        - APIKeyHeader: []
+  '/masters/banks/{id}/detail':
+    patch:
+      tags:
+        - masters
+      summary: Update Bank Detail (Admin Route)
+      description: Update Bank Detail (Admin Route)
+      operationId: updateBankDetail
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateBankDetailBody'
+        required: true
+      responses:
+        '200':
+          description: Request Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        4XX:
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        5XX:
+          description: Sever Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+        - APIKeyHeader: []
+      x-codegen-request-body-name: body
+  '/masters/banks/{id}/logo':
+    patch:
+      tags:
+        - masters
+      summary: Change Bank Logo (Admin Route)
+      description: Change Bank Logo (Admin Route)
+      operationId: changeBankLogo
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UpdateBankLogoBody'
+        required: true
+      responses:
+        '200':
+          description: Request Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        4XX:
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        5XX:
+          description: Sever Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+        - APIKeyHeader: []
+  '/masters/banks/{id}/steps':
+    post:
+      tags:
+        - masters
+      summary: Add Bank Step (Admin Route)
+      description: Add Bank Step (Admin Route)
+      operationId: addBankStep
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostBankStepBody'
+        required: true
+      responses:
+        '200':
+          description: Request Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        4XX:
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        5XX:
+          description: Sever Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+        - APIKeyHeader: []
+      x-codegen-request-body-name: body
+  '/masters/banks/steps/{id}':
+    delete:
+      tags:
+        - masters
+      summary: Delete Bank Step (Admin Route)
+      description: Delete Bank Step (Admin Route)
+      operationId: deleteBankStep
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Request Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        4XX:
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        5XX:
+          description: Sever Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+        - APIKeyHeader: []
+  /masters/categories:
+    post:
+      tags:
+        - masters
+      summary: Add Category (Admin Route)
+      description: Add Category (Admin Route)
+      operationId: addCategory
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PostCategoryBody'
+        required: true
+      responses:
+        '200':
+          description: Request Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        4XX:
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        5XX:
+          description: Sever Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+        - APIKeyHeader: []
+    get:
+      tags:
+        - masters
+      summary: Get All Categories (Route All Roles)
+      description: Get All Categories (Route All Roles)
+      operationId: getAllCateogories
+      parameters:
+        - name: page
+          in: query
+          schema:
+            $ref: '#/components/schemas/PageQuery'
+        - name: search
+          in: query
+          description: 'Available search field wallet_name, wallet_description'
+          schema:
+            $ref: '#/components/schemas/SearchQuery'
+        - name: orderBy
+          in: query
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/OrderByQuery'
+              - enum:
+                  - created_at
+                  - category
+                  - description
+        - name: orderDirection
+          in: query
+          schema:
+            $ref: '#/components/schemas/OrderDirectionQuery'
+      responses:
+        '200':
+          description: Request Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryResponse'
+        4XX:
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        5XX:
+          description: Sever Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+        - APIKeyHeader: []
+  '/masters/categories/{id}':
+    patch:
+      tags:
+        - masters
+      summary: Update Category (Admin Route)
+      description: Update Category (Admin Route)
+      operationId: updateCategory
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCategoryBody'
+        required: true
+      responses:
+        '200':
+          description: Request Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        4XX:
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        5XX:
+          description: Sever Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+        - APIKeyHeader: []
+      x-codegen-request-body-name: body
+    delete:
+      tags:
+        - masters
+      summary: Delete Category (Admin Route)
+      description: Delete Category (Admin Route)
+      operationId: deleteCategory
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Request Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        4XX:
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        5XX:
+          description: Sever Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+        - APIKeyHeader: []
+  '/masters/categories/{id}/icon':
+    patch:
+      tags:
+        - masters
+      summary: Update Category Icon (Admin Route)
+      description: Update Category Icon (Admin Route)
+      operationId: updateCategoryIcon
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UpdateCategoryIconBody'
+        required: true
+      responses:
+        '200':
+          description: Request Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        4XX:
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        5XX:
+          description: Sever Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+        - APIKeyHeader: []
+  /masters/medias:
+    post:
+      tags:
+        - masters
+      summary: Add Media (Admin Route)
+      description: Add Media (Admin Route)
+      operationId: addMedia
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PostMediaBody'
+        required: true
+      responses:
+        '200':
+          description: Request Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        4XX:
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        5XX:
+          description: Sever Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+        - APIKeyHeader: []
+    get:
+      tags:
+        - masters
+      summary: Get All Media (Route All Roles)
+      description: Get All Media (Route All Roles)
+      operationId: getAllMedia
+      parameters:
+        - name: page
+          in: query
+          schema:
+            $ref: '#/components/schemas/PageQuery'
+        - name: search
+          in: query
+          description: Available search field label
+          schema:
+            $ref: '#/components/schemas/SearchQuery'
+        - name: orderBy
+          in: query
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/OrderByQuery'
+              - enum:
+                  - created_at
+                  - label
+        - name: orderDirection
+          in: query
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/OrderDirectionQuery'
+      responses:
+        '200':
+          description: Request Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetMediasResponse'
+        4XX:
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        5XX:
+          description: Sever Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+        - APIKeyHeader: []
+  '/masters/medias/{id}':
+    patch:
+      tags:
+        - masters
+      summary: Update Media (Admin Route)
+      description: Update Meida (Admin Route)
+      operationId: updateMedia
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PostMediaBody'
+        required: true
+      responses:
+        '200':
+          description: Request Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        4XX:
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        5XX:
+          description: Sever Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+        - APIKeyHeader: []
+    delete:
+      tags:
+        - masters
+      summary: Delete Media (Admin Route)
+      description: Delete Media (Admin Route)
+      operationId: deleteMedia
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Request Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        4XX:
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        5XX:
+          description: Sever Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+        - APIKeyHeader: []
+  /masters/wallets:
+    post:
+      tags:
+        - masters
+      summary: Add Wallet (Admin Route)
+      description: Add Wallet (Admin Route)
+      operationId: addWallet
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PostWalletBody'
+        required: true
+      responses:
+        '200':
+          description: Request Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        4XX:
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        5XX:
+          description: Sever Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+        - APIKeyHeader: []
+    get:
+      tags:
+        - masters
+      summary: Get All Wallet (Route All Roles)
+      description: Get All Wallet (Route All Roles)
+      operationId: getAllWallet
+      parameters:
+        - name: page
+          in: query
+          schema:
+            $ref: '#/components/schemas/PageQuery'
+        - name: search
+          in: query
+          description: 'Available search field wallet_name, wallet_description'
+          schema:
+            $ref: '#/components/schemas/SearchQuery'
+        - name: orderBy
+          in: query
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/OrderByQuery'
+              - enum:
+                  - created_at
+                  - wallet_name
+                  - wallet_description
+        - name: orderDirection
+          in: query
+          schema:
+            $ref: '#/components/schemas/OrderDirectionQuery'
+      responses:
+        '200':
+          description: Request Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetMasterWalletsResponse'
+        4XX:
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        5XX:
+          description: Sever Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+        - APIKeyHeader: []
+  '/masters/wallets/{id}':
+    patch:
+      tags:
+        - masters
+      summary: Update Wallet (Admin Route)
+      description: Update Wallet (Admin Route)
+      operationId: updateWallet
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateWalletBody'
+        required: true
+      responses:
+        '200':
+          description: Request Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        4XX:
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        5XX:
+          description: Sever Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+        - APIKeyHeader: []
+      x-codegen-request-body-name: body
+    delete:
+      tags:
+        - masters
+      summary: Delete Wallet (Admin Route)
+      description: Delete Wallet (Admin Route)
+      operationId: deleteWallet
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Request Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        4XX:
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        5XX:
+          description: Sever Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+        - APIKeyHeader: []
+  '/masters/wallets/{id}/logo':
+    patch:
+      tags:
+        - masters
+      summary: Update Wallet Logo (Admin Route)
+      description: Update Wallet Logo (Admin Route)
+      operationId: updateWalletLogo
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UpdateWalletLogoBody'
+        required: true
+      responses:
+        '200':
+          description: Request Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        4XX:
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        5XX:
+          description: Sever Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+        - APIKeyHeader: []
+  /masters/faqs:
+    post:
+      tags:
+        - masters
+      summary: Add Faq (Admin Route)
+      description: Add Faq (Admin Route)
+      operationId: addFaq
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostFaqBody'
+        required: true
+      responses:
+        '200':
+          description: Request Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        4XX:
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        5XX:
+          description: Sever Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+        - APIKeyHeader: []
+      x-codegen-request-body-name: body
+    get:
+      tags:
+        - masters
+      summary: Get All Faqs
+      description: Get All Faqs
+      operationId: getAllFaqs
+      responses:
+        '200':
+          description: Request Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetFaqsResponse'
+        4XX:
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        5XX:
+          description: Sever Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+  '/masters/faqs/{id}':
+    patch:
+      tags:
+        - masters
+      summary: Update Faq (Admin Route)
+      description: Update Faq (Admin Route)
+      operationId: updateFaq
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateFaqBody'
+        required: true
+      responses:
+        '200':
+          description: Request Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        4XX:
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        5XX:
+          description: Sever Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+        - APIKeyHeader: []
+      x-codegen-request-body-name: body
+    delete:
+      tags:
+        - masters
+      summary: Delete Faq (Admin Route)
+      description: Delete FAq (Admin Route)
+      operationId: deleteFaq
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Request Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        4XX:
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        5XX:
+          description: Sever Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+        - APIKeyHeader: []
   /merchants:
     get:
       tags:
@@ -361,13 +1372,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                allOf:
-                  - $ref: '#/components/schemas/ApiResponse'
-                  - type: object
-                    properties:
-                      data:
-                        $ref: '#/components/schemas/GetMerchant'
+                $ref: '#/components/schemas/GetMerchantProfileResponse'
         4XX:
           description: Request Error
           content:
@@ -382,7 +1387,7 @@ paths:
                 $ref: '#/components/schemas/ApiResponse'
       security:
         - APIKeyHeader: []
-    put:
+    patch:
       tags:
         - merchants
       summary: Update Merchant Data (Merchant Route)
@@ -392,28 +1397,7 @@ paths:
         content:
           multipart/form-data:
             schema:
-              required:
-                - market_address
-                - market_lat
-                - market_lon
-                - market_name
-                - market_photo
-                - no_identity
-              properties:
-                market_photo:
-                  type: string
-                  format: binary
-                no_identity:
-                  type: string
-                market_name:
-                  type: string
-                market_address:
-                  type: integer
-                  format: int32
-                market_lat:
-                  type: number
-                market_lon:
-                  type: number
+              $ref: '#/components/schemas/UpdateMerchantProfileBody'
         required: true
       responses:
         '200':
@@ -436,45 +1420,53 @@ paths:
                 $ref: '#/components/schemas/ApiResponse'
       security:
         - APIKeyHeader: []
-  /merchants/activate:
+  /merchants/operation-time:
+    patch:
+      tags:
+        - merchants
+      summary: Update Merchant Operation Time (Merchant Route)
+      description: Update Merchant Operation Time (Merchant Route)
+      operationId: updateMerchantOperation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMerchantClosetimeBody'
+        required: true
+      responses:
+        '200':
+          description: Request Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        4XX:
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        5XX:
+          description: Sever Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+        - APIKeyHeader: []
+      x-codegen-request-body-name: body
+  /merchants/products:
     post:
       tags:
         - merchants
-      summary: Activate User Merchant (Route All Roles)
-      description: Activate User Merchant (Route All Roles)
-      operationId: activateMerchant
+      summary: Add Product (Merchant Route)
+      description: Add Product (Merchant Route)
+      operationId: addProduct
       requestBody:
         content:
           multipart/form-data:
             schema:
-              required:
-                - identity_photo
-                - market_address
-                - market_close_time
-                - market_lat
-                - market_lon
-                - market_name
-                - market_photo
-                - no_identity
-              properties:
-                no_identity:
-                  type: string
-                identity_photo:
-                  type: string
-                  format: binary
-                market_photo:
-                  type: string
-                  format: binary
-                market_name:
-                  type: string
-                market_address:
-                  type: string
-                market_lat:
-                  type: number
-                market_lon:
-                  type: number
-                market_close_time:
-                  type: string
+              $ref: '#/components/schemas/PostProductBody'
         required: true
       responses:
         '200':
@@ -482,7 +1474,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiResponse'
+                $ref: '#/components/schemas/PostProductResponse'
         4XX:
           description: Request Error
           content:
@@ -497,7 +1489,6 @@ paths:
                 $ref: '#/components/schemas/ApiResponse'
       security:
         - APIKeyHeader: []
-  /merchants/products:
     get:
       tags:
         - merchants
@@ -534,85 +1525,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                allOf:
-                  - $ref: '#/components/schemas/ApiResponse'
-                  - type: object
-                    properties:
-                      data:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/GetProduct'
-        4XX:
-          description: Request Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        5XX:
-          description: Sever Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-      security:
-        - APIKeyHeader: []
-    post:
-      tags:
-        - merchants
-      summary: Add Product (Merchant Route)
-      description: Add Product (Merchant Route)
-      operationId: addProduct
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              required:
-                - description
-                - discount
-                - price_default
-                - price_selling
-                - product_name
-                - qty
-              properties:
-                product_name:
-                  type: string
-                description:
-                  type: string
-                cover:
-                  type: string
-                  format: binary
-                  default: '1'
-                price_default:
-                  type: integer
-                  format: int32
-                price_selling:
-                  type: integer
-                  format: int32
-                qty:
-                  type: integer
-                  format: int32
-                discount:
-                  type: integer
-                  format: int32
-                is_visible:
-                  type: integer
-                  format: int32
-                  default: 1
-        required: true
-      responses:
-        '200':
-          description: Request Success
-          content:
-            application/json:
-              schema:
-                type: object
-                allOf:
-                  - $ref: '#/components/schemas/ApiResponse'
-                  - type: object
-                    properties:
-                      data:
-                        $ref: '#/components/schemas/GetProductId'
+                $ref: '#/components/schemas/GetMerchantProductsResponse'
         4XX:
           description: Request Error
           content:
@@ -628,46 +1541,7 @@ paths:
       security:
         - APIKeyHeader: []
   '/merchants/products/{id}':
-    get:
-      tags:
-        - merchants
-      summary: Get Single Product (Route All Roles)
-      description: Get Single Product (Route All Roles)
-      operationId: singleProduct
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Request Success
-          content:
-            application/json:
-              schema:
-                type: object
-                allOf:
-                  - $ref: '#/components/schemas/ApiResponse'
-                  - type: object
-                    properties:
-                      data:
-                        $ref: '#/components/schemas/GetSingleProduct'
-        4XX:
-          description: Request Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        5XX:
-          description: Sever Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-      security:
-        - APIKeyHeader: []
-    put:
+    patch:
       tags:
         - merchants
       summary: Update Product (Merchant Route)
@@ -684,7 +1558,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateProduct'
+              $ref: '#/components/schemas/UpdateProductBody'
         required: true
       responses:
         '200':
@@ -708,6 +1582,39 @@ paths:
       security:
         - APIKeyHeader: []
       x-codegen-request-body-name: body
+    get:
+      tags:
+        - merchants
+      summary: Get Single Product (Route All Roles)
+      description: Get Single Product (Route All Roles)
+      operationId: singleProduct
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Request Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetMerchantProductDetailResponse'
+        4XX:
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        5XX:
+          description: Sever Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+        - APIKeyHeader: []
     delete:
       tags:
         - merchants
@@ -742,7 +1649,7 @@ paths:
       security:
         - APIKeyHeader: []
   '/merchants/products/{id}/cover':
-    put:
+    patch:
       tags:
         - merchants
       summary: Change Product Cover (Merchant Route)
@@ -758,12 +1665,7 @@ paths:
         content:
           multipart/form-data:
             schema:
-              required:
-                - cover
-              properties:
-                cover:
-                  type: string
-                  format: binary
+              $ref: '#/components/schemas/UpdateProductCoverBody'
         required: true
       responses:
         '200':
@@ -798,7 +1700,7 @@ paths:
       security:
         - APIKeyHeader: []
   '/merchants/products/{id}/status':
-    put:
+    patch:
       tags:
         - merchants
       summary: Change Product Status (Merchant Route)
@@ -814,7 +1716,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateProductStatus'
+              $ref: '#/components/schemas/UpdateProductStatusBody'
         required: true
       responses:
         '200':
@@ -822,16 +1724,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                allOf:
-                  - $ref: '#/components/schemas/ApiResponse'
-                  - type: object
-                    properties:
-                      data:
-                        type: object
-                        properties:
-                          is_visible:
-                            type: integer
+                $ref: '#/components/schemas/UpdateProductStatusResponse'
         4XX:
           description: Request Error
           content:
@@ -848,7 +1741,7 @@ paths:
         - APIKeyHeader: []
       x-codegen-request-body-name: body
   '/merchants/products/{id}/categories':
-    post:
+    patch:
       tags:
         - merchants
       summary: Bind Product Category (Merchant Route)
@@ -864,7 +1757,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PostProductCategory'
+              $ref: '#/components/schemas/BindProductCategoryBody'
         required: true
       responses:
         '200':
@@ -872,13 +1765,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                allOf:
-                  - $ref: '#/components/schemas/ApiResponse'
-                  - type: object
-                    properties:
-                      data:
-                        $ref: '#/components/schemas/GetProductCategory'
+                $ref: '#/components/schemas/BindProductCategoryResponse'
         4XX:
           description: Request Error
           content:
@@ -894,6 +1781,46 @@ paths:
       security:
         - APIKeyHeader: []
       x-codegen-request-body-name: body
+  '/merchants/products/{id}/image':
+    post:
+      tags:
+        - merchants
+      summary: Add Product Image (Merchant Route)
+      description: Add Product Image (Merchant Route)
+      operationId: productImage
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PostProductImageBody'
+        required: true
+      responses:
+        '200':
+          description: Request Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostProductImageResponse'
+        4XX:
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        5XX:
+          description: Sever Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+        - APIKeyHeader: []
   '/merchants/products/{productId}/categories/{categoryId}':
     delete:
       tags:
@@ -919,51 +1846,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponse'
-        4XX:
-          description: Request Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        5XX:
-          description: Sever Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-      security:
-        - APIKeyHeader: []
-  '/merchants/products/{id}/image':
-    post:
-      tags:
-        - merchants
-      summary: Add Product Image (Merchant Route)
-      description: Add Product Image (Merchant Route)
-      operationId: productImage
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              required:
-                - image
-              properties:
-                image:
-                  type: string
-                  format: binary
-        required: true
-      responses:
-        '200':
-          description: Request Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetProductPhoto'
         4XX:
           description: Request Error
           content:
@@ -1058,15 +1940,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                allOf:
-                  - $ref: '#/components/schemas/ApiResponse'
-                  - type: object
-                    properties:
-                      data:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/GetOrder'
+                $ref: '#/components/schemas/GetMerchantOrdersResponse'
         4XX:
           description: Request Error
           content:
@@ -1100,15 +1974,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                allOf:
-                  - $ref: '#/components/schemas/ApiResponse'
-                  - type: object
-                    properties:
-                      data:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/GetProductOrder'
+                $ref: '#/components/schemas/GetMerchantOrderDetailResponse'
         4XX:
           description: Request Error
           content:
@@ -1123,7 +1989,7 @@ paths:
                 $ref: '#/components/schemas/ApiResponse'
       security:
         - APIKeyHeader: []
-    put:
+    patch:
       tags:
         - merchants
       summary: Update Merchant Order (Merchant Route)
@@ -1139,7 +2005,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateProductOrderStatus'
+              $ref: '#/components/schemas/UpdateOrderStatusBody'
         required: true
       responses:
         '200':
@@ -1147,13 +2013,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                allOf:
-                  - $ref: '#/components/schemas/ApiResponse'
-                  - type: object
-                    properties:
-                      data:
-                        $ref: '#/components/schemas/GetProductOrder'
+                $ref: '#/components/schemas/UpdateOrderStatusResponse'
         4XX:
           description: Request Error
           content:
@@ -1209,54 +2069,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                allOf:
-                  - $ref: '#/components/schemas/ApiResponse'
-                  - type: object
-                    properties:
-                      data:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/GetMerchant'
-        4XX:
-          description: Request Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        5XX:
-          description: Sever Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-  /merchants/random:
-    get:
-      tags:
-        - merchants
-      summary: Merchant Random
-      description: Merchant Random
-      operationId: merchantRandom
-      parameters:
-        - name: limit
-          in: query
-          schema:
-            $ref: '#/components/schemas/LimitQuery'
-      responses:
-        '200':
-          description: Request Success
-          content:
-            application/json:
-              schema:
-                type: object
-                allOf:
-                  - $ref: '#/components/schemas/ApiResponse'
-                  - type: object
-                    properties:
-                      data:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/GetMerchant'
+                $ref: '#/components/schemas/GetMerchantListResponse'
         4XX:
           description: Request Error
           content:
@@ -1288,15 +2101,38 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                allOf:
-                  - $ref: '#/components/schemas/ApiResponse'
-                  - type: object
-                    properties:
-                      data:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/GetProduct'
+                $ref: '#/components/schemas/GetMerchantProductListResponse'
+        4XX:
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        5XX:
+          description: Sever Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+  /merchants/random:
+    get:
+      tags:
+        - merchants
+      summary: Merchant Random
+      description: Merchant Random
+      operationId: merchantRandom
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            $ref: '#/components/schemas/LimitQuery'
+      responses:
+        '200':
+          description: Request Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetRandomMerchantsResponse'
         4XX:
           description: Request Error
           content:
@@ -1328,15 +2164,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                allOf:
-                  - $ref: '#/components/schemas/ApiResponse'
-                  - type: object
-                    properties:
-                      data:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/GetUserTransaction'
+                $ref: '#/components/schemas/GetMerchantTransactionHistoriesResponse'
         4XX:
           description: Request Error
           content:
@@ -1370,15 +2198,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                allOf:
-                  - $ref: '#/components/schemas/ApiResponse'
-                  - type: object
-                    properties:
-                      data:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/GetMerchantIncomes'
+                $ref: '#/components/schemas/GetMerchantIncomeHistoriesResponse'
         4XX:
           description: Request Error
           content:
@@ -1393,18 +2213,128 @@ paths:
                 $ref: '#/components/schemas/ApiResponse'
       security:
         - APIKeyHeader: []
-  /merchants/operation-time:
-    put:
+  /products:
+    get:
       tags:
-        - merchants
-      summary: Update Merchant Operation Time (Merchant Route)
-      description: Update Merchant Operation Time (Merchant Route)
-      operationId: updateMerchantOperation
+        - products
+      summary: Get All Products
+      description: Get All Products
+      operationId: getAllProducts
+      parameters:
+        - name: page
+          in: query
+          schema:
+            $ref: '#/components/schemas/PageQuery'
+        - name: limit
+          in: query
+          schema:
+            type: string
+            default: '10'
+        - name: search
+          in: query
+          description: 'Available search field product_name, market_name, market_address'
+          schema:
+            $ref: '#/components/schemas/SearchQuery'
+        - name: orderBy
+          in: query
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/OrderByQuery'
+              - enum:
+                  - created_at
+                  - product_name
+                  - market_name
+                  - market_address
+        - name: orderDirection
+          in: query
+          schema:
+            $ref: '#/components/schemas/OrderDirectionQuery'
+      responses:
+        '200':
+          description: Request Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetProductsResponse'
+        4XX:
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        5XX:
+          description: Sever Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+  '/products/categories/{categoryId}':
+    get:
+      tags:
+        - products
+      summary: Get All Products by Category
+      description: Get All Products by Category
+      operationId: getAllProductsByCategory
+      parameters:
+        - name: categoryId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: page
+          in: query
+          schema:
+            $ref: '#/components/schemas/PageQuery'
+        - name: limit
+          in: query
+          schema:
+            type: string
+            default: '10'
+        - name: orderBy
+          in: query
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/OrderByQuery'
+              - enum:
+                  - created_at
+                  - product_name
+                  - market_name
+                  - market_address
+        - name: orderDirection
+          in: query
+          schema:
+            $ref: '#/components/schemas/OrderDirectionQuery'
+      responses:
+        '200':
+          description: Request Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetProductsByCategoryResponse'
+        4XX:
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        5XX:
+          description: Sever Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+  /carts:
+    post:
+      tags:
+        - carts
+      summary: Add To Cart (Route All Roles)
+      description: Add To Cart (Route All Roles)
+      operationId: addToCart
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateMerchantOperation'
+              $ref: '#/components/schemas/AddToCartBody'
         required: true
       responses:
         '200':
@@ -1428,7 +2358,6 @@ paths:
       security:
         - APIKeyHeader: []
       x-codegen-request-body-name: body
-  /carts:
     get:
       tags:
         - carts
@@ -1441,15 +2370,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                allOf:
-                  - $ref: '#/components/schemas/ApiResponse'
-                  - type: object
-                    properties:
-                      data:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/GetCart'
+                $ref: '#/components/schemas/GetCartItemsResponse'
         4XX:
           description: Request Error
           content:
@@ -1464,42 +2385,8 @@ paths:
                 $ref: '#/components/schemas/ApiResponse'
       security:
         - APIKeyHeader: []
-    post:
-      tags:
-        - carts
-      summary: Add To Cart (Route All Roles)
-      description: Add To Cart (Route All Roles)
-      operationId: addToCart
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PostAddToCart'
-        required: true
-      responses:
-        '200':
-          description: Request Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        4XX:
-          description: Request Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        5XX:
-          description: Sever Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-      security:
-        - APIKeyHeader: []
-      x-codegen-request-body-name: body
   '/carts/{id}':
-    put:
+    patch:
       tags:
         - carts
       summary: Update Item QTY (Route All Roles)
@@ -1515,7 +2402,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateProductQty'
+              $ref: '#/components/schemas/UpdateCartQtyBody'
         required: true
       responses:
         '200':
@@ -1583,7 +2470,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PostCheckout'
+              $ref: '#/components/schemas/CheckoutBody'
         required: true
       responses:
         '200':
@@ -1654,15 +2541,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                allOf:
-                  - $ref: '#/components/schemas/ApiResponse'
-                  - type: object
-                    properties:
-                      data:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/GetOrder'
+                $ref: '#/components/schemas/GetUserProcessedTransactionsResponse'
         4XX:
           description: Request Error
           content:
@@ -1696,21 +2575,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                allOf:
-                  - $ref: '#/components/schemas/ApiResponse'
-                  - type: object
-                    properties:
-                      data:
-                        type: object
-                        allOf:
-                          - $ref: '#/components/schemas/GetOrder'
-                          - type: object
-                            properties:
-                              products:
-                                type: array
-                                items:
-                                  $ref: '#/components/schemas/GetProductOrder'
+                $ref: '#/components/schemas/GetUserTransactionDetailResponse'
         4XX:
           description: Request Error
           content:
@@ -1725,7 +2590,7 @@ paths:
                 $ref: '#/components/schemas/ApiResponse'
       security:
         - APIKeyHeader: []
-    put:
+    patch:
       tags:
         - transactions
       summary: Finish Transaction (Route All Roles)
@@ -1774,7 +2639,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PostReviewTransaction'
+              $ref: '#/components/schemas/ReviewTransactionBody'
         required: true
       responses:
         '200':
@@ -1798,301 +2663,18 @@ paths:
       security:
         - APIKeyHeader: []
       x-codegen-request-body-name: body
-  /masters/medias:
-    get:
-      tags:
-        - masters
-      summary: Get All Media (Route All Roles)
-      description: Get All Media (Route All Roles)
-      operationId: getAllMedia
-      parameters:
-        - name: page
-          in: query
-          schema:
-            $ref: '#/components/schemas/PageQuery'
-        - name: search
-          in: query
-          description: Available search field label
-          schema:
-            $ref: '#/components/schemas/SearchQuery'
-        - name: orderBy
-          in: query
-          schema:
-            allOf:
-              - $ref: '#/components/schemas/OrderByQuery'
-              - enum:
-                  - created_at
-                  - label
-        - name: orderDirection
-          in: query
-          schema:
-            allOf:
-              - $ref: '#/components/schemas/OrderDirectionQuery'
-      responses:
-        '200':
-          description: Request Success
-          content:
-            application/json:
-              schema:
-                type: object
-                allOf:
-                  - $ref: '#/components/schemas/ApiResponse'
-                  - type: object
-                    properties:
-                      data:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/GetMedia'
-        4XX:
-          description: Request Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        5XX:
-          description: Sever Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-      security:
-        - APIKeyHeader: []
+  /banks/users:
     post:
       tags:
-        - masters
-      summary: Add Media (Admin Route)
-      description: Add Media (Admin Route)
-      operationId: addMedia
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              required:
-                - image
-              properties:
-                image:
-                  type: string
-                  format: binary
-        required: true
-      responses:
-        '200':
-          description: Request Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        4XX:
-          description: Request Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        5XX:
-          description: Sever Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-      security:
-        - APIKeyHeader: []
-  '/masters/medias/{id}':
-    put:
-      tags:
-        - masters
-      summary: Update Media (Admin Route)
-      description: Update Meida (Admin Route)
-      operationId: updateMedia
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              required:
-                - image
-              properties:
-                image:
-                  type: string
-                  format: binary
-        required: true
-      responses:
-        '200':
-          description: Request Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        4XX:
-          description: Request Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        5XX:
-          description: Sever Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-      security:
-        - APIKeyHeader: []
-    delete:
-      tags:
-        - masters
-      summary: Delete Media (Admin Route)
-      description: Delete Media (Admin Route)
-      operationId: deleteMedia
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Request Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        4XX:
-          description: Request Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        5XX:
-          description: Sever Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-      security:
-        - APIKeyHeader: []
-  /masters/wallets:
-    get:
-      tags:
-        - masters
-      summary: Get All Wallet (Route All Roles)
-      description: Get All Wallet (Route All Roles)
-      operationId: getAllWallet
-      parameters:
-        - name: page
-          in: query
-          schema:
-            $ref: '#/components/schemas/PageQuery'
-        - name: search
-          in: query
-          description: 'Available search field wallet_name, wallet_description'
-          schema:
-            $ref: '#/components/schemas/SearchQuery'
-        - name: orderBy
-          in: query
-          schema:
-            allOf:
-              - $ref: '#/components/schemas/OrderByQuery'
-              - enum:
-                  - created_at
-                  - wallet_name
-                  - wallet_description
-        - name: orderDirection
-          in: query
-          schema:
-            $ref: '#/components/schemas/OrderDirectionQuery'
-      responses:
-        '200':
-          description: Request Success
-          content:
-            application/json:
-              schema:
-                type: object
-                allOf:
-                  - $ref: '#/components/schemas/ApiResponse'
-                  - type: object
-                    properties:
-                      data:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/GetWallet'
-        4XX:
-          description: Request Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        5XX:
-          description: Sever Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-      security:
-        - APIKeyHeader: []
-    post:
-      tags:
-        - masters
-      summary: Add Wallet (Admin Route)
-      description: Add Wallet (Admin Route)
-      operationId: addWallet
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              required:
-                - wallet_description
-                - wallet_name
-              properties:
-                logo:
-                  type: string
-                  format: binary
-                wallet_name:
-                  type: string
-                wallet_description:
-                  type: string
-        required: true
-      responses:
-        '200':
-          description: Request Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        4XX:
-          description: Request Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        5XX:
-          description: Sever Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-      security:
-        - APIKeyHeader: []
-  '/masters/wallets/{id}':
-    put:
-      tags:
-        - masters
-      summary: Update Wallet (Admin Route)
-      description: Update Wallet (Admin Route)
-      operationId: updateWallet
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
+        - banks
+      summary: Add Bank User (Route All Roles)
+      description: Add Bank User (Route All Roles)
+      operationId: addBankUser
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateWallet'
+              $ref: '#/components/schemas/PostBankUserBody'
         required: true
       responses:
         '200':
@@ -2116,844 +2698,6 @@ paths:
       security:
         - APIKeyHeader: []
       x-codegen-request-body-name: body
-    delete:
-      tags:
-        - masters
-      summary: Delete Wallet (Admin Route)
-      description: Delete Wallet (Admin Route)
-      operationId: deleteWallet
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Request Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        4XX:
-          description: Request Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        5XX:
-          description: Sever Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-      security:
-        - APIKeyHeader: []
-  '/masters/wallets/{id}/logo':
-    put:
-      tags:
-        - masters
-      summary: Update Wallet Logo (Admin Route)
-      description: Update Wallet Logo (Admin Route)
-      operationId: updateWalletLogo
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              required:
-                - logo
-              properties:
-                logo:
-                  type: string
-                  format: binary
-        required: true
-      responses:
-        '200':
-          description: Request Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        4XX:
-          description: Request Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        5XX:
-          description: Sever Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-      security:
-        - APIKeyHeader: []
-  /masters/banks:
-    get:
-      tags:
-        - masters
-      summary: Get All Bank Data (Route All Roles)
-      description: Get All Bank Data (Route All Roles)
-      operationId: getAllBank
-      parameters:
-        - name: page
-          in: query
-          schema:
-            $ref: '#/components/schemas/PageQuery'
-        - name: search
-          in: query
-          description: Available search field bank_name
-          schema:
-            $ref: '#/components/schemas/SearchQuery'
-        - name: orderBy
-          in: query
-          schema:
-            allOf:
-              - $ref: '#/components/schemas/OrderByQuery'
-              - enum:
-                  - created_at
-                  - bank_name
-        - name: orderDirection
-          in: query
-          schema:
-            $ref: '#/components/schemas/OrderDirectionQuery'
-      responses:
-        '200':
-          description: Request Success
-          content:
-            application/json:
-              schema:
-                type: object
-                allOf:
-                  - $ref: '#/components/schemas/ApiResponse'
-                  - type: object
-                    properties:
-                      data:
-                        type: array
-                        items:
-                          type: object
-                          allOf:
-                            - $ref: '#/components/schemas/GetBank'
-                            - type: object
-                              properties:
-                                Logo:
-                                  $ref: '#/components/schemas/GetMedia'
-        4XX:
-          description: Request Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        5XX:
-          description: Sever Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-      security:
-        - APIKeyHeader: []
-    post:
-      tags:
-        - masters
-      summary: Add Bank Data (Admin Route)
-      description: Add Bank Data (Admin Route)
-      operationId: addBank
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              required:
-                - bank_name
-              properties:
-                logo:
-                  type: string
-                  format: binary
-                bank_name:
-                  type: string
-        required: true
-      responses:
-        '200':
-          description: Request Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        4XX:
-          description: Request Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        5XX:
-          description: Sever Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-      security:
-        - APIKeyHeader: []
-  '/masters/banks/{id}':
-    get:
-      tags:
-        - masters
-      summary: Get Bank Detail (Admin Route)
-      description: Get Bank Detail (Admin Route)
-      operationId: bankDetail
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Request Success
-          content:
-            application/json:
-              schema:
-                type: object
-                allOf:
-                  - $ref: '#/components/schemas/ApiResponse'
-                  - type: object
-                    properties:
-                      data:
-                        type: array
-                        items:
-                          type: object
-                          allOf:
-                            - $ref: '#/components/schemas/GetBank'
-                            - type: object
-                              properties:
-                                Logo:
-                                  $ref: '#/components/schemas/GetMedia'
-                                Accounts:
-                                  type: array
-                                  items:
-                                    $ref: '#/components/schemas/GetBankUser'
-                                Utilities:
-                                  type: array
-                                  items:
-                                    $ref: '#/components/schemas/GetBankUtility'
-        4XX:
-          description: Request Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        5XX:
-          description: Sever Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-      security:
-        - APIKeyHeader: []
-    put:
-      tags:
-        - masters
-      summary: Update Bank Data (Admin Route)
-      description: Update Bank Data (Admin Route)
-      operationId: updateBank
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateBank'
-        required: true
-      responses:
-        '200':
-          description: Request Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        4XX:
-          description: Request Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        5XX:
-          description: Sever Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-      security:
-        - APIKeyHeader: []
-      x-codegen-request-body-name: body
-    delete:
-      tags:
-        - masters
-      summary: Delete Bank Data (Admin Route)
-      description: Delete Bank Data (Admin Route)
-      operationId: deleteBank
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Request Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        4XX:
-          description: Request Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        5XX:
-          description: Sever Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-      security:
-        - APIKeyHeader: []
-  '/masters/banks/{id}/logo':
-    put:
-      tags:
-        - masters
-      summary: Change Bank Logo (Admin Route)
-      description: Change Bank Logo (Admin Route)
-      operationId: changeBankLogo
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              required:
-                - logo
-              properties:
-                logo:
-                  type: string
-                  format: binary
-        required: true
-      responses:
-        '200':
-          description: Request Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        4XX:
-          description: Request Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        5XX:
-          description: Sever Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-      security:
-        - APIKeyHeader: []
-  '/masters/banks/{id}/detail':
-    put:
-      tags:
-        - masters
-      summary: Update Bank Detail (Admin Route)
-      description: Update Bank Detail (Admin Route)
-      operationId: updateBankDetail
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateBankDetail'
-        required: true
-      responses:
-        '200':
-          description: Request Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        4XX:
-          description: Request Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        5XX:
-          description: Sever Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-      security:
-        - APIKeyHeader: []
-      x-codegen-request-body-name: body
-  '/masters/banks/{id}/steps':
-    post:
-      tags:
-        - masters
-      summary: Add Bank Step (Admin Route)
-      description: Add Bank Step (Admin Route)
-      operationId: addBankStep
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PostBankStep'
-        required: true
-      responses:
-        '200':
-          description: Request Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        4XX:
-          description: Request Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        5XX:
-          description: Sever Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-      security:
-        - APIKeyHeader: []
-      x-codegen-request-body-name: body
-  '/masters/banks/steps/{id}':
-    delete:
-      tags:
-        - masters
-      summary: Delete Bank Step (Admin Route)
-      description: Delete Bank Step (Admin Route)
-      operationId: deleteBankStep
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Request Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        4XX:
-          description: Request Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        5XX:
-          description: Sever Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-      security:
-        - APIKeyHeader: []
-  /masters/categories:
-    get:
-      tags:
-        - masters
-      summary: Get All Categories (Route All Roles)
-      description: Get All Categories (Route All Roles)
-      operationId: getAllCateogories
-      parameters:
-        - name: page
-          in: query
-          schema:
-            $ref: '#/components/schemas/PageQuery'
-        - name: search
-          in: query
-          description: 'Available search field wallet_name, wallet_description'
-          schema:
-            $ref: '#/components/schemas/SearchQuery'
-        - name: orderBy
-          in: query
-          schema:
-            allOf:
-              - $ref: '#/components/schemas/OrderByQuery'
-              - enum:
-                  - created_at
-                  - category
-                  - description
-        - name: orderDirection
-          in: query
-          schema:
-            $ref: '#/components/schemas/OrderDirectionQuery'
-      responses:
-        '200':
-          description: Request Success
-          content:
-            application/json:
-              schema:
-                type: object
-                allOf:
-                  - $ref: '#/components/schemas/ApiResponse'
-                  - type: object
-                    properties:
-                      data:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/GetCategory'
-        4XX:
-          description: Request Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        5XX:
-          description: Sever Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-      security:
-        - APIKeyHeader: []
-    post:
-      tags:
-        - masters
-      summary: Add Category (Admin Route)
-      description: Add Category (Admin Route)
-      operationId: addCategory
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              required:
-                - category
-                - description
-                - slug
-              properties:
-                icon:
-                  type: string
-                  format: binary
-                category:
-                  type: string
-                slug:
-                  type: string
-                description:
-                  type: string
-        required: true
-      responses:
-        '200':
-          description: Request Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        4XX:
-          description: Request Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        5XX:
-          description: Sever Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-      security:
-        - APIKeyHeader: []
-  '/masters/categories/{id}':
-    put:
-      tags:
-        - masters
-      summary: Update Category (Admin Route)
-      description: Update Category (Admin Route)
-      operationId: updateCategory
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateCategory'
-        required: true
-      responses:
-        '200':
-          description: Request Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        4XX:
-          description: Request Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        5XX:
-          description: Sever Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-      security:
-        - APIKeyHeader: []
-      x-codegen-request-body-name: body
-    delete:
-      tags:
-        - masters
-      summary: Delete Category (Admin Route)
-      description: Delete Category (Admin Route)
-      operationId: deleteCategory
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Request Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        4XX:
-          description: Request Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        5XX:
-          description: Sever Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-      security:
-        - APIKeyHeader: []
-  '/masters/categories/{id}/icon':
-    put:
-      tags:
-        - masters
-      summary: Update Category Icon (Admin Route)
-      description: Update Category Icon (Admin Route)
-      operationId: updateCategoryIcon
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              required:
-                - icon
-              properties:
-                icon:
-                  type: string
-                  format: binary
-        required: true
-      responses:
-        '200':
-          description: Request Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        4XX:
-          description: Request Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        5XX:
-          description: Sever Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-      security:
-        - APIKeyHeader: []
-  /masters/faqs:
-    get:
-      tags:
-        - masters
-      summary: Get All Faqs
-      description: Get All Faqs
-      operationId: getAllFaqs
-      responses:
-        '200':
-          description: Request Success
-          content:
-            application/json:
-              schema:
-                type: object
-                allOf:
-                  - $ref: '#/components/schemas/ApiResponse'
-                  - type: object
-                    properties:
-                      data:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/GetFaq'
-        4XX:
-          description: Request Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        5XX:
-          description: Sever Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-    post:
-      tags:
-        - masters
-      summary: Add Faq (Admin Route)
-      description: Add Faq (Admin Route)
-      operationId: addFaq
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PostFaq'
-        required: true
-      responses:
-        '200':
-          description: Request Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        4XX:
-          description: Request Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        5XX:
-          description: Sever Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-      security:
-        - APIKeyHeader: []
-      x-codegen-request-body-name: body
-  '/masters/faqs/{id}':
-    put:
-      tags:
-        - masters
-      summary: Update Faq (Admin Route)
-      description: Update Faq (Admin Route)
-      operationId: updateFaq
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateFaq'
-        required: true
-      responses:
-        '200':
-          description: Request Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        4XX:
-          description: Request Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        5XX:
-          description: Sever Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-      security:
-        - APIKeyHeader: []
-      x-codegen-request-body-name: body
-    delete:
-      tags:
-        - masters
-      summary: Delete Faq (Admin Route)
-      description: Delete FAq (Admin Route)
-      operationId: deleteFaq
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Request Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        4XX:
-          description: Request Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        5XX:
-          description: Sever Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-      security:
-        - APIKeyHeader: []
   /banks:
     get:
       tags:
@@ -2967,25 +2711,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                allOf:
-                  - $ref: '#/components/schemas/ApiResponse'
-                  - type: object
-                    properties:
-                      data:
-                        type: array
-                        items:
-                          type: object
-                          allOf:
-                            - $ref: '#/components/schemas/GetBank'
-                            - type: object
-                              properties:
-                                Logo:
-                                  $ref: '#/components/schemas/GetMedia'
-                                Account:
-                                  type: array
-                                  items:
-                                    $ref: '#/components/schemas/GetBankUser'
+                $ref: '#/components/schemas/GetBanksResponse'
         4XX:
           description: Request Error
           content:
@@ -3019,25 +2745,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                allOf:
-                  - $ref: '#/components/schemas/ApiResponse'
-                  - type: object
-                    properties:
-                      data:
-                        type: array
-                        items:
-                          type: object
-                          allOf:
-                            - $ref: '#/components/schemas/GetBank'
-                            - type: object
-                              properties:
-                                Logo:
-                                  $ref: '#/components/schemas/GetMedia'
-                                Utilities:
-                                  type: array
-                                  items:
-                                    $ref: '#/components/schemas/GetBankUtility'
+                $ref: '#/components/schemas/GetBankDetailResponse'
         4XX:
           description: Request Error
           content:
@@ -3065,27 +2773,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                allOf:
-                  - $ref: '#/components/schemas/ApiResponse'
-                  - type: object
-                    properties:
-                      data:
-                        type: array
-                        items:
-                          type: object
-                          allOf:
-                            - $ref: '#/components/schemas/GetBankUser'
-                            - type: object
-                              properties:
-                                Bank:
-                                  type: object
-                                  allOf:
-                                    - $ref: '#/components/schemas/GetBank'
-                                    - type: object
-                                      properties:
-                                        Logo:
-                                          $ref: '#/components/schemas/GetMedia'
+                $ref: '#/components/schemas/GetBankUsersResponse'
         4XX:
           description: Request Error
           content:
@@ -3100,43 +2788,8 @@ paths:
                 $ref: '#/components/schemas/ApiResponse'
       security:
         - APIKeyHeader: []
-  /banks/users:
-    post:
-      tags:
-        - banks
-      summary: Add Bank User (Route All Roles)
-      description: Add Bank User (Route All Roles)
-      operationId: addBankUser
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PostBankUser'
-        required: true
-      responses:
-        '200':
-          description: Request Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        4XX:
-          description: Request Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        5XX:
-          description: Sever Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-      security:
-        - APIKeyHeader: []
-      x-codegen-request-body-name: body
   '/banks/users/{id}':
-    put:
+    patch:
       tags:
         - banks
       summary: Update Bank User (Route All Roles)
@@ -3152,7 +2805,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateBankUser'
+              $ref: '#/components/schemas/UpdateBankUserBody'
         required: true
       responses:
         '200':
@@ -3209,6 +2862,78 @@ paths:
                 $ref: '#/components/schemas/ApiResponse'
       security:
         - APIKeyHeader: []
+  /wallets/topup:
+    post:
+      tags:
+        - wallets
+      summary: Top Up (Route All Roles)
+      description: Top Up (Route All Roles)
+      operationId: topUp
+      requestBody:
+        description: Request Data
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TopUpBody'
+        required: true
+      responses:
+        '200':
+          description: Request Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        4XX:
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        5XX:
+          description: Sever Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+        - APIKeyHeader: []
+      x-codegen-request-body-name: body
+  /wallets/withdraw:
+    post:
+      tags:
+        - wallets
+      summary: Withdraw (Route All Roles)
+      description: Withdraw (Route All Roles)
+      operationId: withdraw
+      requestBody:
+        description: Request Data
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WithdrawBody'
+        required: true
+      responses:
+        '200':
+          description: Request Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        4XX:
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        5XX:
+          description: Sever Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+        - APIKeyHeader: []
+      x-codegen-request-body-name: body
   /wallets:
     get:
       tags:
@@ -3222,13 +2947,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                allOf:
-                  - $ref: '#/components/schemas/ApiResponse'
-                  - type: object
-                    properties:
-                      data:
-                        $ref: '#/components/schemas/GetUserWallet'
+                $ref: '#/components/schemas/GetWalletsResponse'
         4XX:
           description: Request Error
           content:
@@ -3243,123 +2962,6 @@ paths:
                 $ref: '#/components/schemas/ApiResponse'
       security:
         - APIKeyHeader: []
-  /wallets/topup:
-    post:
-      tags:
-        - wallets
-      summary: Top Up (Route All Roles)
-      description: Top Up (Route All Roles)
-      operationId: topUp
-      requestBody:
-        description: Request Data
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PostTopUp'
-        required: true
-      responses:
-        '200':
-          description: Request Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        4XX:
-          description: Request Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        5XX:
-          description: Sever Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-      security:
-        - APIKeyHeader: []
-      x-codegen-request-body-name: body
-  '/wallets/topup/{id}/image':
-    post:
-      tags:
-        - wallets
-      summary: Upload Proof of Top Up (Route All Roles)
-      description: Upload Proof of Top Up (Route All Roles)
-      operationId: uploadProofOfTopUp
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              required:
-                - image
-              properties:
-                image:
-                  type: string
-                  format: binary
-        required: true
-      responses:
-        '200':
-          description: Request Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        4XX:
-          description: Request Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        5XX:
-          description: Sever Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-      security:
-        - APIKeyHeader: []
-  /wallets/withdraw:
-    post:
-      tags:
-        - wallets
-      summary: Withdraw (Route All Roles)
-      description: Withdraw (Route All Roles)
-      operationId: withdraw
-      requestBody:
-        description: Request Data
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PostWithdraw'
-        required: true
-      responses:
-        '200':
-          description: Request Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        4XX:
-          description: Request Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        5XX:
-          description: Sever Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-      security:
-        - APIKeyHeader: []
-      x-codegen-request-body-name: body
   /wallets/topup/histories:
     get:
       tags:
@@ -3396,15 +2998,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                allOf:
-                  - $ref: '#/components/schemas/ApiResponse'
-                  - type: object
-                    properties:
-                      data:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/GetTopUp'
+                $ref: '#/components/schemas/GetTopUpHistoriesResponse'
         4XX:
           description: Request Error
           content:
@@ -3454,27 +3048,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                allOf:
-                  - $ref: '#/components/schemas/ApiResponse'
-                  - type: object
-                    properties:
-                      data:
-                        type: array
-                        items:
-                          type: object
-                          allOf:
-                            - $ref: '#/components/schemas/GetWithdraw'
-                            - type: object
-                              properties:
-                                UserBank:
-                                  type: object
-                                  allOf:
-                                    - $ref: '#/components/schemas/GetBankUser'
-                                    - type: object
-                                      properties:
-                                        Bank:
-                                          $ref: '#/components/schemas/GetBank'
+                $ref: '#/components/schemas/GetWithdrawHistoriesResponse'
         4XX:
           description: Request Error
           content:
@@ -3508,50 +3082,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                allOf:
-                  - $ref: '#/components/schemas/ApiResponse'
-                  - type: object
-                    properties:
-                      data:
-                        type: array
-                        items:
-                          type: object
-                          allOf:
-                            - $ref: '#/components/schemas/GetTopUp'
-                            - type: object
-                              properties:
-                                Bank:
-                                  type: object
-                                  allOf:
-                                    - $ref: '#/components/schemas/GetBank'
-                                    - type: object
-                                      properties:
-                                        Utilities:
-                                          type: array
-                                          items:
-                                            $ref: '#/components/schemas/GetBankUtility'
-                                        Accounts:
-                                          type: array
-                                          items:
-                                            $ref: '#/components/schemas/GetBankUser'
-                                Media:
-                                  $ref: '#/components/schemas/GetMedia'
-                                UserWallet:
-                                  type: object
-                                  properties:
-                                    id_u_user:
-                                      type: integer
-                                    u_user:
-                                      type: object
-                                      properties:
-                                        id_m_users:
-                                          type: integer
-                                        m_user:
-                                          type: object
-                                          properties:
-                                            full_name:
-                                              type: string
+                $ref: '#/components/schemas/GetTopUpDetailResponse'
         4XX:
           description: Request Error
           content:
@@ -3585,35 +3116,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                allOf:
-                  - $ref: '#/components/schemas/ApiResponse'
-                  - type: object
-                    properties:
-                      data:
-                        type: array
-                        items:
-                          type: object
-                          allOf:
-                            - $ref: '#/components/schemas/GetTopUp'
-                            - type: object
-                              properties:
-                                UserBank:
-                                  type: object
-                                  allOf:
-                                    - $ref: '#/components/schemas/GetBankUser'
-                                    - type: object
-                                      properties:
-                                        Bank:
-                                          type: object
-                                          allOf:
-                                            - $ref: '#/components/schemas/GetBank'
-                                            - type: object
-                                              properties:
-                                                Utilities:
-                                                  type: array
-                                                  items:
-                                                    $ref: '#/components/schemas/GetBankUtility'
+                $ref: '#/components/schemas/GetWithdrawDetailResponse'
         4XX:
           description: Request Error
           content:
@@ -3628,90 +3131,6 @@ paths:
                 $ref: '#/components/schemas/ApiResponse'
       security:
         - APIKeyHeader: []
-  '/wallets/topup/{id}/status':
-    put:
-      tags:
-        - wallets
-      summary: Update Top Up Status (Admin Route)
-      description: Update Top Up Status (Admin Route)
-      operationId: updateTopUpStatus
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      requestBody:
-        description: Request Data
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateTopUpStatus'
-        required: true
-      responses:
-        '200':
-          description: Request Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        4XX:
-          description: Request Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        5XX:
-          description: Sever Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-      security:
-        - APIKeyHeader: []
-      x-codegen-request-body-name: body
-  '/wallets/withdraw/{id}/status':
-    put:
-      tags:
-        - wallets
-      summary: Update Withdraw Status (Admin Route)
-      description: Update Withdraw Status (Admin Route)
-      operationId: updateWithdrawStatus
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      requestBody:
-        description: Request Data
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateWithdrawStatus'
-        required: true
-      responses:
-        '200':
-          description: Request Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        4XX:
-          description: Request Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        5XX:
-          description: Sever Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-      security:
-        - APIKeyHeader: []
-      x-codegen-request-body-name: body
   /wallets/topup/users/all:
     get:
       tags:
@@ -3753,15 +3172,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                allOf:
-                  - $ref: '#/components/schemas/ApiResponse'
-                  - type: object
-                    properties:
-                      data:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/GetTopUp'
+                $ref: '#/components/schemas/GetAllUserTopUpResponse'
         4XX:
           description: Request Error
           content:
@@ -3816,15 +3227,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                allOf:
-                  - $ref: '#/components/schemas/ApiResponse'
-                  - type: object
-                    properties:
-                      data:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/GetWithdraw'
+                $ref: '#/components/schemas/GetAllUserWithdrawResponse'
         4XX:
           description: Request Error
           content:
@@ -3839,120 +3242,32 @@ paths:
                 $ref: '#/components/schemas/ApiResponse'
       security:
         - APIKeyHeader: []
-  /products:
-    get:
+  '/wallets/topup/{id}/image':
+    post:
       tags:
-        - products
-      summary: Get All Products
-      description: Get All Products
-      operationId: getAllProducts
+        - wallets
+      summary: Upload Proof of Top Up (Route All Roles)
+      description: Upload Proof of Top Up (Route All Roles)
+      operationId: uploadProofOfTopUp
       parameters:
-        - name: page
-          in: query
-          schema:
-            $ref: '#/components/schemas/PageQuery'
-        - name: limit
-          in: query
-          schema:
-            type: string
-            default: '10'
-        - name: search
-          in: query
-          description: 'Available search field product_name, market_name, market_address'
-          schema:
-            $ref: '#/components/schemas/SearchQuery'
-        - name: orderBy
-          in: query
-          schema:
-            allOf:
-              - $ref: '#/components/schemas/OrderByQuery'
-              - enum:
-                  - created_at
-                  - product_name
-                  - market_name
-                  - market_address
-        - name: orderDirection
-          in: query
-          schema:
-            $ref: '#/components/schemas/OrderDirectionQuery'
-      responses:
-        '200':
-          description: Request Success
-          content:
-            application/json:
-              schema:
-                type: object
-                allOf:
-                  - $ref: '#/components/schemas/ApiResponse'
-                  - type: object
-                    properties:
-                      data:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/GetProduct'
-        4XX:
-          description: Request Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        5XX:
-          description: Sever Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-  '/products/categories/{categoryId}':
-    get:
-      tags:
-        - products
-      summary: Get All Products by Category
-      description: Get All Products by Category
-      operationId: getAllProductsByCategory
-      parameters:
-        - name: categoryId
+        - name: id
           in: path
           required: true
           schema:
             type: string
-        - name: page
-          in: query
-          schema:
-            $ref: '#/components/schemas/PageQuery'
-        - name: limit
-          in: query
-          schema:
-            type: string
-            default: '10'
-        - name: orderBy
-          in: query
-          schema:
-            allOf:
-              - $ref: '#/components/schemas/OrderByQuery'
-              - enum:
-                  - created_at
-                  - product_name
-                  - market_name
-                  - market_address
-        - name: orderDirection
-          in: query
-          schema:
-            $ref: '#/components/schemas/OrderDirectionQuery'
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TopUpProofBody'
+        required: true
       responses:
         '200':
           description: Request Success
           content:
             application/json:
               schema:
-                type: object
-                allOf:
-                  - $ref: '#/components/schemas/ApiResponse'
-                  - type: object
-                    properties:
-                      data:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/GetProduct'
+                $ref: '#/components/schemas/ApiResponse'
         4XX:
           description: Request Error
           content:
@@ -3965,6 +3280,92 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponse'
+      security:
+        - APIKeyHeader: []
+  '/wallets/topup/{id}/status':
+    patch:
+      tags:
+        - wallets
+      summary: Update Top Up Status (Admin Route)
+      description: Update Top Up Status (Admin Route)
+      operationId: updateTopUpStatus
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Request Data
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTopUpStatusBody'
+        required: true
+      responses:
+        '200':
+          description: Request Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        4XX:
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        5XX:
+          description: Sever Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+        - APIKeyHeader: []
+      x-codegen-request-body-name: body
+  '/wallets/withdraw/{id}/status':
+    patch:
+      tags:
+        - wallets
+      summary: Update Withdraw Status (Admin Route)
+      description: Update Withdraw Status (Admin Route)
+      operationId: updateWithdrawStatus
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Request Data
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateWithdrawStatusBody'
+        required: true
+      responses:
+        '200':
+          description: Request Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        4XX:
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        5XX:
+          description: Sever Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+        - APIKeyHeader: []
+      x-codegen-request-body-name: body
 components:
   schemas:
     PageQuery:
@@ -3992,17 +3393,20 @@ components:
     StatusQuery:
       type: string
       default: '0'
-    PostLogin:
-      required:
-        - password
-        - username
+    UserAuthorizedResponse:
       type: object
-      properties:
-        username:
-          type: string
-        password:
-          type: string
-    PostRegister:
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                type:
+                  type: integer
+                token:
+                  type: string
+    RegisterBody:
       required:
         - address
         - full_name
@@ -4013,102 +3417,339 @@ components:
       properties:
         full_name:
           type: string
+          minLength: 2
+          maxLength: 255
+        phone_number:
+          type: string
+          minLength: 5
+          maxLength: 14
+        address:
+          type: string
+          minLength: 5
+          maxLength: 1000
+        username:
+          type: string
+          minLength: 8
+          maxLength: 20
+        password:
+          type: string
+          minLength: 8
+          maxLength: 20
+    ActivateMerchantBody:
+      required:
+        - identity_photo
+        - market_photo
+        - no_identity
+        - market_name
+        - market_address
+        - market_lat
+        - market_lon
+        - market_close_time
+      properties:
+        identity_photo:
+          type: string
+          format: binary
+        market_photo:
+          type: string
+          format: binary
+        no_identity:
+          type: string
+        market_name:
+          type: string
+        market_address:
+          type: string
+        market_lat:
+          type: number
+        market_lon:
+          type: number
+        market_close_time:
+          type: string
+    LoginBody:
+      required:
+        - password
+        - username
+      type: object
+      properties:
         username:
           type: string
         password:
           type: string
-        phone_number:
+    GetProfileResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                full_name:
+                  type: string
+                username:
+                  type: string
+                address:
+                  type: string
+                phone_number:
+                  type: string
+                face:
+                  type: string
+                  nullable: true
+                wallets:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      balance:
+                        type: integer
+                      is_visible:
+                        type: integer
+                      wallet_name:
+                        type: string
+                        nullable: true
+                      wallet_description:
+                        type: string
+                        nullable: true
+                      uri:
+                        type: string
+                        nullable: true
+                      label:
+                        type: string
+                        nullable: true
+    UpdateProfileBody:
+      type: object
+      properties:
+        avatar:
+          type: string
+          format: binary
+        full_name:
           type: string
         address:
           type: string
-    PostForgotPassword:
+        phone_number:
+          type: string
+    ForgotPasswordBody:
       required:
         - phone_number
       type: object
       properties:
         phone_number:
           type: string
-    PostAddToCart:
+    VerifyTokenResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+        - type: object
+          properties:
+            data:
+              $ref: '#/components/schemas/GetToken'
+    ResetPasswordBody:
       required:
-        - id_m_products
-        - id_merchant
-        - qty
+        - new_password
       type: object
       properties:
-        qty:
-          type: integer
-        id_merchant:
-          type: integer
-        id_m_products:
-          type: integer
-    PostProductCategory:
-      required:
-        - id_category
-      type: object
-      properties:
-        id_category:
-          type: integer
-    PostReviewTransaction:
-      required:
-        - rating
-        - review
-      type: object
-      properties:
-        rating:
-          type: integer
-        review:
+        new_password:
           type: string
-    PostBankStep:
+    PostBankBody:
+      required:
+        - bank_name
+      properties:
+        logo:
+          type: string
+          format: binary
+        bank_name:
+          type: string
+    GetMasterBanksResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                type: object
+                allOf:
+                  - $ref: '#/components/schemas/GetBank'
+                  - type: object
+                    properties:
+                      Logo:
+                        $ref: '#/components/schemas/GetMedia'
+    GetMasterBankDetailResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                type: object
+                allOf:
+                  - $ref: '#/components/schemas/GetBank'
+                  - type: object
+                    properties:
+                      Logo:
+                        $ref: '#/components/schemas/GetMedia'
+                      Accounts:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/GetBankUser'
+                      Utilities:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/GetBankUtility'
+    UpdateBankBody:
+      type: object
+      properties:
+        bank_name:
+          type: string
+        visibility:
+          type: integer
+    UpdateBankDetailBody:
+      required:
+        - account_number
+        - account_name
+      type: object
+      properties:
+        account_number:
+          type: string
+        account_name:
+          type: string
+    UpdateBankLogoBody:
+      required:
+        - logo
+      properties:
+        logo:
+          type: string
+          format: binary
+    PostBankStepBody:
       required:
         - step
       type: object
       properties:
         step:
           type: string
-    PostBankUser:
+    PostCategoryBody:
       required:
-        - account_name
-        - account_number
-        - id_m_banks
-      type: object
+        - category
+        - description
+        - slug
       properties:
-        id_m_banks:
-          type: integer
-        account_number:
+        icon:
           type: string
-        account_name:
+          format: binary
+        category:
           type: string
-    PostTopUp:
-      required:
-        - balance_request
-        - balance_transfer
-        - id_m_banks
+        slug:
+          type: string
+        description:
+          type: string
+    CategoryResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  id_icon:
+                    type: integer
+                  category:
+                    type: string
+                  slug:
+                    type: string
+                  description:
+                    type: string
+                  uri:
+                    type: string
+                  label:
+                    type: string
+                  is_visible:
+                    type: integer
+                  created_at:
+                    type: string
+                    format: date-time
+                  updated_at:
+                    type: string
+                    format: date-time
+    UpdateCategoryBody:
       type: object
       properties:
-        id_m_banks:
+        category:
+          type: string
+        slug:
+          type: string
+        description:
+          type: string
+        visibility:
           type: integer
-        balance_request:
-          type: integer
-        balance_transfer:
-          type: integer
-    PostWithdraw:
+    UpdateCategoryIconBody:
       required:
-        - balance_request
-        - id_u_user_bank_account
-      type: object
+        - icon
       properties:
-        id_u_user_bank_account:
-          type: integer
-        balance_request:
-          type: integer
-    PostCheckout:
+        icon:
+          type: string
+          format: binary
+    PostMediaBody:
       required:
-        - price_total
-      type: object
+        - image
       properties:
-        price_total:
+        image:
+          type: string
+          format: binary
+    GetMediasResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/GetMedia'
+    PostWalletBody:
+      required:
+        - wallet_description
+        - wallet_name
+      properties:
+        logo:
+          type: string
+          format: binary
+        wallet_name:
+          type: string
+        wallet_description:
+          type: string
+    GetMasterWalletsResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/GetWallet'
+    UpdateWalletBody:
+      properties:
+        wallet_name:
+          type: string
+        wallet_description:
+          type: string
+        visibility:
           type: integer
-    PostFaq:
+    UpdateWalletLogoBody:
+      required:
+        - logo
+      properties:
+        logo:
+          type: string
+          format: binary
+    PostFaqBody:
       required:
         - answer
         - question
@@ -4118,121 +3759,185 @@ components:
           type: string
         answer:
           type: string
-    UpdateResetPassword:
-      required:
-        - new_password
+    GetFaqsResponse:
       type: object
-      properties:
-        new_password:
-          type: string
-    UpdateProduct:
-      type: object
-      properties:
-        product_name:
-          type: string
-        description:
-          type: string
-        price_default:
-          type: integer
-        price_selling:
-          type: integer
-        qty:
-          type: integer
-        discount:
-          type: integer
-        is_visible:
-          type: integer
-    UpdateProductStatus:
-      type: object
-      properties:
-        is_visible:
-          type: integer
-    UpdateProductOrderStatus:
-      type: object
-      properties:
-        status:
-          type: integer
-    UpdateProductQty:
-      required:
-        - qty
-      type: object
-      properties:
-        qty:
-          type: integer
-    UpdateWallet:
-      type: object
-      properties:
-        wallet_name:
-          type: string
-        wallet_description:
-          type: string
-        is_visible:
-          type: integer
-    UpdateBank:
-      type: object
-      properties:
-        bank_name:
-          type: string
-        is_visible:
-          type: integer
-    UpdateBankDetail:
-      required:
-        - account_name
-        - account_number
-      type: object
-      properties:
-        account_number:
-          type: string
-        account_name:
-          type: string
-    UpdateCategory:
-      type: object
-      properties:
-        category:
-          type: string
-        slug:
-          type: string
-        description:
-          type: string
-        is_visible:
-          type: integer
-    UpdateBankUser:
-      type: object
-      properties:
-        id_m_banks:
-          type: integer
-        account_number:
-          type: string
-        account_name:
-          type: string
-    UpdateTopUpStatus:
-      type: object
-      properties:
-        status:
-          type: integer
-    UpdateWithdrawStatus:
-      type: object
-      properties:
-        status:
-          type: integer
-    UpdateMerchantOperation:
-      type: object
-      properties:
-        market_close_time:
-          type: string
-    UpdateFaq:
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/GetFaq'
+    UpdateFaqBody:
       type: object
       properties:
         question:
           type: string
         answer:
           type: string
-    GetToken:
+    GetMerchantProfileResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+        - type: object
+          properties:
+            data:
+              $ref: '#/components/schemas/GetMerchant'
+    UpdateMerchantProfileBody:
+      properties:
+        identity_photo:
+          type: string
+          format: binary
+        market_photo:
+          type: string
+          format: binary
+        no_identity:
+          type: string
+        market_name:
+          type: string
+        market_address:
+          type: string
+        market_lat:
+          type: number
+        market_lon:
+          type: number
+        market_close_time:
+          type: string
+    UpdateMerchantClosetimeBody:
       type: object
       properties:
-        token:
+        close_time:
           type: string
-    GetProductPhoto:
+    PostProductBody:
+      required:
+        - description
+        - discount
+        - price_default
+        - price_selling
+        - product_name
+        - qty
+      properties:
+        product_name:
+          type: string
+        description:
+          type: string
+        cover:
+          type: string
+          format: binary
+          default: '1'
+        price_default:
+          type: integer
+          format: int32
+        price_selling:
+          type: integer
+          format: int32
+        qty:
+          type: integer
+          format: int32
+        discount:
+          type: integer
+          format: int32
+        status:
+          type: integer
+          format: int32
+          default: 1
+    PostProductResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+        - type: object
+          properties:
+            data:
+              $ref: '#/components/schemas/GetProductId'
+    GetMerchantProductsResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+        - type: object
+          properties:
+            data:
+              $ref: '#/components/schemas/GetProductId'
+    UpdateProductBody:
+      type: object
+      properties:
+        product_name:
+          type: string
+        description:
+          type: string
+        cover:
+          type: string
+          format: binary
+          default: '1'
+        price_default:
+          type: integer
+          format: int32
+        price_selling:
+          type: integer
+          format: int32
+        qty:
+          type: integer
+          format: int32
+        discount:
+          type: integer
+          format: int32
+        status:
+          type: integer
+          format: int32
+          default: 1
+    GetMerchantProductDetailResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+        - type: object
+          properties:
+            data:
+              $ref: '#/components/schemas/GetSingleProduct'
+    UpdateProductCoverBody:
+      required:
+        - cover
+      properties:
+        cover:
+          type: string
+          format: binary
+    UpdateProductStatusBody:
+      required:
+        - status
+      properties:
+        status:
+          type: integer
+    UpdateProductStatusResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                status:
+                  type: integer
+    BindProductCategoryBody:
+      type: object
+      properties:
+        category_id:
+          type: integer
+    BindProductCategoryResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+        - type: object
+          properties:
+            data:
+              $ref: '#/components/schemas/GetProductCategory'
+    PostProductImageBody:
+      required:
+        - image
+      properties:
+        image:
+          type: string
+          format: binary
+    PostProductImageResponse:
       type: object
       properties:
         id:
@@ -4251,39 +3956,448 @@ components:
           type: string
         label:
           type: string
-    GetProfile:
+    GetMerchantOrdersResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/GetOrder'
+    GetMerchantOrderDetailResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/GetProductOrder'
+    UpdateOrderStatusBody:
       type: object
       properties:
-        full_name:
-          type: string
-        username:
-          type: string
-        address:
-          type: string
-        phone_number:
-          type: string
-        face:
-          type: string
-          nullable: true
-    GetAccountWallet:
+        status:
+          type: integer
+    UpdateOrderStatusResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+        - type: object
+          properties:
+            data:
+              $ref: '#/components/schemas/GetProductOrder'
+    GetMerchantListResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/GetMerchant'
+    GetMerchantProductListResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/GetProduct'
+    GetRandomMerchantsResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/GetMerchant'
+    GetMerchantTransactionHistoriesResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/GetUserTransaction'
+    GetMerchantIncomeHistoriesResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/GetMerchantIncomes'
+    GetProductsResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/GetProduct'
+    GetProductsByCategoryResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/GetProduct'
+    AddToCartBody:
+      required:
+        - qty
+        - merchant_id
+        - product_id
       type: object
       properties:
-        balance:
+        qty:
           type: integer
-        is_visible:
+        merchant_id:
           type: integer
-        wallet_name:
+        product_id:
+          type: integer
+    GetCartItemsResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/GetCart'
+    UpdateCartQtyBody:
+      required:
+        - qty
+      type: object
+      properties:
+        qty:
+          type: integer
+    CheckoutBody:
+      required:
+        - price_total
+      type: object
+      properties:
+        price_total:
+          type: integer
+    GetUserProcessedTransactionsResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/GetOrder'
+    GetUserTransactionDetailResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/GetOrder'
+                - type: object
+                  properties:
+                    products:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/GetProductOrder'
+    ReviewTransactionBody:
+      required:
+        - rating
+        - review
+      type: object
+      properties:
+        rating:
+          type: integer
+        review:
           type: string
-          nullable: true
-        wallet_description:
+    PostBankUserBody:
+      required:
+        - bank_id
+        - account_number
+        - account_name
+      type: object
+      properties:
+        bank_id:
+          type: integer
+        account_number:
           type: string
-          nullable: true
-        uri:
+        account_name:
           type: string
-          nullable: true
-        label:
+    GetBanksResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                type: object
+                allOf:
+                  - $ref: '#/components/schemas/GetBank'
+                  - type: object
+                    properties:
+                      Logo:
+                        $ref: '#/components/schemas/GetMedia'
+                      Account:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/GetBankUser'
+    GetBankDetailResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                type: object
+                allOf:
+                  - $ref: '#/components/schemas/GetBank'
+                  - type: object
+                    properties:
+                      Logo:
+                        $ref: '#/components/schemas/GetMedia'
+                      Utilities:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/GetBankUtility'
+    GetBankUsersResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                type: object
+                allOf:
+                  - $ref: '#/components/schemas/GetBankUser'
+                  - type: object
+                    properties:
+                      Bank:
+                        type: object
+                        allOf:
+                          - $ref: '#/components/schemas/GetBank'
+                          - type: object
+                            properties:
+                              Logo:
+                                $ref: '#/components/schemas/GetMedia'
+    UpdateBankUserBody:
+      required:
+        - bank_id
+      type: object
+      properties:
+        bank_id:
+          type: integer
+        account_number:
           type: string
-          nullable: true
+        account_name:
+          type: string
+    TopUpBody:
+      required:
+        - wallet_id
+        - balance_request
+        - balance_transfer
+      type: object
+      properties:
+        wallet_id:
+          type: integer
+        balance_request:
+          type: integer
+        balance_transfer:
+          type: integer
+    WithdrawBody:
+      required:
+        - wallet_id
+        - balance_request
+      type: object
+      properties:
+        wallet_id:
+          type: integer
+        balance_request:
+          type: integer
+    GetWalletsResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+        - type: object
+          properties:
+            data:
+              $ref: '#/components/schemas/GetUserWallet'
+    GetTopUpHistoriesResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/GetTopUp'
+    GetWithdrawHistoriesResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                type: object
+                allOf:
+                  - $ref: '#/components/schemas/GetWithdraw'
+                  - type: object
+                    properties:
+                      UserBank:
+                        type: object
+                        allOf:
+                          - $ref: '#/components/schemas/GetBankUser'
+                          - type: object
+                            properties:
+                              Bank:
+                                $ref: '#/components/schemas/GetBank'
+    GetTopUpDetailResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                type: object
+                allOf:
+                  - $ref: '#/components/schemas/GetTopUp'
+                  - type: object
+                    properties:
+                      Bank:
+                        type: object
+                        allOf:
+                          - $ref: '#/components/schemas/GetBank'
+                          - type: object
+                            properties:
+                              Utilities:
+                                type: array
+                                items:
+                                  $ref: '#/components/schemas/GetBankUtility'
+                              Accounts:
+                                type: array
+                                items:
+                                  $ref: '#/components/schemas/GetBankUser'
+                      Media:
+                        $ref: '#/components/schemas/GetMedia'
+                      UserWallet:
+                        type: object
+                        properties:
+                          id_u_user:
+                            type: integer
+                          u_user:
+                            type: object
+                            properties:
+                              id_m_users:
+                                type: integer
+                              m_user:
+                                type: object
+                                properties:
+                                  full_name:
+                                    type: string
+    GetWithdrawDetailResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                type: object
+                allOf:
+                  - $ref: '#/components/schemas/GetTopUp'
+                  - type: object
+                    properties:
+                      UserBank:
+                        type: object
+                        allOf:
+                          - $ref: '#/components/schemas/GetBankUser'
+                          - type: object
+                            properties:
+                              Bank:
+                                type: object
+                                allOf:
+                                  - $ref: '#/components/schemas/GetBank'
+                                  - type: object
+                                    properties:
+                                      Utilities:
+                                        type: array
+                                        items:
+                                          $ref: '#/components/schemas/GetBankUtility'
+    GetAllUserTopUpResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/GetTopUp'
+    GetAllUserWithdrawResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/GetWithdraw'
+    TopUpProofBody:
+      required:
+        - image
+      properties:
+        image:
+          type: string
+          format: binary
+    UpdateTopUpStatusBody:
+      type: object
+      properties:
+        status:
+          type: integer
+    UpdateWithdrawStatusBody:
+      type: object
+      properties:
+        status:
+          type: integer
+    GetToken:
+      type: object
+      properties:
+        token:
+          type: string
     GetProduct:
       type: object
       properties:
@@ -4667,31 +4781,6 @@ components:
           type: string
           format: date-time
         updatedAt:
-          type: string
-          format: date-time
-    GetCategory:
-      type: object
-      properties:
-        id:
-          type: integer
-        id_icon:
-          type: integer
-        category:
-          type: string
-        slug:
-          type: string
-        description:
-          type: string
-        uri:
-          type: string
-        label:
-          type: string
-        is_visible:
-          type: integer
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
           type: string
           format: date-time
     GetUserWallet:

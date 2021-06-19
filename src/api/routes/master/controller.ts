@@ -1,3 +1,4 @@
+import type CustModelType from '../../types/model';
 import type { Request, RequestHandler } from '../../types/fasitify';
 import type {
   ApiKeyHeader,
@@ -10,6 +11,7 @@ import type {
   PostBankStepBody,
   PostCategoryBody,
   UpdateCategoryBody,
+  UpdateCategoryIconBody,
   PostMediaBody,
   PostWalletBody,
   UpdateWalletBody,
@@ -17,11 +19,12 @@ import type {
   PostFaqBody,
   UpdateFaqBody,
 } from '../../types/schema';
+import { postBank, getBankData, getSingleBank } from './service';
 
 export const postMasterBank: RequestHandler<
   Request<{ Headers: ApiKeyHeader; Body: PostBankBody }>
-> = async function postMasterBank(_, res): Promise<void> {
-  await Promise.resolve('hi');
+> = async function postMasterBank(req, res): Promise<void> {
+  await postBank(req.body);
 
   res.status(201).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 201,
@@ -33,24 +36,33 @@ export const postMasterBank: RequestHandler<
 export const getMasterBanks: RequestHandler<
   Request<{ Headers: ApiKeyHeader; Querystring: GetQuery }>
 > = async function getMasterBanks(_, res): Promise<void> {
-  await Promise.resolve('hi');
+  const query = this.requestContext.get<CustModelType['SearchQuery']>('query');
+
+  if (!query) {
+    res.badRequest();
+    return;
+  }
+
+  const resData = await getBankData(query);
 
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
     success: true,
     message: 'success',
+    data: resData,
   });
 };
 
 export const getMasterBankDetail: RequestHandler<
   Request<{ Headers: ApiKeyHeader; Params: IdRequestParams }>
-> = async function getMasterBankDetail(_, res): Promise<void> {
-  await Promise.resolve('hi');
+> = async function getMasterBankDetail(req, res): Promise<void> {
+  const resData = await getSingleBank(req.params.id);
 
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
     success: true,
     message: 'success',
+    data: resData,
   });
 };
 
@@ -163,7 +175,7 @@ export const updateCategory: RequestHandler<
 };
 
 export const changeCategoryIcon: RequestHandler<
-  Request<{ Headers: ApiKeyHeader; Params: IdRequestParams }>
+  Request<{ Headers: ApiKeyHeader; Params: IdRequestParams; Body: UpdateCategoryIconBody }>
 > = async function changeCategoryIcon(_, res): Promise<void> {
   await Promise.resolve('hi');
 

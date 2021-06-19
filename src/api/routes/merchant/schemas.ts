@@ -175,11 +175,15 @@ export const responses = {
   merchant: {
     type: 'object',
     allOf: [
-      { $ref: '#ApiResponse' },
+      {
+        $ref: '#ApiResponse',
+      },
       {
         type: 'object',
         properties: {
-          data: { $ref: '#GetMerchant' },
+          data: {
+            $ref: '#GetMerchant',
+          },
         },
       },
     ],
@@ -187,11 +191,15 @@ export const responses = {
   postedProduct: {
     type: 'object',
     allOf: [
-      { $ref: '#ApiResponse' },
+      {
+        $ref: '#ApiResponse',
+      },
       {
         type: 'object',
         properties: {
-          data: { $ref: '#GetProductId' },
+          data: {
+            $ref: '#GetProductId',
+          },
         },
       },
     ],
@@ -199,13 +207,14 @@ export const responses = {
   merchantProducts: {
     type: 'object',
     allOf: [
-      { $ref: '#ApiResponse' },
+      {
+        $ref: '#ApiResponse',
+      },
       {
         type: 'object',
         properties: {
           data: {
-            type: 'array',
-            items: { $ref: '#GetProduct' },
+            $ref: '#GetProductId',
           },
         },
       },
@@ -214,25 +223,96 @@ export const responses = {
   merchantSingleProduct: {
     type: 'object',
     allOf: [
-      { $ref: '#ApiResponse' },
+      {
+        $ref: '#ApiResponse',
+      },
       {
         type: 'object',
         properties: {
-          data: { $ref: '#GetSingleProduct' },
+          data: {
+            $ref: '#GetSingleProduct',
+          },
         },
       },
     ],
   },
+  updatedProductStatus: {
+    type: 'object',
+    allOf: [
+      {
+        $ref: '#ApiResponse',
+      },
+      {
+        type: 'object',
+        properties: {
+          data: {
+            type: 'object',
+            properties: {
+              status: {
+                type: 'integer',
+              },
+            },
+          },
+        },
+      },
+    ],
+  },
+  bindedProductCategory: {
+    type: 'object',
+    allOf: [
+      {
+        $ref: '#ApiResponse',
+      },
+      {
+        type: 'object',
+        properties: {
+          data: {
+            $ref: '#GetProductCategory',
+          },
+        },
+      },
+    ],
+  },
+  postedProductImage: {
+    type: 'object',
+    properties: {
+      id: {
+        type: 'integer',
+      },
+      id_u_product: {
+        type: 'integer',
+      },
+      id_m_medias: {
+        type: 'integer',
+      },
+      created_at: {
+        type: 'string',
+      },
+      updated_at: {
+        type: 'string',
+      },
+      url: {
+        type: 'string',
+      },
+      label: {
+        type: 'string',
+      },
+    },
+  },
   merchantOrders: {
     type: 'object',
     allOf: [
-      { $ref: '#ApiResponse' },
+      {
+        $ref: '#ApiResponse',
+      },
       {
         type: 'object',
         properties: {
           data: {
             type: 'array',
-            items: { $ref: '#GetOrder' },
+            items: {
+              $ref: '#GetOrder',
+            },
           },
         },
       },
@@ -241,7 +321,9 @@ export const responses = {
   merchantOrderDetail: {
     type: 'object',
     allOf: [
-      { $ref: '#ApiResponse' },
+      {
+        $ref: '#ApiResponse',
+      },
       {
         type: 'object',
         properties: {
@@ -255,16 +337,74 @@ export const responses = {
       },
     ],
   },
+  updatedOrderStatus: {
+    type: 'object',
+    allOf: [
+      {
+        $ref: '#ApiResponse',
+      },
+      {
+        type: 'object',
+        properties: {
+          data: {
+            $ref: '#GetProductOrder',
+          },
+        },
+      },
+    ],
+  },
   merchantList: {
     type: 'object',
     allOf: [
-      { $ref: '#ApiResponse' },
+      {
+        $ref: '#ApiResponse',
+      },
       {
         type: 'object',
         properties: {
           data: {
             type: 'array',
-            items: { $ref: '#GetMerchant' },
+            items: {
+              $ref: '#GetMerchant',
+            },
+          },
+        },
+      },
+    ],
+  },
+  merchantProducList: {
+    type: 'object',
+    allOf: [
+      {
+        $ref: '#ApiResponse',
+      },
+      {
+        type: 'object',
+        properties: {
+          data: {
+            type: 'array',
+            items: {
+              $ref: '#GetProduct',
+            },
+          },
+        },
+      },
+    ],
+  },
+  randomMerchants: {
+    type: 'object',
+    allOf: [
+      {
+        $ref: '#ApiResponse',
+      },
+      {
+        type: 'object',
+        properties: {
+          data: {
+            type: 'array',
+            items: {
+              $ref: '#GetMerchant',
+            },
           },
         },
       },
@@ -273,7 +413,9 @@ export const responses = {
   merchantTransactions: {
     type: 'object',
     allOf: [
-      { $ref: '#ApiResponse' },
+      {
+        $ref: '#ApiResponse',
+      },
       {
         type: 'object',
         properties: {
@@ -290,7 +432,9 @@ export const responses = {
   merchantIncomes: {
     type: 'object',
     allOf: [
-      { $ref: '#ApiResponse' },
+      {
+        $ref: '#ApiResponse',
+      },
       {
         type: 'object',
         properties: {
