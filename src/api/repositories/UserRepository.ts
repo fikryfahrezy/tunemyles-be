@@ -1,15 +1,41 @@
 import { QueryTypes, Op } from 'sequelize';
-import type CustModelType from '../types/model';
 import type { RegisterBody, ActivateMerchantBody, UpdateProfileBody } from '../types/schema';
 import sequelize from '../../databases/sequelize';
 import initModels, { ModelType } from '../models/sql/init-models';
 import { Merchant } from '../models/sql/Merchant';
 
+type UserType = {
+  id: number;
+  full_name: string;
+  username: string;
+  password: string;
+  address: string;
+  phone_number: string;
+  imgUrl: string | null;
+  imgId: number | null;
+  utilId: number;
+  type: number;
+};
+
+type UserUtilityType = {
+  id: number;
+  userId: number;
+  token: string;
+  type: number;
+  previousType: number;
+};
+
+type UserForgotToken = {
+  userId: number;
+};
+
 const { User, UserUtility, UserWallet, Media, UserLostPassword } = initModels(sequelize);
 
-export const createUser: (data: RegisterBody) => Promise<ModelType['User']> = (
+export const createUser: (data: RegisterBody) => Promise<ModelType['User']> = function createUser(
   data: RegisterBody,
-) => User.create(data);
+) {
+  return User.create(data);
+};
 
 export const createUserUtility: (
   token: string,
@@ -56,15 +82,15 @@ export const createMerchant: (
 export const updateUser: (
   userId: number,
   data: UpdateProfileBody & { id_photo?: number },
-) => Promise<[number, ModelType['User'][]]> = function updateUser(id, data) {
-  return User.update(data, { where: { id } });
+) => Promise<[number, ModelType['User'][]]> = function updateUser(userId, data) {
+  return User.update(data, { where: { id: userId } });
 };
 
 export const updateUserImg: (
   imgId: number,
   imgName: string,
-) => Promise<[number, ModelType['Media'][]]> = function updateUserImg(id, label) {
-  return Media.update({ label, uri: `/img/${label}` }, { where: { id } });
+) => Promise<[number, ModelType['Media'][]]> = function updateUserImg(imgId, label) {
+  return Media.update({ label, uri: `/img/${label}` }, { where: { id: imgId } });
 };
 
 export const updateForgotTokenStatus: (
@@ -105,7 +131,7 @@ export const updateUserType: (
 export const getUser: (
   by: 'ID' | 'USERNAME' | 'PHONE',
   val: string | number,
-) => Promise<CustModelType['User'] | null> = function getUser(by, val) {
+) => Promise<UserType | null> = function getUser(by, val) {
   let sqlQuery = ` 
         SELECT
             mu.id,
@@ -114,13 +140,13 @@ export const getUser: (
             mu.password,
             mu.address,
             mu.phone_number,
-            mm.uri AS face,
+            mm.uri AS imgUrl,
             mm.id AS imgId,
             uu.id AS utilId,
             uu.type AS type
         FROM m_users mu
-        LEFT JOIN m_medias mm ON mu.id_photo = mm.id
-        LEFT JOIN u_user uu ON mu.id = uu.id_m_users
+        LEFT JOIN m_medias mm ON mm.id = mu.id_photo
+        LEFT JOIN u_user uu ON uu.id_m_users = mu.id
     `;
 
   switch (by) {
@@ -134,16 +160,16 @@ export const getUser: (
       sqlQuery += ' WHERE mu.id = :val';
   }
 
-  return sequelize.query<CustModelType['User']>(sqlQuery, {
+  return sequelize.query<UserType>(sqlQuery, {
     replacements: { val },
     type: QueryTypes.SELECT,
     plain: true,
   });
 };
 
-export const getUserUtility: (
-  userId: number,
-) => Promise<CustModelType['UserUtility']> = function getUserUtility(userId) {
+export const getUserUtility: (userId: number) => Promise<UserUtilityType> = function getUserUtility(
+  userId,
+) {
   const sqlQuery = `
         SELECT
             id,
@@ -155,7 +181,7 @@ export const getUserUtility: (
         WHERE id_m_users = :userId
     `;
 
-  return sequelize.query<CustModelType['UserUtility']>(sqlQuery, {
+  return sequelize.query<UserUtilityType>(sqlQuery, {
     replacements: { userId },
     type: QueryTypes.SELECT,
     plain: true,
@@ -174,8 +200,8 @@ export const getUserWallets: (userId: number) => Promise<unknown> = function get
             mm.uri,
             mm.label
         FROM u_user_wallet uuw
-        LEFT JOIN m_wallets mw ON uuw.id_m_wallets = mw.id
-        LEFT JOIN m_medias mm ON mw.id_logo = mm.id
+        LEFT JOIN m_wallets mw ON mw.id = uuw.id_m_wallets
+        LEFT JOIN m_medias mm ON mm.id = mw.id_logo
         WHERE uuw.id_u_user = :userId
     `;
 
@@ -187,17 +213,17 @@ export const getUserWallets: (userId: number) => Promise<unknown> = function get
 
 export const getUserForgotToken: (
   token: string,
-) => Promise<CustModelType['UserForgotToken'] | null> = function getUserForgotToken(token) {
+) => Promise<UserForgotToken | null> = function getUserForgotToken(token) {
   const sqlQuery = `
         SELECT
             uu. id_m_users AS userId
         FROM u_user_lost_password uulp
-        LEFT JOIN u_user uu ON uulp.id_u_user = uu.id
+        LEFT JOIN u_user uu ON uu.id = uulp.id_u_user
         WHERE uulp.verification_token = :token
           AND uulp.status = 1
     `;
 
-  return sequelize.query<CustModelType['UserForgotToken']>(sqlQuery, {
+  return sequelize.query<UserForgotToken>(sqlQuery, {
     replacements: { token },
     type: QueryTypes.SELECT,
     plain: true,

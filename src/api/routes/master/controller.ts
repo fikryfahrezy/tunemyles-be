@@ -7,11 +7,11 @@ import type {
   PostBankBody,
   UpdateBankBody,
   UpdateBankDetailBody,
-  UpdateBankLogoBody,
+  ChangeBankLogoBody,
   PostBankStepBody,
   PostCategoryBody,
   UpdateCategoryBody,
-  UpdateCategoryIconBody,
+  ChangeCategoryIconBody,
   PostMediaBody,
   PostWalletBody,
   UpdateWalletBody,
@@ -19,7 +19,22 @@ import type {
   PostFaqBody,
   UpdateFaqBody,
 } from '../../types/schema';
-import { postBank, getBankData, getSingleBank } from './service';
+import {
+  postBank,
+  getBankData,
+  getSingleBank,
+  updateBankData,
+  updateBankDetail,
+  changeBankLogo,
+  postBankStep,
+  deleteBankStepData,
+  deleteBankData,
+  postCategoryData,
+  getCategoryData,
+  updateCategoryData,
+  updateCategoryIcon,
+  deleteCategoryData,
+} from './service';
 
 export const postMasterBank: RequestHandler<
   Request<{ Headers: ApiKeyHeader; Body: PostBankBody }>
@@ -29,7 +44,7 @@ export const postMasterBank: RequestHandler<
   res.status(201).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 201,
     success: true,
-    message: 'success',
+    message: 'successfully add bank',
   });
 };
 
@@ -48,7 +63,7 @@ export const getMasterBanks: RequestHandler<
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
     success: true,
-    message: 'success',
+    message: 'successfully fetch bank data',
     data: resData,
   });
 };
@@ -56,140 +71,188 @@ export const getMasterBanks: RequestHandler<
 export const getMasterBankDetail: RequestHandler<
   Request<{ Headers: ApiKeyHeader; Params: IdRequestParams }>
 > = async function getMasterBankDetail(req, res): Promise<void> {
-  const resData = await getSingleBank(req.params.id);
+  const bankId = parseInt(req.params.id, 10) || -1;
+
+  if (bankId <= 0) res.notFound();
+
+  const resData = await getSingleBank(bankId);
 
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
     success: true,
-    message: 'success',
+    message: 'successfully fetch bank detail',
     data: resData,
   });
 };
 
 export const updateMasterBank: RequestHandler<
   Request<{ Headers: ApiKeyHeader; Params: IdRequestParams; Body: UpdateBankBody }>
-> = async function updateMasterBank(_, res): Promise<void> {
-  await Promise.resolve('hi');
+> = async function updateMasterBank(req, res): Promise<void> {
+  const bankId = parseInt(req.params.id, 10) || -1;
+
+  if (bankId <= 0) res.notFound();
+
+  await updateBankData(bankId, req.body);
 
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
     success: true,
-    message: 'success',
+    message: 'successfully update bank',
   });
 };
 
-export const updateMasterBankDetail: RequestHandler<
+export const updateMasterBankAccount: RequestHandler<
   Request<{ Headers: ApiKeyHeader; Params: IdRequestParams; Body: UpdateBankDetailBody }>
-> = async function updateMasterBankDetail(_, res): Promise<void> {
-  await Promise.resolve('hi');
+> = async function updateMasterBankDetail(req, res): Promise<void> {
+  const bankId = parseInt(req.params.id, 10) || -1;
+
+  if (bankId <= 0) res.notFound();
+
+  await updateBankDetail(bankId, req.body);
 
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
     success: true,
-    message: 'success',
+    message: 'successfully update bank account',
   });
 };
 
 export const changeMasterBankLogo: RequestHandler<
-  Request<{ Headers: ApiKeyHeader; Params: IdRequestParams; Body: UpdateBankLogoBody }>
-> = async function changeMasterBankLogo(_, res): Promise<void> {
-  await Promise.resolve('hi');
+  Request<{ Headers: ApiKeyHeader; Params: IdRequestParams; Body: ChangeBankLogoBody }>
+> = async function changeMasterBankLogo(req, res): Promise<void> {
+  const bankId = parseInt(req.params.id, 10) || -1;
+
+  if (bankId <= 0) res.notFound();
+
+  await changeBankLogo(bankId, req.body);
 
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
     success: true,
-    message: 'success',
+    message: 'successfully change bank logo',
   });
 };
 
 export const postMasterBankStep: RequestHandler<
   Request<{ Headers: ApiKeyHeader; Params: IdRequestParams; Body: PostBankStepBody }>
-> = async function postMasterBankStep(_, res): Promise<void> {
-  await Promise.resolve('hi');
+> = async function postMasterBankStep(req, res): Promise<void> {
+  const bankId = parseInt(req.params.id, 10) || -1;
+
+  if (bankId <= 0) res.notFound();
+
+  await postBankStep(bankId, req.body);
 
   res.status(201).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 201,
     success: true,
-    message: 'success',
+    message: 'successfully add bank step',
   });
 };
 
 export const deleteMasterBankStep: RequestHandler<
   Request<{ Headers: ApiKeyHeader; Params: IdRequestParams }>
-> = async function deleteMasterBankStep(_, res): Promise<void> {
-  await Promise.resolve('hi');
+> = async function deleteMasterBankStep(req, res): Promise<void> {
+  const bankStepId = parseInt(req.params.id, 10) || -1;
+
+  if (bankStepId <= 0) res.notFound();
+
+  await deleteBankStepData(bankStepId);
 
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
     success: true,
-    message: 'success',
+    message: 'successfully delete bank step',
   });
 };
 
 export const deleteMasterBank: RequestHandler<
   Request<{ Headers: ApiKeyHeader; Params: IdRequestParams }>
-> = async function deleteMasterBank(_, res): Promise<void> {
-  await Promise.resolve('hi');
+> = async function deleteMasterBank(req, res): Promise<void> {
+  const bankId = parseInt(req.params.id, 10) || -1;
+
+  if (bankId <= 0) res.notFound();
+
+  await deleteBankData(bankId);
 
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
     success: true,
-    message: 'success',
+    message: 'successfully delete bank',
   });
 };
 
 export const postCategory: RequestHandler<
   Request<{ Headers: ApiKeyHeader; Body: PostCategoryBody }>
-> = async function postCategory(_, res): Promise<void> {
-  await Promise.resolve('hi');
+> = async function postCategory(req, res): Promise<void> {
+  await postCategoryData(req.body);
 
   res.status(201).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 201,
     success: true,
-    message: 'success',
+    message: 'successfully add category',
   });
 };
 
 export const getCategories: RequestHandler<
   Request<{ Headers: ApiKeyHeader; Querystring: GetQuery }>
 > = async function getCategories(_, res): Promise<void> {
-  await Promise.resolve('hi');
+  const query = this.requestContext.get<CustModelType['SearchQuery']>('query');
+
+  if (!query) {
+    res.badRequest();
+    return;
+  }
+
+  const resData = await getCategoryData(query);
 
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
     success: true,
-    message: 'success',
+    message: 'successfully fetch category data',
+    data: resData,
   });
 };
 
 export const updateCategory: RequestHandler<
   Request<{ Headers: ApiKeyHeader; Params: IdRequestParams; Body: UpdateCategoryBody }>
-> = async function updateCategory(_, res): Promise<void> {
-  await Promise.resolve('hi');
+> = async function updateCategory(req, res): Promise<void> {
+  const categoryId = parseInt(req.params.id, 10) || -1;
+
+  if (categoryId <= 0) res.notFound();
+
+  await updateCategoryData(categoryId, req.body);
 
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
     success: true,
-    message: 'success',
+    message: 'successfully update category',
   });
 };
 
 export const changeCategoryIcon: RequestHandler<
-  Request<{ Headers: ApiKeyHeader; Params: IdRequestParams; Body: UpdateCategoryIconBody }>
-> = async function changeCategoryIcon(_, res): Promise<void> {
-  await Promise.resolve('hi');
+  Request<{ Headers: ApiKeyHeader; Params: IdRequestParams; Body: ChangeCategoryIconBody }>
+> = async function changeCategoryIcon(req, res): Promise<void> {
+  const categoryId = parseInt(req.params.id, 10) || -1;
+
+  if (categoryId <= 0) res.notFound();
+
+  await updateCategoryIcon(categoryId, req.body);
 
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
     success: true,
-    message: 'success',
+    message: 'successfulle change category icon',
   });
 };
 
 export const deleteCategory: RequestHandler<
   Request<{ Headers: ApiKeyHeader; Params: IdRequestParams }>
-> = async function deleteCategory(_, res): Promise<void> {
-  await Promise.resolve('hi');
+> = async function deleteCategory(req, res): Promise<void> {
+  const categoryId = parseInt(req.params.id, 10) || -1;
+
+  if (categoryId <= 0) res.notFound();
+
+  await deleteCategoryData(categoryId);
 
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
@@ -206,7 +269,7 @@ export const postMedia: RequestHandler<
   res.status(201).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 201,
     success: true,
-    message: 'success',
+    message: 'successfully delete category',
   });
 };
 

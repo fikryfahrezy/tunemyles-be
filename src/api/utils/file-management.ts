@@ -60,6 +60,8 @@ export const saveFiles: (files: AddedFileBody[]) => Promise<void> = async functi
   );
 };
 
-export const deleteLocalFile: (filepath: string) => void = function deleteLocalFile(filepath) {
-  fs.unlink(path.resolve('./', 'public', `./${filepath}`), () => {});
+export const deleteLocalFile: (filepath: string | null) => void = function deleteLocalFile(
+  filepath,
+) {
+  if (filepath) fs.unlink(path.resolve('./', 'public', `./${filepath}`), () => {});
 };

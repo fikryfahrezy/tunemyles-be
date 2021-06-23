@@ -379,9 +379,8 @@
                   "    pm.test('Success', () => {\r",
                   "        const { code, headers } = response;\r",
                   "        const json = response.json()\r",
-                  "        const token = json.data.token;\r",
-                  "\r",
-                  "        pm.environment.set('TOKEN', token);\r",
+                  "        \r",
+                  "        pm.environment.set('TOKEN', json.data.token);\r",
                   "\r",
                   "        pm.expect(code).to.eql(201);\r",
                   "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
@@ -679,10 +678,13 @@
                 "exec": [
                   " pm.test('User Success Become Admin', () => {\r",
                   "        const { code, headers } = pm.response;\r",
+                  "        const json = pm.response.json();\r",
+                  "        \r",
+                  "        pm.environment.set('TOKEN', json.data);\r",
                   "\r",
                   "        pm.expect(code).to.eql(200);\r",
                   "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(pm.response.json().success).to.eql(true);\r",
+                  "        pm.expect(json.success).to.eql(true);\r",
                   "});"
                 ],
                 "type": "text/javascript"
@@ -1569,10 +1571,12 @@
                       "        const { code, headers } = response;\r",
                       "        const body = response.json();\r",
                       "\r",
+                      "        pm.environment.set('MASTER_BANK_ID', body.data[0].id);\r",
+                      "\r",
                       "        pm.expect(code).to.eql(200);\r",
                       "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
                       "        pm.expect(body.success).to.eql(true);\r",
-                      "        // pm.expect(response.json().data.length).to.eql(1);\r",
+                      "        pm.expect(body.data.length).to.eql(1);\r",
                       "    });\r",
                       "});\r",
                       "\r",
@@ -1730,435 +1734,8 @@
                     },
                     {
                       "key": "limit",
-                      "value": null,
-                      "description": "Available values: 0...n",
+                      "value": "1",
                       "disabled": true
-                    }
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Get Master Bank Detail",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      "const { Request } = require('postman-collection')\r",
-                      "\r",
-                      "const makeRequest = function makeRequest(token = undefined, bankId = 0) {\r",
-                      "    const header = {};\r",
-                      "\r",
-                      "    if (token) header.authorization = `Bearer ${token}`;\r",
-                      "\r",
-                      "    return new Request({\r",
-                      "        header,\r",
-                      "        method: 'GET',\r",
-                      "        url: pm.environment.replaceIn(`{{URL}}/masters/banks/${bankId}`),\r",
-                      "    });\r",
-                      "};\r",
-                      "\r",
-                      "pm.sendRequest(makeRequest(\r",
-                      "    pm.environment.get('TOKEN'),\r",
-                      "    pm.environment.get('MASTER_BANK_ID'),\r",
-                      "), (_, response) => {\r",
-                      "    pm.test('Success', () => {\r",
-                      "        const { code, headers } = response;\r",
-                      "\r",
-                      "        pm.expect(code).to.eql(200);\r",
-                      "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                      "        pm.expect(response.json().success).to.eql(true);\r",
-                      "    })\r",
-                      "});\r",
-                      "\r",
-                      "pm.sendRequest(makeRequest(pm.environment.get('TOKEN')), (_, response) => {\r",
-                      "    pm.test('Fail, Master Bank Not Found', () => {\r",
-                      "        const { code, headers } = response;\r",
-                      "\r",
-                      "        pm.expect(code).to.eql(404);\r",
-                      "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                      "        pm.expect(response.json().success).to.eql(false);\r",
-                      "    })\r",
-                      "});\r",
-                      "\r",
-                      "pm.sendRequest(makeRequest('this-is-wrong'), (_, response) => {\r",
-                      "    pm.test('Fail, Wrong API Key', () => {\r",
-                      "        const { code, headers } = response;\r",
-                      "\r",
-                      "        pm.expect(code).to.eql(403);\r",
-                      "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                      "        pm.expect(response.json().success).to.eql(false);\r",
-                      "    });\r",
-                      "});\r",
-                      "\r",
-                      "pm.sendRequest(makeRequest(), (_, response) => {\r",
-                      "    pm.test('Fail, API Key Not Given', () => {\r",
-                      "        const { code, headers } = response;\r",
-                      "\r",
-                      "        pm.expect(code).to.eql(403);\r",
-                      "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                      "        pm.expect(response.json().success).to.eql(false);\r",
-                      "    });\r",
-                      "});\r",
-                      ""
-                    ],
-                    "type": "text/javascript"
-                  }
-                }
-              ],
-              "protocolProfileBehavior": {
-                "disableBodyPruning": true
-              },
-              "request": {
-                "auth": {
-                  "type": "bearer",
-                  "bearer": [
-                    {
-                      "key": "token",
-                      "value": "{{TOKEN}}",
-                      "type": "string"
-                    }
-                  ]
-                },
-                "method": "GET",
-                "header": [],
-                "body": {
-                  "mode": "formdata",
-                  "formdata": []
-                },
-                "url": {
-                  "raw": "{{URL}}/masters/banks/:id",
-                  "host": ["{{URL}}"],
-                  "path": ["masters", "banks", ":id"],
-                  "variable": [
-                    {
-                      "key": "id",
-                      "value": "2",
-                      "type": "string"
-                    }
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Update Master Bank",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      "const { Request } = require('postman-collection')\r",
-                      "\r",
-                      "const makeRequest = function makeRequest(payload, token = undefined, bankId = 0) {\r",
-                      "    const header = {\r",
-                      "        'Content-Type': 'application/json',\r",
-                      "    };\r",
-                      "\r",
-                      "    if (token) header.authorization = `Bearer ${token}`;\r",
-                      "\r",
-                      "    return new Request({\r",
-                      "        header,\r",
-                      "        method: 'PATCH',\r",
-                      "        url: pm.environment.replaceIn(`{{URL}}/masters/banks/${bankId}`),\r",
-                      "        body: {\r",
-                      "            mode: 'raw',\r",
-                      "            raw: JSON.stringify(payload),\r",
-                      "        },\r",
-                      "    });\r",
-                      "};\r",
-                      "\r",
-                      "pm.sendRequest(makeRequest(\r",
-                      "    {\r",
-                      "        bank_name: 'new bank name',\r",
-                      "        is_visible: 2,\r",
-                      "    },\r",
-                      "    pm.environment.get('TOKEN'),\r",
-                      "    pm.environment.get('MASTER_BANK_ID'),\r",
-                      "), (_, response) => {\r",
-                      "    pm.test('Success', () => {\r",
-                      "        const { code, headers } = response;\r",
-                      "\r",
-                      "        pm.expect(code).to.eql(200);\r",
-                      "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                      "        pm.expect(response.json().success).to.eql(true);\r",
-                      "    })\r",
-                      "});\r",
-                      "\r",
-                      "pm.sendRequest(makeRequest({}, pm.environment.get('TOKEN')), (_, response) => {\r",
-                      "    pm.test('Fail, Master Bank Not Found', () => {\r",
-                      "        const { code, headers } = response;\r",
-                      "\r",
-                      "        pm.expect(code).to.eql(404);\r",
-                      "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                      "        pm.expect(response.json().sjjuccess).to.eql(false);\r",
-                      "    })\r",
-                      "});\r",
-                      "\r",
-                      "pm.sendRequest(makeRequest({}, 'this-is-wrong'), (_, response) => {\r",
-                      "    pm.test('Fail, Wrong API Key', () => {\r",
-                      "        const { code, headers } = response;\r",
-                      "\r",
-                      "        pm.expect(code).to.eql(403);\r",
-                      "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                      "        pm.expect(response.json().success).to.eql(false);\r",
-                      "    });\r",
-                      "});\r",
-                      "\r",
-                      "pm.sendRequest(makeRequest({}), (_, response) => {\r",
-                      "    pm.test('Fail, API Key Not Given', () => {\r",
-                      "        const { code, headers } = response;\r",
-                      "\r",
-                      "        pm.expect(code).to.eql(403);\r",
-                      "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                      "        pm.expect(response.json().success).to.eql(false);\r",
-                      "    });\r",
-                      "});\r",
-                      ""
-                    ],
-                    "type": "text/javascript"
-                  }
-                }
-              ],
-              "request": {
-                "auth": {
-                  "type": "bearer",
-                  "bearer": [
-                    {
-                      "key": "token",
-                      "value": "{{TOKEN}}",
-                      "type": "string"
-                    }
-                  ]
-                },
-                "method": "PATCH",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json",
-                    "description": "JSON Type",
-                    "type": "text"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n    \"bank_name\": \"new bank name\",\r\n    \"visibility\": 2\r\n}"
-                },
-                "url": {
-                  "raw": "{{URL}}/masters/banks/:id",
-                  "host": ["{{URL}}"],
-                  "path": ["masters", "banks", ":id"],
-                  "variable": [
-                    {
-                      "key": "id",
-                      "value": "2",
-                      "type": "string"
-                    }
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Update Master Bank Detail",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      "const { Request } = require('postman-collection')\r",
-                      "\r",
-                      "const makeRequest = function makeRequest(payload, token = undefined, bankId = 0) {\r",
-                      "    const header = {\r",
-                      "        'Content-Type': 'application/json',\r",
-                      "    };\r",
-                      "\r",
-                      "    if (token) header.authorization = `Bearer ${token}`;\r",
-                      "\r",
-                      "    return new Request({\r",
-                      "        header,\r",
-                      "        method: 'PATCH',\r",
-                      "        url: pm.environment.replaceIn(`{{URL}}/masters/banks/${bankId}/detail`),\r",
-                      "        body: {\r",
-                      "            mode: 'raw',\r",
-                      "            raw: JSON.stringify(payload),\r",
-                      "        },\r",
-                      "    });\r",
-                      "};\r",
-                      "\r",
-                      "pm.sendRequest(makeRequest(\r",
-                      "    {\r",
-                      "        account_number: \"0123421421\",\r",
-                      "        account_name: \"update name\"\r",
-                      "    },\r",
-                      "    pm.environment.get('TOKEN'),\r",
-                      "    pm.environment.get('MASTER_BANK_ID'),\r",
-                      "), (_, response) => {\r",
-                      "    pm.test('Success', () => {\r",
-                      "        const { code, headers } = response;\r",
-                      "\r",
-                      "        pm.expect(code).to.eql(200);\r",
-                      "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                      "        pm.expect(response.json().success).to.eql(true);\r",
-                      "    })\r",
-                      "});\r",
-                      "\r",
-                      "pm.sendRequest(makeRequest({}, pm.environment.get('TOKEN')), (_, response) => {\r",
-                      "    pm.test('Fail, Master Bank Not Found', () => {\r",
-                      "        const { code, headers } = response;\r",
-                      "\r",
-                      "        pm.expect(code).to.eql(404);\r",
-                      "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                      "        pm.expect(response.json().success).to.eql(false);\r",
-                      "    })\r",
-                      "});\r",
-                      "\r",
-                      "pm.sendRequest(makeRequest({}, 'this-is-wrong'), (_, response) => {\r",
-                      "    pm.test('Fail, Wrong API Key', () => {\r",
-                      "        const { code, headers } = response;\r",
-                      "\r",
-                      "        pm.expect(code).to.eql(403);\r",
-                      "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                      "        pm.expect(response.json().success).to.eql(false);\r",
-                      "    });\r",
-                      "});\r",
-                      "\r",
-                      "pm.sendRequest(makeRequest({}), (_, response) => {\r",
-                      "    pm.test('Fail, API Key Not Given', () => {\r",
-                      "        const { code, headers } = response;\r",
-                      "\r",
-                      "        pm.expect(code).to.eql(403);\r",
-                      "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                      "        pm.expect(response.json().success).to.eql(false);\r",
-                      "    });\r",
-                      "});\r",
-                      ""
-                    ],
-                    "type": "text/javascript"
-                  }
-                }
-              ],
-              "request": {
-                "auth": {
-                  "type": "bearer",
-                  "bearer": [
-                    {
-                      "key": "token",
-                      "value": "{{TOKEN}}",
-                      "type": "string"
-                    }
-                  ]
-                },
-                "method": "PATCH",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json",
-                    "description": "JSON Type",
-                    "type": "text"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n    \"account_number\": \"0123421421\",\r\n    \"account_name\": \"update name\"\r\n}"
-                },
-                "url": {
-                  "raw": "{{URL}}/api/v1/masters/banks/:id/detail",
-                  "host": ["{{URL}}"],
-                  "path": ["api", "v1", "masters", "banks", ":id", "detail"],
-                  "variable": [
-                    {
-                      "key": "id",
-                      "value": "8",
-                      "type": "string"
-                    }
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Change Master Bank Logo",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      "const { Request } = require('postman-collection');\r",
-                      "\r",
-                      "const makeRequest = function makeRequest(formdata, token = undefined, bankId = 0) {\r",
-                      "    const header = {};\r",
-                      "\r",
-                      "    if (token) header.authorization = `Bearer ${token}`;\r",
-                      "\r",
-                      "    return new Request({\r",
-                      "        header,\r",
-                      "        method: 'PATCH',\r",
-                      "        url: pm.environment.replaceIn(`{{URL}}/masters/banks/${bankId}/logo`),\r",
-                      "        body: {\r",
-                      "            formdata,\r",
-                      "            mode: 'formdata',\r",
-                      "        },\r",
-                      "    });\r",
-                      "};\r",
-                      "\r",
-                      "pm.test('Success', () => {\r",
-                      "    const { code, headers } = pm.response;\r",
-                      "\r",
-                      "    pm.expect(code).to.eql(200);\r",
-                      "    pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                      "    pm.expect(pm.response.json().success).to.eql(true);\r",
-                      "});\r",
-                      "\r",
-                      "pm.sendRequest(makeRequest([{}], pm.environment.get('TOKEN')), (_, response) => {\r",
-                      "    pm.test('Fail, No `logo` Provided', () => {\r",
-                      "        const { code, headers } = response;\r",
-                      "\r",
-                      "        pm.expect(code).to.eql(422);\r",
-                      "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                      "        pm.expect(response.json().success).to.eql(false);\r",
-                      "    });\r",
-                      "});\r",
-                      ""
-                    ],
-                    "type": "text/javascript"
-                  }
-                }
-              ],
-              "request": {
-                "auth": {
-                  "type": "bearer",
-                  "bearer": [
-                    {
-                      "key": "token",
-                      "value": "{{TOKEN}}",
-                      "type": "string"
-                    }
-                  ]
-                },
-                "method": "PATCH",
-                "header": [],
-                "body": {
-                  "mode": "formdata",
-                  "formdata": [
-                    {
-                      "key": "logo",
-                      "type": "file",
-                      "src": "Bliss.png"
-                    }
-                  ]
-                },
-                "url": {
-                  "raw": "{{URL}}/masters/banks/:id/logo",
-                  "host": ["{{URL}}"],
-                  "path": ["masters", "banks", ":id", "logo"],
-                  "variable": [
-                    {
-                      "key": "id",
-                      "value": "2",
-                      "type": "string"
                     }
                   ]
                 }
@@ -2283,6 +1860,434 @@
               "response": []
             },
             {
+              "name": "Get Master Bank Detail",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const { Request } = require('postman-collection')\r",
+                      "\r",
+                      "const makeRequest = function makeRequest(token = undefined, bankId = 0) {\r",
+                      "    const header = {};\r",
+                      "\r",
+                      "    if (token) header.authorization = `Bearer ${token}`;\r",
+                      "\r",
+                      "    return new Request({\r",
+                      "        header,\r",
+                      "        method: 'GET',\r",
+                      "        url: pm.environment.replaceIn(`{{URL}}/masters/banks/${bankId}`),\r",
+                      "    });\r",
+                      "};\r",
+                      "\r",
+                      "pm.sendRequest(makeRequest(\r",
+                      "    pm.environment.get('TOKEN'),\r",
+                      "    pm.environment.get('MASTER_BANK_ID'),\r",
+                      "), (_, response) => {\r",
+                      "    pm.test('Success', () => {\r",
+                      "        const { code, headers } = response;\r",
+                      "        const body = response.json();\r",
+                      "\r",
+                      "        pm.environment.set('MASTER_BANK_STEP_ID', body.data.steps[0].id);\r",
+                      "\r",
+                      "        pm.expect(code).to.eql(200);\r",
+                      "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "        pm.expect(body.success).to.eql(true);\r",
+                      "    })\r",
+                      "});\r",
+                      "\r",
+                      "pm.sendRequest(makeRequest(pm.environment.get('TOKEN')), (_, response) => {\r",
+                      "    pm.test('Fail, Master Bank Not Found', () => {\r",
+                      "        const { code, headers } = response;\r",
+                      "\r",
+                      "        pm.expect(code).to.eql(404);\r",
+                      "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "        pm.expect(response.json().success).to.eql(false);\r",
+                      "    })\r",
+                      "});\r",
+                      "\r",
+                      "pm.sendRequest(makeRequest('this-is-wrong'), (_, response) => {\r",
+                      "    pm.test('Fail, Wrong API Key', () => {\r",
+                      "        const { code, headers } = response;\r",
+                      "\r",
+                      "        pm.expect(code).to.eql(403);\r",
+                      "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "        pm.expect(response.json().success).to.eql(false);\r",
+                      "    });\r",
+                      "});\r",
+                      "\r",
+                      "pm.sendRequest(makeRequest(), (_, response) => {\r",
+                      "    pm.test('Fail, API Key Not Given', () => {\r",
+                      "        const { code, headers } = response;\r",
+                      "\r",
+                      "        pm.expect(code).to.eql(403);\r",
+                      "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "        pm.expect(response.json().success).to.eql(false);\r",
+                      "    });\r",
+                      "});\r",
+                      ""
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": []
+                },
+                "url": {
+                  "raw": "{{URL}}/masters/banks/:id",
+                  "host": ["{{URL}}"],
+                  "path": ["masters", "banks", ":id"],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "8",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Master Bank",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const { Request } = require('postman-collection')\r",
+                      "\r",
+                      "const makeRequest = function makeRequest(payload, token = undefined, bankId = 0) {\r",
+                      "    const header = {\r",
+                      "        'Content-Type': 'application/json',\r",
+                      "    };\r",
+                      "\r",
+                      "    if (token) header.authorization = `Bearer ${token}`;\r",
+                      "\r",
+                      "    return new Request({\r",
+                      "        header,\r",
+                      "        method: 'PATCH',\r",
+                      "        url: pm.environment.replaceIn(`{{URL}}/masters/banks/${bankId}`),\r",
+                      "        body: {\r",
+                      "            mode: 'raw',\r",
+                      "            raw: JSON.stringify(payload),\r",
+                      "        },\r",
+                      "    });\r",
+                      "};\r",
+                      "\r",
+                      "pm.sendRequest(makeRequest(\r",
+                      "    {\r",
+                      "        bank_name: 'new bank name',\r",
+                      "        is_visible: 2,\r",
+                      "    },\r",
+                      "    pm.environment.get('TOKEN'),\r",
+                      "    pm.environment.get('MASTER_BANK_ID'),\r",
+                      "), (_, response) => {\r",
+                      "    pm.test('Success', () => {\r",
+                      "        const { code, headers } = response;\r",
+                      "        \r",
+                      "        pm.expect(code).to.eql(200);\r",
+                      "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "        pm.expect(response.json().success).to.eql(true);\r",
+                      "    })\r",
+                      "});\r",
+                      "\r",
+                      "pm.sendRequest(makeRequest({}, pm.environment.get('TOKEN')), (_, response) => {\r",
+                      "    pm.test('Fail, Master Bank Not Found', () => {\r",
+                      "        const { code, headers } = response;\r",
+                      "\r",
+                      "        pm.expect(code).to.eql(404);\r",
+                      "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "        pm.expect(response.json().success).to.eql(false);\r",
+                      "    })\r",
+                      "});\r",
+                      "\r",
+                      "pm.sendRequest(makeRequest({}, 'this-is-wrong'), (_, response) => {\r",
+                      "    pm.test('Fail, Wrong API Key', () => {\r",
+                      "        const { code, headers } = response;\r",
+                      "\r",
+                      "        pm.expect(code).to.eql(403);\r",
+                      "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "        pm.expect(response.json().success).to.eql(false);\r",
+                      "    });\r",
+                      "});\r",
+                      "\r",
+                      "pm.sendRequest(makeRequest({}), (_, response) => {\r",
+                      "    pm.test('Fail, API Key Not Given', () => {\r",
+                      "        const { code, headers } = response;\r",
+                      "\r",
+                      "        pm.expect(code).to.eql(403);\r",
+                      "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "        pm.expect(response.json().success).to.eql(false);\r",
+                      "    });\r",
+                      "});\r",
+                      ""
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": "JSON Type",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"bank_name\": \"new bank name\",\r\n    \"visibility\": 2\r\n}"
+                },
+                "url": {
+                  "raw": "{{URL}}/masters/banks/:id",
+                  "host": ["{{URL}}"],
+                  "path": ["masters", "banks", ":id"],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "8",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Master Bank Account",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const { Request } = require('postman-collection')\r",
+                      "\r",
+                      "const makeRequest = function makeRequest(payload, token = undefined, bankId = 0) {\r",
+                      "    const header = {\r",
+                      "        'Content-Type': 'application/json',\r",
+                      "    };\r",
+                      "\r",
+                      "    if (token) header.authorization = `Bearer ${token}`;\r",
+                      "\r",
+                      "    return new Request({\r",
+                      "        header,\r",
+                      "        method: 'PATCH',\r",
+                      "        url: pm.environment.replaceIn(`{{URL}}/masters/banks/${bankId}/account`),\r",
+                      "        body: {\r",
+                      "            mode: 'raw',\r",
+                      "            raw: JSON.stringify(payload),\r",
+                      "        },\r",
+                      "    });\r",
+                      "};\r",
+                      "\r",
+                      "pm.sendRequest(makeRequest(\r",
+                      "    {\r",
+                      "        account_number: \"0123421421\",\r",
+                      "        account_name: \"update name\"\r",
+                      "    },\r",
+                      "    pm.environment.get('TOKEN'),\r",
+                      "    pm.environment.get('MASTER_BANK_ID'),\r",
+                      "), (_, response) => {\r",
+                      "    pm.test('Success', () => {\r",
+                      "        const { code, headers } = response;\r",
+                      "\r",
+                      "        pm.expect(code).to.eql(200);\r",
+                      "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "        pm.expect(response.json().success).to.eql(true);\r",
+                      "    })\r",
+                      "});\r",
+                      "\r",
+                      "pm.sendRequest(makeRequest({}, pm.environment.get('TOKEN')), (_, response) => {\r",
+                      "    pm.test('Fail, Master Bank Not Found', () => {\r",
+                      "        const { code, headers } = response;\r",
+                      "\r",
+                      "        pm.expect(code).to.eql(404);\r",
+                      "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "        pm.expect(response.json().success).to.eql(false);\r",
+                      "    })\r",
+                      "});\r",
+                      "\r",
+                      "pm.sendRequest(makeRequest({}, 'this-is-wrong'), (_, response) => {\r",
+                      "    pm.test('Fail, Wrong API Key', () => {\r",
+                      "        const { code, headers } = response;\r",
+                      "\r",
+                      "        pm.expect(code).to.eql(403);\r",
+                      "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "        pm.expect(response.json().success).to.eql(false);\r",
+                      "    });\r",
+                      "});\r",
+                      "\r",
+                      "pm.sendRequest(makeRequest({}), (_, response) => {\r",
+                      "    pm.test('Fail, API Key Not Given', () => {\r",
+                      "        const { code, headers } = response;\r",
+                      "\r",
+                      "        pm.expect(code).to.eql(403);\r",
+                      "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "        pm.expect(response.json().success).to.eql(false);\r",
+                      "    });\r",
+                      "});\r",
+                      ""
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": "JSON Type",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"account_number\": \"0123421421\",\r\n    \"account_name\": \"update name\"\r\n}"
+                },
+                "url": {
+                  "raw": "{{URL}}/masters/banks/:id/account",
+                  "host": ["{{URL}}"],
+                  "path": ["masters", "banks", ":id", "account"],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "9"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Change Master Bank Logo",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const { Request } = require('postman-collection');\r",
+                      "\r",
+                      "const makeRequest = function makeRequest(formdata, token = undefined, bankId = 0) {\r",
+                      "    const header = {};\r",
+                      "\r",
+                      "    if (token) header.authorization = `Bearer ${token}`;\r",
+                      "\r",
+                      "    return new Request({\r",
+                      "        header,\r",
+                      "        method: 'PATCH',\r",
+                      "        url: pm.environment.replaceIn(`{{URL}}/masters/banks/${bankId}/logo`),\r",
+                      "        body: {\r",
+                      "            formdata,\r",
+                      "            mode: 'formdata',\r",
+                      "        },\r",
+                      "    });\r",
+                      "};\r",
+                      "\r",
+                      "pm.test('Success', () => {\r",
+                      "    const { code, headers } = pm.response;\r",
+                      "\r",
+                      "    pm.expect(code).to.eql(200);\r",
+                      "    pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "    pm.expect(pm.response.json().success).to.eql(true);\r",
+                      "});\r",
+                      "\r",
+                      "pm.sendRequest(makeRequest([{}], pm.environment.get('TOKEN')), (_, response) => {\r",
+                      "    pm.test('Fail, No `logo` Provided', () => {\r",
+                      "        const { code, headers } = response;\r",
+                      "\r",
+                      "        pm.expect(code).to.eql(422);\r",
+                      "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                      "        pm.expect(response.json().success).to.eql(false);\r",
+                      "    });\r",
+                      "});\r",
+                      ""
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "logo",
+                      "type": "file",
+                      "src": "Bliss.png"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{URL}}/masters/banks/:id/logo",
+                  "host": ["{{URL}}"],
+                  "path": ["masters", "banks", ":id", "logo"],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "{{MASTER_BANK_ID}}",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
               "name": "Delete Master Bank Step",
               "event": [
                 {
@@ -2375,7 +2380,7 @@
                   "variable": [
                     {
                       "key": "id",
-                      "value": "2",
+                      "value": "6",
                       "type": "string"
                     }
                   ]
@@ -2483,7 +2488,7 @@
                   "variable": [
                     {
                       "key": "id",
-                      "value": "2",
+                      "value": "9",
                       "type": "string"
                     }
                   ]
@@ -2664,10 +2669,12 @@
                       "        const { code, headers } = response;\r",
                       "        const body = response.json();\r",
                       "\r",
+                      "        pm.environment.set('CATEGORY_ID', body.data[0].id);\r",
+                      "\r",
                       "        pm.expect(code).to.eql(200);\r",
                       "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
                       "        pm.expect(body.success).to.eql(true);\r",
-                      "        // pm.expect(response.json().data.length).to.eql(1);\r",
+                      "        pm.expect(body.data.length).to.eql(1);\r",
                       "    });\r",
                       "});\r",
                       "\r",
@@ -3058,7 +3065,7 @@
                   "variable": [
                     {
                       "key": "id",
-                      "value": "3",
+                      "value": "{{CATEGORY_ID}}",
                       "type": "string"
                     }
                   ]
@@ -3293,7 +3300,7 @@
                       "        pm.expect(code).to.eql(200);\r",
                       "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
                       "        pm.expect(body.success).to.eql(true);\r",
-                      "        // pm.expect(response.json().data.length).to.eql(1);\r",
+                      "        // pm.expect(body.data.length).to.eql(1);\r",
                       "    });\r",
                       "});\r",
                       "\r",
@@ -3830,7 +3837,7 @@
                       "        pm.expect(code).to.eql(200);\r",
                       "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
                       "        pm.expect(body.success).to.eql(true);\r",
-                      "        // pm.expect(response.json().data.length).to.eql(1);\r",
+                      "        // pm.expect(body.data.length).to.eql(1);\r",
                       "    });\r",
                       "});\r",
                       "\r",
@@ -4353,6 +4360,11 @@
                     "exec": [
                       "const { Request } = require('postman-collection')\r",
                       "\r",
+                      "const reqBody = {\r",
+                      "    question: 'Hai?',\r",
+                      "    answer: 'Hello',\r",
+                      "}\r",
+                      "\r",
                       "const makeRequest = function makeRequest(payload, token = undefined) {\r",
                       "    const header = {\r",
                       "        'Content-Type': 'application/json',\r",
@@ -4371,13 +4383,7 @@
                       "    });\r",
                       "};\r",
                       "\r",
-                      "pm.sendRequest(makeRequest(\r",
-                      "    {\r",
-                      "        question: 'Hai?',\r",
-                      "        answer: 'Hello',\r",
-                      "    },\r",
-                      "    pm.environment.get('TOKEN'),\r",
-                      "), (_, response) => {\r",
+                      "pm.sendRequest(makeRequest(reqBody, pm.environment.get('TOKEN')), (_, response) => {\r",
                       "    pm.test('Success', () => {\r",
                       "        const { code, headers } = response;\r",
                       "\r",
@@ -4387,7 +4393,7 @@
                       "    })\r",
                       "});\r",
                       "\r",
-                      "pm.sendRequest(makeRequest({}, pm.environment.get('TOKEN')), (_, response) => {\r",
+                      "pm.sendRequest(makeRequest(reqBody, pm.environment.get('TOKEN')), (_, response) => {\r",
                       "    pm.test('Fail, No Data Provided', () => {\r",
                       "        const { code, headers } = response;\r",
                       "\r",
@@ -4397,7 +4403,7 @@
                       "    })\r",
                       "});\r",
                       "\r",
-                      "pm.sendRequest(makeRequest({}, 'this-is-wrong'), (_, response) => {\r",
+                      "pm.sendRequest(makeRequest(reqBody, 'this-is-wrong'), (_, response) => {\r",
                       "    pm.test('Fail, Wrong API Key', () => {\r",
                       "        const { code, headers } = response;\r",
                       "\r",
@@ -4407,7 +4413,7 @@
                       "    });\r",
                       "});\r",
                       "\r",
-                      "pm.sendRequest(makeRequest({}), (_, response) => {\r",
+                      "pm.sendRequest(makeRequest(reqBody), (_, response) => {\r",
                       "    pm.test('Fail, API Key Not Given', () => {\r",
                       "        const { code, headers } = response;\r",
                       "\r",
@@ -5196,7 +5202,7 @@
                       "        pm.expect(code).to.eql(200);\r",
                       "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
                       "        pm.expect(body.success).to.eql(true);\r",
-                      "        // pm.expect(response.json().data.length).to.eql(1);\r",
+                      "        // pm.expect(body.data.length).to.eql(1);\r",
                       "    });\r",
                       "});\r",
                       "\r",
@@ -6475,7 +6481,7 @@
                       "        pm.expect(code).to.eql(200);\r",
                       "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
                       "        pm.expect(body.success).to.eql(true);\r",
-                      "        // pm.expect(response.json().data.length).to.eql(1);\r",
+                      "        // pm.expect(body.data.length).to.eql(1);\r",
                       "    });\r",
                       "});\r",
                       "\r",
@@ -6980,7 +6986,7 @@
                       "        pm.expect(code).to.eql(200);\r",
                       "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
                       "        pm.expect(body.success).to.eql(true);\r",
-                      "        // pm.expect(response.json().data.length).to.eql(1);\r",
+                      "        // pm.expect(body.data.length).to.eql(1);\r",
                       "    });\r",
                       "});\r",
                       "\r",
@@ -7371,7 +7377,7 @@
                       "        pm.expect(code).to.eql(200);\r",
                       "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
                       "        pm.expect(body.success).to.eql(true);\r",
-                      "        // pm.expect(response.json().data.length).to.eql(1);\r",
+                      "        // pm.expect(body.data.length).to.eql(1);\r",
                       "    });\r",
                       "});\r",
                       "\r",
@@ -7701,7 +7707,7 @@
                   "        pm.expect(code).to.eql(200);\r",
                   "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
                   "        pm.expect(body.success).to.eql(true);\r",
-                  "        // pm.expect(response.json().data.length).to.eql(1);\r",
+                  "        // pm.expect(body.data.length).to.eql(1);\r",
                   "    });\r",
                   "});\r",
                   "\r",
@@ -7935,7 +7941,7 @@
                   "        pm.expect(code).to.eql(200);\r",
                   "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
                   "        pm.expect(response.json().success).to.eql(true);\r",
-                  "        // pm.expect(response.json().data.length).to.eql(0);\r",
+                  "        // pm.expect(body.data.length).to.eql(0);\r",
                   "    });\r",
                   "});\r",
                   "\r",
@@ -7951,7 +7957,7 @@
                   "        pm.expect(code).to.eql(200);\r",
                   "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
                   "        pm.expect(body.success).to.eql(true);\r",
-                  "        // pm.expect(response.json().data.length).to.eql(1);\r",
+                  "        // pm.expect(body.data.length).to.eql(1);\r",
                   "    });\r",
                   "});\r",
                   "\r",
@@ -8727,7 +8733,7 @@
                   "        pm.expect(code).to.eql(200);\r",
                   "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
                   "        pm.expect(body.success).to.eql(true);\r",
-                  "        // pm.expect(response.json().data.length).to.eql(1);\r",
+                  "        // pm.expect(body.data.length).to.eql(1);\r",
                   "    });\r",
                   "});\r",
                   "\r",
@@ -10282,7 +10288,7 @@
                   "        pm.expect(code).to.eql(200);\r",
                   "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
                   "        pm.expect(body.success).to.eql(true);\r",
-                  "        // pm.expect(response.json().data.length).to.eql(1);\r",
+                  "        // pm.expect(body.data.length).to.eql(1);\r",
                   "    });\r",
                   "});\r",
                   "\r",
@@ -10523,7 +10529,7 @@
                   "        pm.expect(code).to.eql(200);\r",
                   "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
                   "        pm.expect(body.success).to.eql(true);\r",
-                  "        // pm.expect(response.json().data.length).to.eql(1);\r",
+                  "        // pm.expect(body.data.length).to.eql(1);\r",
                   "    });\r",
                   "});\r",
                   "\r",
@@ -10947,7 +10953,7 @@
                   "        pm.expect(code).to.eql(200);\r",
                   "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
                   "        pm.expect(body.success).to.eql(true);\r",
-                  "        // pm.expect(response.json().data.length).to.eql(1);\r",
+                  "        // pm.expect(body.data.length).to.eql(1);\r",
                   "    });\r",
                   "});\r",
                   "\r",
@@ -11188,7 +11194,7 @@
                   "        pm.expect(code).to.eql(200);\r",
                   "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
                   "        pm.expect(body.success).to.eql(true);\r",
-                  "        // pm.expect(response.json().data.length).to.eql(1);\r",
+                  "        // pm.expect(body.data.length).to.eql(1);\r",
                   "    });\r",
                   "});\r",
                   "\r",

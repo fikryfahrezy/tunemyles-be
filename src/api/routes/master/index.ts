@@ -7,11 +7,11 @@ import type {
   PostBankBody,
   UpdateBankBody,
   UpdateBankDetailBody,
-  UpdateBankLogoBody,
+  ChangeBankLogoBody,
   PostBankStepBody,
   PostCategoryBody,
   UpdateCategoryBody,
-  UpdateCategoryIconBody,
+  ChangeCategoryIconBody,
   PostMediaBody,
   PostWalletBody,
   UpdateWalletBody,
@@ -20,6 +20,7 @@ import type {
   UpdateFaqBody,
 } from '../../types/schema';
 import { controllerWrapper, handlerWrapper } from '../../utils/serverfn-wrapper';
+import { isBodyEmpty } from '../../utils/request-validation';
 import { renameFiles } from '../../utils/file-management';
 import { protect } from '../../middlewares/protect-route';
 import dbQuerying from '../../middlewares/db-querying';
@@ -30,7 +31,7 @@ import {
   getMasterBanks,
   getMasterBankDetail,
   updateMasterBank,
-  updateMasterBankDetail,
+  updateMasterBankAccount,
   changeMasterBankLogo,
   postMasterBankStep,
   deleteMasterBankStep,
@@ -109,6 +110,25 @@ const routes = function routes(
     controllerWrapper(getMasterBanks),
   );
 
+  fastify.post<Request<{ Headers: ApiKeyHeader; Params: IdRequestParams; Body: PostBankStepBody }>>(
+    '/banks/:id/steps',
+    {
+      attachValidation: true,
+      schema: {
+        headers: requestHeaders.private,
+        params: requestParams.id,
+        body: requestBody.postBankStep,
+        response: {
+          200: { $ref: '#ApiResponse' },
+          '4xx': { $ref: '#ApiResponse' },
+          '5xx': { $ref: '#ApiResponse' },
+        },
+      },
+      preHandler: [schemaValidation, handlerWrapper(protect('ADMIN'))],
+    },
+    controllerWrapper(postMasterBankStep),
+  );
+
   fastify.get<Request<{ Headers: ApiKeyHeader; Params: IdRequestParams }>>(
     '/banks/:id',
     {
@@ -149,13 +169,13 @@ const routes = function routes(
   fastify.patch<
     Request<{ Headers: ApiKeyHeader; Params: IdRequestParams; Body: UpdateBankDetailBody }>
   >(
-    '/banks/:id/detail',
+    '/banks/:id/account',
     {
       attachValidation: true,
       schema: {
         headers: requestHeaders.private,
         params: requestParams.id,
-        body: requestBody.updateBankdetail,
+        body: requestBody.updateBankAccount,
         response: {
           200: { $ref: '#ApiResponse' },
           '4xx': { $ref: '#ApiResponse' },
@@ -164,11 +184,11 @@ const routes = function routes(
       },
       preHandler: [schemaValidation, handlerWrapper(protect('ADMIN'))],
     },
-    controllerWrapper(updateMasterBankDetail),
+    controllerWrapper(updateMasterBankAccount),
   );
 
   fastify.patch<
-    Request<{ Headers: ApiKeyHeader; Params: IdRequestParams; Body: UpdateBankLogoBody }>
+    Request<{ Headers: ApiKeyHeader; Params: IdRequestParams; Body: ChangeBankLogoBody }>
   >(
     '/banks/:id/logo',
     {
@@ -183,32 +203,19 @@ const routes = function routes(
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preValidation: (req, __, done) => {
+      preValidation: (req, res, done) => {
+        if (isBodyEmpty(req.body)) {
+          res.unprocessableEntity();
+          return;
+        }
+
         req.body = { ...req.body, logo: renameFiles(req.url, req.body.logo) ?? req.body.logo };
+
         done();
       },
       preHandler: [schemaValidation, handlerWrapper(protect('ADMIN'))],
     },
     controllerWrapper(changeMasterBankLogo),
-  );
-
-  fastify.post<Request<{ Headers: ApiKeyHeader; Params: IdRequestParams; Body: PostBankStepBody }>>(
-    '/banks/:id/steps',
-    {
-      attachValidation: true,
-      schema: {
-        headers: requestHeaders.private,
-        params: requestParams.id,
-        body: requestBody.postBankStep,
-        response: {
-          200: { $ref: '#ApiResponse' },
-          '4xx': { $ref: '#ApiResponse' },
-          '5xx': { $ref: '#ApiResponse' },
-        },
-      },
-      preHandler: [schemaValidation, handlerWrapper(protect('ADMIN'))],
-    },
-    controllerWrapper(postMasterBankStep),
   );
 
   fastify.delete<Request<{ Headers: ApiKeyHeader; Params: IdRequestParams }>>(
@@ -261,7 +268,8 @@ const routes = function routes(
         },
       },
       preValidation: (req, __, done) => {
-        req.body = { ...req.body, icon: renameFiles(req.url, req.body.icon) ?? req.body.icon };
+        req.body = { ...req.body, icon: renameFiles(req.url, req.body.icon) };
+
         done();
       },
       preHandler: [schemaValidation, handlerWrapper(protect('ADMIN'))],
@@ -313,7 +321,7 @@ const routes = function routes(
   );
 
   fastify.patch<
-    Request<{ Headers: ApiKeyHeader; Params: IdRequestParams; Body: UpdateCategoryIconBody }>
+    Request<{ Headers: ApiKeyHeader; Params: IdRequestParams; Body: ChangeCategoryIconBody }>
   >(
     '/categories/:id/icon',
     {
@@ -321,12 +329,22 @@ const routes = function routes(
       schema: {
         headers: requestHeaders.private,
         params: requestParams.id,
-        body: requestBody.updateCategoryIcon,
+        body: requestBody.changeCategoryIcon,
         response: {
           200: { $ref: '#ApiResponse' },
           '4xx': { $ref: '#ApiResponse' },
           '5xx': { $ref: '#ApiResponse' },
         },
+      },
+      preValidation: (req, res, done) => {
+        if (isBodyEmpty(req.body)) {
+          res.unprocessableEntity();
+          return;
+        }
+
+        req.body = { ...req.body, icon: renameFiles(req.url, req.body.icon) ?? req.body.icon };
+
+        done();
       },
       preHandler: [schemaValidation, handlerWrapper(protect('ADMIN'))],
     },
@@ -364,8 +382,14 @@ const routes = function routes(
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preValidation: (req, __, done) => {
+      preValidation: (req, res, done) => {
+        if (isBodyEmpty(req.body)) {
+          res.unprocessableEntity();
+          return;
+        }
+
         req.body = { ...req.body, image: renameFiles(req.url, req.body.image) ?? req.body.image };
+
         done();
       },
       preHandler: [schemaValidation, handlerWrapper(protect('ADMIN'))],
@@ -405,8 +429,14 @@ const routes = function routes(
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preValidation: (req, __, done) => {
+      preValidation: (req, res, done) => {
+        if (isBodyEmpty(req.body)) {
+          res.unprocessableEntity();
+          return;
+        }
+
         req.body = { ...req.body, image: renameFiles(req.url, req.body.image) ?? req.body.image };
+
         done();
       },
       preHandler: [schemaValidation, handlerWrapper(protect('ADMIN'))],
@@ -446,7 +476,8 @@ const routes = function routes(
         },
       },
       preValidation: (req, __, done) => {
-        req.body = { ...req.body, logo: renameFiles(req.url, req.body.logo) ?? req.body.logo };
+        req.body = { ...req.body, logo: renameFiles(req.url, req.body.logo) };
+
         done();
       },
       preHandler: [schemaValidation, handlerWrapper(protect('ADMIN'))],
@@ -513,8 +544,14 @@ const routes = function routes(
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preValidation: (req, __, done) => {
+      preValidation: (req, res, done) => {
+        if (isBodyEmpty(req.body)) {
+          res.unprocessableEntity();
+          return;
+        }
+
         req.body = { ...req.body, logo: renameFiles(req.url, req.body.logo) ?? req.body.logo };
+
         done();
       },
       preHandler: [schemaValidation, handlerWrapper(protect('ADMIN'))],

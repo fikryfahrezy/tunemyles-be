@@ -51,7 +51,8 @@ import type {
   UpdateWithdrawStatusBody,
 } from '../../src/api/types/schema';
 import supertest, { Test } from 'supertest';
-import { userRegistration, userLogin } from '../../src/api/routes/account/service';
+import { issueJwt } from '../../src/api/utils/jwt';
+import { userRegistration, userLogin, makeUserAdmin } from '../../src/api/routes/account/service';
 import {
   getUser,
   createForgotPassword,
@@ -63,7 +64,7 @@ type FilesType = { field?: string; fileDir?: string }[];
 
 type SupertestReqType = {
   server: Server;
-  type: 'GET' | 'POST' | 'PATCH' | 'DELETE';
+  type: 'GET' | 'POST' | 'PATCH' | 'DELETE' | 'PUT';
   url: string;
   payload?:
     | { obj?: Record<string, unknown> }
@@ -136,6 +137,9 @@ const supertestReq = function supertestReq({
       break;
     case 'DELETE':
       req = init.delete(newUrl);
+      break;
+    case 'PUT':
+      req = init.put(newUrl);
       break;
     default:
       req = init.get(newUrl);
@@ -300,6 +304,23 @@ export const getMasterBanks = function getMasterBanks(
   });
 };
 
+export const postMasterBankStep = function postMasterBankStep(
+  server: Server,
+  bankId: number,
+  payload: Partial<PostBankStepBody> = { step: 'step' },
+  token?: string,
+) {
+  return supertestReq({
+    server,
+    token,
+    type: 'POST',
+    url: `/masters/banks/${bankId}/steps`,
+    payload: {
+      obj: payload,
+    },
+  });
+};
+
 export const getMasterBankDetail = function getMasterBankDetail(
   server: Server,
   bankId: number,
@@ -340,7 +361,7 @@ export const updateMasterBankDetail = function updateMasterBankDetail(
     server,
     token,
     type: 'PATCH',
-    url: `/masters/banks/${bankId}/detail`,
+    url: `/masters/banks/${bankId}/account`,
     payload: {
       obj: payload,
     },
@@ -364,23 +385,6 @@ export const changeMasterBankLogo = function changeMasterBankLogo(
     url: `/masters/banks/${bankId}/logo`,
     payload: {
       files,
-    },
-  });
-};
-
-export const postMasterBankStep = function postMasterBankStep(
-  server: Server,
-  bankId: number,
-  payload: Partial<PostBankStepBody> = { step: 'step' },
-  token?: string,
-) {
-  return supertestReq({
-    server,
-    token,
-    type: 'POST',
-    url: `/masters/banks/${bankId}/steps`,
-    payload: {
-      obj: payload,
     },
   });
 };
@@ -1414,9 +1418,17 @@ export const registerThenForgotPass = async function registerThenForgotPass() {
   return { username, verification_token };
 };
 
+export const createAdminUser = async function createAdminUser() {
+  const { username } = await registration();
+  const { id, utilId } = await getUser('USERNAME', username);
+  const token = await makeUserAdmin(id, utilId);
+
+  return token;
+};
+
 export const createMercUser = async function createMerAccount() {
-  const { username, password, token } = await registration();
-  const { utilId } = await getUser('USERNAME', username);
+  const { username, password } = await registration();
+  const { id, utilId } = await getUser('USERNAME', username);
   const [identityPhoto, marketPhoto] = await createImgs(['a', 'b']);
 
   await createMerchant({
@@ -1426,5 +1438,7 @@ export const createMercUser = async function createMerAccount() {
     id_u_user: utilId,
   });
 
-  return { username, password, token };
+  const newToken = issueJwt(id, utilId, 'MERCHANT');
+
+  return { username, password, token: newToken };
 };

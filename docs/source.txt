@@ -27,3 +27,6 @@ https://stackoverflow.com/a/42983914/12976234
 
 How to add file in a pre-request script using form data
 https://community.postman.com/t/how-to-add-file-in-a-pre-request-script-using-form-data/18236
+
+How do I test for an empty JavaScript object?
+https://stackoverflow.com/questions/679915/how-do-i-test-for-an-empty-javascript-object

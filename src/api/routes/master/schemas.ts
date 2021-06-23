@@ -78,6 +78,12 @@ export const requestBody = {
     },
     additionalProperties: false,
   },
+  postBankStep: {
+    required: ['step'],
+    type: 'object',
+    properties: { step: { type: 'string' } },
+    additionalProperties: false,
+  },
   updateBank: {
     type: 'object',
     properties: {
@@ -86,7 +92,7 @@ export const requestBody = {
     },
     additionalProperties: false,
   },
-  updateBankdetail: {
+  updateBankAccount: {
     type: 'object',
     properties: {
       account_number: { type: 'string' },
@@ -100,12 +106,6 @@ export const requestBody = {
     properties: {
       logo: { type: 'array', items: { $ref: '#MultiPartSchema' } },
     },
-    additionalProperties: false,
-  },
-  postBankStep: {
-    required: ['step'],
-    type: 'object',
-    properties: { step: { type: 'string' } },
     additionalProperties: false,
   },
   postCategory: {
@@ -129,7 +129,7 @@ export const requestBody = {
     },
     additionalProperties: false,
   },
-  updateCategoryIcon: {
+  changeCategoryIcon: {
     required: ['icon'],
     type: 'object',
     properties: {
@@ -206,19 +206,28 @@ export const responses = {
             type: 'array',
             items: {
               type: 'object',
-              allOf: [
-                {
-                  $ref: '#GetBank',
+              properties: {
+                id: {
+                  type: 'integer',
                 },
-                {
-                  type: 'object',
-                  properties: {
-                    Logo: {
-                      $ref: '#GetMedia',
-                    },
-                  },
+                bank_name: {
+                  type: 'string',
                 },
-              ],
+                logo: {
+                  type: 'string',
+                  nullable: true,
+                },
+                logo_url: {
+                  type: 'string',
+                  nullable: true,
+                },
+                created_at: {
+                  type: 'string',
+                },
+                updated_at: {
+                  type: 'string',
+                },
+              },
             },
           },
         },
@@ -235,34 +244,56 @@ export const responses = {
         type: 'object',
         properties: {
           data: {
-            type: 'array',
-            items: {
-              type: 'object',
-              allOf: [
-                {
-                  $ref: '#GetBank',
-                },
-                {
+            type: 'object',
+            properties: {
+              id: {
+                type: 'integer',
+              },
+              bank_name: {
+                type: 'string',
+              },
+              logo: {
+                type: 'string',
+                nullable: true,
+              },
+              logo_url: {
+                type: 'string',
+                nullable: true,
+              },
+              created_at: {
+                type: 'string',
+              },
+              updated_at: {
+                type: 'string',
+              },
+              steps: {
+                type: 'array',
+                items: {
                   type: 'object',
                   properties: {
-                    Logo: {
-                      $ref: '#GetMedia',
+                    id: {
+                      type: 'integer',
                     },
-                    Accounts: {
-                      type: 'array',
-                      items: {
-                        $ref: '#GetBankUser',
-                      },
-                    },
-                    Utilities: {
-                      type: 'array',
-                      items: {
-                        $ref: '#GetBankUtility',
-                      },
+                    step: {
+                      type: 'string',
                     },
                   },
                 },
-              ],
+              },
+              accounts: {
+                type: 'array',
+                properties: {
+                  id: {
+                    type: 'integer',
+                  },
+                  acccount_name: {
+                    type: 'string',
+                  },
+                  account_number: {
+                    type: 'string',
+                  },
+                },
+              },
             },
           },
         },
@@ -286,26 +317,22 @@ export const responses = {
                 id: {
                   type: 'integer',
                 },
-                id_icon: {
-                  type: 'integer',
-                },
                 category: {
-                  type: 'string',
-                },
-                slug: {
                   type: 'string',
                 },
                 description: {
                   type: 'string',
                 },
-                uri: {
+                slug: {
                   type: 'string',
                 },
-                label: {
+                icon: {
                   type: 'string',
+                  nullable: true,
                 },
-                is_visible: {
-                  type: 'integer',
+                icon_url: {
+                  type: 'string',
+                  nullable: true,
                 },
                 created_at: {
                   type: 'string',

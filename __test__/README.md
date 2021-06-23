@@ -437,6 +437,32 @@
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `false`
 
+##### [# Post Master Bank Step](#post-bank-step)
+
+**[POSTMAN] [JEST]** Success
+
+- Status code should `201`
+- Header `Content-Type` should `application/json; charset=utf-8`
+- Body should object with `success` property `true`
+
+**[POSTMAN] [JEST]** Fail, No `step` Provided
+
+- Status code should `422`
+- Header `Content-Type` should `application/json; charset=utf-8`
+- Body should object with `success` property `false`
+
+**[POSTMAN] [JEST]** Fail, Wrong API Key
+
+- Status code should `403`
+- Header `Content-Type` should `application/json; charset=utf-8`
+- Body should object with `success` property `false`
+
+**[POSTMAN] [JEST]** Fail, API Key Not Given
+
+- Status code should `403`
+- Header `Content-Type` should `application/json; charset=utf-8`
+- Body should object with `success` property `false`
+
 ##### [# Get Master Bank Detail](#get-bank-detail)
 
 **[POSTMAN] [JEST]** Success
@@ -489,7 +515,7 @@
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `false`
 
-##### [# Update Master Bank Detail](#update-bank-detail)
+##### [# Update Master Bank Account](#update-bank-account)
 
 **[POSTMAN] [JEST]** Success
 
@@ -526,32 +552,6 @@
 **[POSTMAN] [JEST]** Fail, No `logo` Provided
 
 - Status code should `422`
-- Header `Content-Type` should `application/json; charset=utf-8`
-- Body should object with `success` property `false`
-
-##### [# Post Master Bank Step](#post-bank-step)
-
-**[POSTMAN] [JEST]** Success
-
-- Status code should `201`
-- Header `Content-Type` should `application/json; charset=utf-8`
-- Body should object with `success` property `true`
-
-**[POSTMAN] [JEST]** Fail, No `step` Provided
-
-- Status code should `422`
-- Header `Content-Type` should `application/json; charset=utf-8`
-- Body should object with `success` property `false`
-
-**[POSTMAN] [JEST]** Fail, Wrong API Key
-
-- Status code should `403`
-- Header `Content-Type` should `application/json; charset=utf-8`
-- Body should object with `success` property `false`
-
-**[POSTMAN] [JEST]** Fail, API Key Not Given
-
-- Status code should `403`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `false`
 

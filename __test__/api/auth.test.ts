@@ -10,7 +10,6 @@ import {
   verifyUserToken,
 } from '../../src/api/routes/account/service';
 import {
-  fileDir,
   registerPayload,
   registerMerchPayload,
   updateProfilePayload,
@@ -55,6 +54,7 @@ describe('Register', () => {
   });
 
   test('Fail, `phone_number` Already Exist', async () => {
+    const payload = registerPayload();
     const phoneNumber = Date.now().toString();
     await userRegistration({ ...payload, phone_number: phoneNumber });
 
@@ -72,6 +72,7 @@ describe('Register', () => {
   });
 
   test('Fail, `username` Already Exist', async () => {
+    const payload = registerPayload();
     const { username } = payload;
     await userRegistration(payload);
     const newPayload = {
@@ -203,14 +204,11 @@ describe('Register', () => {
 });
 
 describe('Activate Merchant', () => {
-  const { fields, files } = registerMerchPayload();
+  const payload = registerMerchPayload();
 
   test('Success', async () => {
     const { token } = await registration();
-    const payload = {
-      fields,
-      files,
-    };
+    const payload = registerMerchPayload();
 
     const { status, headers, body } = await registerMerchant(server, payload, token);
 
@@ -221,10 +219,7 @@ describe('Activate Merchant', () => {
 
   test('Fail, User Already Merchant Identified by User ID', async () => {
     const { token } = await createMercUser();
-    const payload = {
-      fields,
-      files,
-    };
+    const payload = registerMerchPayload();
 
     const { status, headers, body } = await registerMerchant(server, payload, token);
 
@@ -236,10 +231,6 @@ describe('Activate Merchant', () => {
   test('Fail, User Already Merchant Identified by Token Type', async () => {
     const { username, password } = await createMercUser();
     const { token } = await userLogin({ username, password });
-    const payload = {
-      fields,
-      files,
-    };
 
     const { status, headers, body } = await registerMerchant(server, payload, token);
 
@@ -250,9 +241,8 @@ describe('Activate Merchant', () => {
 
   test('Fail, No Data Provided', async () => {
     const { token } = await registration();
-    const fields = {};
 
-    const { status, headers, body } = await registerMerchant(server, { fields }, token);
+    const { status, headers, body } = await registerMerchant(server, { fields: {} }, token);
 
     expect(status).toBe(422);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -261,10 +251,6 @@ describe('Activate Merchant', () => {
 
   test('Fail, Token Invalid', async () => {
     const token = 'invalid-token';
-    const payload = {
-      fields,
-      files,
-    };
 
     const { status, headers, body } = await registerMerchant(server, payload, token);
 
@@ -274,11 +260,6 @@ describe('Activate Merchant', () => {
   });
 
   test('Fail, No Token Provided', async () => {
-    const payload = {
-      fields,
-      files,
-    };
-
     const { status, headers, body } = await registerMerchant(server, payload);
 
     expect(status).toBe(403);
@@ -377,16 +358,13 @@ describe('Get Profile', () => {
 });
 
 describe('Update Profile', () => {
-  const { fields, files } = updateProfilePayload();
+  const payload = updateProfilePayload();
 
   test('Success, Add New Profile Image', async () => {
     const { token } = await registerThenLogin();
-    const updatePayload = {
-      fields,
-      files,
-    };
+    const payload = updateProfilePayload();
 
-    const { status, headers, body } = await updateProfile(server, updatePayload, token);
+    const { status, headers, body } = await updateProfile(server, payload, token);
 
     expect(status).toBe(200);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -395,17 +373,14 @@ describe('Update Profile', () => {
 
   test('Success, Update Profile Image', async () => {
     const { token, username } = await registerThenLogin();
+    const payload = updateProfilePayload();
     const [{ id: userId }, { id: imgId }] = await Promise.all([
       getUser('USERNAME', username),
       createUserImg(`${username}-not-valid.jpg`),
     ]);
     await updateUser(userId, { id_photo: imgId });
-    const updatePayload = {
-      fields,
-      files,
-    };
 
-    const { status, headers, body } = await updateProfile(server, updatePayload, token);
+    const { status, headers, body } = await updateProfile(server, payload, token);
 
     expect(status).toBe(200);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -535,7 +510,7 @@ describe('Update Profile', () => {
   test('Fail, Wrong API Key', async () => {
     const token = 'this-is-wrong-token';
 
-    const { status, headers, body } = await updateProfile(server, {}, token);
+    const { status, headers, body } = await updateProfile(server, payload, token);
 
     expect(status).toBe(403);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -543,7 +518,7 @@ describe('Update Profile', () => {
   });
 
   test('Fail, API Key Not Given', async () => {
-    const { status, headers, body } = await updateProfile(server, {});
+    const { status, headers, body } = await updateProfile(server, payload);
 
     expect(status).toBe(403);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');

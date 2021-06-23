@@ -172,7 +172,7 @@ export const responses = {
               phone_number: {
                 type: 'string',
               },
-              face: {
+              img_url: {
                 type: 'string',
                 nullable: true,
               },

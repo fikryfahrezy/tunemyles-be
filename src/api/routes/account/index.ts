@@ -11,6 +11,7 @@ import type {
   ResetPasswordBody,
 } from '../../types/schema';
 import { controllerWrapper, handlerWrapper } from '../../utils/serverfn-wrapper';
+import { isBodyEmpty } from '../../utils/request-validation';
 import { renameFiles } from '../../utils/file-management';
 import { protect } from '../../middlewares/protect-route';
 import schemaValidation from '../../middlewares/schema-validation';
@@ -66,7 +67,12 @@ const routes = function routes(
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preValidation: (req, __, done) => {
+      preValidation: (req, res, done) => {
+        if (isBodyEmpty(req.body)) {
+          res.unprocessableEntity();
+          return;
+        }
+
         req.body = {
           ...req.body,
           market_photo: renameFiles(req.url, req.body.market_photo) ?? req.body.market_photo,
@@ -191,7 +197,7 @@ const routes = function routes(
     '/admin',
     {
       onRequest: (__, res, done) => {
-        if (process.env.NODE_ENV !== 'test') res.methodNotAllowed();
+        if (process.env.NODE_ENV === 'production') res.methodNotAllowed();
 
         done();
       },

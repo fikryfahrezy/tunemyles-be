@@ -16,10 +16,8 @@ externalDocs:
   description: Find out more about Swagger
   url: 'http://swagger.io'
 servers:
-  - url: 'http://localhost:5000'
-    description: Development Server Api v2
-  - url: 'http://xxx.xxx.xxx.xxx:5000/api/v2'
-    description: Development Server Api v2
+  - url: 'http://localhost:5000/api/v2'
+    description: Dev Server API URL
 tags:
   - name: check
     description: Checking Server
@@ -409,6 +407,47 @@ paths:
                 $ref: '#/components/schemas/ApiResponse'
       security:
         - APIKeyHeader: []
+  '/masters/banks/{id}/steps':
+    post:
+      tags:
+        - masters
+      summary: Add Bank Step (Admin Route)
+      description: Add Bank Step (Admin Route)
+      operationId: addBankStep
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostBankStepBody'
+        required: true
+      responses:
+        '200':
+          description: Request Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        4XX:
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        5XX:
+          description: Sever Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+        - APIKeyHeader: []
+      x-codegen-request-body-name: body
   '/masters/banks/{id}':
     get:
       tags:
@@ -516,7 +555,7 @@ paths:
                 $ref: '#/components/schemas/ApiResponse'
       security:
         - APIKeyHeader: []
-  '/masters/banks/{id}/detail':
+  '/masters/banks/{id}/account':
     patch:
       tags:
         - masters
@@ -533,7 +572,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateBankDetailBody'
+              $ref: '#/components/schemas/UpdateBankAccountBody'
         required: true
       responses:
         '200':
@@ -597,47 +636,6 @@ paths:
                 $ref: '#/components/schemas/ApiResponse'
       security:
         - APIKeyHeader: []
-  '/masters/banks/{id}/steps':
-    post:
-      tags:
-        - masters
-      summary: Add Bank Step (Admin Route)
-      description: Add Bank Step (Admin Route)
-      operationId: addBankStep
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PostBankStepBody'
-        required: true
-      responses:
-        '200':
-          description: Request Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        4XX:
-          description: Request Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        5XX:
-          description: Sever Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-      security:
-        - APIKeyHeader: []
-      x-codegen-request-body-name: body
   '/masters/banks/steps/{id}':
     delete:
       tags:
@@ -741,7 +739,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CategoryResponse'
+                $ref: '#/components/schemas/GetCategoriesResponse'
         4XX:
           description: Request Error
           content:
@@ -834,9 +832,9 @@ paths:
     patch:
       tags:
         - masters
-      summary: Update Category Icon (Admin Route)
-      description: Update Category Icon (Admin Route)
-      operationId: updateCategoryIcon
+      summary: Change Category Icon (Admin Route)
+      description: Change Category Icon (Admin Route)
+      operationId: changeCategoryIcon
       parameters:
         - name: id
           in: path
@@ -847,7 +845,7 @@ paths:
         content:
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/UpdateCategoryIconBody'
+              $ref: '#/components/schemas/ChangeCategoryIconBody'
         required: true
       responses:
         '200':
@@ -3491,7 +3489,7 @@ components:
                   type: string
                 phone_number:
                   type: string
-                face:
+                img_url:
                   type: string
                   nullable: true
                 wallets:
@@ -3568,12 +3566,28 @@ components:
               type: array
               items:
                 type: object
-                allOf:
-                  - $ref: '#/components/schemas/GetBank'
-                  - type: object
-                    properties:
-                      Logo:
-                        $ref: '#/components/schemas/GetMedia'
+                properties:
+                  id:
+                    type: integer
+                  bank_name:
+                    type: string
+                  logo:
+                    type: string
+                    nullable: true
+                  logo_url:
+                    type: string
+                    nullable: true
+                  created_at:
+                    type: string
+                  updated_at:
+                    type: string
+    PostBankStepBody:
+      required:
+        - step
+      type: object
+      properties:
+        step:
+          type: string
     GetMasterBankDetailResponse:
       type: object
       allOf:
@@ -3581,23 +3595,42 @@ components:
         - type: object
           properties:
             data:
-              type: array
-              items:
-                type: object
-                allOf:
-                  - $ref: '#/components/schemas/GetBank'
-                  - type: object
+              type: object
+              properties:
+                id:
+                  type: integer
+                bank_name:
+                  type: string
+                logo:
+                  type: string
+                  nullable: true
+                logo_url:
+                  type: string
+                  nullable: true
+                created_at:
+                  type: string
+                updated_at:
+                  type: string
+                steps:
+                  type: array
+                  items:
+                    type: object
                     properties:
-                      Logo:
-                        $ref: '#/components/schemas/GetMedia'
-                      Accounts:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/GetBankUser'
-                      Utilities:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/GetBankUtility'
+                      id:
+                        type: integer
+                      step:
+                        type: string
+                acccounts:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      acccount_name:
+                        type: string
+                      account_number:
+                        type: string
     UpdateBankBody:
       type: object
       properties:
@@ -3605,7 +3638,7 @@ components:
           type: string
         visibility:
           type: integer
-    UpdateBankDetailBody:
+    UpdateBankAccountBody:
       required:
         - account_number
         - account_name
@@ -3622,13 +3655,6 @@ components:
         logo:
           type: string
           format: binary
-    PostBankStepBody:
-      required:
-        - step
-      type: object
-      properties:
-        step:
-          type: string
     PostCategoryBody:
       required:
         - category
@@ -3644,7 +3670,7 @@ components:
           type: string
         description:
           type: string
-    CategoryResponse:
+    GetCategoriesResponse:
       type: object
       allOf:
         - $ref: '#/components/schemas/ApiResponse'
@@ -3657,20 +3683,18 @@ components:
                 properties:
                   id:
                     type: integer
-                  id_icon:
-                    type: integer
                   category:
-                    type: string
-                  slug:
                     type: string
                   description:
                     type: string
-                  uri:
+                  slug:
                     type: string
-                  label:
+                  icon:
                     type: string
-                  is_visible:
-                    type: integer
+                    nullable: true
+                  icon_url:
+                    type: string
+                    nullable: true
                   created_at:
                     type: string
                     format: date-time
@@ -3688,7 +3712,7 @@ components:
           type: string
         visibility:
           type: integer
-    UpdateCategoryIconBody:
+    ChangeCategoryIconBody:
       required:
         - icon
       properties:

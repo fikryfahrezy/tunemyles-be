@@ -30,9 +30,14 @@ import {
   getUserForgotToken,
 } from '../../repositories/UserRepository';
 
+type UserAuth = {
+  type: number;
+  token: string;
+};
+
 export const userRegistration: (
   data: RegisterBody,
-) => Promise<CustModelType['UserAuth']> = async function userRegistration(data) {
+) => Promise<UserAuth> = async function userRegistration(data) {
   const user = await createUser(data);
   const { id, type } = await createUserUtility(data.password, user.id);
 
@@ -50,7 +55,7 @@ export const userRegistration: (
 export const merchantRegistration: (
   data: ActivateMerchantBody,
   userToken: CustModelType['UserToken'],
-) => Promise<CustModelType['UserAuth']> = async function merchantRegistration(
+) => Promise<UserAuth> = async function merchantRegistration(
   { identity_photo: identityPhoto, market_photo: marketPhoto, ...data },
   { userId, utilId, type },
 ) {
@@ -69,11 +74,8 @@ export const merchantRegistration: (
 
   if (!created) throw new ErrorResponse('user already merchant', 400);
 
-  await Promise.all([
-    updateUserType('MERCHANT', userId),
-    saveFiles(identityPhoto),
-    saveFiles(marketPhoto),
-  ]);
+  await updateUserType('MERCHANT', userId);
+  await Promise.all([saveFiles(identityPhoto), saveFiles(marketPhoto)]);
 
   const jwtToken = issueJwt(userId, utilId, 'MERCHANT');
 
@@ -83,9 +85,10 @@ export const merchantRegistration: (
   };
 };
 
-export const userLogin: (
-  data: LoginBody,
-) => Promise<CustModelType['UserAuth']> = async function userLogin({ username, password }) {
+export const userLogin: (data: LoginBody) => Promise<UserAuth> = async function userLogin({
+  username,
+  password,
+}) {
   const user = await getUser('USERNAME', username);
 
   if (!user) throw new ErrorResponse('invalid credential', 400);
@@ -120,7 +123,7 @@ export const userProfile: (userId: number) => Promise<unknown> = async function 
     username: user.address,
     address: user.address,
     phone_number: user.phone_number,
-    face: user.face,
+    img_url: user.imgUrl,
     wallets: userWallets,
   };
 };
@@ -133,19 +136,16 @@ export const updateUserProfile: (
 
   if (!user) throw new ErrorResponse('no user available', 404);
 
-  const { id, imgId, face } = user;
+  const { id, imgId, imgUrl } = user;
 
   if (avatar && imgId) {
-    await Promise.all([
-      updateUser(id, userData),
-      updateUserImg(imgId, avatar[0].filename),
-      saveFiles(avatar),
-    ]);
-    deleteLocalFile(face as string);
+    await Promise.all([updateUser(id, userData), updateUserImg(imgId, avatar[0].filename)]);
+    await Promise.all([saveFiles(avatar), deleteLocalFile(imgUrl)]);
   } else if (avatar && !imgId) {
     const img = await createUserImg(avatar[0].filename);
 
-    await Promise.all([updateUser(id, { ...userData, id_photo: img.id }), saveFiles(avatar)]);
+    await updateUser(id, { ...userData, id_photo: img.id });
+    await saveFiles(avatar);
   } else await updateUser(id, userData);
 };
 

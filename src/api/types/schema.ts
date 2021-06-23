@@ -80,9 +80,13 @@ export type PostBankBody = {
   bank_name: string;
 };
 
+export type PostBankStepBody = {
+  step: string;
+};
+
 export type UpdateBankBody = {
   bank_name?: string;
-  visiblity?: number;
+  visibility?: number;
 };
 
 export type UpdateBankDetailBody = {
@@ -90,12 +94,8 @@ export type UpdateBankDetailBody = {
   account_name: string;
 };
 
-export type UpdateBankLogoBody = {
+export type ChangeBankLogoBody = {
   logo: AddedFileBody[];
-};
-
-export type PostBankStepBody = {
-  step: string;
 };
 
 export type PostCategoryBody = {
@@ -109,7 +109,7 @@ export type UpdateCategoryBody = Partial<Omit<PostCategoryBody, 'icon'>> & {
   visibility?: number;
 };
 
-export type UpdateCategoryIconBody = Pick<PostCategoryBody, 'icon'>;
+export type ChangeCategoryIconBody = Required<Pick<PostCategoryBody, 'icon'>>;
 
 export type PostMediaBody = {
   image: AddedFileBody[];
