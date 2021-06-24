@@ -22,20 +22,32 @@ import {
   createMedia,
   createBankStep,
   createCategory,
+  createWallet,
+  createFaq,
   findOrCreateBankAcc,
   updateBank,
   updateBankAcc,
   updateMedia,
   updateCategory,
+  updateWallet,
+  updateFaq,
   deleteBankStep,
   deleteBank,
   deleteCategory,
+  deleteMedia,
+  deleteWallet,
+  deleteFaq,
   getBanks,
   getBank,
   getBankUtilitiesByBankId,
   getBankAccountsByBankId,
   getCategories,
   getCategory,
+  getMedias,
+  getMedia,
+  getWallets,
+  getWallet,
+  getFaqs,
 } from '../../repositories/MasterRepository';
 
 export const postBank: (data: PostBankBody) => Promise<void> = async function postBank({
@@ -44,6 +56,7 @@ export const postBank: (data: PostBankBody) => Promise<void> = async function po
 }) {
   if (logo) {
     const { id } = await createMedia(logo[0].filename);
+
     await createBank({ bank_name, logoId: id });
     await saveFiles(logo);
   } else await createBank({ bank_name });
@@ -140,9 +153,18 @@ export const deleteBankStepData: (
 export const deleteBankData: (bankId: number) => Promise<void> = async function deleteBankData(
   bankId,
 ) {
-  const isDeleted = await deleteBank(bankId);
+  const bank = await getBank(bankId);
 
-  if (!isDeleted) throw new ErrorResponse(`bank with id ${bankId} not found`, 404);
+  if (!bank) throw new ErrorResponse(`bank with id ${bankId} not found`, 404);
+
+  const { logoId, logo_url: logoUrl } = bank;
+
+  await deleteBank(bankId);
+
+  if (logoId && logoUrl) {
+    await deleteMedia(logoId);
+    deleteLocalFile(logoUrl);
+  }
 };
 
 export const postCategoryData: (
@@ -150,6 +172,7 @@ export const postCategoryData: (
 ) => Promise<void> = async function postCategoryData({ icon, ...data }) {
   if (icon) {
     const { id } = await createMedia(icon[0].filename);
+
     await createCategory({ ...data, iconId: id });
     await saveFiles(icon);
   } else await createCategory(data);
@@ -180,7 +203,7 @@ export const updateCategoryIcon: (
 
   if (!category) throw new ErrorResponse(`category with id ${categoryId} not found`, 404);
 
-  const { iconId, icon_url: iconUrl } = category;
+  const { iconId, iconUrl } = category;
   const { filename } = icon[0];
 
   if (iconId && iconUrl) {
@@ -197,7 +220,147 @@ export const updateCategoryIcon: (
 export const deleteCategoryData: (
   categoryId: number,
 ) => Promise<void> = async function deleteCategoryData(categoryId) {
-  const isDeleted = await deleteCategory(categoryId);
+  const category = await getCategory(categoryId);
 
-  if (!isDeleted) throw new ErrorResponse(`category with id ${categoryId} not found`, 404);
+  if (!category) throw new ErrorResponse(`category with id ${categoryId} not found`, 404);
+
+  const { iconId, iconUrl } = category;
+
+  await deleteCategory(categoryId);
+
+  if (iconId && iconUrl) {
+    await deleteMedia(iconId);
+    deleteLocalFile(iconUrl);
+  }
+};
+
+export const postMediaData: (data: PostMediaBody) => Promise<void> = async function postMediData({
+  image,
+}) {
+  await createMedia(image[0].filename);
+  await saveFiles(image);
+};
+
+export const getMediaData: (
+  query: CustModelType['SearchQuery'],
+) => Promise<unknown> = async function getMediaData(query) {
+  const medias = await getMedias(query);
+
+  return medias;
+};
+
+export const updateMediaData: (
+  mediaId: number,
+  data: PostMediaBody,
+) => Promise<void> = async function updaetMediaData(mediaId, { image }) {
+  const media = await getMedia(mediaId);
+
+  if (!media) throw new ErrorResponse(`media with id ${mediaId} not found`, 404);
+
+  await updateMedia(mediaId, image[0].filename);
+  await Promise.all([saveFiles(image), deleteLocalFile(media.url)]);
+};
+
+export const deleteMediaData: (mediaId: number) => Promise<void> = async function deleteMediaData(
+  mediaId,
+) {
+  const media = await getMedia(mediaId);
+
+  if (!media) throw new ErrorResponse(`media with id ${mediaId} not found`, 404);
+
+  const isDeleted = await deleteMedia(mediaId);
+
+  if (!isDeleted) deleteLocalFile(media.url);
+};
+
+export const postWalletData: (
+  data: PostWalletBody,
+) => Promise<void> = async function postWalletData({ logo, ...data }) {
+  if (logo) {
+    const { id } = await createMedia(logo[0].filename);
+
+    await createWallet({ ...data, logoId: id });
+    await saveFiles(logo);
+  } else await createWallet(data);
+};
+
+export const getWalletData: (
+  query: CustModelType['SearchQuery'],
+) => Promise<unknown> = async function getWalletData(query) {
+  const wallets = await getWallets(query);
+
+  return wallets;
+};
+
+export const updateWalletData: (
+  walletId: number,
+  data: UpdateWalletBody,
+) => Promise<void> = async function updateWalletData(walletId, data) {
+  const [isUpdated] = await updateWallet(walletId, data);
+
+  if (!isUpdated) throw new ErrorResponse(`wallet with id ${walletId} not found`, 404);
+};
+
+export const changeWalletLogo: (
+  walletId: number,
+  data: UpdateWalletLogoBody,
+) => Promise<void> = async function changeWalletLogo(walletId, { logo }) {
+  const wallet = await getWallet(walletId);
+
+  if (!wallet) throw new ErrorResponse(`wallet with id ${walletId} not found`, 404);
+
+  const { logoId, logoUrl } = wallet;
+  const { filename } = logo[0];
+
+  if (logoId && logoUrl) {
+    await updateMedia(logoId, filename);
+    await Promise.all([saveFiles(logo), deleteLocalFile(logoUrl)]);
+  } else {
+    const { id } = await createMedia(filename);
+
+    await updateWallet(walletId, { logoId: id });
+    await saveFiles(logo);
+  }
+};
+
+export const deleteWalletData: (
+  walletId: number,
+) => Promise<void> = async function deleteWalletData(walletId) {
+  const wallet = await getWallet(walletId);
+
+  if (!wallet) throw new ErrorResponse(`wallet with id ${walletId} not found`, 404);
+
+  const { logoId, logoUrl } = wallet;
+
+  await deleteWallet(walletId);
+
+  if (logoId && logoUrl) {
+    await deleteMedia(logoId);
+    deleteLocalFile(logoUrl);
+  }
+};
+
+export const postFaqData: (data: PostFaqBody) => Promise<void> = async function postFaqData(data) {
+  await createFaq(data);
+};
+
+export const getFaqData: () => Promise<unknown> = async function getFaqData() {
+  const faqs = await getFaqs();
+
+  return faqs;
+};
+
+export const updateFaqData: (
+  faqId: number,
+  data: UpdateFaqBody,
+) => Promise<void> = async function updateFaqData(faqId, data) {
+  const [isUpdated] = await updateFaq(faqId, data);
+
+  if (!isUpdated) throw new ErrorResponse(`faq with id ${faqId} not found`, 404);
+};
+
+export const deleteFaqData: (faqId: number) => Promise<void> = async function deleteFaqData(faqId) {
+  const isDeleted = await deleteFaq(faqId);
+
+  if (!isDeleted) throw new ErrorResponse(`faq with id ${faqId} not found`, 404);
 };

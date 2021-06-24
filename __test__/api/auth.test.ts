@@ -242,7 +242,7 @@ describe('Activate Merchant', () => {
   test('Fail, No Data Provided', async () => {
     const { token } = await registration();
 
-    const { status, headers, body } = await registerMerchant(server, { fields: {} }, token);
+    const { status, headers, body } = await registerMerchant(server, {}, token);
 
     expect(status).toBe(422);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -311,7 +311,7 @@ describe('Login', () => {
   });
 
   test('Fail, No `username` Provided', async () => {
-    const { status, headers, body } = await login(server, { username: 'username' });
+    const { status, headers, body } = await login(server, { password: 'password' });
 
     expect(status).toBe(422);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -319,7 +319,7 @@ describe('Login', () => {
   });
 
   test('Fail, No `password` Provided', async () => {
-    const { status, headers, body } = await login(server, { password: 'password' });
+    const { status, headers, body } = await login(server, { username: 'username' });
 
     expect(status).toBe(422);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');

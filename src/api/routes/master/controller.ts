@@ -34,6 +34,19 @@ import {
   updateCategoryData,
   updateCategoryIcon,
   deleteCategoryData,
+  postMediaData,
+  getMediaData,
+  updateMediaData,
+  deleteMediaData,
+  postWalletData,
+  getWalletData,
+  updateWalletData,
+  changeWalletLogo,
+  deleteWalletData,
+  postFaqData,
+  getFaqData,
+  updateFaqData,
+  deleteFaqData,
 } from './service';
 
 export const postMasterBank: RequestHandler<
@@ -257,160 +270,205 @@ export const deleteCategory: RequestHandler<
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
     success: true,
-    message: 'success',
+    message: 'successfully delete category',
   });
 };
 
 export const postMedia: RequestHandler<
   Request<{ Headers: ApiKeyHeader; Body: PostMediaBody }>
-> = async function postMedia(_, res): Promise<void> {
-  await Promise.resolve('hi');
+> = async function postMedia(req, res): Promise<void> {
+  await postMediaData(req.body);
 
   res.status(201).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 201,
     success: true,
-    message: 'successfully delete category',
+    message: 'successfully add media',
   });
 };
 
 export const getMedias: RequestHandler<
   Request<{ Headers: ApiKeyHeader; Querystring: GetQuery }>
 > = async function getMedias(_, res): Promise<void> {
-  await Promise.resolve('hi');
+  const query = this.requestContext.get<CustModelType['SearchQuery']>('query');
+
+  if (!query) {
+    res.badRequest();
+    return;
+  }
+
+  const resData = await getMediaData(query);
 
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
     success: true,
-    message: 'success',
+    message: 'successfully fetch media data',
+    data: resData,
   });
 };
 
 export const updateMedia: RequestHandler<
   Request<{ Headers: ApiKeyHeader; Params: IdRequestParams; Body: PostMediaBody }>
-> = async function updateMedia(_, res): Promise<void> {
-  await Promise.resolve('hi');
+> = async function updateMedia(req, res): Promise<void> {
+  const mediaId = parseInt(req.params.id, 10) || -1;
+
+  if (mediaId <= 0) res.notFound();
+
+  await updateMediaData(mediaId, req.body);
 
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
     success: true,
-    message: 'success',
+    message: 'successfully update media',
   });
 };
 
 export const deleteMedia: RequestHandler<
   Request<{ Headers: ApiKeyHeader; Params: IdRequestParams }>
-> = async function deleteMedia(_, res): Promise<void> {
-  await Promise.resolve('hi');
+> = async function deleteMedia(req, res): Promise<void> {
+  const mediaId = parseInt(req.params.id, 10) || -1;
+
+  if (mediaId <= 0) res.notFound();
+
+  await deleteMediaData(mediaId);
 
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
     success: true,
-    message: 'success',
+    message: 'successfully delete media',
   });
 };
 
 export const postMasterWallet: RequestHandler<
   Request<{ Headers: ApiKeyHeader; Body: PostWalletBody }>
-> = async function postMasterWallet(_, res): Promise<void> {
-  await Promise.resolve('hi');
+> = async function postMasterWallet(req, res): Promise<void> {
+  await postWalletData(req.body);
 
   res.status(201).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 201,
     success: true,
-    message: 'success',
+    message: 'successfully add wallet',
   });
 };
 
 export const getMasterWallets: RequestHandler<
   Request<{ Headers: ApiKeyHeader; Querystring: GetQuery }>
 > = async function getMasterWallets(_, res): Promise<void> {
-  await Promise.resolve('hi');
+  const query = this.requestContext.get<CustModelType['SearchQuery']>('query');
+
+  if (!query) {
+    res.badRequest();
+    return;
+  }
+
+  const resData = await getWalletData(query);
 
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
     success: true,
-    message: 'success',
+    message: 'successfully fetch wallet data',
+    data: resData,
   });
 };
 
 export const udpateMasterWallet: RequestHandler<
   Request<{ Headers: ApiKeyHeader; Params: IdRequestParams; Body: UpdateWalletBody }>
-> = async function updateMasterWallet(_, res): Promise<void> {
-  await Promise.resolve('hi');
+> = async function updateMasterWallet(req, res): Promise<void> {
+  const walletId = parseInt(req.params.id, 10) || -1;
+
+  if (walletId <= 0) res.notFound();
+
+  await updateWalletData(walletId, req.body);
 
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
     success: true,
-    message: 'success',
+    message: 'successfully update wallet',
   });
 };
 
 export const changeMasterWalletLogo: RequestHandler<
   Request<{ Headers: ApiKeyHeader; Params: IdRequestParams; Body: UpdateWalletLogoBody }>
-> = async function changeMasterWalletLogo(_, res): Promise<void> {
-  await Promise.resolve('hi');
+> = async function changeMasterWalletLogo(req, res): Promise<void> {
+  const walletId = parseInt(req.params.id, 10) || -1;
+
+  if (walletId <= 0) res.notFound();
+
+  await changeWalletLogo(walletId, req.body);
 
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
     success: true,
-    message: 'success',
+    message: 'successfully change wallet logo',
   });
 };
 
 export const deleteMasterWallet: RequestHandler<
   Request<{ Headers: ApiKeyHeader; Params: IdRequestParams }>
-> = async function deleteMasterWallet(_, res): Promise<void> {
-  await Promise.resolve('hi');
+> = async function deleteMasterWallet(req, res): Promise<void> {
+  const walletId = parseInt(req.params.id, 10) || -1;
+
+  if (walletId <= 0) res.notFound();
+
+  await deleteWalletData(walletId);
 
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
     success: true,
-    message: 'success',
+    message: 'successfully delete wallet',
   });
 };
 
 export const postFaq: RequestHandler<
   Request<{ Headers: ApiKeyHeader; Body: PostFaqBody }>
-> = async function postFaq(_, res): Promise<void> {
-  await Promise.resolve('hi');
+> = async function postFaq(req, res): Promise<void> {
+  await postFaqData(req.body);
 
   res.status(201).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 201,
     success: true,
-    message: 'success',
+    message: 'successfully add faq',
   });
 };
 
 export const getFaqs: RequestHandler<Request> = async function getFaqs(_, res): Promise<void> {
-  await Promise.resolve('hi');
+  const resData = await getFaqData();
 
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
     success: true,
-    message: 'success',
+    message: 'successfully fetch faq data',
+    data: resData,
   });
 };
 
 export const updateFaq: RequestHandler<
   Request<{ Headers: ApiKeyHeader; Params: IdRequestParams; Body: UpdateFaqBody }>
-> = async function updateFaq(_, res): Promise<void> {
-  await Promise.resolve('hi');
+> = async function updateFaq(req, res): Promise<void> {
+  const faqId = parseInt(req.params.id, 10) || -1;
+
+  if (faqId <= 0) res.notFound();
+
+  await updateFaqData(faqId, req.body);
 
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
     success: true,
-    message: 'success',
+    message: 'successfully update faq',
   });
 };
 
 export const deleteFaq: RequestHandler<
   Request<{ Headers: ApiKeyHeader; Params: IdRequestParams }>
-> = async function deleteFaq(_, res): Promise<void> {
-  await Promise.resolve('hi');
+> = async function deleteFaq(req, res): Promise<void> {
+  const faqId = parseInt(req.params.id, 10) || -1;
+
+  if (faqId <= 0) res.notFound();
+
+  await deleteFaqData(faqId);
 
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
     success: true,
-    message: 'success',
+    message: 'successfully delete faq',
   });
 };

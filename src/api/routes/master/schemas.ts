@@ -361,7 +361,26 @@ export const responses = {
           data: {
             type: 'array',
             items: {
-              $ref: '#GetMedia',
+              type: 'object',
+              properties: {
+                id: {
+                  type: 'integer',
+                },
+                media: {
+                  type: 'string',
+                },
+                url: {
+                  type: 'string',
+                },
+                created_at: {
+                  type: 'string',
+                  format: 'date-time',
+                },
+                updated_at: {
+                  type: 'string',
+                  format: 'date-time',
+                },
+              },
             },
           },
         },
@@ -380,7 +399,32 @@ export const responses = {
           data: {
             type: 'array',
             items: {
-              $ref: '#GetWallet',
+              type: 'object',
+              properties: {
+                id: {
+                  type: 'integer',
+                },
+                wallet_name: {
+                  type: 'string',
+                },
+                wallet_description: {
+                  type: 'string',
+                },
+                logo: {
+                  type: 'string',
+                  nullabe: true,
+                },
+                logo_url: {
+                  type: 'string',
+                  nullabe: true,
+                },
+                created_at: {
+                  type: 'string',
+                },
+                updated_at: {
+                  type: 'string',
+                },
+              },
             },
           },
         },
@@ -399,7 +443,24 @@ export const responses = {
           data: {
             type: 'array',
             items: {
-              $ref: '#GetFaq',
+              type: 'object',
+              properties: {
+                id: {
+                  type: 'integer',
+                },
+                question: {
+                  type: 'string',
+                },
+                answer: {
+                  type: 'string',
+                },
+                created_at: {
+                  type: 'string',
+                },
+                updated_at: {
+                  type: 'string',
+                },
+              },
             },
           },
         },

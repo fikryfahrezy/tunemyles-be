@@ -78,7 +78,12 @@ const routes = function routes(
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preValidation: (req, __, done) => {
+      preValidation: (req, res, done) => {
+        if (isBodyEmpty(req.body)) {
+          res.unprocessableEntity();
+          return;
+        }
+
         req.body = { ...req.body, logo: renameFiles(req.url, req.body.logo) };
 
         done();
@@ -267,7 +272,12 @@ const routes = function routes(
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preValidation: (req, __, done) => {
+      preValidation: (req, res, done) => {
+        if (isBodyEmpty(req.body)) {
+          res.unprocessableEntity();
+          return;
+        }
+
         req.body = { ...req.body, icon: renameFiles(req.url, req.body.icon) };
 
         done();
@@ -410,7 +420,11 @@ const routes = function routes(
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preHandler: [schemaValidation, handlerWrapper(protect('USER'))],
+      preHandler: [
+        schemaValidation,
+        handlerWrapper(protect('USER')),
+        handlerWrapper(dbQuerying('MEDIA')),
+      ],
     },
     controllerWrapper(getMedias),
   );
@@ -475,7 +489,12 @@ const routes = function routes(
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preValidation: (req, __, done) => {
+      preValidation: (req, res, done) => {
+        if (isBodyEmpty(req.body)) {
+          res.unprocessableEntity();
+          return;
+        }
+
         req.body = { ...req.body, logo: renameFiles(req.url, req.body.logo) };
 
         done();

@@ -6,10 +6,8 @@ import type {
   UpdateBankDetailBody,
   PostCategoryBody,
   UpdateCategoryBody,
-  PostMediaBody,
   PostWalletBody,
   UpdateWalletBody,
-  UpdateWalletLogoBody,
   PostFaqBody,
   UpdateFaqBody,
 } from '../types/schema';
@@ -26,8 +24,18 @@ type BankType = {
 
 type CategoryType = {
   iconId: number | null;
-  icon_url: string | null;
+  iconUrl: string | null;
   [index: string]: unknown;
+};
+
+type MediaType = {
+  url: string;
+  [index: string]: unknown;
+};
+
+type WalletType = {
+  logoId: number | null;
+  logoUrl: string | null;
 };
 
 const { Bank, BankAccount, BankUtility, Category, Media, Wallet, Faq } = initModels(sequelize);
@@ -55,6 +63,18 @@ export const createCategory: (
   data: Omit<PostCategoryBody, 'icon'> & { iconId?: number },
 ) => Promise<ModelType['Category']> = function createCategory({ iconId, ...data }) {
   return Category.create({ ...data, id_icon: iconId });
+};
+
+export const createWallet: (
+  data: Omit<PostWalletBody, 'logo'> & { logoId?: number },
+) => Promise<ModelType['Wallet']> = function createWallet({ logoId, ...data }) {
+  return Wallet.create({ ...data, id_logo: logoId });
+};
+
+export const createFaq: (data: PostFaqBody) => Promise<ModelType['Faq']> = function createFaq(
+  data,
+) {
+  return Faq.create(data);
 };
 
 export const findOrCreateBankAcc: (
@@ -107,6 +127,26 @@ export const updateCategory: (
   );
 };
 
+export const updateWallet: (
+  walletId: number,
+  data: UpdateWalletBody & { logoId?: number },
+) => Promise<[number, ModelType['Wallet'][]]> = function updateWallet(
+  walletId,
+  { logoId, visbility, ...data },
+) {
+  return Wallet.update(
+    { ...data, is_visible: visbility, id_logo: logoId },
+    { where: { id: walletId } },
+  );
+};
+
+export const updateFaq: (
+  faqId: number,
+  data: UpdateFaqBody,
+) => Promise<[number, ModelType['Faq'][]]> = function updateFaq(faqId, data) {
+  return Faq.update(data, { where: { id: faqId } });
+};
+
 export const deleteBankStep: (bankStepId: number) => Promise<number> = function deleteBankStep(
   bankStepId,
 ) {
@@ -121,6 +161,18 @@ export const deleteCategory: (categoryId: number) => Promise<number> = function 
   categoryId,
 ) {
   return Category.destroy({ where: { id: categoryId } });
+};
+
+export const deleteMedia: (mediaId: number) => Promise<number> = function deleteMedia(mediaId) {
+  return Media.destroy({ where: { id: mediaId } });
+};
+
+export const deleteWallet: (walletId: number) => Promise<number> = function deleteWallet(walletId) {
+  return Wallet.destroy({ where: { id: walletId } });
+};
+
+export const deleteFaq: (faqId: number) => Promise<number> = function deleteFaq(faqId) {
+  return Faq.destroy({ where: { id: faqId } });
 };
 
 export const getBanks: (
@@ -232,7 +284,7 @@ export const getCategory: (
   const sqlQuery = `
     SELECT
       mm.id AS iconId,
-      mm.uri AS icon_url
+      mm.uri AS iconUrl
     FROM m_categories mc
     LEFT JOIN m_medias mm ON mc.id_icon = mm.id
     WHERE mc.id = :categoryId
@@ -242,5 +294,98 @@ export const getCategory: (
     replacements: { categoryId },
     type: QueryTypes.SELECT,
     plain: true,
+  });
+};
+
+export const getMedias: (
+  query: CustModelType['SearchQuery'],
+) => Promise<unknown> = function getMedias(query) {
+  let sqlQuery = `
+    SELECT
+      mm.id,
+      mm.label AS media,
+      mm.uri AS url,
+      mm.created_at,
+      mm.updated_at
+    FROM m_medias mm
+  `;
+
+  sqlQuery += queryingBuilder(query);
+
+  return sequelize.query(sqlQuery, {
+    type: QueryTypes.SELECT,
+  });
+};
+
+export const getMedia: (mediaId: number) => Promise<MediaType | null> = function getMedia(mediaId) {
+  const sqlQuery = `
+    SELECT
+      mm.uri AS url
+    FROM m_medias mm
+    WHERE mm.id = :mediaId
+  `;
+
+  return sequelize.query<MediaType>(sqlQuery, {
+    replacements: { mediaId },
+    type: QueryTypes.SELECT,
+    plain: true,
+  });
+};
+
+export const getWallets: (
+  query: CustModelType['SearchQuery'],
+) => Promise<unknown> = function getWallets(query) {
+  let sqlQuery = `
+    SELECT
+      mw.id,
+      mw.wallet_name,
+      mw.wallet_description,
+      mm.label AS logo,
+      mm.uri AS logo_url,
+      mw.created_at,
+      mw.updated_at
+    FROM m_wallets mw
+    LEFT JOIN m_medias mm ON mw.id_logo = mm.id
+  `;
+
+  sqlQuery += queryingBuilder(query);
+
+  return sequelize.query(sqlQuery, {
+    type: QueryTypes.SELECT,
+  });
+};
+
+export const getWallet: (walletId: number) => Promise<WalletType | null> = function getWallet(
+  walletId,
+) {
+  const sqlQuery = `
+    SELECT
+      mm.id AS logoId,
+      mm.uri AS logoUrl
+    FROM m_wallets mw
+    LEFT JOIN m_medias mm ON mw.id_logo = mm.id
+    WHERE mw.id = :walletId
+  `;
+
+  return sequelize.query<WalletType>(sqlQuery, {
+    replacements: { walletId },
+    type: QueryTypes.SELECT,
+    plain: true,
+  });
+};
+
+export const getFaqs: () => Promise<unknown> = async function getFaqs() {
+  const sqlQuery = `
+    SELECT
+      mf.id,
+      mf.question,
+      mf.answer,
+      mf.created_at,
+      mf.updated_at
+    FROM m_faq mf
+  `;
+
+  return sequelize.query(sqlQuery, {
+    type: QueryTypes.SELECT,
   });
 };

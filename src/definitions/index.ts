@@ -221,21 +221,6 @@ export default {
           updated_at: { type: 'string', format: 'date-time' },
         },
       },
-      GetWallet: {
-        $id: '#GetWallet',
-        type: 'object',
-        properties: {
-          id: { type: 'integer' },
-          id_logo: { type: 'integer' },
-          wallet_name: { type: 'string' },
-          wallet_description: { type: 'string' },
-          is_visible: { type: 'integer' },
-          created_at: { type: 'string', format: 'date-time' },
-          updated_at: { type: 'string', format: 'date-time' },
-          craetedAt: { type: 'string', format: 'date-time' },
-          updatedAt: { type: 'string', format: 'date-time' },
-        },
-      },
       GetMedia: {
         $id: '#GetMedia',
         type: 'object',
@@ -417,17 +402,6 @@ export default {
           updated_at: { type: 'string', format: 'date-time' },
           createdAt: { type: 'string', format: 'date-time' },
           updatedAt: { type: 'string', format: 'date-time' },
-        },
-      },
-      GetFaq: {
-        $id: '#GetFaq',
-        type: 'object',
-        properties: {
-          id: { type: 'integer' },
-          question: { type: 'string' },
-          answer: { type: 'string' },
-          created_at: { type: 'string', format: 'date-time' },
-          updated_at: { type: 'string', format: 'date-time' },
         },
       },
       GetMerchantIncomes: {

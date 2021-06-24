@@ -3735,7 +3735,20 @@ components:
             data:
               type: array
               items:
-                $ref: '#/components/schemas/GetMedia'
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  media:
+                    type: string
+                  url:
+                    type: string
+                  created_at:
+                    type: string
+                    format: date-time
+                  updated_at:
+                    type: string
+                    format: date-time
     PostWalletBody:
       required:
         - wallet_description
@@ -3757,7 +3770,24 @@ components:
             data:
               type: array
               items:
-                $ref: '#/components/schemas/GetWallet'
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  wallet_name:
+                    type: string
+                  wallet_description:
+                    type: string
+                  logo:
+                    type: string
+                    nullable: true
+                  logo_url:
+                    type: string
+                    nullable: true
+                  created_at:
+                    type: string
+                  updated_at:
+                    type: string
     UpdateWalletBody:
       properties:
         wallet_name:
@@ -3792,7 +3822,20 @@ components:
             data:
               type: array
               items:
-                $ref: '#/components/schemas/GetFaq'
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  question:
+                    type: string
+                  answer:
+                    type: string
+                  created_at:
+                    type: string
+                    format: date-time
+                  updated_at:
+                    type: string
+                    format: date-time
     UpdateFaqBody:
       type: object
       properties:
@@ -4688,31 +4731,6 @@ components:
         updated_at:
           type: string
           format: date-time
-    GetWallet:
-      type: object
-      properties:
-        id:
-          type: integer
-        id_logo:
-          type: integer
-        wallet_name:
-          type: string
-        wallet_description:
-          type: string
-        is_visible:
-          type: integer
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-        craetedAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
     GetMedia:
       type: object
       properties:
@@ -4989,21 +5007,6 @@ components:
           type: string
           format: date-time
         updatedAt:
-          type: string
-          format: date-time
-    GetFaq:
-      type: object
-      properties:
-        id:
-          type: integer
-        question:
-          type: string
-        answer:
-          type: string
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
           type: string
           format: date-time
     GetMerchantIncomes:

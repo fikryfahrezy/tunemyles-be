@@ -6,6 +6,275 @@
   },
   "item": [
     {
+      "name": "[TEMP] Reg",
+      "item": [
+        {
+          "name": "Regiter Copy",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const { Request } = require('postman-collection');\r",
+                  "\r",
+                  "const usedPhoneNumber = Date.now().toString();\r",
+                  "const usedUsername = Math.random().toString(36).substring(2);\r",
+                  "const userPassword = 'password';\r",
+                  "const token = pm.response.json()?.data?.token;\r",
+                  "\r",
+                  "pm.environment.set('USER_USERNAME', usedUsername);\r",
+                  "pm.environment.set('USER_PASSWORD', userPassword);\r",
+                  "pm.environment.set('USER_PHONE', usedPhoneNumber);\r",
+                  "\r",
+                  "if (token) pm.environment.set('TOKEN', token);\r",
+                  "\r",
+                  "const makeRequest = function makeRequest(payload) {\r",
+                  "    return new Request({\r",
+                  "        header: {\r",
+                  "            'Content-Type': 'application/json',\r",
+                  "        },\r",
+                  "        method: 'POST',\r",
+                  "        url: pm.environment.replaceIn('{{URL}}/account/register'),\r",
+                  "        body: {\r",
+                  "            mode: 'raw',\r",
+                  "            raw: JSON.stringify(payload),\r",
+                  "        },\r",
+                  "    });\r",
+                  "};\r",
+                  "\r",
+                  "const regPayload = function regPayload() {\r",
+                  "    return {\r",
+                  "        full_name: 'Name',\r",
+                  "        username: usedUsername,\r",
+                  "        password: userPassword,\r",
+                  "        phone_number: usedPhoneNumber,\r",
+                  "        address: 'address',\r",
+                  "    };\r",
+                  "};\r",
+                  "\r",
+                  "pm.sendRequest(makeRequest(regPayload()), (_, response) => {\r",
+                  "    pm.test('Success', () => {\r",
+                  "        const { code, headers } = response;\r",
+                  "        const json = response.json()\r",
+                  "        \r",
+                  "        pm.environment.set('TOKEN', json.data.token);\r",
+                  "\r",
+                  "        pm.expect(code).to.eql(201);\r",
+                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(json.success).to.eql(true);\r",
+                  "    });\r",
+                  "});\r",
+                  "\r",
+                  "pm.sendRequest(makeRequest({ ...regPayload(), phone_number: usedPhoneNumber }), (_, response) => {\r",
+                  "    pm.test('Fail, `phone_number` Already Exist', () => {\r",
+                  "        const { code, headers } = response;\r",
+                  "\r",
+                  "        pm.expect(code).to.eql(400);\r",
+                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(false);\r",
+                  "    });\r",
+                  "});\r",
+                  "\r",
+                  "pm.sendRequest(makeRequest({ ...regPayload(), username: usedUsername }), (_, response) => {\r",
+                  "    pm.test('Fail, `username` Already Exist', () => {\r",
+                  "        const { code, headers } = response;\r",
+                  "\r",
+                  "        pm.expect(code).to.eql(400);\r",
+                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(false);\r",
+                  "    });\r",
+                  "});\r",
+                  "\r",
+                  "pm.sendRequest(makeRequest({ ...regPayload(), full_name: '' }), (_, response) => {\r",
+                  "    pm.test('Fail, Empty `full_name`', () => {\r",
+                  "        const { code, headers } = response;\r",
+                  "\r",
+                  "        pm.expect(code).to.eql(422);\r",
+                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(false);\r",
+                  "    });\r",
+                  "});\r",
+                  "\r",
+                  "pm.sendRequest(makeRequest({ ...regPayload(), address: '' }), (_, response) => {\r",
+                  "    pm.test('Fail, Empty `address`', () => {\r",
+                  "        const { code, headers } = response;\r",
+                  "\r",
+                  "        pm.expect(code).to.eql(422);\r",
+                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(false);\r",
+                  "    });\r",
+                  "});\r",
+                  "\r",
+                  "pm.sendRequest(makeRequest({ ...regPayload(), full_name: 'x' }), (_, response) => {\r",
+                  "    pm.test('Fail, `full_name` too Short', () => {\r",
+                  "        const { code, headers } = response;\r",
+                  "\r",
+                  "        pm.expect(code).to.eql(422);\r",
+                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(false);\r",
+                  "    });\r",
+                  "});\r",
+                  "\r",
+                  "pm.sendRequest(makeRequest({ ...regPayload(), full_name: Array(257).toString() }), (_, response) => {\r",
+                  "    pm.test('Fail, `full_name` too Long', () => {\r",
+                  "        const { code, headers } = response;\r",
+                  "\r",
+                  "        pm.expect(code).to.eql(422);\r",
+                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(false);\r",
+                  "    });\r",
+                  "});\r",
+                  "\r",
+                  "pm.sendRequest(makeRequest({\r",
+                  "    ...regPayload(),\r",
+                  "    username: Math.random().toString(36).substring(7),\r",
+                  "}), (_, response) => {\r",
+                  "    pm.test('Fail, `username` too Short', () => {\r",
+                  "        const { code, headers } = response;\r",
+                  "\r",
+                  "        pm.expect(code).to.eql(422);\r",
+                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(false);\r",
+                  "    });\r",
+                  "});\r",
+                  "\r",
+                  "pm.sendRequest(makeRequest({ ...regPayload(), username: Array(22).toString() }), (_, response) => {\r",
+                  "    pm.test('Fail, `username` too Long', () => {\r",
+                  "        const { code, headers } = response;\r",
+                  "\r",
+                  "        pm.expect(code).to.eql(422);\r",
+                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(false);\r",
+                  "    });\r",
+                  "});\r",
+                  "\r",
+                  "pm.sendRequest(makeRequest({ ...regPayload(), phone_number: '1234' }), (_, response) => {\r",
+                  "    pm.test('Fail, `phone_number` too Short', () => {\r",
+                  "        const { code, headers } = response;\r",
+                  "\r",
+                  "        pm.expect(code).to.eql(422);\r",
+                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(false);\r",
+                  "    });\r",
+                  "});\r",
+                  "\r",
+                  "pm.sendRequest(makeRequest({ ...regPayload(), phone_number: '123456789012345' }), (_, response) => {\r",
+                  "    pm.test('Fail, `phone_number` too Long', () => {\r",
+                  "        const { code, headers } = response;\r",
+                  "\r",
+                  "        pm.expect(code).to.eql(422);\r",
+                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(false);\r",
+                  "    });\r",
+                  "});\r",
+                  "\r",
+                  "pm.sendRequest(makeRequest({ ...regPayload(), address: 'addr' }), (_, response) => {\r",
+                  "    pm.test('Fail, `phone_number` too Short', () => {\r",
+                  "        const { code, headers } = response;\r",
+                  "\r",
+                  "        pm.expect(code).to.eql(422);\r",
+                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(false);\r",
+                  "    });\r",
+                  "});\r",
+                  "\r",
+                  "pm.sendRequest(makeRequest({ ...regPayload(), address: Array(1002).toString() }), (_, response) => {\r",
+                  "    pm.test('Fail, `address` too Long', () => {\r",
+                  "        const { code, headers } = response;\r",
+                  "\r",
+                  "        pm.expect(code).to.eql(422);\r",
+                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(false);\r",
+                  "    });\r",
+                  "});\r",
+                  "\r",
+                  "pm.sendRequest(makeRequest({}), (_, response) => {\r",
+                  "    pm.test('Fail, No Data Provided', () => {\r",
+                  "        const { code, headers } = response;\r",
+                  "\r",
+                  "        pm.expect(code).to.eql(422);\r",
+                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(false);\r",
+                  "    });\r",
+                  "});\r",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "description": "JSON Type",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"full_name\": \"Name\",\r\n    \"phone_number\": \"12345678931232\",\r\n    \"address\": \"address\",\r\n    \"username\": \"username\",\r\n    \"password\": \"password\"\r\n}"
+            },
+            "url": {
+              "raw": "{{URL}}/account/register",
+              "host": ["{{URL}}"],
+              "path": ["account", "register"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "[AVAILABLE IN TEST] Make User an Admin Copy",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  " pm.test('User Success Become Admin', () => {\r",
+                  "        const { code, headers } = pm.response;\r",
+                  "        const json = pm.response.json();\r",
+                  "        \r",
+                  "        pm.environment.set('TOKEN', json.data);\r",
+                  "\r",
+                  "        pm.expect(code).to.eql(200);\r",
+                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(json.success).to.eql(true);\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{URL}}/account/admin",
+              "host": ["{{URL}}"],
+              "path": ["account", "admin"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
       "name": "example",
       "item": [
         {
@@ -1995,7 +2264,7 @@
                       "\r",
                       "pm.sendRequest(makeRequest(\r",
                       "    {\r",
-                      "        bank_name: 'new bank name',\r",
+                      "        bank_name: pm.variables.replaceIn('new bank name {{$timestamp}}'),\r",
                       "        is_visible: 2,\r",
                       "    },\r",
                       "    pm.environment.get('TOKEN'),\r",
@@ -2043,6 +2312,13 @@
                     ],
                     "type": "text/javascript"
                   }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [""],
+                    "type": "text/javascript"
+                  }
                 }
               ],
               "request": {
@@ -2076,7 +2352,7 @@
                   "variable": [
                     {
                       "key": "id",
-                      "value": "8",
+                      "value": "0",
                       "type": "string"
                     }
                   ]
@@ -2113,8 +2389,8 @@
                       "\r",
                       "pm.sendRequest(makeRequest(\r",
                       "    {\r",
-                      "        account_number: \"0123421421\",\r",
-                      "        account_name: \"update name\"\r",
+                      "        account_number: '0123421421',\r",
+                      "        account_name: pm.variables.replaceIn('update name {{$timestamp}}'),\r",
                       "    },\r",
                       "    pm.environment.get('TOKEN'),\r",
                       "    pm.environment.get('MASTER_BANK_ID'),\r",
@@ -2161,6 +2437,13 @@
                     ],
                     "type": "text/javascript"
                   }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [""],
+                    "type": "text/javascript"
+                  }
                 }
               ],
               "request": {
@@ -2194,7 +2477,7 @@
                   "variable": [
                     {
                       "key": "id",
-                      "value": "9"
+                      "value": "0"
                     }
                   ]
                 }
@@ -2380,7 +2663,7 @@
                   "variable": [
                     {
                       "key": "id",
-                      "value": "6",
+                      "value": "0",
                       "type": "string"
                     }
                   ]
@@ -2408,19 +2691,6 @@
                       "        url: pm.environment.replaceIn(`{{URL}}/masters/banks/${bankId}`),\r",
                       "    });\r",
                       "};\r",
-                      "\r",
-                      "pm.sendRequest(makeRequest(\r",
-                      "    pm.environment.get('TOKEN'),\r",
-                      "    pm.environment.get('MASTER_BANK_ID'),\r",
-                      "), (_, response) => {\r",
-                      "    pm.test('Success', () => {\r",
-                      "        const { code, headers } = response;\r",
-                      "\r",
-                      "        pm.expect(code).to.eql(200);\r",
-                      "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                      "        pm.expect(response.json().success).to.eql(true);\r",
-                      "    });\r",
-                      "});\r",
                       "\r",
                       "pm.sendRequest(makeRequest(pm.environment.get('TOKEN')), (_, response) => {\r",
                       "    pm.test('Fail, Master Bank Not Found', () => {\r",
@@ -2488,7 +2758,7 @@
                   "variable": [
                     {
                       "key": "id",
-                      "value": "9",
+                      "value": "0",
                       "type": "string"
                     }
                   ]
@@ -2896,7 +3166,7 @@
                       "\r",
                       "pm.sendRequest(makeRequest(\r",
                       "    {\r",
-                      "        category: 'new category',\r",
+                      "        category: pm.variables.replaceIn('new category {{$timestamp}}'),\r",
                       "        slug: 'new category slug',\r",
                       "        description: 'new category description',\r",
                       "        is_visible: 2,\r",
@@ -2946,6 +3216,13 @@
                     ],
                     "type": "text/javascript"
                   }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [""],
+                    "type": "text/javascript"
+                  }
                 }
               ],
               "request": {
@@ -2979,7 +3256,7 @@
                   "variable": [
                     {
                       "key": "id",
-                      "value": "77",
+                      "value": "0",
                       "type": "string"
                     }
                   ]
@@ -3093,19 +3370,6 @@
                       "        url: pm.environment.replaceIn(`{{URL}}/masters/categories/${categoryId}`),\r",
                       "    });\r",
                       "};\r",
-                      "\r",
-                      "pm.sendRequest(makeRequest(\r",
-                      "    pm.environment.get('TOKEN'),\r",
-                      "    pm.environment.get('CATEGORY_ID'),\r",
-                      "), (_, response) => {\r",
-                      "    pm.test('Success', () => {\r",
-                      "        const { code, headers } = response;\r",
-                      "\r",
-                      "        pm.expect(code).to.eql(200);\r",
-                      "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                      "        pm.expect(response.json().success).to.eql(true);\r",
-                      "    });\r",
-                      "});\r",
                       "\r",
                       "pm.sendRequest(makeRequest(pm.environment.get('TOKEN')), (_, response) => {\r",
                       "    pm.test('Fail, Category Not Found', () => {\r",
@@ -3297,10 +3561,11 @@
                       "        const { code, headers } = response;\r",
                       "        const body = response.json();\r",
                       "\r",
+                      "        pm.environment.set('MEDIA_ID', body.data[0].id);\r",
+                      "\r",
                       "        pm.expect(code).to.eql(200);\r",
                       "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
                       "        pm.expect(body.success).to.eql(true);\r",
-                      "        // pm.expect(body.data.length).to.eql(1);\r",
                       "    });\r",
                       "});\r",
                       "\r",
@@ -3545,7 +3810,7 @@
                   "variable": [
                     {
                       "key": "id",
-                      "value": "4",
+                      "value": "{{MEDIA_ID}}",
                       "type": "string"
                     }
                   ]
@@ -3573,20 +3838,6 @@
                       "        url: pm.environment.replaceIn(`{{URL}}/masters/medias/${mediaId}`),\r",
                       "    });\r",
                       "};\r",
-                      "\r",
-                      "pm.sendRequest(makeRequest(\r",
-                      "    pm.environment.get('TOKEN'),\r",
-                      "    pm.environment.get('MEDIA_ID'),\r",
-                      "), (_, response) => {\r",
-                      "    pm.test('Success', () => {\r",
-                      "        const { code, headers } = response;\r",
-                      "\r",
-                      "        pm.expect(code).to.eql(200);\r",
-                      "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                      "        pm.expect(response.json().success).to.eql(true);\r",
-                      "    });\r",
-                      "});\r",
-                      "\r",
                       "\r",
                       "pm.sendRequest(makeRequest(pm.environment.get('TOKEN')), (_, response) => {\r",
                       "    pm.test('Fail, Media Not Found', () => {\r",
@@ -3647,7 +3898,7 @@
                   "variable": [
                     {
                       "key": "id",
-                      "value": "63",
+                      "value": "0",
                       "type": "string"
                     }
                   ]
@@ -3834,10 +4085,12 @@
                       "        const { code, headers } = response;\r",
                       "        const body = response.json();\r",
                       "\r",
+                      "        pm.environment.set('MASTER_WALLET_ID', body.data[0].id);\r",
+                      "\r",
                       "        pm.expect(code).to.eql(200);\r",
                       "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
                       "        pm.expect(body.success).to.eql(true);\r",
-                      "        // pm.expect(body.data.length).to.eql(1);\r",
+                      "        pm.expect(body.data.length).to.eql(1);\r",
                       "    });\r",
                       "});\r",
                       "\r",
@@ -4059,15 +4312,17 @@
                       "\r",
                       "pm.sendRequest(makeRequest(\r",
                       "    {\r",
-                      "        wallet_name: 'new wallet name',\r",
+                      "        wallet_name: pm.variables.replaceIn('new wallet name {{$timestamp}}'),\r",
                       "        wallet_description: 'new wallet description',\r",
                       "        is_visible: 2,\r",
                       "    },\r",
                       "    pm.environment.get('TOKEN'),\r",
-                      "    pm.environment.get('WALLET_ID'),\r",
+                      "    pm.environment.get('MASTER_WALLET_ID'),\r",
                       "), (_, response) => {\r",
                       "    pm.test('Success', () => {\r",
                       "        const { code, headers } = response;\r",
+                      "\r",
+                      "        console.log(pm.variables.replaceIn('new wallet name {{$timestamp}}'));\r",
                       "\r",
                       "        pm.expect(code).to.eql(200);\r",
                       "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
@@ -4108,25 +4363,22 @@
                     ],
                     "type": "text/javascript"
                   }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [""],
+                    "type": "text/javascript"
+                  }
                 }
               ],
               "request": {
                 "auth": {
-                  "type": "apikey",
-                  "apikey": [
+                  "type": "bearer",
+                  "bearer": [
                     {
-                      "key": "value",
+                      "key": "token",
                       "value": "{{TOKEN}}",
-                      "type": "string"
-                    },
-                    {
-                      "key": "key",
-                      "value": "authorization",
-                      "type": "string"
-                    },
-                    {
-                      "key": "in",
-                      "value": "header",
                       "type": "string"
                     }
                   ]
@@ -4151,7 +4403,7 @@
                   "variable": [
                     {
                       "key": "id",
-                      "value": "1",
+                      "value": "0",
                       "type": "string"
                     }
                   ]
@@ -4237,7 +4489,7 @@
                   "variable": [
                     {
                       "key": "id",
-                      "value": "3",
+                      "value": "{{MASTER_WALLET_ID}}",
                       "type": "string"
                     }
                   ]
@@ -4265,19 +4517,6 @@
                       "        url: pm.environment.replaceIn(`{{URL}}/masters/categories/${walletId}`),\r",
                       "    });\r",
                       "};\r",
-                      "\r",
-                      "pm.sendRequest(makeRequest(\r",
-                      "    pm.environment.get('TOKEN'),\r",
-                      "    pm.environment.get('WALLET_ID'),\r",
-                      "), (_, response) => {\r",
-                      "    pm.test('Success', () => {\r",
-                      "        const { code, headers } = response;\r",
-                      "\r",
-                      "        pm.expect(code).to.eql(200);\r",
-                      "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                      "        pm.expect(response.json().success).to.eql(true);\r",
-                      "    });\r",
-                      "});\r",
                       "\r",
                       "pm.sendRequest(makeRequest(pm.environment.get('TOKEN')), (_, response) => {\r",
                       "    pm.test('Fail, Wallet Not Found', () => {\r",
@@ -4338,7 +4577,7 @@
                   "variable": [
                     {
                       "key": "id",
-                      "value": "3",
+                      "value": "0",
                       "type": "string"
                     }
                   ]
@@ -4469,10 +4708,13 @@
                     "exec": [
                       "pm.test('Success', () => {\r",
                       "    const { code, headers } = pm.response;\r",
+                      "    const body = pm.response.json();\r",
+                      "\r",
+                      "    pm.environment.set('FAQ_ID', body.data[0].id);\r",
                       "\r",
                       "    pm.expect(code).to.eql(200);\r",
                       "    pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                      "    pm.expect(pm.response.json().success).to.eql(true);\r",
+                      "    pm.expect(body.success).to.eql(true);\r",
                       "});"
                     ],
                     "type": "text/javascript"
@@ -4522,7 +4764,7 @@
                       "\r",
                       "pm.sendRequest(makeRequest(\r",
                       "    {\r",
-                      "        question: 'Hai?',\r",
+                      "        question: pm.variables.replaceIn('Hai? {{$timestamp}}'),\r",
                       "        answer: 'Hello',\r",
                       "    },\r",
                       "    pm.environment.get('TOKEN'),\r",
@@ -4570,6 +4812,13 @@
                     ],
                     "type": "text/javascript"
                   }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [""],
+                    "type": "text/javascript"
+                  }
                 }
               ],
               "request": {
@@ -4603,7 +4852,7 @@
                   "variable": [
                     {
                       "key": "id",
-                      "value": "1",
+                      "value": "0",
                       "type": "string"
                     }
                   ]
@@ -4628,7 +4877,7 @@
                       "    return new Request({\r",
                       "        header,\r",
                       "        method: 'DELETE',\r",
-                      "        url: pm.environment.replaceIn(`{{URL}}/masters/categories/${faqId}`),\r",
+                      "        url: pm.environment.replaceIn(`{{URL}}/masters/faqs/${faqId}`),\r",
                       "    });\r",
                       "};\r",
                       "\r",
@@ -4700,7 +4949,7 @@
                   "variable": [
                     {
                       "key": "id",
-                      "value": "1",
+                      "value": "0",
                       "type": "string"
                     }
                   ]

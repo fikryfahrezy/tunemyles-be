@@ -591,7 +591,7 @@ export const updateMasterWallet = function updateMasterWallet(
     server,
     token,
     type: 'PATCH',
-    url: `/masters/categories/${walletId}`,
+    url: `/masters/wallets/${walletId}`,
     payload: {
       obj: payload,
     },

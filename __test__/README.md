@@ -198,6 +198,12 @@
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
+**[POSTMAN]** Success, With Avatar
+
+- Status code should `200`
+- Header `Content-Type` should `application/json; charset=utf-8`
+- Body should object with `success` property `true`
+
 **[POSTMAN] [JEST]** Fail, `full_name` too Short
 
 - Status code should `422`
@@ -583,12 +589,6 @@
 
 ##### [# Delete Master Bank](#delete-bank)
 
-**[POSTMAN] [JEST]** Success
-
-- Status code should `200`
-- Header `Content-Type` should `application/json; charset=utf-8`
-- Body should object with `success` property `true`
-
 **[POSTMAN] [JEST]** Fail, Master Bank Not Found
 
 - Status code should `404`
@@ -758,12 +758,6 @@
 
 ##### [# Delete Category](#delete-category)
 
-**[POSTMAN] [JEST]** Success
-
-- Status code should `200`
-- Header `Content-Type` should `application/json; charset=utf-8`
-- Body should object with `success` property `true`
-
 **[POSTMAN] [JEST]** Fail, Category Not Found
 
 - Status code should `404`
@@ -811,7 +805,7 @@
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
-- Property `data` on the body should have a `length of 1`
+- **[JEST]** Property `data` on the body should have a `length of 1`
 
 **[POSTMAN] [JEST]** Success, with Query `?orderDirection=DESC&orderBy=created_at&search=&page=&limit=`
 
@@ -876,12 +870,6 @@
 - Body should object with `success` property `false`
 
 ##### [# Delete Media](#delete-media)
-
-**[POSTMAN] [JEST]** Success
-
-- Status code should `200`
-- Header `Content-Type` should `application/json; charset=utf-8`
-- Body should object with `success` property `true`
 
 **[POSTMAN] [JEST]** Fail, Media Not Found
 
@@ -1051,12 +1039,6 @@
 - Body should object with `success` property `false`
 
 ##### [# Delete Master Wallet](#delete-master-wallet)
-
-**[POSTMAN] [JEST]** Success
-
-- Status code should `200`
-- Header `Content-Type` should `application/json; charset=utf-8`
-- Body should object with `success` property `true`
 
 **[POSTMAN] [JEST]** Fail, Wallet Not Found
 
