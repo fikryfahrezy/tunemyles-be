@@ -13,6 +13,7 @@ type SearchQuery = {
     field: string;
     direction: 'ASC' | 'DESC';
   };
+  status?: number;
 };
 
 type CustModelType = {

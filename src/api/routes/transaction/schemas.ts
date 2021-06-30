@@ -11,7 +11,7 @@ export const requestParams = {
  * routes in Postman
  */
 export const requestQuery = {
-  getTransaction: {
+  getTransactions: {
     type: 'object',
     properties: {
       orderDirection: { $ref: '#OrderDirectionQuery' },
@@ -27,6 +27,18 @@ export const requestQuery = {
       status: {
         allOf: [{ $ref: '#StatusQuery' }, { enum: ['0', '1', '2', '3'] }],
       },
+    },
+  },
+  getReviewedTransactions: {
+    type: 'object',
+    properties: {
+      orderDirection: { $ref: '#OrderDirectionQuery' },
+      orderBy: {
+        allOf: [{ $ref: '#OrderByQuery' }, { enum: ['created_at', 'rating', 'review'] }],
+      },
+      search: { $ref: '#SearchQuery' },
+      page: { $ref: '#PageQuery' },
+      limit: { $ref: '#LimitQuery' },
     },
   },
 };

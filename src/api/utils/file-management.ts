@@ -42,26 +42,34 @@ export const renameFiles: (
   });
 };
 
-export const saveFiles: (files: AddedFileBody[]) => Promise<void> = async function saveFiles(
-  files,
-) {
+export const saveFile: (file: AddedFileBody) => Promise<void> = async function saveFiles({
+  filename,
+  data,
+}) {
+  if (!data) throw Error('file required');
+
   const dir = './public/img/';
+  const destFile = `${dir}${filename}`;
+  const streamFile = stream.Readable.from(data);
+  const dest = fs.createWriteStream(destFile);
 
-  await Promise.all(
-    files.filter(({ filename, data }) => {
-      if (!data) return false;
-
-      const destFile = `${dir}${filename}`;
-      const streamFile = stream.Readable.from(data);
-      const dest = fs.createWriteStream(destFile);
-
-      return pump(streamFile, dest);
-    }),
-  );
+  return pump(streamFile, dest);
 };
 
-export const deleteLocalFile: (filepath: string | null) => void = function deleteLocalFile(
-  filepath,
+export const saveFiles: (...files: AddedFileBody[]) => Promise<void> = async function saveFiles(
+  ...files
 ) {
+  await Promise.all(files.map((file) => saveFile(file)));
+};
+
+export const deleteLocalFile: (
+  filepath: string | null | undefined,
+) => void = function deleteLocalFile(filepath) {
   if (filepath) fs.unlink(path.resolve('./', 'public', `./${filepath}`), () => {});
+};
+
+export const deleteLocalFiles: (
+  ...filepaths: (string | null | undefined)[]
+) => void = function deleteLocalFiles(...filepaths) {
+  filepaths.forEach((filepath) => deleteLocalFile(filepath));
 };

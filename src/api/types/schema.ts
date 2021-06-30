@@ -144,8 +144,8 @@ export type PostProductBody = {
   cover?: AddedFileBody[];
   product_name: string;
   description: string;
-  price_default: number;
-  price_selling: number;
+  normal_price: number;
+  selling_price: number;
   qty: number;
   discount: number;
   status?: number;
@@ -153,7 +153,7 @@ export type PostProductBody = {
 
 export type UpdateProductBody = Partial<Omit<PostProductBody, 'cover'>>;
 
-export type UpdateProductCoverBody = Required<Pick<PostProductBody, 'cover'>>;
+export type ChangeProductCoverBody = Required<Pick<PostProductBody, 'cover'>>;
 
 export type UpdateProductStatusBody = Required<Pick<PostProductBody, 'status'>>;
 
@@ -163,11 +163,6 @@ export type BindProductCategoryBody = {
 
 export type PostProductImageBody = {
   image: AddedFileBody[];
-};
-
-export type DeleteProductCategoryParams = {
-  productId: string;
-  categoryId: string;
 };
 
 export type UpdateOrderStatusBody = {
@@ -184,25 +179,6 @@ export type GetMerchantTransactionHistoriesQuery = {
 
 export type GetMerchantIncomeHistoriesQuery = {
   year: string;
-};
-
-export type AddToCartBody = {
-  qty: number;
-  merchant_id: number;
-  product_id: number;
-};
-
-export type UpdateCartItemQtyBody = {
-  qty: number;
-};
-
-export type CheckoutBody = {
-  price_total: number;
-};
-
-export type ReviewTransactionBody = {
-  rating: number;
-  review: string;
 };
 
 export type PostBankUserBody = {
@@ -236,4 +212,23 @@ export type UpdateTopUpStatusBody = {
 
 export type UpdateWithdrawStatusBody = {
   status: number;
+};
+
+export type AddToCartBody = {
+  qty: number;
+  merchant_id: number;
+  product_id: number;
+};
+
+export type UpdateCartItemQtyBody = {
+  qty: number;
+};
+
+export type CheckoutBody = {
+  price_total: number;
+};
+
+export type ReviewTransactionBody = {
+  rating: number;
+  review: string;
 };

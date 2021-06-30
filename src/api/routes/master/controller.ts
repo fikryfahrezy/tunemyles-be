@@ -22,7 +22,7 @@ import type {
 import {
   postBank,
   getBankData,
-  getSingleBank,
+  getBankDetail,
   updateBankData,
   updateBankDetail,
   changeBankLogo,
@@ -68,6 +68,7 @@ export const getMasterBanks: RequestHandler<
 
   if (!query) {
     res.badRequest();
+
     return;
   }
 
@@ -86,9 +87,13 @@ export const getMasterBankDetail: RequestHandler<
 > = async function getMasterBankDetail(req, res): Promise<void> {
   const bankId = parseInt(req.params.id, 10) || -1;
 
-  if (bankId <= 0) res.notFound();
+  if (bankId <= 0) {
+    res.notFound();
 
-  const resData = await getSingleBank(bankId);
+    return;
+  }
+
+  const resData = await getBankDetail(bankId);
 
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
@@ -103,7 +108,11 @@ export const updateMasterBank: RequestHandler<
 > = async function updateMasterBank(req, res): Promise<void> {
   const bankId = parseInt(req.params.id, 10) || -1;
 
-  if (bankId <= 0) res.notFound();
+  if (bankId <= 0) {
+    res.notFound();
+
+    return;
+  }
 
   await updateBankData(bankId, req.body);
 
@@ -119,7 +128,11 @@ export const updateMasterBankAccount: RequestHandler<
 > = async function updateMasterBankDetail(req, res): Promise<void> {
   const bankId = parseInt(req.params.id, 10) || -1;
 
-  if (bankId <= 0) res.notFound();
+  if (bankId <= 0) {
+    res.notFound();
+
+    return;
+  }
 
   await updateBankDetail(bankId, req.body);
 
@@ -135,7 +148,11 @@ export const changeMasterBankLogo: RequestHandler<
 > = async function changeMasterBankLogo(req, res): Promise<void> {
   const bankId = parseInt(req.params.id, 10) || -1;
 
-  if (bankId <= 0) res.notFound();
+  if (bankId <= 0) {
+    res.notFound();
+
+    return;
+  }
 
   await changeBankLogo(bankId, req.body);
 
@@ -151,7 +168,11 @@ export const postMasterBankStep: RequestHandler<
 > = async function postMasterBankStep(req, res): Promise<void> {
   const bankId = parseInt(req.params.id, 10) || -1;
 
-  if (bankId <= 0) res.notFound();
+  if (bankId <= 0) {
+    res.notFound();
+
+    return;
+  }
 
   await postBankStep(bankId, req.body);
 
@@ -167,7 +188,11 @@ export const deleteMasterBankStep: RequestHandler<
 > = async function deleteMasterBankStep(req, res): Promise<void> {
   const bankStepId = parseInt(req.params.id, 10) || -1;
 
-  if (bankStepId <= 0) res.notFound();
+  if (bankStepId <= 0) {
+    res.notFound();
+
+    return;
+  }
 
   await deleteBankStepData(bankStepId);
 
@@ -183,7 +208,11 @@ export const deleteMasterBank: RequestHandler<
 > = async function deleteMasterBank(req, res): Promise<void> {
   const bankId = parseInt(req.params.id, 10) || -1;
 
-  if (bankId <= 0) res.notFound();
+  if (bankId <= 0) {
+    res.notFound();
+
+    return;
+  }
 
   await deleteBankData(bankId);
 
@@ -213,6 +242,7 @@ export const getCategories: RequestHandler<
 
   if (!query) {
     res.badRequest();
+
     return;
   }
 
@@ -231,7 +261,11 @@ export const updateCategory: RequestHandler<
 > = async function updateCategory(req, res): Promise<void> {
   const categoryId = parseInt(req.params.id, 10) || -1;
 
-  if (categoryId <= 0) res.notFound();
+  if (categoryId <= 0) {
+    res.notFound();
+
+    return;
+  }
 
   await updateCategoryData(categoryId, req.body);
 
@@ -247,7 +281,11 @@ export const changeCategoryIcon: RequestHandler<
 > = async function changeCategoryIcon(req, res): Promise<void> {
   const categoryId = parseInt(req.params.id, 10) || -1;
 
-  if (categoryId <= 0) res.notFound();
+  if (categoryId <= 0) {
+    res.notFound();
+
+    return;
+  }
 
   await updateCategoryIcon(categoryId, req.body);
 
@@ -263,7 +301,11 @@ export const deleteCategory: RequestHandler<
 > = async function deleteCategory(req, res): Promise<void> {
   const categoryId = parseInt(req.params.id, 10) || -1;
 
-  if (categoryId <= 0) res.notFound();
+  if (categoryId <= 0) {
+    res.notFound();
+
+    return;
+  }
 
   await deleteCategoryData(categoryId);
 
@@ -293,6 +335,7 @@ export const getMedias: RequestHandler<
 
   if (!query) {
     res.badRequest();
+
     return;
   }
 
@@ -311,7 +354,11 @@ export const updateMedia: RequestHandler<
 > = async function updateMedia(req, res): Promise<void> {
   const mediaId = parseInt(req.params.id, 10) || -1;
 
-  if (mediaId <= 0) res.notFound();
+  if (mediaId <= 0) {
+    res.notFound();
+
+    return;
+  }
 
   await updateMediaData(mediaId, req.body);
 
@@ -327,7 +374,11 @@ export const deleteMedia: RequestHandler<
 > = async function deleteMedia(req, res): Promise<void> {
   const mediaId = parseInt(req.params.id, 10) || -1;
 
-  if (mediaId <= 0) res.notFound();
+  if (mediaId <= 0) {
+    res.notFound();
+
+    return;
+  }
 
   await deleteMediaData(mediaId);
 
@@ -357,6 +408,7 @@ export const getMasterWallets: RequestHandler<
 
   if (!query) {
     res.badRequest();
+
     return;
   }
 
@@ -375,7 +427,11 @@ export const udpateMasterWallet: RequestHandler<
 > = async function updateMasterWallet(req, res): Promise<void> {
   const walletId = parseInt(req.params.id, 10) || -1;
 
-  if (walletId <= 0) res.notFound();
+  if (walletId <= 0) {
+    res.notFound();
+
+    return;
+  }
 
   await updateWalletData(walletId, req.body);
 
@@ -391,7 +447,11 @@ export const changeMasterWalletLogo: RequestHandler<
 > = async function changeMasterWalletLogo(req, res): Promise<void> {
   const walletId = parseInt(req.params.id, 10) || -1;
 
-  if (walletId <= 0) res.notFound();
+  if (walletId <= 0) {
+    res.notFound();
+
+    return;
+  }
 
   await changeWalletLogo(walletId, req.body);
 
@@ -407,7 +467,11 @@ export const deleteMasterWallet: RequestHandler<
 > = async function deleteMasterWallet(req, res): Promise<void> {
   const walletId = parseInt(req.params.id, 10) || -1;
 
-  if (walletId <= 0) res.notFound();
+  if (walletId <= 0) {
+    res.notFound();
+
+    return;
+  }
 
   await deleteWalletData(walletId);
 
@@ -446,7 +510,11 @@ export const updateFaq: RequestHandler<
 > = async function updateFaq(req, res): Promise<void> {
   const faqId = parseInt(req.params.id, 10) || -1;
 
-  if (faqId <= 0) res.notFound();
+  if (faqId <= 0) {
+    res.notFound();
+
+    return;
+  }
 
   await updateFaqData(faqId, req.body);
 
@@ -462,7 +530,11 @@ export const deleteFaq: RequestHandler<
 > = async function deleteFaq(req, res): Promise<void> {
   const faqId = parseInt(req.params.id, 10) || -1;
 
-  if (faqId <= 0) res.notFound();
+  if (faqId <= 0) {
+    res.notFound();
+
+    return;
+  }
 
   await deleteFaqData(faqId);
 

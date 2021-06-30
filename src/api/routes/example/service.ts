@@ -2,7 +2,7 @@ import type { DummyArrayDataType, DummyDataType } from './repository';
 import type { AddedFileBody } from '../../types/schema';
 import { ErrorResponse } from '../../utils/error-handler';
 import { exampleMultipleData, exampleSingleData } from './repository';
-import { saveFiles } from '../../utils/file-management';
+import { saveFile } from '../../utils/file-management';
 
 export const getService: () => DummyArrayDataType = function getService() {
   const data = exampleMultipleData();
@@ -25,5 +25,5 @@ export const getIdService: (id: number) => DummyDataType | Error = function getI
 };
 
 export const postFileService: (files: AddedFileBody[]) => Promise<void> = async (files) => {
-  await saveFiles(files);
+  await saveFile(files[0]);
 };

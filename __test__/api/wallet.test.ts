@@ -186,9 +186,9 @@ describe('Get Top Up Histories', () => {
     // expect(body.data.length).toBe(1);
   });
 
-  test('Success, with Query `?orderDirection=DESC&orderBy=created_at&search=&page=&limit=&status=0`', async () => {
+  test('Success, with Query `?orderDirection=DESC&orderBy=created_at&search=&page=&limit=`', async () => {
     const token = 'this.is.token';
-    const query = '?orderDirection=DESC&orderBy=created_at&search=&page=&limit=&status=0';
+    const query = '?orderDirection=DESC&orderBy=created_at&search=&page=&limit=';
 
     const { status, headers, body } = await getTopUpHistories(server, query, token);
 
@@ -197,9 +197,9 @@ describe('Get Top Up Histories', () => {
     expect(body.success).toBe(true);
   });
 
-  test('Success, with Query `?orderDirection=DESC&orderBy=balance_request&search=&page=&limit=&status=0`', async () => {
+  test('Success, with Query `?orderDirection=DESC&orderBy=balance_request&search=&page=&limit=`', async () => {
     const token = 'this.is.token';
-    const query = '?orderDirection=DESC&orderBy=balance_request&search=&page=&limit=&status=0';
+    const query = '?orderDirection=DESC&orderBy=balance_request&search=&page=&limit=';
 
     const { status, headers, body } = await getTopUpHistories(server, query, token);
 
@@ -208,9 +208,9 @@ describe('Get Top Up Histories', () => {
     expect(body.success).toBe(true);
   });
 
-  test('Success, with Query `?orderDirection=DESC&orderBy=balance_transfer&search=&page=&limit=&status=0`', async () => {
+  test('Success, with Query `?orderDirection=DESC&orderBy=balance_transfer&search=&page=&limit=`', async () => {
     const token = 'this.is.token';
-    const query = '?orderDirection=DESC&orderBy=balance_transfer&search=&page=&limit=&status=0';
+    const query = '?orderDirection=DESC&orderBy=balance_transfer&search=&page=&limit=';
 
     const { status, headers, body } = await getTopUpHistories(server, query, token);
 
@@ -219,9 +219,9 @@ describe('Get Top Up Histories', () => {
     expect(body.success).toBe(true);
   });
 
-  test('Success, with Query `?orderDirection=ASC&orderBy=created_at&search=&page=&limit=&status=0`', async () => {
+  test('Success, with Query `?orderDirection=ASC&orderBy=created_at&search=&page=&limit=`', async () => {
     const token = 'this.is.token';
-    const query = '?orderDirection=ASC&orderBy=created_at&search=&page=&limit=&status=0';
+    const query = '?orderDirection=ASC&orderBy=created_at&search=&page=&limit=';
 
     const { status, headers, body } = await getTopUpHistories(server, query, token);
 
@@ -230,9 +230,9 @@ describe('Get Top Up Histories', () => {
     expect(body.success).toBe(true);
   });
 
-  test('Success, with Query `?orderDirection=ASC&orderBy=balance_request&search=&page=&limit=&status=0`', async () => {
+  test('Success, with Query `?orderDirection=ASC&orderBy=balance_request&search=&page=&limit=`', async () => {
     const token = 'this.is.token';
-    const query = '?orderDirection=ASC&orderBy=balance_request&search=&page=&limit=&status=0';
+    const query = '?orderDirection=ASC&orderBy=balance_request&search=&page=&limit=';
 
     const { status, headers, body } = await getTopUpHistories(server, query, token);
 
@@ -241,9 +241,9 @@ describe('Get Top Up Histories', () => {
     expect(body.success).toBe(true);
   });
 
-  test('Success, with Query `?orderDirection=ASC&orderBy=balance_transfer&search=&page=&limit=&status=0`', async () => {
+  test('Success, with Query `?orderDirection=ASC&orderBy=balance_transfer&search=&page=&limit=`', async () => {
     const token = 'this.is.token';
-    const query = '?orderDirection=ASC&orderBy=balance_transfer&search=&page=&limit=&status=0';
+    const query = '?orderDirection=ASC&orderBy=balance_transfer&search=&page=&limit=';
 
     const { status, headers, body } = await getTopUpHistories(server, query, token);
 
@@ -252,9 +252,9 @@ describe('Get Top Up Histories', () => {
     expect(body.success).toBe(true);
   });
 
-  test('Fail, with Query `?orderDirection=DESCs&orderBy=created_at&search=&page=&limit=&status=0`', async () => {
+  test('Fail, with Query `?orderDirection=DESCs&orderBy=created_at&search=&page=&limit=`', async () => {
     const token = 'this.is.token';
-    const query = '?orderDirection=DESCs&orderBy=created_at&search=&page=&limit=&status=0`';
+    const query = '?orderDirection=DESCs&orderBy=created_at&search=&page=&limit=`';
 
     const { status, headers, body } = await getTopUpHistories(server, query, token);
 
@@ -263,9 +263,9 @@ describe('Get Top Up Histories', () => {
     expect(body.success).toBe(false);
   });
 
-  test('Fail, with Query `?orderDirection=DESC&orderBy=created_ats&search=&page=&limit=&status=0`', async () => {
+  test('Fail, with Query `?orderDirection=DESC&orderBy=created_ats&search=&page=&limit=`', async () => {
     const token = 'this.is.token';
-    const query = '?orderDirection=DESC&orderBy=created_ats&search=&page=&limit=&status=0';
+    const query = '?orderDirection=DESC&orderBy=created_ats&search=&page=&limit=';
 
     const { status, headers, body } = await getTopUpHistories(server, query, token);
 
@@ -320,9 +320,9 @@ describe('Get Withdraw Histories', () => {
     // expect(body.data.length).toBe(1);
   });
 
-  test('Success, with Query `?orderDirection=DESC&orderBy=created_at&search=&page=&limit=&status=0`', async () => {
+  test('Success, with Query `?orderDirection=DESC&orderBy=created_at&search=&page=&limit=`', async () => {
     const token = 'this.is.token';
-    const query = '?orderDirection=DESC&orderBy=created_at&search=&page=&limit=&status=0';
+    const query = '?orderDirection=DESC&orderBy=created_at&search=&page=&limit=';
 
     const { status, headers, body } = await getWithdrawHistories(server, query, token);
 
@@ -331,9 +331,9 @@ describe('Get Withdraw Histories', () => {
     expect(body.success).toBe(true);
   });
 
-  test('Success, with Query `?orderDirection=DESC&orderBy=balance_request&search=&page=&limit=&status=0`', async () => {
+  test('Success, with Query `?orderDirection=DESC&orderBy=balance_request&search=&page=&limit=`', async () => {
     const token = 'this.is.token';
-    const query = '?orderDirection=DESC&orderBy=balance_request&search=&page=&limit=&status=0';
+    const query = '?orderDirection=DESC&orderBy=balance_request&search=&page=&limit=';
 
     const { status, headers, body } = await getWithdrawHistories(server, query, token);
 
@@ -342,9 +342,9 @@ describe('Get Withdraw Histories', () => {
     expect(body.success).toBe(true);
   });
 
-  test('Success, with Query `?orderDirection=ASC&orderBy=created_at&search=&page=&limit=&status=0`', async () => {
+  test('Success, with Query `?orderDirection=ASC&orderBy=created_at&search=&page=&limit=`', async () => {
     const token = 'this.is.token';
-    const query = '?orderDirection=ASC&orderBy=created_at&search=&page=&limit=&status=0';
+    const query = '?orderDirection=ASC&orderBy=created_at&search=&page=&limit=';
 
     const { status, headers, body } = await getWithdrawHistories(server, query, token);
 
@@ -353,9 +353,9 @@ describe('Get Withdraw Histories', () => {
     expect(body.success).toBe(true);
   });
 
-  test('Success, with Query `?orderDirection=ASC&orderBy=balance_request&search=&page=&limit=&status=0`', async () => {
+  test('Success, with Query `?orderDirection=ASC&orderBy=balance_request&search=&page=&limit=`', async () => {
     const token = 'this.is.token';
-    const query = '?orderDirection=ASC&orderBy=balance_request&search=&page=&limit=&status=0';
+    const query = '?orderDirection=ASC&orderBy=balance_request&search=&page=&limit=';
 
     const { status, headers, body } = await getWithdrawHistories(server, query, token);
 
@@ -364,9 +364,9 @@ describe('Get Withdraw Histories', () => {
     expect(body.success).toBe(true);
   });
 
-  test('Fail, with Query `?orderDirection=DESCs&orderBy=created_at&search=&page=&limit=&status=0`', async () => {
+  test('Fail, with Query `?orderDirection=DESCs&orderBy=created_at&search=&page=&limit=`', async () => {
     const token = 'this.is.token';
-    const query = '?orderDirection=DESCs&orderBy=created_at&search=&page=&limit=&status=0';
+    const query = '?orderDirection=DESCs&orderBy=created_at&search=&page=&limit=';
 
     const { status, headers, body } = await getWithdrawHistories(server, query, token);
 
@@ -375,9 +375,9 @@ describe('Get Withdraw Histories', () => {
     expect(body.success).toBe(false);
   });
 
-  test('Fail, with Query `?orderDirection=DESC&orderBy=created_ats&search=&page=&limit=&status=0`', async () => {
+  test('Fail, with Query `?orderDirection=DESC&orderBy=created_ats&search=&page=&limit=`', async () => {
     const token = 'this.is.token';
-    const query = '?orderDirection=DESC&orderBy=created_ats&search=&page=&limit=&status=0';
+    const query = '?orderDirection=DESC&orderBy=created_ats&search=&page=&limit=';
 
     const { status, headers, body } = await getWithdrawHistories(server, query, token);
 

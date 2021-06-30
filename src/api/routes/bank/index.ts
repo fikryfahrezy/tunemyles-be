@@ -7,8 +7,8 @@ import type {
   UpdateBankUserBody,
 } from '../../types/schema';
 import { controllerWrapper, handlerWrapper } from '../../utils/serverfn-wrapper';
-import { protect } from '../../middlewares/protect-route';
 import schemaValidation from '../../middlewares/schema-validation';
+import { protect } from '../../middlewares/protect-route';
 import { requestHeaders, requestBody, requestParams } from './schemas';
 import {
   postBankUser,

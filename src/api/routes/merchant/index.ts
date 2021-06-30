@@ -8,11 +8,10 @@ import type {
   UpdateMerchantClosetimeBody,
   PostProductBody,
   UpdateProductBody,
-  UpdateProductCoverBody,
+  ChangeProductCoverBody,
   UpdateProductStatusBody,
   BindProductCategoryBody,
   PostProductImageBody,
-  DeleteProductCategoryParams,
   UpdateOrderStatusBody,
   GetRandomMerchantsQuery,
   GetMerchantTransactionHistoriesQuery,
@@ -20,9 +19,9 @@ import type {
 } from '../../types/schema';
 import { controllerWrapper, handlerWrapper } from '../../utils/serverfn-wrapper';
 import { renameFiles } from '../../utils/file-management';
-import { protect } from '../../middlewares/protect-route';
 import dbQuerying from '../../middlewares/db-querying';
 import schemaValidation from '../../middlewares/schema-validation';
+import { protect } from '../../middlewares/protect-route';
 import { requestHeaders, requestQuery, requestBody, requestParams } from './schemas';
 import {
   updateMerchantProfile,
@@ -30,12 +29,12 @@ import {
   getMerchantProfile,
   postMerchantProduct,
   getMerchantProducts,
+  postMerchantProductImage,
+  getMerchantProductDetail,
   updateMerchantProduct,
-  updateMerchantProductCover,
+  changeMerchantProductCover,
   updateMerchantProductStatus,
   bindMerchantProductCategory,
-  getMerchantProductDetail,
-  postMerchantProductImage,
   deleteMerchantProductCategory,
   deleteMerchantProductImage,
   deleteMerchantProduct,
@@ -164,6 +163,50 @@ const routes = function routes(
     controllerWrapper(getMerchantProducts),
   );
 
+  fastify.post<
+    Request<{ Headers: ApiKeyHeader; Params: IdRequestParams; Body: PostProductImageBody }>
+  >(
+    '/products/:id/image',
+    {
+      attachValidation: true,
+      schema: {
+        headers: requestHeaders.private,
+        params: requestParams.id,
+        body: requestBody.postProductImage,
+        response: {
+          200: { $ref: '#ApiResponse' },
+          '4xx': { $ref: '#ApiResponse' },
+          '5xx': { $ref: '#ApiResponse' },
+        },
+      },
+      preValidation: (req, __, done) => {
+        req.body = { ...req.body, image: renameFiles(req.url, req.body.image) ?? req.body.image };
+
+        done();
+      },
+      preHandler: [schemaValidation, handlerWrapper(protect('MERCHANT'))],
+    },
+    controllerWrapper(postMerchantProductImage),
+  );
+
+  fastify.get<Request<{ Headers: ApiKeyHeader; Params: IdRequestParams }>>(
+    '/products/:id',
+    {
+      attachValidation: true,
+      schema: {
+        headers: requestHeaders.private,
+        params: requestParams.id,
+        response: {
+          200: { $ref: '#ApiResponse' },
+          '4xx': { $ref: '#ApiResponse' },
+          '5xx': { $ref: '#ApiResponse' },
+        },
+      },
+      preHandler: [schemaValidation, handlerWrapper(protect('USER'))],
+    },
+    controllerWrapper(getMerchantProductDetail),
+  );
+
   fastify.patch<
     Request<{ Headers: ApiKeyHeader; Params: IdRequestParams; Body: UpdateProductBody }>
   >(
@@ -186,7 +229,7 @@ const routes = function routes(
   );
 
   fastify.patch<
-    Request<{ Headers: ApiKeyHeader; Params: IdRequestParams; Body: UpdateProductCoverBody }>
+    Request<{ Headers: ApiKeyHeader; Params: IdRequestParams; Body: ChangeProductCoverBody }>
   >(
     '/products/:id/cover',
     {
@@ -194,7 +237,7 @@ const routes = function routes(
       schema: {
         headers: requestHeaders.private,
         params: requestParams.id,
-        body: requestBody.updateProductCover,
+        body: requestBody.changeProductCover,
         response: {
           200: { $ref: '#ApiResponse' },
           '4xx': { $ref: '#ApiResponse' },
@@ -208,7 +251,7 @@ const routes = function routes(
       },
       preHandler: [schemaValidation, handlerWrapper(protect('MERCHANT'))],
     },
-    controllerWrapper(updateMerchantProductCover),
+    controllerWrapper(changeMerchantProductCover),
   );
 
   fastify.patch<
@@ -253,57 +296,13 @@ const routes = function routes(
     controllerWrapper(bindMerchantProductCategory),
   );
 
-  fastify.get<Request<{ Headers: ApiKeyHeader; Params: IdRequestParams }>>(
-    '/products/:id',
-    {
-      attachValidation: true,
-      schema: {
-        headers: requestHeaders.private,
-        params: requestParams.id,
-        response: {
-          200: { $ref: '#ApiResponse' },
-          '4xx': { $ref: '#ApiResponse' },
-          '5xx': { $ref: '#ApiResponse' },
-        },
-      },
-      preHandler: [schemaValidation, handlerWrapper(protect('USER'))],
-    },
-    controllerWrapper(getMerchantProductDetail),
-  );
-
-  fastify.post<
-    Request<{ Headers: ApiKeyHeader; Params: IdRequestParams; Body: PostProductImageBody }>
-  >(
-    '/products/:id/image',
-    {
-      attachValidation: true,
-      schema: {
-        headers: requestHeaders.private,
-        params: requestParams.id,
-        body: requestBody.postProductImage,
-        response: {
-          200: { $ref: '#ApiResponse' },
-          '4xx': { $ref: '#ApiResponse' },
-          '5xx': { $ref: '#ApiResponse' },
-        },
-      },
-      preValidation: (req, __, done) => {
-        req.body = { ...req.body, image: renameFiles(req.url, req.body.image) ?? req.body.image };
-
-        done();
-      },
-      preHandler: [schemaValidation, handlerWrapper(protect('MERCHANT'))],
-    },
-    controllerWrapper(postMerchantProductImage),
-  );
-
-  fastify.delete<Request<{ Headers: ApiKeyHeader; Params: DeleteProductCategoryParams }>>(
+  fastify.delete<Request<{ Headers: ApiKeyHeader; Params: IdRequestParams }>>(
     '/products/:productId/category/:categoryId',
     {
       attachValidation: true,
       schema: {
         headers: requestHeaders.private,
-        params: requestParams.deleteProductCategory,
+        params: requestParams.id,
         response: {
           200: { $ref: '#ApiResponse' },
           '4xx': { $ref: '#ApiResponse' },
@@ -421,7 +420,7 @@ const routes = function routes(
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preHandler: [schemaValidation, handlerWrapper(protect('MERCHANT'))],
+      preHandler: [schemaValidation, handlerWrapper(dbQuerying('MERCHANT'))],
     },
     controllerWrapper(getMerchantList),
   );
@@ -439,7 +438,7 @@ const routes = function routes(
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preHandler: [schemaValidation, handlerWrapper(protect('MERCHANT'))],
+      preHandler: schemaValidation,
     },
     controllerWrapper(getMerchantProductList),
   );
@@ -457,7 +456,7 @@ const routes = function routes(
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preHandler: [schemaValidation, handlerWrapper(protect('MERCHANT'))],
+      preHandler: schemaValidation,
     },
     controllerWrapper(getRandomMerchants),
   );

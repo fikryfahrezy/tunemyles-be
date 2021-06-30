@@ -1,8 +1,7 @@
-import { QueryTypes, Op } from 'sequelize';
+import { QueryTypes } from 'sequelize';
 import type { RegisterBody, ActivateMerchantBody, UpdateProfileBody } from '../types/schema';
 import sequelize from '../../databases/sequelize';
 import initModels, { ModelType } from '../models/sql/init-models';
-import { Merchant } from '../models/sql/Merchant';
 
 type UserType = {
   id: number;
@@ -11,6 +10,7 @@ type UserType = {
   password: string;
   address: string;
   phone_number: string;
+  imgLabel: string | null;
   imgUrl: string | null;
   imgId: number | null;
   utilId: number;
@@ -29,7 +29,7 @@ type UserForgotToken = {
   userId: number;
 };
 
-const { User, UserUtility, UserWallet, Media, UserLostPassword } = initModels(sequelize);
+const { User, UserUtility, UserWallet, Media, UserLostPassword, Merchant } = initModels(sequelize);
 
 export const createUser: (data: RegisterBody) => Promise<ModelType['User']> = function createUser(
   data: RegisterBody,
@@ -50,10 +50,10 @@ export const createUserWallet: (
   return UserWallet.create({ id_u_user: userUtilityId });
 };
 
-export const createUserImg: (label: string) => Promise<ModelType['Media']> = function createUserImg(
+export const createMedia: (label: string) => Promise<ModelType['Media']> = function createUserImg(
   label,
 ) {
-  return Media.create({ label, uri: `/img/${label}` });
+  return Media.create({ label, uri: label });
 };
 
 export const createForgotPassword: (data: {
@@ -63,20 +63,23 @@ export const createForgotPassword: (data: {
   return UserLostPassword.create({ id_u_user: utilId, verification_token: phone });
 };
 
-export const createImgs: (labels: string[]) => Promise<ModelType['Media'][]> = function createImgs(
-  labels,
-) {
+export const createMedias: (
+  labels: string[],
+) => Promise<ModelType['Media'][]> = function createImgs(labels) {
   return Media.bulkCreate(labels.map((label) => ({ label, uri: `/img/${label}` })));
 };
 
 export const createMerchant: (
+  userId: number,
   data: Omit<ActivateMerchantBody, 'identity_photo' | 'market_photo'> & {
-    id_u_user: number;
     id_identity_photo: number;
     id_market_photo: number;
   },
-) => Promise<[ModelType['Merchant'], boolean]> = function createMerchant(data) {
-  return Merchant.findOrCreate({ where: { id_u_user: data.id_u_user }, defaults: data });
+) => Promise<[ModelType['Merchant'], boolean]> = function createMerchant(userId, data) {
+  return Merchant.findOrCreate({
+    where: { id_u_user: userId },
+    defaults: { ...data, id_u_user: userId },
+  });
 };
 
 export const updateUser: (
@@ -86,7 +89,7 @@ export const updateUser: (
   return User.update(data, { where: { id: userId } });
 };
 
-export const updateUserImg: (
+export const updateMedia: (
   imgId: number,
   imgName: string,
 ) => Promise<[number, ModelType['Media'][]]> = function updateUserImg(imgId, label) {
@@ -104,7 +107,7 @@ export const updateForgotTokenStatus: (
 ) {
   return UserLostPassword.update(
     { status: toStatus },
-    { where: { [Op.and]: [{ verification_token: token }, { status: fromStatus }] } },
+    { where: { verification_token: token, status: fromStatus } },
   );
 };
 
@@ -140,13 +143,14 @@ export const getUser: (
             mu.password,
             mu.address,
             mu.phone_number,
+            mm.label AS imgLabel,
             mm.uri AS imgUrl,
             mm.id AS imgId,
             uu.id AS utilId,
             uu.type AS type
         FROM m_users mu
-        LEFT JOIN m_medias mm ON mm.id = mu.id_photo
-        LEFT JOIN u_user uu ON uu.id_m_users = mu.id
+          LEFT JOIN m_medias mm ON mm.id = mu.id_photo
+          LEFT JOIN u_user uu ON uu.id_m_users = mu.id
     `;
 
   switch (by) {
@@ -161,9 +165,10 @@ export const getUser: (
   }
 
   return sequelize.query<UserType>(sqlQuery, {
-    replacements: { val },
     type: QueryTypes.SELECT,
+    raw: true,
     plain: true,
+    replacements: { val },
   });
 };
 
@@ -182,9 +187,10 @@ export const getUserUtility: (userId: number) => Promise<UserUtilityType> = func
     `;
 
   return sequelize.query<UserUtilityType>(sqlQuery, {
-    replacements: { userId },
     type: QueryTypes.SELECT,
+    raw: true,
     plain: true,
+    replacements: { userId },
   });
 };
 
@@ -197,17 +203,19 @@ export const getUserWallets: (userId: number) => Promise<unknown> = function get
             uuw.is_visible,
             mw.wallet_name,
             mw.wallet_description,
-            mm.uri,
-            mm.label
+            mm.label AS logo_label,
+            mm.uri AS logo_url
         FROM u_user_wallet uuw
-        LEFT JOIN m_wallets mw ON mw.id = uuw.id_m_wallets
-        LEFT JOIN m_medias mm ON mm.id = mw.id_logo
+          LEFT JOIN m_wallets mw ON mw.id = uuw.id_m_wallets
+          LEFT JOIN m_medias mm ON mm.id = mw.id_logo
         WHERE uuw.id_u_user = :userId
     `;
 
   return sequelize.query(sqlQuery, {
-    replacements: { userId },
     type: QueryTypes.SELECT,
+    raw: true,
+    plain: false,
+    replacements: { userId },
   });
 };
 
@@ -218,14 +226,15 @@ export const getUserForgotToken: (
         SELECT
             uu. id_m_users AS userId
         FROM u_user_lost_password uulp
-        LEFT JOIN u_user uu ON uu.id = uulp.id_u_user
+          LEFT JOIN u_user uu ON uu.id = uulp.id_u_user
         WHERE uulp.verification_token = :token
           AND uulp.status = 1
     `;
 
   return sequelize.query<UserForgotToken>(sqlQuery, {
-    replacements: { token },
     type: QueryTypes.SELECT,
+    raw: true,
     plain: true,
+    replacements: { token },
   });
 };

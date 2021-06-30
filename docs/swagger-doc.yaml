@@ -28,15 +28,15 @@ tags:
   - name: merchants
     description: Merchant Route
   - name: products
-    description: Product RouteG
-  - name: carts
-    description: Cart Route
-  - name: transactions
-    description: Transaction Route
+    description: Product Route
   - name: banks
     description: Bank Route
   - name: wallets
     description: Wallet Route
+  - name: carts
+    description: Cart Route
+  - name: transactions
+    description: Transaction Route
 paths:
   /:
     get:
@@ -238,7 +238,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiResponse'
+                $ref: '#/components/schemas/VerifyTokenResponse'
         4XX:
           description: Request Error
           content:
@@ -365,15 +365,10 @@ paths:
       description: Get All Bank Data (Route All Roles)
       operationId: getAllBank
       parameters:
-        - name: page
+        - name: orderDirection
           in: query
           schema:
-            $ref: '#/components/schemas/PageQuery'
-        - name: search
-          in: query
-          description: Available search field bank_name
-          schema:
-            $ref: '#/components/schemas/SearchQuery'
+            $ref: '#/components/schemas/OrderDirectionQuery'
         - name: orderBy
           in: query
           schema:
@@ -382,10 +377,19 @@ paths:
               - enum:
                   - created_at
                   - bank_name
-        - name: orderDirection
+        - name: search
+          in: query
+          description: Available search field bank_name
+          schema:
+            $ref: '#/components/schemas/SearchQuery'
+        - name: page
           in: query
           schema:
-            $ref: '#/components/schemas/OrderDirectionQuery'
+            $ref: '#/components/schemas/PageQuery'
+        - name: limit
+          in: query
+          schema:
+            $ref: '#/components/schemas/LimitQuery'
       responses:
         '200':
           description: Request Success
@@ -711,15 +715,10 @@ paths:
       description: Get All Categories (Route All Roles)
       operationId: getAllCateogories
       parameters:
-        - name: page
+        - name: orderDirection
           in: query
           schema:
-            $ref: '#/components/schemas/PageQuery'
-        - name: search
-          in: query
-          description: 'Available search field wallet_name, wallet_description'
-          schema:
-            $ref: '#/components/schemas/SearchQuery'
+            $ref: '#/components/schemas/OrderDirectionQuery'
         - name: orderBy
           in: query
           schema:
@@ -729,10 +728,19 @@ paths:
                   - created_at
                   - category
                   - description
-        - name: orderDirection
+        - name: search
+          in: query
+          description: 'Available search field wallet_name, wallet_description'
+          schema:
+            $ref: '#/components/schemas/SearchQuery'
+        - name: page
           in: query
           schema:
-            $ref: '#/components/schemas/OrderDirectionQuery'
+            $ref: '#/components/schemas/PageQuery'
+        - name: limit
+          in: query
+          schema:
+            $ref: '#/components/schemas/LimitQuery'
       responses:
         '200':
           description: Request Success
@@ -909,15 +917,11 @@ paths:
       description: Get All Media (Route All Roles)
       operationId: getAllMedia
       parameters:
-        - name: page
+        - name: orderDirection
           in: query
           schema:
-            $ref: '#/components/schemas/PageQuery'
-        - name: search
-          in: query
-          description: Available search field label
-          schema:
-            $ref: '#/components/schemas/SearchQuery'
+            allOf:
+              - $ref: '#/components/schemas/OrderDirectionQuery'
         - name: orderBy
           in: query
           schema:
@@ -926,11 +930,19 @@ paths:
               - enum:
                   - created_at
                   - label
-        - name: orderDirection
+        - name: search
+          in: query
+          description: Available search field label
+          schema:
+            $ref: '#/components/schemas/SearchQuery'
+        - name: page
           in: query
           schema:
-            allOf:
-              - $ref: '#/components/schemas/OrderDirectionQuery'
+            $ref: '#/components/schemas/PageQuery'
+        - name: limit
+          in: query
+          schema:
+            $ref: '#/components/schemas/LimitQuery'
       responses:
         '200':
           description: Request Success
@@ -1066,15 +1078,10 @@ paths:
       description: Get All Wallet (Route All Roles)
       operationId: getAllWallet
       parameters:
-        - name: page
+        - name: orderDirection
           in: query
           schema:
-            $ref: '#/components/schemas/PageQuery'
-        - name: search
-          in: query
-          description: 'Available search field wallet_name, wallet_description'
-          schema:
-            $ref: '#/components/schemas/SearchQuery'
+            $ref: '#/components/schemas/OrderDirectionQuery'
         - name: orderBy
           in: query
           schema:
@@ -1084,10 +1091,19 @@ paths:
                   - created_at
                   - wallet_name
                   - wallet_description
-        - name: orderDirection
+        - name: search
+          in: query
+          description: 'Available search field wallet_name, wallet_description'
+          schema:
+            $ref: '#/components/schemas/SearchQuery'
+        - name: page
           in: query
           schema:
-            $ref: '#/components/schemas/OrderDirectionQuery'
+            $ref: '#/components/schemas/PageQuery'
+        - name: limit
+          in: query
+          schema:
+            $ref: '#/components/schemas/LimitQuery'
       responses:
         '200':
           description: Request Success
@@ -1464,7 +1480,7 @@ paths:
         content:
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/PostProductBody'
+              $ref: '#/components/schemas/PostMerchantProductBody'
         required: true
       responses:
         '200':
@@ -1472,7 +1488,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PostProductResponse'
+                $ref: '#/components/schemas/PostMerchantProductResponse'
         4XX:
           description: Request Error
           content:
@@ -1494,15 +1510,10 @@ paths:
       description: Product List (Merchant Route)
       operationId: productList
       parameters:
-        - name: page
+        - name: orderDirection
           in: query
           schema:
-            $ref: '#/components/schemas/PageQuery'
-        - name: search
-          in: query
-          description: 'Available search field product_name, market_name, market_address'
-          schema:
-            $ref: '#/components/schemas/SearchQuery'
+            $ref: '#/components/schemas/OrderDirectionQuery'
         - name: orderBy
           in: query
           schema:
@@ -1513,10 +1524,19 @@ paths:
                   - product_name
                   - market_name
                   - market_address
-        - name: orderDirection
+        - name: search
+          in: query
+          description: 'Available search field product_name, market_name, market_address'
+          schema:
+            $ref: '#/components/schemas/SearchQuery'
+        - name: page
           in: query
           schema:
-            $ref: '#/components/schemas/OrderDirectionQuery'
+            $ref: '#/components/schemas/PageQuery'
+        - name: limit
+          in: query
+          schema:
+            $ref: '#/components/schemas/LimitQuery'
       responses:
         '200':
           description: Request Success
@@ -1538,13 +1558,13 @@ paths:
                 $ref: '#/components/schemas/ApiResponse'
       security:
         - APIKeyHeader: []
-  '/merchants/products/{id}':
-    patch:
+  '/merchants/products/{id}/image':
+    post:
       tags:
         - merchants
-      summary: Update Product (Merchant Route)
-      description: Update Product (Merchant Route)
-      operationId: updateProduct
+      summary: Add Product Image (Merchant Route)
+      description: Add Product Image (Merchant Route)
+      operationId: productImage
       parameters:
         - name: id
           in: path
@@ -1552,11 +1572,10 @@ paths:
           schema:
             type: string
       requestBody:
-        description: Request Data
         content:
-          application/json:
+          multipart/form-data:
             schema:
-              $ref: '#/components/schemas/UpdateProductBody'
+              $ref: '#/components/schemas/PostMerchantProductImageBody'
         required: true
       responses:
         '200':
@@ -1564,7 +1583,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiResponse'
+                $ref: '#/components/schemas/PostMerchantProductImageResponse'
         4XX:
           description: Request Error
           content:
@@ -1579,7 +1598,7 @@ paths:
                 $ref: '#/components/schemas/ApiResponse'
       security:
         - APIKeyHeader: []
-      x-codegen-request-body-name: body
+  '/merchants/products/{id}':
     get:
       tags:
         - merchants
@@ -1613,6 +1632,47 @@ paths:
                 $ref: '#/components/schemas/ApiResponse'
       security:
         - APIKeyHeader: []
+    patch:
+      tags:
+        - merchants
+      summary: Update Product (Merchant Route)
+      description: Update Product (Merchant Route)
+      operationId: updateProduct
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Request Data
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMerchantProductBody'
+        required: true
+      responses:
+        '200':
+          description: Request Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        4XX:
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        5XX:
+          description: Sever Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+        - APIKeyHeader: []
+      x-codegen-request-body-name: body
     delete:
       tags:
         - merchants
@@ -1663,7 +1723,7 @@ paths:
         content:
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/UpdateProductCoverBody'
+              $ref: '#/components/schemas/UpdateMerchantProductCoverBody'
         required: true
       responses:
         '200':
@@ -1671,18 +1731,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                allOf:
-                  - $ref: '#/components/schemas/ApiResponse'
-                  - type: object
-                    properties:
-                      data:
-                        type: object
-                        properties:
-                          cover_uri:
-                            type: string
-                          cover_label:
-                            type: string
+                $ref: '#/components/schemas/ChangeMerchantProductCoverResponse'
         4XX:
           description: Request Error
           content:
@@ -1714,7 +1763,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateProductStatusBody'
+              $ref: '#/components/schemas/UpdateMerchantProductStatusBody'
         required: true
       responses:
         '200':
@@ -1722,7 +1771,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UpdateProductStatusResponse'
+                $ref: '#/components/schemas/UpdateMerchantProductStatusResponse'
         4XX:
           description: Request Error
           content:
@@ -1755,7 +1804,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/BindProductCategoryBody'
+              $ref: '#/components/schemas/BindMerchantProductCategoryBody'
         required: true
       responses:
         '200':
@@ -1763,7 +1812,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BindProductCategoryResponse'
+                $ref: '#/components/schemas/BindMerchantProductCategoryResponse'
         4XX:
           description: Request Error
           content:
@@ -1779,47 +1828,7 @@ paths:
       security:
         - APIKeyHeader: []
       x-codegen-request-body-name: body
-  '/merchants/products/{id}/image':
-    post:
-      tags:
-        - merchants
-      summary: Add Product Image (Merchant Route)
-      description: Add Product Image (Merchant Route)
-      operationId: productImage
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/PostProductImageBody'
-        required: true
-      responses:
-        '200':
-          description: Request Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PostProductImageResponse'
-        4XX:
-          description: Request Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        5XX:
-          description: Sever Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-      security:
-        - APIKeyHeader: []
-  '/merchants/products/{productId}/categories/{categoryId}':
+  '/merchants/products/categories/{id}':
     delete:
       tags:
         - merchants
@@ -1827,12 +1836,7 @@ paths:
       description: Unbind Product Category (Merchant Route)
       operationId: unbindProductCategory
       parameters:
-        - name: productId
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: categoryId
+        - name: id
           in: path
           required: true
           schema:
@@ -1900,15 +1904,10 @@ paths:
       description: Merchant Orders (Merchant Route)
       operationId: merchantOrders
       parameters:
-        - name: page
+        - name: orderDirection
           in: query
           schema:
-            $ref: '#/components/schemas/PageQuery'
-        - name: search
-          in: query
-          description: 'Available search field full_name, phone_number, address'
-          schema:
-            $ref: '#/components/schemas/SearchQuery'
+            $ref: '#/components/schemas/OrderDirectionQuery'
         - name: orderBy
           in: query
           schema:
@@ -1919,10 +1918,19 @@ paths:
                   - full_name
                   - phone_number
                   - address
-        - name: orderDirection
+        - name: search
+          in: query
+          description: 'Available search field full_name, phone_number, address'
+          schema:
+            $ref: '#/components/schemas/SearchQuery'
+        - name: page
           in: query
           schema:
-            $ref: '#/components/schemas/OrderDirectionQuery'
+            $ref: '#/components/schemas/PageQuery'
+        - name: limit
+          in: query
+          schema:
+            $ref: '#/components/schemas/LimitQuery'
         - name: status
           in: query
           schema:
@@ -2003,7 +2011,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateOrderStatusBody'
+              $ref: '#/components/schemas/UpdateMerchantOrderStatusBody'
         required: true
       responses:
         '200':
@@ -2011,7 +2019,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UpdateOrderStatusResponse'
+                $ref: '#/components/schemas/UpdateMerchantOrderStatusResponse'
         4XX:
           description: Request Error
           content:
@@ -2035,17 +2043,10 @@ paths:
       description: Merchant List
       operationId: merchantList
       parameters:
-        - name: page
+        - name: orderDirection
           in: query
           schema:
-            $ref: '#/components/schemas/PageQuery'
-        - name: search
-          in: query
-          description: >-
-            Available search field full_name, phone_number, market_name,
-            market_address
-          schema:
-            $ref: '#/components/schemas/SearchQuery'
+            $ref: '#/components/schemas/OrderDirectionQuery'
         - name: orderBy
           in: query
           schema:
@@ -2057,10 +2058,21 @@ paths:
                   - phone_number
                   - market_name
                   - market_address
-        - name: orderDirection
+        - name: search
+          in: query
+          description: >-
+            Available search field full_name, phone_number, market_name,
+            market_address
+          schema:
+            $ref: '#/components/schemas/SearchQuery'
+        - name: page
           in: query
           schema:
-            $ref: '#/components/schemas/OrderDirectionQuery'
+            $ref: '#/components/schemas/PageQuery'
+        - name: limit
+          in: query
+          schema:
+            $ref: '#/components/schemas/LimitQuery'
       responses:
         '200':
           description: Request Success
@@ -2219,20 +2231,10 @@ paths:
       description: Get All Products
       operationId: getAllProducts
       parameters:
-        - name: page
+        - name: orderDirection
           in: query
           schema:
-            $ref: '#/components/schemas/PageQuery'
-        - name: limit
-          in: query
-          schema:
-            type: string
-            default: '10'
-        - name: search
-          in: query
-          description: 'Available search field product_name, market_name, market_address'
-          schema:
-            $ref: '#/components/schemas/SearchQuery'
+            $ref: '#/components/schemas/OrderDirectionQuery'
         - name: orderBy
           in: query
           schema:
@@ -2243,10 +2245,19 @@ paths:
                   - product_name
                   - market_name
                   - market_address
-        - name: orderDirection
+        - name: search
+          in: query
+          description: 'Available search field product_name, market_name, market_address'
+          schema:
+            $ref: '#/components/schemas/SearchQuery'
+        - name: page
           in: query
           schema:
-            $ref: '#/components/schemas/OrderDirectionQuery'
+            $ref: '#/components/schemas/PageQuery'
+        - name: limit
+          in: query
+          schema:
+            $ref: '#/components/schemas/LimitQuery'
       responses:
         '200':
           description: Request Success
@@ -2279,15 +2290,10 @@ paths:
           required: true
           schema:
             type: string
-        - name: page
+        - name: orderDirection
           in: query
           schema:
-            $ref: '#/components/schemas/PageQuery'
-        - name: limit
-          in: query
-          schema:
-            type: string
-            default: '10'
+            $ref: '#/components/schemas/OrderDirectionQuery'
         - name: orderBy
           in: query
           schema:
@@ -2298,10 +2304,19 @@ paths:
                   - product_name
                   - market_name
                   - market_address
-        - name: orderDirection
+        - name: search
+          in: query
+          description: 'Available search field product_name, market_name, market_address'
+          schema:
+            $ref: '#/components/schemas/SearchQuery'
+        - name: page
           in: query
           schema:
-            $ref: '#/components/schemas/OrderDirectionQuery'
+            $ref: '#/components/schemas/PageQuery'
+        - name: limit
+          in: query
+          schema:
+            $ref: '#/components/schemas/LimitQuery'
       responses:
         '200':
           description: Request Success
@@ -2321,346 +2336,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponse'
-  /carts:
-    post:
-      tags:
-        - carts
-      summary: Add To Cart (Route All Roles)
-      description: Add To Cart (Route All Roles)
-      operationId: addToCart
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AddToCartBody'
-        required: true
-      responses:
-        '200':
-          description: Request Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        4XX:
-          description: Request Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        5XX:
-          description: Sever Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-      security:
-        - APIKeyHeader: []
-      x-codegen-request-body-name: body
-    get:
-      tags:
-        - carts
-      summary: Get Cart Items (Route All Roles)
-      description: Get Cart Items (Route All Roles)
-      operationId: cartItems
-      responses:
-        '200':
-          description: Request Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetCartItemsResponse'
-        4XX:
-          description: Request Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        5XX:
-          description: Sever Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-      security:
-        - APIKeyHeader: []
-  '/carts/{id}':
-    patch:
-      tags:
-        - carts
-      summary: Update Item QTY (Route All Roles)
-      description: Update Item QTY (Route All Roles)
-      operationId: updateItemQTY
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateCartQtyBody'
-        required: true
-      responses:
-        '200':
-          description: Request Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        4XX:
-          description: Request Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        5XX:
-          description: Sever Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-      security:
-        - APIKeyHeader: []
-      x-codegen-request-body-name: body
-    delete:
-      tags:
-        - carts
-      summary: Delete Item (Route All Roles)
-      description: Delete Item (Route All Roles)
-      operationId: deleteItem
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Request Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        4XX:
-          description: Request Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        5XX:
-          description: Sever Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-      security:
-        - APIKeyHeader: []
-  /carts/checkout:
-    post:
-      tags:
-        - carts
-      summary: Cart Checkout (Route All Roles)
-      description: Cart Checkout (Route All Roles)
-      operationId: cartCheckout
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CheckoutBody'
-        required: true
-      responses:
-        '200':
-          description: Request Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        4XX:
-          description: Request Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        5XX:
-          description: Sever Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-      security:
-        - APIKeyHeader: []
-      x-codegen-request-body-name: body
-  /transactions:
-    get:
-      tags:
-        - transactions
-      summary: Get All Transactions (Route All Roles)
-      description: Get All Transactions (Route All Roles)
-      operationId: allTransactions
-      parameters:
-        - name: page
-          in: query
-          schema:
-            $ref: '#/components/schemas/PageQuery'
-        - name: search
-          in: query
-          description: 'Available search full_name, phone_number, address'
-          schema:
-            $ref: '#/components/schemas/SearchQuery'
-        - name: orderBy
-          in: query
-          schema:
-            allOf:
-              - $ref: '#/components/schemas/OrderByQuery'
-              - enum:
-                  - created_at
-                  - full_name
-                  - phone_number
-                  - address
-        - name: orderDirection
-          in: query
-          schema:
-            $ref: '#/components/schemas/OrderDirectionQuery'
-        - name: status
-          in: query
-          schema:
-            allOf:
-              - $ref: '#/components/schemas/StatusQuery'
-              - enum:
-                  - '0'
-                  - '1'
-                  - '2'
-                  - '3'
-      responses:
-        '200':
-          description: Request Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetUserProcessedTransactionsResponse'
-        4XX:
-          description: Request Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        5XX:
-          description: Sever Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-      security:
-        - APIKeyHeader: []
-  '/transactions/{id}':
-    get:
-      tags:
-        - transactions
-      summary: Get Single Transaction (Route All Roles)
-      description: Get Single Transactions (Route All Roles)
-      operationId: singleTransaction
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Request Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetUserTransactionDetailResponse'
-        4XX:
-          description: Request Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        5XX:
-          description: Sever Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-      security:
-        - APIKeyHeader: []
-    patch:
-      tags:
-        - transactions
-      summary: Finish Transaction (Route All Roles)
-      description: Finish Transactions (Route All Roles)
-      operationId: finishTransaction
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Request Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        4XX:
-          description: Request Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        5XX:
-          description: Sever Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-      security:
-        - APIKeyHeader: []
-    post:
-      tags:
-        - transactions
-      summary: Review Transaction (Route All Roles)
-      description: Review Transactions (Route All Roles)
-      operationId: reviewTransaction
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ReviewTransactionBody'
-        required: true
-      responses:
-        '200':
-          description: Request Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        4XX:
-          description: Request Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        5XX:
-          description: Sever Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-      security:
-        - APIKeyHeader: []
-      x-codegen-request-body-name: body
   /banks/users:
     post:
       tags:
@@ -2968,15 +2643,10 @@ paths:
       description: Get User Top Up Histories (Route All Roles)
       operationId: topUpHistories
       parameters:
-        - name: page
+        - name: orderDirection
           in: query
           schema:
-            $ref: '#/components/schemas/PageQuery'
-        - name: search
-          in: query
-          description: 'Available search field balance_request, balance_transfer'
-          schema:
-            $ref: '#/components/schemas/SearchQuery'
+            $ref: '#/components/schemas/OrderDirectionQuery'
         - name: orderBy
           in: query
           schema:
@@ -2986,10 +2656,28 @@ paths:
                   - created_at
                   - balance_request
                   - balance_transfer
-        - name: orderDirection
+        - name: search
+          in: query
+          description: 'Available search field balance_request, balance_transfer'
+          schema:
+            $ref: '#/components/schemas/SearchQuery'
+        - name: page
           in: query
           schema:
-            $ref: '#/components/schemas/OrderDirectionQuery'
+            $ref: '#/components/schemas/PageQuery'
+        - name: limit
+          in: query
+          schema:
+            $ref: '#/components/schemas/LimitQuery'
+        - name: status
+          in: query
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/StatusQuery'
+              - enum:
+                  - '0'
+                  - '1'
+                  - '2'
       responses:
         '200':
           description: Request Success
@@ -3019,15 +2707,10 @@ paths:
       description: Get User Withdraw Histories (Route All Roles)
       operationId: withdrawHistories
       parameters:
-        - name: page
+        - name: orderDirection
           in: query
           schema:
-            $ref: '#/components/schemas/PageQuery'
-        - name: search
-          in: query
-          description: Available search field balance_request
-          schema:
-            $ref: '#/components/schemas/SearchQuery'
+            $ref: '#/components/schemas/OrderDirectionQuery'
         - name: orderBy
           in: query
           schema:
@@ -3036,10 +2719,28 @@ paths:
               - enum:
                   - created_at
                   - balance_request
-        - name: orderDirection
+        - name: search
+          in: query
+          description: Available search field balance_request
+          schema:
+            $ref: '#/components/schemas/SearchQuery'
+        - name: page
           in: query
           schema:
-            $ref: '#/components/schemas/OrderDirectionQuery'
+            $ref: '#/components/schemas/PageQuery'
+        - name: limit
+          in: query
+          schema:
+            $ref: '#/components/schemas/LimitQuery'
+        - name: status
+          in: query
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/StatusQuery'
+              - enum:
+                  - '0'
+                  - '1'
+                  - '2'
       responses:
         '200':
           description: Request Success
@@ -3137,11 +2838,10 @@ paths:
       description: Get All User Top Up (Admin Route)
       operationId: allUserTopUp
       parameters:
-        - name: search
+        - name: orderDirection
           in: query
-          description: 'Available search field balance_request, balance_transfer'
           schema:
-            $ref: '#/components/schemas/SearchQuery'
+            $ref: '#/components/schemas/OrderDirectionQuery'
         - name: orderBy
           in: query
           schema:
@@ -3151,10 +2851,19 @@ paths:
                   - created_at
                   - balance_request
                   - balance_transfer
-        - name: orderDirection
+        - name: search
+          in: query
+          description: 'Available search field balance_request, balance_transfer'
+          schema:
+            $ref: '#/components/schemas/SearchQuery'
+        - name: page
           in: query
           schema:
-            $ref: '#/components/schemas/OrderDirectionQuery'
+            $ref: '#/components/schemas/PageQuery'
+        - name: limit
+          in: query
+          schema:
+            $ref: '#/components/schemas/LimitQuery'
         - name: status
           in: query
           schema:
@@ -3193,11 +2902,10 @@ paths:
       description: Get All User Withdraw (Admin Route)
       operationId: allUserWithdraw
       parameters:
-        - name: search
+        - name: orderDirection
           in: query
-          description: Available search field balance_request
           schema:
-            $ref: '#/components/schemas/SearchQuery'
+            $ref: '#/components/schemas/OrderDirectionQuery'
         - name: orderBy
           in: query
           schema:
@@ -3206,10 +2914,19 @@ paths:
               - enum:
                   - created_at
                   - balance_request
-        - name: orderDirection
+        - name: search
+          in: query
+          description: Available search field balance_request
+          schema:
+            $ref: '#/components/schemas/SearchQuery'
+        - name: page
           in: query
           schema:
-            $ref: '#/components/schemas/OrderDirectionQuery'
+            $ref: '#/components/schemas/PageQuery'
+        - name: limit
+          in: query
+          schema:
+            $ref: '#/components/schemas/LimitQuery'
         - name: status
           in: query
           schema:
@@ -3364,6 +3081,405 @@ paths:
       security:
         - APIKeyHeader: []
       x-codegen-request-body-name: body
+  /carts:
+    post:
+      tags:
+        - carts
+      summary: Add To Cart (Route All Roles)
+      description: Add To Cart (Route All Roles)
+      operationId: addToCart
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddToCartBody'
+        required: true
+      responses:
+        '200':
+          description: Request Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        4XX:
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        5XX:
+          description: Sever Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+        - APIKeyHeader: []
+      x-codegen-request-body-name: body
+    get:
+      tags:
+        - carts
+      summary: Get Cart Items (Route All Roles)
+      description: Get Cart Items (Route All Roles)
+      operationId: cartItems
+      responses:
+        '200':
+          description: Request Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCartItemsResponse'
+        4XX:
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        5XX:
+          description: Sever Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+        - APIKeyHeader: []
+  '/carts/{id}':
+    patch:
+      tags:
+        - carts
+      summary: Update Item QTY (Route All Roles)
+      description: Update Item QTY (Route All Roles)
+      operationId: updateItemQTY
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCartQtyBody'
+        required: true
+      responses:
+        '200':
+          description: Request Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        4XX:
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        5XX:
+          description: Sever Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+        - APIKeyHeader: []
+      x-codegen-request-body-name: body
+    delete:
+      tags:
+        - carts
+      summary: Delete Item (Route All Roles)
+      description: Delete Item (Route All Roles)
+      operationId: deleteItem
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Request Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        4XX:
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        5XX:
+          description: Sever Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+        - APIKeyHeader: []
+  /carts/checkout:
+    post:
+      tags:
+        - carts
+      summary: Cart Checkout (Route All Roles)
+      description: Cart Checkout (Route All Roles)
+      operationId: cartCheckout
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CheckoutBody'
+        required: true
+      responses:
+        '200':
+          description: Request Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        4XX:
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        5XX:
+          description: Sever Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+        - APIKeyHeader: []
+      x-codegen-request-body-name: body
+  /transactions:
+    get:
+      tags:
+        - transactions
+      summary: Get All Transactions (Route All Roles)
+      description: Get All Transactions (Route All Roles)
+      operationId: allTransactions
+      parameters:
+        - name: orderDirection
+          in: query
+          schema:
+            $ref: '#/components/schemas/OrderDirectionQuery'
+        - name: orderBy
+          in: query
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/OrderByQuery'
+              - enum:
+                  - created_at
+                  - full_name
+                  - phone_number
+                  - address
+        - name: search
+          in: query
+          description: 'Available search full_name, phone_number, address'
+          schema:
+            $ref: '#/components/schemas/SearchQuery'
+        - name: page
+          in: query
+          schema:
+            $ref: '#/components/schemas/PageQuery'
+        - name: limit
+          in: query
+          schema:
+            $ref: '#/components/schemas/LimitQuery'
+        - name: status
+          in: query
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/StatusQuery'
+              - enum:
+                  - '0'
+                  - '1'
+                  - '2'
+                  - '3'
+      responses:
+        '200':
+          description: Request Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetProcessedTransactionsResponse'
+        4XX:
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        5XX:
+          description: Sever Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+        - APIKeyHeader: []
+  '/transactions/{id}':
+    get:
+      tags:
+        - transactions
+      summary: Get Single Transaction (Route All Roles)
+      description: Get Single Transactions (Route All Roles)
+      operationId: singleTransaction
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Request Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetTransactionDetailResponse'
+        4XX:
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        5XX:
+          description: Sever Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+        - APIKeyHeader: []
+    patch:
+      tags:
+        - transactions
+      summary: Finish Transaction (Route All Roles)
+      description: Finish Transactions (Route All Roles)
+      operationId: finishTransaction
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Request Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        4XX:
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        5XX:
+          description: Sever Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+        - APIKeyHeader: []
+    post:
+      tags:
+        - transactions
+      summary: Review Transaction (Route All Roles)
+      description: Review Transactions (Route All Roles)
+      operationId: reviewTransaction
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReviewTransactionBody'
+        required: true
+      responses:
+        '200':
+          description: Request Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        4XX:
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        5XX:
+          description: Sever Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+        - APIKeyHeader: []
+      x-codegen-request-body-name: body
+  /transations/reviewed:
+    get:
+      tags:
+        - transactions
+      summary: Get Reviewd Transactions (Route All Roles)
+      description: Get Reviewed Transactions (Route All Roles)
+      operationId: reviewedTransactions
+      parameters:
+        - name: orderDirection
+          in: query
+          schema:
+            $ref: '#/components/schemas/OrderDirectionQuery'
+        - name: orderBy
+          in: query
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/OrderByQuery'
+              - enum:
+                  - created_at
+                  - rating
+                  - review
+        - name: search
+          in: query
+          description: 'Available search review'
+          schema:
+            $ref: '#/components/schemas/SearchQuery'
+        - name: page
+          in: query
+          schema:
+            $ref: '#/components/schemas/PageQuery'
+        - name: limit
+          in: query
+          schema:
+            $ref: '#/components/schemas/LimitQuery'
+      responses:
+        '200':
+          description: Request Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetReviewedTransactionsResponse'
+        4XX:
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        5XX:
+          description: Sever Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+        - APIKeyHeader: []
 components:
   schemas:
     PageQuery:
@@ -3391,6 +3507,20 @@ components:
     StatusQuery:
       type: string
       default: '0'
+    ApiResponse:
+      type: object
+      properties:
+        code:
+          type: number
+        success:
+          type: boolean
+        messages:
+          type: string
+    GetToken:
+      type: object
+      properties:
+        token:
+          type: string
     UserAuthorizedResponse:
       type: object
       allOf:
@@ -3507,10 +3637,10 @@ components:
                       wallet_description:
                         type: string
                         nullable: true
-                      uri:
+                      logo_label:
                         type: string
                         nullable: true
-                      label:
+                      logo_url:
                         type: string
                         nullable: true
     UpdateProfileBody:
@@ -3571,7 +3701,7 @@ components:
                     type: integer
                   bank_name:
                     type: string
-                  logo:
+                  logo_label:
                     type: string
                     nullable: true
                   logo_url:
@@ -3601,7 +3731,7 @@ components:
                   type: integer
                 bank_name:
                   type: string
-                logo:
+                logo_label:
                   type: string
                   nullable: true
                 logo_url:
@@ -3689,7 +3819,7 @@ components:
                     type: string
                   slug:
                     type: string
-                  icon:
+                  icon_label:
                     type: string
                     nullable: true
                   icon_url:
@@ -3778,7 +3908,7 @@ components:
                     type: string
                   wallet_description:
                     type: string
-                  logo:
+                  logo_label:
                     type: string
                     nullable: true
                   logo_url:
@@ -3850,7 +3980,46 @@ components:
         - type: object
           properties:
             data:
-              $ref: '#/components/schemas/GetMerchant'
+              type: object
+              properties:
+                merchant_id:
+                  type: integer
+                full_name:
+                  type: string
+                phone_number:
+                  type: string
+                market_id:
+                  type: integer
+                market_name:
+                  type: string
+                market_address:
+                  type: string
+                market_lat:
+                  type: integer
+                market_long:
+                  type: integer
+                market_close_time:
+                  type: string
+                profile_id:
+                  type: integer
+                profile_label:
+                  type: string
+                profile_url:
+                  type: string
+                identity_id:
+                  type: integer
+                identity_label:
+                  type: string
+                identity_url:
+                  type: string
+                status:
+                  type: integer
+                created_at:
+                  type: string
+                  format: date-time
+                updated_at:
+                  type: string
+                  format: date-time
     UpdateMerchantProfileBody:
       properties:
         identity_photo:
@@ -3876,7 +4045,7 @@ components:
       properties:
         close_time:
           type: string
-    PostProductBody:
+    PostMerchantProductBody:
       required:
         - description
         - discount
@@ -3909,14 +4078,17 @@ components:
           type: integer
           format: int32
           default: 1
-    PostProductResponse:
+    PostMerchantProductResponse:
       type: object
       allOf:
         - $ref: '#/components/schemas/ApiResponse'
         - type: object
           properties:
             data:
-              $ref: '#/components/schemas/GetProductId'
+              type: object
+              properties:
+                product_id:
+                  type: integer
     GetMerchantProductsResponse:
       type: object
       allOf:
@@ -3924,8 +4096,162 @@ components:
         - type: object
           properties:
             data:
-              $ref: '#/components/schemas/GetProductId'
-    UpdateProductBody:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  product_util_id:
+                    type: integer
+                  product_name:
+                    type: string
+                  description:
+                    type: string
+                  status:
+                    type: integer
+                  price_default:
+                    type: integer
+                  price_selling:
+                    type: integer
+                  qty:
+                    type: integer
+                  discount:
+                    type: integer
+                  cover_label:
+                    type: string
+                  cover_url:
+                    type: string
+                  merchant_id:
+                    type: integer
+                  market_id:
+                    type: integer
+                  market_name:
+                    type: string
+                  market_address:
+                    type: string
+                  market_close_time:
+                    type: string
+                  market_status:
+                    type: integer
+                  photo_label:
+                    type: string
+                  photo_url:
+                    type: string
+                  creaetd_at:
+                    type: string
+                    format: date-time
+                  updated_at:
+                    type: string
+                    format: date-time
+    PostMerchantProductImageBody:
+      required:
+        - image
+      properties:
+        image:
+          type: string
+          format: binary
+    PostMerchantProductImageResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        product_util_id:
+          type: integer
+        image_id:
+          type: integer
+        image_label:
+          type: string
+        image_url:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    GetMerchantProductDetailResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                id:
+                  type: integer
+                product_util_id:
+                  type: integer
+                product_name:
+                  type: string
+                description:
+                  type: string
+                status:
+                  type: integer
+                price_default:
+                  type: integer
+                price_selling:
+                  type: integer
+                qty:
+                  type: integer
+                discount:
+                  type: integer
+                cover_label:
+                  type: string
+                cover_url:
+                  type: string
+                merchant_id:
+                  type: integer
+                market_id:
+                  type: integer
+                market_name:
+                  type: string
+                market_address:
+                  type: string
+                market_close_time:
+                  type: string
+                market_status:
+                  type: integer
+                photo_label:
+                  type: string
+                photo_url:
+                  type: string
+                creaetd_at:
+                  type: string
+                  format: date-time
+                updated_at:
+                  type: string
+                  format: date-time
+                medias:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      product_image_id:
+                        type: integer
+                      image_label:
+                        type: string
+                      image_url:
+                        type: string
+                categories:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      product_category_id:
+                        type: number
+                      category:
+                        type: string
+                      slug:
+                        type: string
+                      description:
+                        type: string
+                      icon_label:
+                        type: string
+                      icon_url:
+                        type: string
+    UpdateMerchantProductBody:
       type: object
       properties:
         product_name:
@@ -3952,28 +4278,33 @@ components:
           type: integer
           format: int32
           default: 1
-    GetMerchantProductDetailResponse:
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/ApiResponse'
-        - type: object
-          properties:
-            data:
-              $ref: '#/components/schemas/GetSingleProduct'
-    UpdateProductCoverBody:
+    UpdateMerchantProductCoverBody:
       required:
         - cover
       properties:
         cover:
           type: string
           format: binary
-    UpdateProductStatusBody:
+    ChangeMerchantProductCoverResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                cover_label:
+                  type: string
+                cover_url:
+                  type: string
+    UpdateMerchantProductStatusBody:
       required:
         - status
       properties:
         status:
           type: integer
-    UpdateProductStatusResponse:
+    UpdateMerchantProductStatusResponse:
       type: object
       allOf:
         - $ref: '#/components/schemas/ApiResponse'
@@ -3984,45 +4315,30 @@ components:
               properties:
                 status:
                   type: integer
-    BindProductCategoryBody:
+    BindMerchantProductCategoryBody:
       type: object
       properties:
         category_id:
           type: integer
-    BindProductCategoryResponse:
+    BindMerchantProductCategoryResponse:
       type: object
       allOf:
         - $ref: '#/components/schemas/ApiResponse'
         - type: object
           properties:
             data:
-              $ref: '#/components/schemas/GetProductCategory'
-    PostProductImageBody:
-      required:
-        - image
-      properties:
-        image:
-          type: string
-          format: binary
-    PostProductImageResponse:
-      type: object
-      properties:
-        id:
-          type: integer
-        id_u_product:
-          type: integer
-        id_m_medias:
-          type: integer
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-        url:
-          type: string
-        label:
-          type: string
+              type: object
+              properties:
+                category_id:
+                  type: integer
+                category:
+                  type: string
+                slug:
+                  type: string
+                description:
+                  type: string
+                product_util_id:
+                  type: integer
     GetMerchantOrdersResponse:
       type: object
       allOf:
@@ -4032,7 +4348,44 @@ components:
             data:
               type: array
               items:
-                $ref: '#/components/schemas/GetOrder'
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  transaction_token:
+                    type: string
+                  total_price:
+                    type: integer
+                  status:
+                    type: integer
+                  buyer_id:
+                    type: integer
+                  full_name:
+                    type: string
+                  phone_number:
+                    type: string
+                  address:
+                    type: string
+                  profile_label:
+                    type: string
+                  profile_url:
+                    type: string
+                  merchant_id:
+                    type: integer
+                  market_id:
+                    type: integer
+                  market_name:
+                    type: string
+                  photo_label:
+                    type: string
+                  photo_url:
+                    type: string
+                  created_at:
+                    type: string
+                    format: date-time
+                  updated_at:
+                    type: string
+                    format: date-time
     GetMerchantOrderDetailResponse:
       type: object
       allOf:
@@ -4042,20 +4395,90 @@ components:
             data:
               type: array
               items:
-                $ref: '#/components/schemas/GetProductOrder'
-    UpdateOrderStatusBody:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  transaction_id:
+                    type: integer
+                  product_id:
+                    type: integer
+                  transaction_token:
+                    type: string
+                  qty:
+                    type: integer
+                  sub_total_price:
+                    type: integer
+                  status:
+                    type: integer
+                  product_name:
+                    type: string
+                  description:
+                    type: string
+                  product_status:
+                    type: integer
+                  cover_label:
+                    type: string
+                  cover_url:
+                    type: string
+                  buyer_id:
+                    type: integer
+                  merchant_id:
+                    type: integer
+                  created_at:
+                    type: string
+                    format: date-time
+                  updated_at:
+                    type: string
+                    format: date-time
+    UpdateMerchantOrderStatusBody:
       type: object
       properties:
         status:
           type: integer
-    UpdateOrderStatusResponse:
+    UpdateMerchantOrderStatusResponse:
       type: object
       allOf:
         - $ref: '#/components/schemas/ApiResponse'
         - type: object
           properties:
             data:
-              $ref: '#/components/schemas/GetProductOrder'
+              type: object
+              properties:
+                id:
+                  type: integer
+                transaction_id:
+                  type: integer
+                product_id:
+                  type: integer
+                transaction_token:
+                  type: string
+                qty:
+                  type: integer
+                sub_total_price:
+                  type: integer
+                status:
+                  type: integer
+                product_name:
+                  type: string
+                description:
+                  type: string
+                product_status:
+                  type: integer
+                cover_label:
+                  type: string
+                cover_url:
+                  type: string
+                buyer_id:
+                  type: integer
+                merchant_id:
+                  type: integer
+                created_at:
+                  type: string
+                  format: date-time
+                updated_at:
+                  type: string
+                  format: date-time
     GetMerchantListResponse:
       type: object
       allOf:
@@ -4065,7 +4488,46 @@ components:
             data:
               type: array
               items:
-                $ref: '#/components/schemas/GetMerchant'
+                type: object
+                properties:
+                  merchant_id:
+                    type: integer
+                  full_name:
+                    type: string
+                  phone_number:
+                    type: string
+                  market_id:
+                    type: integer
+                  market_name:
+                    type: string
+                  market_address:
+                    type: string
+                  market_lat:
+                    type: integer
+                  market_long:
+                    type: integer
+                  market_close_time:
+                    type: string
+                  profile_id:
+                    type: integer
+                  profile_label:
+                    type: string
+                  profile_url:
+                    type: string
+                  identity_id:
+                    type: integer
+                  identity_label:
+                    type: string
+                  identity_url:
+                    type: string
+                  status:
+                    type: integer
+                  created_at:
+                    type: string
+                    format: date-time
+                  updated_at:
+                    type: string
+                    format: date-time
     GetMerchantProductListResponse:
       type: object
       allOf:
@@ -4075,7 +4537,52 @@ components:
             data:
               type: array
               items:
-                $ref: '#/components/schemas/GetProduct'
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  product_util_id:
+                    type: integer
+                  product_name:
+                    type: string
+                  description:
+                    type: string
+                  status:
+                    type: integer
+                  price_default:
+                    type: integer
+                  price_selling:
+                    type: integer
+                  qty:
+                    type: integer
+                  discount:
+                    type: integer
+                  cover_label:
+                    type: string
+                  cover_url:
+                    type: string
+                  merchant_id:
+                    type: integer
+                  market_id:
+                    type: integer
+                  market_name:
+                    type: string
+                  market_address:
+                    type: string
+                  market_close_time:
+                    type: string
+                  market_status:
+                    type: integer
+                  photo_label:
+                    type: string
+                  photo_url:
+                    type: string
+                  creaetd_at:
+                    type: string
+                    format: date-time
+                  updated_at:
+                    type: string
+                    format: date-time
     GetRandomMerchantsResponse:
       type: object
       allOf:
@@ -4085,7 +4592,46 @@ components:
             data:
               type: array
               items:
-                $ref: '#/components/schemas/GetMerchant'
+                type: object
+                properties:
+                  merchant_id:
+                    type: integer
+                  full_name:
+                    type: string
+                  phone_number:
+                    type: string
+                  market_id:
+                    type: integer
+                  market_name:
+                    type: string
+                  market_address:
+                    type: string
+                  market_lat:
+                    type: integer
+                  market_long:
+                    type: integer
+                  market_close_time:
+                    type: string
+                  profile_id:
+                    type: integer
+                  profile_label:
+                    type: string
+                  profile_url:
+                    type: string
+                  identity_id:
+                    type: integer
+                  identity_label:
+                    type: string
+                  identity_url:
+                    type: string
+                  status:
+                    type: integer
+                  created_at:
+                    type: string
+                    format: date-time
+                  updated_at:
+                    type: string
+                    format: date-time
     GetMerchantTransactionHistoriesResponse:
       type: object
       allOf:
@@ -4095,7 +4641,24 @@ components:
             data:
               type: array
               items:
-                $ref: '#/components/schemas/GetUserTransaction'
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  buyer_id:
+                    type: integer
+                  merchant_id:
+                    type: integer
+                  transaction_token:
+                    type: string
+                  total_price:
+                    type: integer
+                  created_at:
+                    type: string
+                    format: date-time
+                  updated_at:
+                    type: string
+                    format: date-time
     GetMerchantIncomeHistoriesResponse:
       type: object
       allOf:
@@ -4105,7 +4668,12 @@ components:
             data:
               type: array
               items:
-                $ref: '#/components/schemas/GetMerchantIncomes'
+                type: object
+                properties:
+                  total_price:
+                    type: integer
+                  month:
+                    type: integer
     GetProductsResponse:
       type: object
       allOf:
@@ -4126,79 +4694,6 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/GetProduct'
-    AddToCartBody:
-      required:
-        - qty
-        - merchant_id
-        - product_id
-      type: object
-      properties:
-        qty:
-          type: integer
-        merchant_id:
-          type: integer
-        product_id:
-          type: integer
-    GetCartItemsResponse:
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/ApiResponse'
-        - type: object
-          properties:
-            data:
-              type: array
-              items:
-                $ref: '#/components/schemas/GetCart'
-    UpdateCartQtyBody:
-      required:
-        - qty
-      type: object
-      properties:
-        qty:
-          type: integer
-    CheckoutBody:
-      required:
-        - price_total
-      type: object
-      properties:
-        price_total:
-          type: integer
-    GetUserProcessedTransactionsResponse:
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/ApiResponse'
-        - type: object
-          properties:
-            data:
-              type: array
-              items:
-                $ref: '#/components/schemas/GetOrder'
-    GetUserTransactionDetailResponse:
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/ApiResponse'
-        - type: object
-          properties:
-            data:
-              type: object
-              allOf:
-                - $ref: '#/components/schemas/GetOrder'
-                - type: object
-                  properties:
-                    products:
-                      type: array
-                      items:
-                        $ref: '#/components/schemas/GetProductOrder'
-    ReviewTransactionBody:
-      required:
-        - rating
-        - review
-      type: object
-      properties:
-        rating:
-          type: integer
-        review:
-          type: string
     PostBankUserBody:
       required:
         - bank_id
@@ -4460,11 +4955,113 @@ components:
       properties:
         status:
           type: integer
-    GetToken:
+    AddToCartBody:
+      required:
+        - qty
+        - merchant_id
+        - product_id
       type: object
       properties:
-        token:
+        qty:
+          type: integer
+        merchant_id:
+          type: integer
+        product_id:
+          type: integer
+    GetCartItemsResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/GetCart'
+    UpdateCartQtyBody:
+      required:
+        - qty
+      type: object
+      properties:
+        qty:
+          type: integer
+    CheckoutBody:
+      required:
+        - price_total
+      type: object
+      properties:
+        price_total:
+          type: integer
+    GetProcessedTransactionsResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/GetOrder'
+    GetTransactionDetailResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/GetOrder'
+                - type: object
+                  properties:
+                    products:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/GetProductOrder'
+    ReviewTransactionBody:
+      required:
+        - rating
+        - review
+      type: object
+      properties:
+        rating:
+          type: integer
+        review:
           type: string
+    GetReviewedTransactionsResponse:
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                id:
+                  type: integer
+                id_product:
+                  type: integer
+                product_name:
+                  type: string
+                price_selling:
+                  type: integer
+                label:
+                  type: string
+                uri:
+                  type: string
+                id_merchant:
+                  type: integer
+                market_name:
+                  type: string
+                rating:
+                  type: integer
+                review:
+                  type: string
+                created_at:
+                  type: string
+                  format: date-time
+                updated_at:
+                  type: string
+                  format: date-time
     GetProduct:
       type: object
       properties:
@@ -4526,41 +5123,6 @@ components:
           type: string
         market_label:
           type: string
-    GetProductCategory:
-      type: object
-      properties:
-        id:
-          type: integer
-        id_u_product:
-          type: integer
-        id_m_categories:
-          type: integer
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-        category:
-          type: string
-        slug:
-          type: string
-        description:
-          type: string
-        is_visible:
-          type: integer
-        id_icon:
-          type: integer
-        url:
-          type: string
-        label:
-          type: string
     GetOrder:
       type: object
       properties:
@@ -4616,47 +5178,6 @@ components:
           type: string
         cover_uri:
           type: string
-    GetMerchant:
-      type: object
-      properties:
-        id:
-          type: integer
-        id_m_users:
-          type: integer
-        id_u_user:
-          type: integer
-        id_identity_photo:
-          type: integer
-        id_market_photo:
-          type: integer
-        no_identity:
-          type: string
-        market_name:
-          type: string
-        market_address:
-          type: string
-        market_uri:
-          type: string
-        market_label:
-          type: string
-        phone_number:
-          type: string
-        full_name:
-          type: string
-        market_lat:
-          type: number
-        market_lon:
-          type: number
-        is_visible:
-          type: integer
-        market_close_time:
-          type: string
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
     GetProductOrder:
       type: object
       properties:
@@ -4904,132 +5425,6 @@ components:
         updatedAt:
           type: string
           format: date-time
-    GetSingleProduct:
-      type: object
-      properties:
-        id_m_users:
-          type: integer
-        product_id:
-          type: integer
-        product_name:
-          type: string
-        description:
-          type: string
-        price_default:
-          type: integer
-        price_selling:
-          type: integer
-          format: date-time
-        qty:
-          type: integer
-        dicount:
-          type: integer
-        cover_uri:
-          type: string
-        cover_label:
-          type: string
-        market_name:
-          type: string
-        market_address:
-          type: string
-        market_lat:
-          type: integer
-        markt_lon:
-          type: integer
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-        images:
-          type: array
-          items:
-            type: object
-            properties:
-              product_image_id:
-                type: string
-              uri:
-                type: string
-              label:
-                type: string
-              created_at:
-                type: string
-                format: date-time
-              updated_at:
-                type: string
-                format: date-time
-        categories:
-          type: array
-          items:
-            type: object
-            properties:
-              category_id:
-                type: integer
-              category:
-                type: string
-              slug:
-                type: string
-              description:
-                type: string
-              icon_uri:
-                type: string
-              icon_label:
-                type: string
-              created_at:
-                type: string
-                format: date-time
-              updated_at:
-                type: string
-                format: date-time
-    GetUserTransaction:
-      type: object
-      properties:
-        id:
-          type: integer
-        id_m_users:
-          type: integer
-        id_merchant:
-          type: integer
-        transaction_token:
-          type: string
-        total_price:
-          type: integer
-        status:
-          type: integer
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-    GetMerchantIncomes:
-      type: object
-      properties:
-        month:
-          type: string
-        income:
-          type: integer
-    GetProductId:
-      type: object
-      properties:
-        product_id:
-          type: integer
-    ApiResponse:
-      type: object
-      properties:
-        code:
-          type: number
-        success:
-          type: boolean
-        messages:
-          type: string
   securitySchemes:
     APIKeyHeader:
       type: apiKey

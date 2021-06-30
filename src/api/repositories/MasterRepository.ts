@@ -22,18 +22,18 @@ type BankType = {
   [index: string]: unknown;
 };
 
-type CategoryType = {
+type CategoryIconType = {
   iconId: number | null;
   iconUrl: string | null;
   [index: string]: unknown;
 };
 
-type MediaType = {
+type MediaUrlType = {
   url: string;
   [index: string]: unknown;
 };
 
-type WalletType = {
+type WalletLogoType = {
   logoId: number | null;
   logoUrl: string | null;
 };
@@ -49,7 +49,7 @@ export const createBank: (
 export const createMedia: (label: string) => Promise<ModelType['Media']> = function createUserImg(
   label,
 ) {
-  return Media.create({ label, uri: `/img/${label}` });
+  return Media.create({ label, uri: label });
 };
 
 export const createBankStep: (
@@ -182,18 +182,20 @@ export const getBanks: (
     SELECT 
       mb.id, 
       mb.bank_name, 
-      mm.label AS logo, 
+      mm.label AS logo_label, 
       mm.uri AS logo_url, 
       mb.created_at, 
       mb.updated_at 
     FROM m_banks mb
-    LEFT JOIN m_medias mm ON mm.id = mb.id_logo
+      LEFT JOIN m_medias mm ON mm.id = mb.id_logo
     `;
 
   sqlQuery += queryingBuilder(query);
 
   return sequelize.query(sqlQuery, {
     type: QueryTypes.SELECT,
+    raw: true,
+    plain: false,
   });
 };
 
@@ -203,19 +205,20 @@ export const getBank: (bankId: number) => Promise<BankType | null> = function ge
       mb.id,
       mb.bank_name,
       mm.id AS logoId,
-      mm.label AS logo,
+      mm.label AS logo_label,
       mm.uri AS logo_url,
       mb.created_at,
       mb.updated_at
     FROM m_banks mb
-    LEFT JOIN m_medias mm ON mm.id = mb.id_logo
+      LEFT JOIN m_medias mm ON mm.id = mb.id_logo
     WHERE mb.id = :bankId;
   `;
 
   return sequelize.query<BankType>(sqlQuery, {
-    replacements: { bankId },
     type: QueryTypes.SELECT,
+    raw: true,
     plain: true,
+    replacements: { bankId },
   });
 };
 
@@ -231,8 +234,10 @@ export const getBankUtilitiesByBankId: (
   `;
 
   return sequelize.query(sqlQuery, {
-    replacements: { bankId },
     type: QueryTypes.SELECT,
+    raw: true,
+    plain: false,
+    replacements: { bankId },
   });
 };
 
@@ -249,8 +254,10 @@ export const getBankAccountsByBankId: (
   `;
 
   return sequelize.query(sqlQuery, {
-    replacements: { bankId },
     type: QueryTypes.SELECT,
+    raw: true,
+    plain: false,
+    replacements: { bankId },
   });
 };
 
@@ -263,37 +270,40 @@ export const getCategories: (
       mc.category,
       mc.description,
       mc.slug,
-      mm.label AS icon,
+      mm.label AS icon_label,
       mm.uri AS icon_url,
       mc.created_at,
       mc.updated_at
     FROM m_categories mc
-    LEFT JOIN m_medias mm ON mc.id_icon = mm.id
+      LEFT JOIN m_medias mm ON mm.id = mc.id_icon
   `;
 
   sqlQuery += queryingBuilder(query);
 
   return sequelize.query(sqlQuery, {
     type: QueryTypes.SELECT,
+    raw: true,
+    plain: false,
   });
 };
 
-export const getCategory: (
+export const getCategoryIcon: (
   categoryId: number,
-) => Promise<CategoryType | null> = function getCategory(categoryId) {
+) => Promise<CategoryIconType | null> = function getCategoryIcon(categoryId) {
   const sqlQuery = `
     SELECT
       mm.id AS iconId,
       mm.uri AS iconUrl
     FROM m_categories mc
-    LEFT JOIN m_medias mm ON mc.id_icon = mm.id
+      LEFT JOIN m_medias mm ON mm.id = mc.id_icon
     WHERE mc.id = :categoryId
   `;
 
-  return sequelize.query<CategoryType>(sqlQuery, {
-    replacements: { categoryId },
+  return sequelize.query<CategoryIconType>(sqlQuery, {
     type: QueryTypes.SELECT,
+    raw: true,
     plain: true,
+    replacements: { categoryId },
   });
 };
 
@@ -314,10 +324,14 @@ export const getMedias: (
 
   return sequelize.query(sqlQuery, {
     type: QueryTypes.SELECT,
+    raw: true,
+    plain: false,
   });
 };
 
-export const getMedia: (mediaId: number) => Promise<MediaType | null> = function getMedia(mediaId) {
+export const getMediaUrl: (mediaId: number) => Promise<MediaUrlType | null> = function getMediaUrl(
+  mediaId,
+) {
   const sqlQuery = `
     SELECT
       mm.uri AS url
@@ -325,10 +339,11 @@ export const getMedia: (mediaId: number) => Promise<MediaType | null> = function
     WHERE mm.id = :mediaId
   `;
 
-  return sequelize.query<MediaType>(sqlQuery, {
-    replacements: { mediaId },
+  return sequelize.query<MediaUrlType>(sqlQuery, {
     type: QueryTypes.SELECT,
+    raw: true,
     plain: true,
+    replacements: { mediaId },
   });
 };
 
@@ -340,37 +355,40 @@ export const getWallets: (
       mw.id,
       mw.wallet_name,
       mw.wallet_description,
-      mm.label AS logo,
+      mm.label AS logo_label,
       mm.uri AS logo_url,
       mw.created_at,
       mw.updated_at
     FROM m_wallets mw
-    LEFT JOIN m_medias mm ON mw.id_logo = mm.id
+      LEFT JOIN m_medias mm ON mm.id = mw.id_logo
   `;
 
   sqlQuery += queryingBuilder(query);
 
   return sequelize.query(sqlQuery, {
     type: QueryTypes.SELECT,
+    raw: true,
+    plain: false,
   });
 };
 
-export const getWallet: (walletId: number) => Promise<WalletType | null> = function getWallet(
-  walletId,
-) {
+export const getWalletLogo: (
+  walletId: number,
+) => Promise<WalletLogoType | null> = function getWalletLogo(walletId) {
   const sqlQuery = `
     SELECT
       mm.id AS logoId,
       mm.uri AS logoUrl
     FROM m_wallets mw
-    LEFT JOIN m_medias mm ON mw.id_logo = mm.id
+      LEFT JOIN m_medias mm ON mm.id = mw.id_logo
     WHERE mw.id = :walletId
   `;
 
-  return sequelize.query<WalletType>(sqlQuery, {
-    replacements: { walletId },
+  return sequelize.query<WalletLogoType>(sqlQuery, {
     type: QueryTypes.SELECT,
+    raw: true,
     plain: true,
+    replacements: { walletId },
   });
 };
 
@@ -387,5 +405,7 @@ export const getFaqs: () => Promise<unknown> = async function getFaqs() {
 
   return sequelize.query(sqlQuery, {
     type: QueryTypes.SELECT,
+    raw: true,
+    plain: false,
   });
 };

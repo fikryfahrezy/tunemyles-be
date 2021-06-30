@@ -12,7 +12,8 @@ const dbQuerying: (
     | 'MEDIA'
     | 'WALLET'
     | 'TOP_UP'
-    | 'WITHDRAW',
+    | 'WITHDRAW'
+    | 'REVIEWED_TRANSACTIONS',
 ) => (
   req: FastifyRequest<{ Querystring: GetQuery }>,
   res: FastifyReply,
@@ -48,11 +49,14 @@ const dbQuerying: (
       case 'WITHDRAW':
         availableFields = ['balance_request'];
         break;
+      case 'REVIEWED_TRANSACTIONS':
+        availableFields = ['rating', 'reviewed'];
+        break;
       default:
         availableFields = [];
     }
 
-    const { page, orderBy, orderDirection, limit, search } = req.query;
+    const { page, orderBy, orderDirection, limit, search, status } = req.query;
     const pagination: { offset: number; limit: number } = {
       offset: 0,
       limit: 10,
@@ -74,12 +78,17 @@ const dbQuerying: (
 
     if (orderDirection?.toLocaleLowerCase() === 'asc') order.direction = 'ASC';
 
-    req.requestContext.set<CustModelType['SearchQuery']>('query', {
+    const query: CustModelType['SearchQuery'] = {
       ...pagination,
       order,
       availableFields,
       search: search ?? '',
-    });
+    };
+    const intStatus = status && parseInt(status, 10);
+
+    if (typeof intStatus === 'number' && intStatus >= 0) query.status = intStatus;
+
+    req.requestContext.set<CustModelType['SearchQuery']>('query', query);
   };
 };
 

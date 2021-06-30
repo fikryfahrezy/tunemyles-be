@@ -12,9 +12,9 @@ import type {
 } from '../../types/schema';
 import { controllerWrapper, handlerWrapper } from '../../utils/serverfn-wrapper';
 import { renameFiles } from '../../utils/file-management';
-import { protect } from '../../middlewares/protect-route';
 import dbQuerying from '../../middlewares/db-querying';
 import schemaValidation from '../../middlewares/schema-validation';
+import { protect } from '../../middlewares/protect-route';
 import { requestHeaders, requestQuery, requestBody, requestParams } from './schemas';
 import {
   topUp,

@@ -1,4 +1,5 @@
 import type { Request, RequestHandler } from '../../types/fasitify';
+import type CustModelType from '../../types/model';
 import type {
   ApiKeyHeader,
   VerifyTokenParams,
@@ -9,7 +10,6 @@ import type {
   ForgotPasswordBody,
   ResetPasswordBody,
 } from '../../types/schema';
-import type CustModelType from '../../types/model';
 import {
   userRegistration,
   merchantRegistration,
@@ -44,6 +44,7 @@ export const activateMerchant: RequestHandler<
 
   if (!userToken) {
     res.unauthorized();
+
     return;
   }
 
@@ -78,6 +79,7 @@ export const getProfile: RequestHandler<
 
   if (!userToken) {
     res.unauthorized();
+
     return;
   }
 
@@ -92,16 +94,17 @@ export const getProfile: RequestHandler<
 };
 
 export const updateProfile: RequestHandler<
-  Request<{ Body: UpdateProfileBody; Headers: ApiKeyHeader }>
+  Request<{ Headers: ApiKeyHeader; Body: UpdateProfileBody }>
 > = async function updateProfile(req, res): Promise<void> {
   const userToken = this.requestContext.get<CustModelType['UserToken']>('usertoken');
 
   if (!userToken) {
     res.unauthorized();
+
     return;
   }
 
-  await updateUserProfile(userToken, req.body);
+  await updateUserProfile(userToken.userId, req.body);
 
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
@@ -113,25 +116,26 @@ export const updateProfile: RequestHandler<
 export const forgotPassword: RequestHandler<
   Request<{ Body: ForgotPasswordBody }>
 > = async function forgotPassword(req, res): Promise<void> {
-  await forgotUserPassword(req.body);
+  const resData = await forgotUserPassword(req.body);
 
   res.status(201).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 201,
     success: true,
     message: 'request sent',
+    data: resData,
   });
 };
 
 export const verifyToken: RequestHandler<
   Request<{ Params: VerifyTokenParams }>
 > = async function verifyToken(req, res): Promise<void> {
-  const token = await verifyUserToken(req.params);
+  const resData = await verifyUserToken(req.params);
 
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
     success: true,
     message: 'verified token success',
-    data: token,
+    data: resData,
   });
 };
 
@@ -155,6 +159,7 @@ export const createAdmin: RequestHandler<Request> = async function createAdmin(
 
   if (!userToken) {
     res.unauthorized();
+
     return;
   }
 
@@ -173,6 +178,7 @@ export const banned: RequestHandler<Request> = async function banned(_, res): Pr
 
   if (!userToken) {
     res.unauthorized();
+
     return;
   }
 

@@ -320,6 +320,75 @@ describe('Get Merchant Products', () => {
   });
 });
 
+describe('Post Merchant Product Image', () => {
+  test('Success', async () => {
+    const token = 'this.is.token';
+    const productId = 0;
+
+    const { status, headers, body } = await postMerchantProductImage(server, productId, {}, token);
+
+    expect(status).toBe(201);
+    expect(headers['content-type']).toBe('application/json; charset=utf-8');
+    expect(body.success).toBe(true);
+  });
+
+  test('Fail, No `image` Provided', async () => {
+    const token = 'this.is.token';
+    const productId = 0;
+
+    const { status, headers, body } = await postMerchantProductImage(server, productId, {}, token);
+
+    expect(status).toBe(422);
+    expect(headers['content-type']).toBe('application/json; charset=utf-8');
+    expect(body.success).toBe(false);
+  });
+});
+
+describe('Get Merchant Product Detail', () => {
+  test('Success', async () => {
+    const token = 'this.is.token';
+    const productId = 0;
+
+    const { status, headers, body } = await getMerchantProductDetail(server, productId, token);
+
+    expect(status).toBe(200);
+    expect(headers['content-type']).toBe('application/json; charset=utf-8');
+    expect(body.success).toBe(true);
+  });
+
+  test('Fail, Merchant Product Not Found', async () => {
+    const token = 'this.is.token';
+    const productId = 0;
+
+    const { status, headers, body } = await getMerchantProductDetail(server, productId, token);
+
+    expect(status).toBe(404);
+    expect(headers['content-type']).toBe('application/json; charset=utf-8');
+    expect(body.success).toBe(false);
+  });
+
+  test('Fail, Wrong API Key', async () => {
+    const token = 'this-is-wrong-token';
+    const productId = 0;
+
+    const { status, headers, body } = await getMerchantProductDetail(server, productId, token);
+
+    expect(status).toBe(403);
+    expect(headers['content-type']).toBe('application/json; charset=utf-8');
+    expect(body.success).toBe(false);
+  });
+
+  test('Fail, API Key Not Given', async () => {
+    const productId = 0;
+
+    const { status, headers, body } = await getMerchantProductDetail(server, productId);
+
+    expect(status).toBe(403);
+    expect(headers['content-type']).toBe('application/json; charset=utf-8');
+    expect(body.success).toBe(false);
+  });
+});
+
 describe('Update Merchant Product', () => {
   test('Success', async () => {
     const token = 'this.is.token';
@@ -365,7 +434,7 @@ describe('Update Merchant Product', () => {
   });
 });
 
-describe('Update Merchant Product Cover', () => {
+describe('Change Merchant Product Cover', () => {
   test('Success', async () => {
     const token = 'this.is.token';
     const productId = 0;
@@ -562,75 +631,6 @@ describe('Bind Merchant Product Category', () => {
     const { status, headers, body } = await bindMerchantProductCategory(server, productId, {});
 
     expect(status).toBe(403);
-    expect(headers['content-type']).toBe('application/json; charset=utf-8');
-    expect(body.success).toBe(false);
-  });
-});
-
-describe('Get Merchant Product Detail', () => {
-  test('Success', async () => {
-    const token = 'this.is.token';
-    const productId = 0;
-
-    const { status, headers, body } = await getMerchantProductDetail(server, productId, token);
-
-    expect(status).toBe(200);
-    expect(headers['content-type']).toBe('application/json; charset=utf-8');
-    expect(body.success).toBe(true);
-  });
-
-  test('Fail, Merchant Product Not Found', async () => {
-    const token = 'this.is.token';
-    const productId = 0;
-
-    const { status, headers, body } = await getMerchantProductDetail(server, productId, token);
-
-    expect(status).toBe(404);
-    expect(headers['content-type']).toBe('application/json; charset=utf-8');
-    expect(body.success).toBe(false);
-  });
-
-  test('Fail, Wrong API Key', async () => {
-    const token = 'this-is-wrong-token';
-    const productId = 0;
-
-    const { status, headers, body } = await getMerchantProductDetail(server, productId, token);
-
-    expect(status).toBe(403);
-    expect(headers['content-type']).toBe('application/json; charset=utf-8');
-    expect(body.success).toBe(false);
-  });
-
-  test('Fail, API Key Not Given', async () => {
-    const productId = 0;
-
-    const { status, headers, body } = await getMerchantProductDetail(server, productId);
-
-    expect(status).toBe(403);
-    expect(headers['content-type']).toBe('application/json; charset=utf-8');
-    expect(body.success).toBe(false);
-  });
-});
-
-describe('Post Merchant Product Image', () => {
-  test('Success', async () => {
-    const token = 'this.is.token';
-    const productId = 0;
-
-    const { status, headers, body } = await postMerchantProductImage(server, productId, {}, token);
-
-    expect(status).toBe(201);
-    expect(headers['content-type']).toBe('application/json; charset=utf-8');
-    expect(body.success).toBe(true);
-  });
-
-  test('Fail, No `image` Provided', async () => {
-    const token = 'this.is.token';
-    const productId = 0;
-
-    const { status, headers, body } = await postMerchantProductImage(server, productId, {}, token);
-
-    expect(status).toBe(422);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
     expect(body.success).toBe(false);
   });

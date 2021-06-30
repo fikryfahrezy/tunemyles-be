@@ -1,4 +1,5 @@
 import bcrypt from 'bcrypt';
+import type CustModelType from '../../types/model';
 import type {
   VerifyTokenParams,
   RegisterBody,
@@ -8,20 +9,19 @@ import type {
   ForgotPasswordBody,
   ResetPasswordBody,
 } from '../../types/schema';
-import type CustModelType from '../../types/model';
 import { ErrorResponse } from '../../utils/error-handler';
 import { issueJwt } from '../../utils/jwt';
-import { saveFiles, deleteLocalFile } from '../../utils/file-management';
+import { saveFile, saveFiles, deleteLocalFile } from '../../utils/file-management';
 import {
   createUser,
   createUserUtility,
   createUserWallet,
-  createUserImg,
+  createMedia,
   createForgotPassword,
-  createImgs,
+  createMedias,
   createMerchant,
   updateUser,
-  updateUserImg,
+  updateMedia,
   updateForgotTokenStatus,
   updateUserType,
   getUser,
@@ -61,21 +61,19 @@ export const merchantRegistration: (
 ) {
   if (type === 1) throw new ErrorResponse('user already merchant', 400);
 
-  const [identityImg, marketImg] = await createImgs([
-    identityPhoto[0].filename,
-    marketPhoto[0].filename,
-  ]);
-  const [, created] = await createMerchant({
+  const identity = identityPhoto[0];
+  const market = marketPhoto[0];
+  const [identityImg, marketImg] = await createMedias([identity.filename, market.filename]);
+  const [, created] = await createMerchant(utilId, {
     ...data,
     id_identity_photo: identityImg.id,
     id_market_photo: marketImg.id,
-    id_u_user: utilId,
   });
 
   if (!created) throw new ErrorResponse('user already merchant', 400);
 
   await updateUserType('MERCHANT', userId);
-  await Promise.all([saveFiles(identityPhoto), saveFiles(marketPhoto)]);
+  await saveFiles(identity, market);
 
   const jwtToken = issueJwt(userId, utilId, 'MERCHANT');
 
@@ -114,7 +112,7 @@ export const userProfile: (userId: number) => Promise<unknown> = async function 
 ) {
   const user = await getUser('ID', userId);
 
-  if (!user) throw new ErrorResponse('invalid credential', 400);
+  if (!user) throw new ErrorResponse('user profile not found', 404);
 
   const userWallets = await getUserWallets(user.utilId);
 
@@ -123,44 +121,50 @@ export const userProfile: (userId: number) => Promise<unknown> = async function 
     username: user.address,
     address: user.address,
     phone_number: user.phone_number,
+    img_label: user.imgLabel,
     img_url: user.imgUrl,
     wallets: userWallets,
   };
 };
 
 export const updateUserProfile: (
-  userUtility: CustModelType['UserToken'],
+  userId: CustModelType['UserToken']['userId'],
   data: UpdateProfileBody,
-) => Promise<void> = async function updateUserProfile({ userId }, { avatar, ...userData }) {
+) => Promise<void> = async function updateUserProfile(userId, { avatar, ...userData }) {
   const user = await getUser('ID', userId);
 
-  if (!user) throw new ErrorResponse('no user available', 404);
+  if (!user) throw new ErrorResponse('user profile not found', 404);
 
   const { id, imgId, imgUrl } = user;
 
   if (avatar && imgId) {
-    await Promise.all([updateUser(id, userData), updateUserImg(imgId, avatar[0].filename)]);
-    await Promise.all([saveFiles(avatar), deleteLocalFile(imgUrl)]);
-  } else if (avatar && !imgId) {
-    const img = await createUserImg(avatar[0].filename);
+    const img = avatar[0];
 
-    await updateUser(id, { ...userData, id_photo: img.id });
-    await saveFiles(avatar);
+    await Promise.all([updateUser(id, userData), updateMedia(imgId, img.filename)]);
+    await Promise.all([saveFile(img), deleteLocalFile(imgUrl)]);
+  } else if (avatar && !imgId) {
+    const img = avatar[0];
+    const { id: newImgId } = await createMedia(img.filename);
+
+    await updateUser(id, { ...userData, id_photo: newImgId });
+    await saveFile(img);
   } else await updateUser(id, userData);
 };
 
 export const forgotUserPassword: (
   data: ForgotPasswordBody,
-) => Promise<void> = async function forgotUserPassword({ phone_number }) {
+) => Promise<{ token: string }> = async function forgotUserPassword({ phone_number }) {
   const user = await getUser('PHONE', phone_number);
 
   if (!user) throw new ErrorResponse('no user available', 404);
-  else if (user.type >= 3) throw new ErrorResponse('user banned', 403);
+  else if (user.type >= 3) throw new ErrorResponse('user already banned', 403);
 
-  await createForgotPassword({
+  const { verification_token: token } = await createForgotPassword({
     utilId: user.utilId,
     phone: phone_number,
   });
+
+  return { token };
 };
 
 export const verifyUserToken: (
@@ -181,10 +185,11 @@ export const resetUserPassword: (
     updateForgotTokenStatus(token, 1, 2),
   ]);
 
-  if (!user) throw new ErrorResponse('reset failed', 404);
+  if (!user) throw new ErrorResponse('reset password failed', 404);
   else if (affectedRows < 1) throw new ErrorResponse('verify failed', 404);
 
   const { userId } = await getUserUtility(user.userId);
+
   await updateUser(userId, { password: newPassword });
 };
 

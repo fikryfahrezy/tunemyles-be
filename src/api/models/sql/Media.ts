@@ -255,6 +255,9 @@ export class Media
         uri: {
           type: DataTypes.TEXT,
           allowNull: false,
+          set(value) {
+            this.setDataValue('uri', `/img/${String(value)}`);
+          },
         },
         label: {
           type: DataTypes.STRING(255),

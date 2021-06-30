@@ -7,15 +7,16 @@ import type {
   ReviewTransactionBody,
 } from '../../types/schema';
 import { controllerWrapper, handlerWrapper } from '../../utils/serverfn-wrapper';
-import { protect } from '../../middlewares/protect-route';
 import dbQuerying from '../../middlewares/db-querying';
 import schemaValidation from '../../middlewares/schema-validation';
+import { protect } from '../../middlewares/protect-route';
 import { requestHeaders, requestBody, requestParams, requestQuery } from './schemas';
 import {
-  getUserProcessedTransactions,
-  getUserTransactionDetail,
+  getProcessedTransactions,
+  getTransactionDetail,
   finishTransaction,
   reviewTransaction,
+  getReviewedTransactions,
 } from './controller';
 
 const routes = function routes(
@@ -33,7 +34,7 @@ const routes = function routes(
       attachValidation: true,
       schema: {
         headers: requestHeaders.private,
-        querystring: requestQuery.getTransaction,
+        querystring: requestQuery.getTransactions,
         response: {
           200: { $ref: '#ApiResponse' },
           '4xx': { $ref: '#ApiResponse' },
@@ -46,7 +47,7 @@ const routes = function routes(
         handlerWrapper(dbQuerying('USER_TRANSACTION')),
       ],
     },
-    controllerWrapper(getUserProcessedTransactions),
+    controllerWrapper(getProcessedTransactions),
   );
 
   fastify.get<Request<{ Headers: ApiKeyHeader; Params: IdRequestParams }>>(
@@ -64,7 +65,7 @@ const routes = function routes(
       },
       preHandler: [schemaValidation, handlerWrapper(protect('USER'))],
     },
-    controllerWrapper(getUserTransactionDetail),
+    controllerWrapper(getTransactionDetail),
   );
 
   fastify.patch<Request<{ Headers: ApiKeyHeader; Params: IdRequestParams }>>(
@@ -104,6 +105,28 @@ const routes = function routes(
       preHandler: [schemaValidation, handlerWrapper(protect('USER'))],
     },
     controllerWrapper(reviewTransaction),
+  );
+
+  fastify.get<Request<{ Headers: ApiKeyHeader; Querystring: GetQuery }>>(
+    '/reviewed',
+    {
+      attachValidation: true,
+      schema: {
+        headers: requestHeaders.private,
+        querystring: requestQuery.getReviewedTransactions,
+        response: {
+          200: { $ref: '#ApiResponse' },
+          '4xx': { $ref: '#ApiResponse' },
+          '5xx': { $ref: '#ApiResponse' },
+        },
+      },
+      preHandler: [
+        schemaValidation,
+        handlerWrapper(protect('USER')),
+        handlerWrapper(dbQuerying('REVIEWED_TRANSACTIONS')),
+      ],
+    },
+    controllerWrapper(getReviewedTransactions),
   );
 
   donePlugin();

@@ -13,8 +13,8 @@ import type {
 import { controllerWrapper, handlerWrapper } from '../../utils/serverfn-wrapper';
 import { isBodyEmpty } from '../../utils/request-validation';
 import { renameFiles } from '../../utils/file-management';
-import { protect } from '../../middlewares/protect-route';
 import schemaValidation from '../../middlewares/schema-validation';
+import { protect } from '../../middlewares/protect-route';
 import { requestHeaders, requestBody, responses } from './schemas';
 import {
   register,
@@ -150,7 +150,7 @@ const routes = function routes(
       schema: {
         body: requestBody.forgotPassword,
         response: {
-          201: { $ref: '#ApiResponse' },
+          201: responses.verifyToken,
           '4xx': { $ref: '#ApiResponse' },
           '5xx': { $ref: '#ApiResponse' },
         },

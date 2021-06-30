@@ -1,9 +1,13 @@
 export const requestHeaders = {
-  private: { $ref: '#ApiKeyHeader' },
+  private: {
+    $ref: '#ApiKeyHeader',
+  },
 };
 
 export const requestParams = {
-  id: { $ref: '#RouteIdParam' },
+  id: {
+    $ref: '#RouteIdParam',
+  },
 };
 
 /**
@@ -14,52 +18,109 @@ export const requestQuery = {
   getBanks: {
     type: 'object',
     properties: {
-      orderDirection: { $ref: '#OrderDirectionQuery' },
-      orderBy: {
-        allOf: [{ $ref: '#OrderByQuery' }, { enum: ['created_at', 'bank_name'] }],
+      orderDirection: {
+        $ref: '#OrderDirectionQuery',
       },
-      search: { $ref: '#SearchQuery' },
-      page: { $ref: '#PageQuery' },
-      limit: { $ref: '#LimitQuery' },
+      orderBy: {
+        allOf: [
+          {
+            $ref: '#OrderByQuery',
+          },
+          {
+            enum: ['created_at', 'bank_name'],
+          },
+        ],
+      },
+      search: {
+        $ref: '#SearchQuery',
+      },
+      page: {
+        $ref: '#PageQuery',
+      },
+      limit: {
+        $ref: '#LimitQuery',
+      },
     },
   },
   getCategories: {
     type: 'object',
     properties: {
-      orderDirection: { $ref: '#OrderDirectionQuery' },
-      orderBy: {
-        allOf: [{ $ref: '#OrderByQuery' }, { enum: ['created_at', 'category', 'description'] }],
+      orderDirection: {
+        $ref: '#OrderDirectionQuery',
       },
-      search: { $ref: '#SearchQuery' },
-      page: { $ref: '#PageQuery' },
-      limit: { $ref: '#LimitQuery' },
+      orderBy: {
+        allOf: [
+          {
+            $ref: '#OrderByQuery',
+          },
+          {
+            enum: ['created_at', 'category', 'description'],
+          },
+        ],
+      },
+      search: {
+        $ref: '#SearchQuery',
+      },
+      page: {
+        $ref: '#PageQuery',
+      },
+      limit: {
+        $ref: '#LimitQuery',
+      },
     },
   },
   getMedias: {
     type: 'object',
     properties: {
-      orderDirection: { $ref: '#OrderDirectionQuery' },
-      orderBy: {
-        allOf: [{ $ref: '#OrderByQuery' }, { enum: ['created_at', 'label'] }],
+      orderDirection: {
+        $ref: '#OrderDirectionQuery',
       },
-      search: { $ref: '#SearchQuery' },
-      page: { $ref: '#PageQuery' },
-      limit: { $ref: '#LimitQuery' },
+      orderBy: {
+        allOf: [
+          {
+            $ref: '#OrderByQuery',
+          },
+          {
+            enum: ['created_at', 'label'],
+          },
+        ],
+      },
+      search: {
+        $ref: '#SearchQuery',
+      },
+      page: {
+        $ref: '#PageQuery',
+      },
+      limit: {
+        $ref: '#LimitQuery',
+      },
     },
   },
   getWallets: {
     type: 'object',
     properties: {
-      orderDirection: { $ref: '#OrderDirectionQuery' },
+      orderDirection: {
+        $ref: '#OrderDirectionQuery',
+      },
       orderBy: {
         allOf: [
-          { $ref: '#OrderByQuery' },
-          { enum: ['created_at', 'wallet_name', 'wallet_description'] },
+          {
+            $ref: '#OrderByQuery',
+          },
+          {
+            enum: ['created_at', 'wallet_name', 'wallet_description'],
+          },
         ],
       },
-      search: { $ref: '#SearchQuery' },
-      page: { $ref: '#PageQuery' },
-      limit: { $ref: '#LimitQuery' },
+      search: {
+        $ref: '#SearchQuery',
+      },
+      page: {
+        $ref: '#PageQuery',
+      },
+      limit: {
+        $ref: '#LimitQuery',
+      },
     },
   },
 };
@@ -73,30 +134,49 @@ export const requestBody = {
     required: ['bank_name'],
     type: 'object',
     properties: {
-      logo: { type: 'array', items: { $ref: '#MultiPartSchema' } },
-      bank_name: { type: 'string' },
+      logo: {
+        type: 'array',
+        items: {
+          $ref: '#MultiPartSchema',
+        },
+      },
+      bank_name: {
+        type: 'string',
+      },
     },
     additionalProperties: false,
   },
   postBankStep: {
     required: ['step'],
     type: 'object',
-    properties: { step: { type: 'string' } },
+    properties: {
+      step: {
+        type: 'string',
+      },
+    },
     additionalProperties: false,
   },
   updateBank: {
     type: 'object',
     properties: {
-      bank_name: { type: 'string' },
-      visibility: { type: 'integer' },
+      bank_name: {
+        type: 'string',
+      },
+      visibility: {
+        type: 'integer',
+      },
     },
     additionalProperties: false,
   },
   updateBankAccount: {
     type: 'object',
     properties: {
-      account_number: { type: 'string' },
-      account_name: { type: 'string' },
+      account_number: {
+        type: 'string',
+      },
+      account_name: {
+        type: 'string',
+      },
     },
     additionalProperties: false,
   },
@@ -104,7 +184,12 @@ export const requestBody = {
     required: ['logo'],
     type: 'object',
     properties: {
-      logo: { type: 'array', items: { $ref: '#MultiPartSchema' } },
+      logo: {
+        type: 'array',
+        items: {
+          $ref: '#MultiPartSchema',
+        },
+      },
     },
     additionalProperties: false,
   },
@@ -112,20 +197,39 @@ export const requestBody = {
     required: ['category', 'description', 'slug'],
     type: 'object',
     properties: {
-      icon: { type: 'array', items: { $ref: '#MultiPartSchema' } },
-      category: { type: 'string' },
-      slug: { type: 'string' },
-      description: { type: 'string' },
+      icon: {
+        type: 'array',
+        items: {
+          $ref: '#MultiPartSchema',
+        },
+      },
+      category: {
+        type: 'string',
+      },
+      slug: {
+        type: 'string',
+      },
+      description: {
+        type: 'string',
+      },
     },
     additionalProperties: false,
   },
   updateCategory: {
     type: 'object',
     properties: {
-      category: { type: 'string' },
-      slug: { type: 'string' },
-      description: { type: 'string' },
-      visibility: { type: 'integer' },
+      category: {
+        type: 'string',
+      },
+      slug: {
+        type: 'string',
+      },
+      description: {
+        type: 'string',
+      },
+      visibility: {
+        type: 'integer',
+      },
     },
     additionalProperties: false,
   },
@@ -133,7 +237,12 @@ export const requestBody = {
     required: ['icon'],
     type: 'object',
     properties: {
-      icon: { type: 'array', items: { $ref: '#MultiPartSchema' } },
+      icon: {
+        type: 'array',
+        items: {
+          $ref: '#MultiPartSchema',
+        },
+      },
     },
     additionalProperties: false,
   },
@@ -141,7 +250,12 @@ export const requestBody = {
     required: ['image'],
     type: 'object',
     properties: {
-      image: { type: 'array', items: { $ref: '#MultiPartSchema' } },
+      image: {
+        type: 'array',
+        items: {
+          $ref: '#MultiPartSchema',
+        },
+      },
     },
     additionalProperties: false,
   },
@@ -149,17 +263,32 @@ export const requestBody = {
     required: ['wallet_description', 'wallet_name'],
     type: 'object',
     properties: {
-      logo: { type: 'array', items: { $ref: '#MultiPartSchema' } },
-      wallet_name: { type: 'string' },
-      wallet_description: { type: 'string' },
+      logo: {
+        type: 'array',
+        items: {
+          $ref: '#MultiPartSchema',
+        },
+      },
+      wallet_name: {
+        type: 'string',
+      },
+      wallet_description: {
+        type: 'string',
+      },
     },
   },
   updateWallet: {
     type: 'object',
     properties: {
-      wallet_name: { type: 'string' },
-      wallet_description: { type: 'string' },
-      visibility: { type: 'integer' },
+      wallet_name: {
+        type: 'string',
+      },
+      wallet_description: {
+        type: 'string',
+      },
+      visibility: {
+        type: 'integer',
+      },
     },
     additionalProperties: false,
   },
@@ -167,23 +296,36 @@ export const requestBody = {
     required: ['logo'],
     type: 'object',
     properties: {
-      logo: { type: 'array', items: { $ref: '#MultiPartSchema' } },
+      logo: {
+        type: 'array',
+        items: {
+          $ref: '#MultiPartSchema',
+        },
+      },
     },
   },
   postFaq: {
     required: ['answer', 'question'],
     type: 'object',
     properties: {
-      question: { type: 'string' },
-      answer: { type: 'string' },
+      question: {
+        type: 'string',
+      },
+      answer: {
+        type: 'string',
+      },
     },
     additionalProperties: false,
   },
   updateFaq: {
     type: 'object',
     properties: {
-      question: { type: 'string' },
-      answer: { type: 'string' },
+      question: {
+        type: 'string',
+      },
+      answer: {
+        type: 'string',
+      },
     },
     additionalProperties: false,
   },
@@ -213,7 +355,7 @@ export const responses = {
                 bank_name: {
                   type: 'string',
                 },
-                logo: {
+                logo_label: {
                   type: 'string',
                   nullable: true,
                 },
@@ -252,7 +394,7 @@ export const responses = {
               bank_name: {
                 type: 'string',
               },
-              logo: {
+              logo_label: {
                 type: 'string',
                 nullable: true,
               },
@@ -326,7 +468,7 @@ export const responses = {
                 slug: {
                   type: 'string',
                 },
-                icon: {
+                icon_label: {
                   type: 'string',
                   nullable: true,
                 },
@@ -410,7 +552,7 @@ export const responses = {
                 wallet_description: {
                   type: 'string',
                 },
-                logo: {
+                logo_label: {
                   type: 'string',
                   nullabe: true,
                 },

@@ -3,8 +3,8 @@ import type { Request } from '../../types/fasitify';
 import type { PostRequestBody, FileRequestBody } from '../../types/schema';
 import { controllerWrapper, handlerWrapper } from '../../utils/serverfn-wrapper';
 import { renameFiles } from '../../utils/file-management';
-import { exampleProtect } from '../../middlewares/protect-route';
 import schemaValidation from '../../middlewares/schema-validation';
+import { exampleProtect } from '../../middlewares/protect-route';
 import { requestBody, requestHeaders, requestParams, responses } from './schemas';
 import { getExample, postExample, getIdExample, postFileExample } from './controllers';
 

@@ -1,9 +1,9 @@
 import type { FastifyInstance, FastifyPluginOptions, HookHandlerDoneFunction } from 'fastify';
 import type { Request } from '../../types/fasitify';
 import type { IdRequestParams, GetQuery } from '../../types/schema';
-import { controllerWrapper, handlerWrapper } from '../../utils/serverfn-wrapper';
 import dbQuerying from '../../middlewares/db-querying';
 import schemaValidation from '../../middlewares/schema-validation';
+import { controllerWrapper, handlerWrapper } from '../../utils/serverfn-wrapper';
 import { requestQuery, requestParams } from './schemas';
 import { getProducts, getProductsByCategory } from './controller';
 

@@ -1,5 +1,7 @@
 export const requestHeaders = {
-  private: { $ref: '#ApiKeyHeader' },
+  private: {
+    $ref: '#ApiKeyHeader',
+  },
 };
 
 /**
@@ -52,14 +54,36 @@ export const requestBody = {
     ],
     type: 'object',
     properties: {
-      identity_photo: { type: 'array', items: { $ref: '#MultiPartSchema' } },
-      market_photo: { type: 'array', items: { $ref: '#MultiPartSchema' } },
-      no_identity: { type: 'string' },
-      market_name: { type: 'string' },
-      market_address: { type: 'string' },
-      market_lat: { type: 'number' },
-      market_lon: { type: 'number' },
-      market_close_time: { type: 'string' },
+      identity_photo: {
+        type: 'array',
+        items: {
+          $ref: '#MultiPartSchema',
+        },
+      },
+      market_photo: {
+        type: 'array',
+        items: {
+          $ref: '#MultiPartSchema',
+        },
+      },
+      no_identity: {
+        type: 'string',
+      },
+      market_name: {
+        type: 'string',
+      },
+      market_address: {
+        type: 'string',
+      },
+      market_lat: {
+        type: 'number',
+      },
+      market_lon: {
+        type: 'number',
+      },
+      market_close_time: {
+        type: 'string',
+      },
     },
     additionalProperties: false,
   },
@@ -67,8 +91,12 @@ export const requestBody = {
     required: ['password', 'username'],
     type: 'object',
     properties: {
-      username: { type: 'string' },
-      password: { type: 'string' },
+      username: {
+        type: 'string',
+      },
+      password: {
+        type: 'string',
+      },
     },
     additionalProperties: false,
   },
@@ -95,21 +123,32 @@ export const requestBody = {
         minLength: 8,
         maxLength: 255,
       },
-      avatar: { type: 'array', items: { $ref: '#MultiPartSchema' } },
+      avatar: {
+        type: 'array',
+        items: {
+          $ref: '#MultiPartSchema',
+        },
+      },
     },
     additionalProperties: false,
   },
   forgotPassword: {
     required: ['phone_number'],
     type: 'object',
-    properties: { phone_number: { type: 'string' } },
+    properties: {
+      phone_number: {
+        type: 'string',
+      },
+    },
     additionalProperties: false,
   },
   resetPassword: {
     required: ['token', 'new_password'],
     type: 'object',
     properties: {
-      token: { type: 'string' },
+      token: {
+        type: 'string',
+      },
       new_password: {
         type: 'string',
         minLength: 8,
@@ -172,6 +211,10 @@ export const responses = {
               phone_number: {
                 type: 'string',
               },
+              img_label: {
+                type: 'string',
+                nullable: true,
+              },
               img_url: {
                 type: 'string',
                 nullable: true,
@@ -195,11 +238,11 @@ export const responses = {
                       type: 'string',
                       nullable: true,
                     },
-                    uri: {
+                    logo_label: {
                       type: 'string',
                       nullable: true,
                     },
-                    label: {
+                    logo_url: {
                       type: 'string',
                       nullable: true,
                     },

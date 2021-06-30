@@ -76,7 +76,7 @@ src                                 ->  Application main folder.
 - Authentication route level specified on [preValidation route option](https://www.fastify.io/docs/latest/Routes/).
 - Use `reply.send()` for [response](https://www.fastify.io/docs/latest/Routes/#async-await)
 - [optional] Declare `import from <dependencies>` above `import from <custom-module/file>`
-- [optional] Declare `import from <most outer custom-module/file>` above `import from <closest custom-module/file>`
+- [optional] Declare `import from <most outer custom-module/file>` above `import from <closest custom-module/file>`. if import different module with the same level, a module with one and only export default or there is export default and used the export default above the sibling.
 - [optional] Declare `import type` above `import`
 
 ## [Resources](#resources)
