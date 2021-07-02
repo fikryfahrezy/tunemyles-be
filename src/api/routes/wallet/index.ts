@@ -99,7 +99,7 @@ const routes = function routes(
       attachValidation: true,
       schema: {
         headers: requestHeaders.private,
-        querystring: requestQuery.topUp,
+        querystring: requestQuery.topUpHistories,
         response: {
           200: { $ref: '#ApiResponse' },
           '4xx': { $ref: '#ApiResponse' },
@@ -117,7 +117,7 @@ const routes = function routes(
       attachValidation: true,
       schema: {
         headers: requestHeaders.private,
-        querystring: requestQuery.withdraw,
+        querystring: requestQuery.withdrawHistories,
         response: {
           200: { $ref: '#ApiResponse' },
           '4xx': { $ref: '#ApiResponse' },

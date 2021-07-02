@@ -1558,80 +1558,7 @@ paths:
                 $ref: '#/components/schemas/ApiResponse'
       security:
         - APIKeyHeader: []
-  '/merchants/products/{id}/image':
-    post:
-      tags:
-        - merchants
-      summary: Add Product Image (Merchant Route)
-      description: Add Product Image (Merchant Route)
-      operationId: productImage
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/PostMerchantProductImageBody'
-        required: true
-      responses:
-        '200':
-          description: Request Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PostMerchantProductImageResponse'
-        4XX:
-          description: Request Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        5XX:
-          description: Sever Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-      security:
-        - APIKeyHeader: []
   '/merchants/products/{id}':
-    get:
-      tags:
-        - merchants
-      summary: Get Single Product (Route All Roles)
-      description: Get Single Product (Route All Roles)
-      operationId: singleProduct
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Request Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetMerchantProductDetailResponse'
-        4XX:
-          description: Request Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        5XX:
-          description: Sever Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-      security:
-        - APIKeyHeader: []
     patch:
       tags:
         - merchants
@@ -1673,6 +1600,39 @@ paths:
       security:
         - APIKeyHeader: []
       x-codegen-request-body-name: body
+    get:
+      tags:
+        - merchants
+      summary: Get Single Product (Route All Roles)
+      description: Get Single Product (Route All Roles)
+      operationId: singleProduct
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Request Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetMerchantProductDetailResponse'
+        4XX:
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        5XX:
+          description: Sever Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+        - APIKeyHeader: []
     delete:
       tags:
         - merchants
@@ -1787,7 +1747,7 @@ paths:
       security:
         - APIKeyHeader: []
       x-codegen-request-body-name: body
-  '/merchants/products/{id}/categories':
+  '/merchants/products/{id}/category':
     patch:
       tags:
         - merchants
@@ -1828,6 +1788,46 @@ paths:
       security:
         - APIKeyHeader: []
       x-codegen-request-body-name: body
+  '/merchants/products/{id}/image':
+    post:
+      tags:
+        - merchants
+      summary: Add Product Image (Merchant Route)
+      description: Add Product Image (Merchant Route)
+      operationId: productImage
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PostMerchantProductImageBody'
+        required: true
+      responses:
+        '200':
+          description: Request Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostMerchantProductImageResponse'
+        4XX:
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        5XX:
+          description: Sever Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+        - APIKeyHeader: []
   '/merchants/products/categories/{id}':
     delete:
       tags:
@@ -2669,15 +2669,6 @@ paths:
           in: query
           schema:
             $ref: '#/components/schemas/LimitQuery'
-        - name: status
-          in: query
-          schema:
-            allOf:
-              - $ref: '#/components/schemas/StatusQuery'
-              - enum:
-                  - '0'
-                  - '1'
-                  - '2'
       responses:
         '200':
           description: Request Success
@@ -2732,15 +2723,6 @@ paths:
           in: query
           schema:
             $ref: '#/components/schemas/LimitQuery'
-        - name: status
-          in: query
-          schema:
-            allOf:
-              - $ref: '#/components/schemas/StatusQuery'
-              - enum:
-                  - '0'
-                  - '1'
-                  - '2'
       responses:
         '200':
           description: Request Success
@@ -4000,11 +3982,11 @@ components:
                   type: integer
                 market_close_time:
                   type: string
-                profile_id:
+                photo_id:
                   type: integer
-                profile_label:
+                photo_label:
                   type: string
-                profile_url:
+                photo_url:
                   type: string
                 identity_id:
                   type: integer
@@ -4047,12 +4029,12 @@ components:
           type: string
     PostMerchantProductBody:
       required:
-        - description
-        - discount
-        - price_default
-        - price_selling
         - product_name
+        - description
+        - normal_price
+        - selling_price
         - qty
+        - discount
       properties:
         product_name:
           type: string
@@ -4062,10 +4044,10 @@ components:
           type: string
           format: binary
           default: '1'
-        price_default:
+        normal_price:
           type: integer
           format: int32
-        price_selling:
+        selling_price:
           type: integer
           format: int32
         qty:
@@ -4144,113 +4126,6 @@ components:
                   updated_at:
                     type: string
                     format: date-time
-    PostMerchantProductImageBody:
-      required:
-        - image
-      properties:
-        image:
-          type: string
-          format: binary
-    PostMerchantProductImageResponse:
-      type: object
-      properties:
-        id:
-          type: integer
-        product_util_id:
-          type: integer
-        image_id:
-          type: integer
-        image_label:
-          type: string
-        image_url:
-          type: string
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-    GetMerchantProductDetailResponse:
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/ApiResponse'
-        - type: object
-          properties:
-            data:
-              type: object
-              properties:
-                id:
-                  type: integer
-                product_util_id:
-                  type: integer
-                product_name:
-                  type: string
-                description:
-                  type: string
-                status:
-                  type: integer
-                price_default:
-                  type: integer
-                price_selling:
-                  type: integer
-                qty:
-                  type: integer
-                discount:
-                  type: integer
-                cover_label:
-                  type: string
-                cover_url:
-                  type: string
-                merchant_id:
-                  type: integer
-                market_id:
-                  type: integer
-                market_name:
-                  type: string
-                market_address:
-                  type: string
-                market_close_time:
-                  type: string
-                market_status:
-                  type: integer
-                photo_label:
-                  type: string
-                photo_url:
-                  type: string
-                creaetd_at:
-                  type: string
-                  format: date-time
-                updated_at:
-                  type: string
-                  format: date-time
-                medias:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      product_image_id:
-                        type: integer
-                      image_label:
-                        type: string
-                      image_url:
-                        type: string
-                categories:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      product_category_id:
-                        type: number
-                      category:
-                        type: string
-                      slug:
-                        type: string
-                      description:
-                        type: string
-                      icon_label:
-                        type: string
-                      icon_url:
-                        type: string
     UpdateMerchantProductBody:
       type: object
       properties:
@@ -4339,6 +4214,113 @@ components:
                   type: string
                 product_util_id:
                   type: integer
+    PostMerchantProductImageBody:
+      required:
+        - image
+      properties:
+        image:
+          type: string
+          format: binary
+    PostMerchantProductImageResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        product_util_id:
+          type: integer
+        image_id:
+          type: integer
+        image_label:
+          type: string
+        image_url:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    GetMerchantProductDetailResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                id:
+                  type: integer
+                product_util_id:
+                  type: integer
+                product_name:
+                  type: string
+                description:
+                  type: string
+                status:
+                  type: integer
+                price_default:
+                  type: integer
+                price_selling:
+                  type: integer
+                qty:
+                  type: integer
+                discount:
+                  type: integer
+                cover_label:
+                  type: string
+                cover_url:
+                  type: string
+                merchant_id:
+                  type: integer
+                market_id:
+                  type: integer
+                market_name:
+                  type: string
+                market_address:
+                  type: string
+                market_close_time:
+                  type: string
+                market_status:
+                  type: integer
+                photo_label:
+                  type: string
+                photo_url:
+                  type: string
+                creaetd_at:
+                  type: string
+                  format: date-time
+                updated_at:
+                  type: string
+                  format: date-time
+                images:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      product_image_id:
+                        type: integer
+                      image_label:
+                        type: string
+                      image_url:
+                        type: string
+                categories:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      product_category_id:
+                        type: number
+                      category:
+                        type: string
+                      slug:
+                        type: string
+                      description:
+                        type: string
+                      icon_label:
+                        type: string
+                      icon_url:
+                        type: string
     GetMerchantOrdersResponse:
       type: object
       allOf:
@@ -4368,8 +4350,10 @@ components:
                     type: string
                   profile_label:
                     type: string
+                    nullable: true
                   profile_url:
                     type: string
+                    nullable: true
                   merchant_id:
                     type: integer
                   market_id:
@@ -4508,11 +4492,11 @@ components:
                     type: integer
                   market_close_time:
                     type: string
-                  profile_id:
+                  photo_id:
                     type: integer
-                  profile_label:
+                  photo_label:
                     type: string
-                  profile_url:
+                  photo_url:
                     type: string
                   identity_id:
                     type: integer
@@ -4612,11 +4596,11 @@ components:
                     type: integer
                   market_close_time:
                     type: string
-                  profile_id:
+                  photo_id:
                     type: integer
-                  profile_label:
+                  photo_label:
                     type: string
-                  profile_url:
+                  photo_url:
                     type: string
                   identity_id:
                     type: integer

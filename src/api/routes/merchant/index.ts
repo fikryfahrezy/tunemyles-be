@@ -18,11 +18,12 @@ import type {
   GetMerchantIncomeHistoriesQuery,
 } from '../../types/schema';
 import { controllerWrapper, handlerWrapper } from '../../utils/serverfn-wrapper';
+import { isBodyEmpty } from '../../utils/request-validation';
 import { renameFiles } from '../../utils/file-management';
 import dbQuerying from '../../middlewares/db-querying';
 import schemaValidation from '../../middlewares/schema-validation';
 import { protect } from '../../middlewares/protect-route';
-import { requestHeaders, requestQuery, requestBody, requestParams } from './schemas';
+import { requestHeaders, requestQuery, requestBody, requestParams, responses } from './schemas';
 import {
   updateMerchantProfile,
   updateMerchantClosetime,
@@ -64,7 +65,7 @@ const routes = function routes(
       schema: {
         headers: requestHeaders.private,
         response: {
-          200: { $ref: '#ApiResponse' },
+          200: responses.merchant,
           '4xx': { $ref: '#ApiResponse' },
           '5xx': { $ref: '#ApiResponse' },
         },
@@ -90,7 +91,8 @@ const routes = function routes(
       preValidation: (req, __, done) => {
         req.body = {
           ...req.body,
-          market_photo: renameFiles(req.url, req.body.market_photo) ?? req.body.market_photo,
+          market_photo: renameFiles(req.url, req.body.market_photo),
+          identity_photo: renameFiles(req.url, req.body.identity_photo),
         };
 
         done();
@@ -126,12 +128,17 @@ const routes = function routes(
         headers: requestHeaders.private,
         body: requestBody.postProduct,
         response: {
-          200: { $ref: '#ApiResponse' },
+          200: responses.postedProduct,
           '4xx': { $ref: '#ApiResponse' },
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preValidation: (req, __, done) => {
+      preValidation: (req, res, done) => {
+        if (isBodyEmpty(req.body)) {
+          res.unprocessableEntity();
+          return;
+        }
+
         req.body = { ...req.body, cover: renameFiles(req.url, req.body.cover) };
 
         done();
@@ -149,7 +156,7 @@ const routes = function routes(
         headers: requestHeaders.private,
         querystring: requestQuery.getProducts,
         response: {
-          200: { $ref: '#ApiResponse' },
+          200: responses.merchantProducts,
           '4xx': { $ref: '#ApiResponse' },
           '5xx': { $ref: '#ApiResponse' },
         },
@@ -161,50 +168,6 @@ const routes = function routes(
       ],
     },
     controllerWrapper(getMerchantProducts),
-  );
-
-  fastify.post<
-    Request<{ Headers: ApiKeyHeader; Params: IdRequestParams; Body: PostProductImageBody }>
-  >(
-    '/products/:id/image',
-    {
-      attachValidation: true,
-      schema: {
-        headers: requestHeaders.private,
-        params: requestParams.id,
-        body: requestBody.postProductImage,
-        response: {
-          200: { $ref: '#ApiResponse' },
-          '4xx': { $ref: '#ApiResponse' },
-          '5xx': { $ref: '#ApiResponse' },
-        },
-      },
-      preValidation: (req, __, done) => {
-        req.body = { ...req.body, image: renameFiles(req.url, req.body.image) ?? req.body.image };
-
-        done();
-      },
-      preHandler: [schemaValidation, handlerWrapper(protect('MERCHANT'))],
-    },
-    controllerWrapper(postMerchantProductImage),
-  );
-
-  fastify.get<Request<{ Headers: ApiKeyHeader; Params: IdRequestParams }>>(
-    '/products/:id',
-    {
-      attachValidation: true,
-      schema: {
-        headers: requestHeaders.private,
-        params: requestParams.id,
-        response: {
-          200: { $ref: '#ApiResponse' },
-          '4xx': { $ref: '#ApiResponse' },
-          '5xx': { $ref: '#ApiResponse' },
-        },
-      },
-      preHandler: [schemaValidation, handlerWrapper(protect('USER'))],
-    },
-    controllerWrapper(getMerchantProductDetail),
   );
 
   fastify.patch<
@@ -239,12 +202,17 @@ const routes = function routes(
         params: requestParams.id,
         body: requestBody.changeProductCover,
         response: {
-          200: { $ref: '#ApiResponse' },
+          200: responses.changedMerchantProductCover,
           '4xx': { $ref: '#ApiResponse' },
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preValidation: (req, __, done) => {
+      preValidation: (req, res, done) => {
+        if (isBodyEmpty(req.body)) {
+          res.unprocessableEntity();
+          return;
+        }
+
         req.body = { ...req.body, cover: renameFiles(req.url, req.body.cover) ?? req.body.cover };
 
         done();
@@ -265,7 +233,7 @@ const routes = function routes(
         params: requestParams.id,
         body: requestBody.updateProductStatus,
         response: {
-          200: { $ref: '#ApiResponse' },
+          200: responses.updatedProductStatus,
           '4xx': { $ref: '#ApiResponse' },
           '5xx': { $ref: '#ApiResponse' },
         },
@@ -286,7 +254,7 @@ const routes = function routes(
         params: requestParams.id,
         body: requestBody.bindProductCategory,
         response: {
-          200: { $ref: '#ApiResponse' },
+          200: responses.bindedProductCategory,
           '4xx': { $ref: '#ApiResponse' },
           '5xx': { $ref: '#ApiResponse' },
         },
@@ -296,8 +264,57 @@ const routes = function routes(
     controllerWrapper(bindMerchantProductCategory),
   );
 
+  fastify.post<
+    Request<{ Headers: ApiKeyHeader; Params: IdRequestParams; Body: PostProductImageBody }>
+  >(
+    '/products/:id/image',
+    {
+      attachValidation: true,
+      schema: {
+        headers: requestHeaders.private,
+        params: requestParams.id,
+        body: requestBody.postProductImage,
+        response: {
+          200: responses.postedProductImage,
+          '4xx': { $ref: '#ApiResponse' },
+          '5xx': { $ref: '#ApiResponse' },
+        },
+      },
+      preValidation: (req, res, done) => {
+        if (isBodyEmpty(req.body)) {
+          res.unprocessableEntity();
+          return;
+        }
+
+        req.body = { ...req.body, image: renameFiles(req.url, req.body.image) ?? req.body.image };
+
+        done();
+      },
+      preHandler: [schemaValidation, handlerWrapper(protect('MERCHANT'))],
+    },
+    controllerWrapper(postMerchantProductImage),
+  );
+
+  fastify.get<Request<{ Headers: ApiKeyHeader; Params: IdRequestParams }>>(
+    '/products/:id',
+    {
+      attachValidation: true,
+      schema: {
+        headers: requestHeaders.private,
+        params: requestParams.id,
+        response: {
+          200: responses.merchantSingleProduct,
+          '4xx': { $ref: '#ApiResponse' },
+          '5xx': { $ref: '#ApiResponse' },
+        },
+      },
+      preHandler: [schemaValidation, handlerWrapper(protect('USER'))],
+    },
+    controllerWrapper(getMerchantProductDetail),
+  );
+
   fastify.delete<Request<{ Headers: ApiKeyHeader; Params: IdRequestParams }>>(
-    '/products/:productId/category/:categoryId',
+    '/products/category/:id',
     {
       attachValidation: true,
       schema: {
@@ -358,12 +375,16 @@ const routes = function routes(
         headers: requestHeaders.private,
         querystring: requestQuery.getOrders,
         response: {
-          200: { $ref: '#ApiResponse' },
+          200: responses.merchantOrders,
           '4xx': { $ref: '#ApiResponse' },
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preHandler: [schemaValidation, handlerWrapper(protect('MERCHANT'))],
+      preHandler: [
+        schemaValidation,
+        handlerWrapper(protect('MERCHANT')),
+        handlerWrapper(dbQuerying('USER_TRANSACTION')),
+      ],
     },
     controllerWrapper(getMerchantOrders),
   );
@@ -376,7 +397,7 @@ const routes = function routes(
         headers: requestHeaders.private,
         params: requestParams.id,
         response: {
-          200: { $ref: '#ApiResponse' },
+          200: responses.merchantOrderDetail,
           '4xx': { $ref: '#ApiResponse' },
           '5xx': { $ref: '#ApiResponse' },
         },
@@ -397,7 +418,7 @@ const routes = function routes(
         params: requestParams.id,
         body: requestBody.updateOrderStatus,
         response: {
-          200: { $ref: '#ApiResponse' },
+          200: responses.updatedOrderStatus,
           '4xx': { $ref: '#ApiResponse' },
           '5xx': { $ref: '#ApiResponse' },
         },
@@ -407,15 +428,14 @@ const routes = function routes(
     controllerWrapper(updateMerchantOrderStatus),
   );
 
-  fastify.get<Request<{ Headers: ApiKeyHeader; Querystring: GetQuery }>>(
+  fastify.get<Request<{ Querystring: GetQuery }>>(
     '/list',
     {
       attachValidation: true,
       schema: {
-        headers: requestHeaders.private,
         querystring: requestQuery.getMerchantList,
         response: {
-          200: { $ref: '#ApiResponse' },
+          200: responses.merchantList,
           '4xx': { $ref: '#ApiResponse' },
           '5xx': { $ref: '#ApiResponse' },
         },
@@ -425,15 +445,14 @@ const routes = function routes(
     controllerWrapper(getMerchantList),
   );
 
-  fastify.get<Request<{ Headers: ApiKeyHeader; Params: IdRequestParams }>>(
+  fastify.get<Request<{ Params: IdRequestParams }>>(
     '/list/:id',
     {
       attachValidation: true,
       schema: {
-        headers: requestHeaders.private,
         params: requestParams.id,
         response: {
-          200: { $ref: '#ApiResponse' },
+          200: responses.merchantProducList,
           '4xx': { $ref: '#ApiResponse' },
           '5xx': { $ref: '#ApiResponse' },
         },
@@ -443,15 +462,14 @@ const routes = function routes(
     controllerWrapper(getMerchantProductList),
   );
 
-  fastify.get<Request<{ Headers: ApiKeyHeader; Querystring: GetRandomMerchantsQuery }>>(
+  fastify.get<Request<{ Querystring: GetRandomMerchantsQuery }>>(
     '/random',
     {
       attachValidation: true,
       schema: {
-        headers: requestHeaders.private,
         querystring: requestQuery.getRandomMerchants,
         response: {
-          200: { $ref: '#ApiResponse' },
+          200: responses.randomMerchants,
           '4xx': { $ref: '#ApiResponse' },
           '5xx': { $ref: '#ApiResponse' },
         },
@@ -471,7 +489,7 @@ const routes = function routes(
         headers: requestHeaders.private,
         querystring: requestQuery.getMerchantTransactionHistories,
         response: {
-          200: { $ref: '#ApiResponse' },
+          200: responses.merchantTransactions,
           '4xx': { $ref: '#ApiResponse' },
           '5xx': { $ref: '#ApiResponse' },
         },
@@ -489,7 +507,7 @@ const routes = function routes(
         headers: requestHeaders.private,
         querystring: requestQuery.getMerchantIncomeHistories,
         response: {
-          200: { $ref: '#ApiResponse' },
+          200: responses.merchantIncomes,
           '4xx': { $ref: '#ApiResponse' },
           '5xx': { $ref: '#ApiResponse' },
         },

@@ -12,8 +12,8 @@ import initModels, { ModelType } from '../models/sql/init-models';
 
 type MerchantType = {
   merchant_id: number;
-  profile_id: number;
-  profile_url: string;
+  photo_id: number;
+  photo_url: string;
   identity_id: number;
   identity_url: string;
   [index: string]: unknown;
@@ -125,7 +125,7 @@ export const createProductCategory: (
 };
 
 export const updateMerchant: (
-  merchantId: number,
+  userId: number,
   data: Omit<UpdateMerchantProfileBody, 'identity_photo' | 'market_photo'> & {
     id_identity_photo?: number;
     id_market_photo?: number;
@@ -225,13 +225,13 @@ export const getMerchant: (
 export const getProducts: (
   userId: number,
   query?: CustModelType['SearchQuery'],
-) => Promise<unknown> = async function getProducts(merchantId, query) {
+) => Promise<unknown> = async function getProducts(userId, query) {
   let sqlQuery = `
     SELECT *
     FROM (
       SELECT *
       FROM v_products vp
-      WHERE vp.merchat_id = :userId
+      WHERE vp.merchant_id = :userId
         AND vp.status <= 3
     ) AS products
     `;
@@ -242,7 +242,7 @@ export const getProducts: (
     type: QueryTypes.SELECT,
     raw: true,
     plain: false,
-    replacements: { merchantId },
+    replacements: { userId },
   });
 };
 
@@ -329,7 +329,7 @@ export const getProductCategoriesByProductId: (
       RIGHT JOIN m_categories mc ON mc.id = upc.id_m_categories 
       LEFT JOIN m_medias mm ON mm.id = mc.id_icon 
     WHERE mp.id = :productId
-    GROUP BY mc.category`;
+    `;
 
   return sequelize.query(sqlQuery, {
     type: QueryTypes.SELECT,

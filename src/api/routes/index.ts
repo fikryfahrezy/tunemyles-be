@@ -10,7 +10,7 @@ import transaction from './transaction';
 import bank from './bank';
 import wallet from './wallet';
 
-const routeV2 = function routeV2(
+const routeV1 = function routeV1(
   instance: FastifyInstance,
   _: FastifyPluginOptions,
   donePlugin: HookHandlerDoneFunction,
@@ -29,4 +29,4 @@ const routeV2 = function routeV2(
   donePlugin();
 };
 
-export default routeV2;
+export default routeV1;

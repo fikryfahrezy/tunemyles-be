@@ -29,6 +29,9 @@ export const errorHandler: (err: ErrorResponse | unknown, res: FastifyReply) => 
       case 404:
         res.notFound(message);
         break;
+      case 422:
+        res.unprocessableEntity(message);
+        break;
       default:
         res.internalServerError('server error');
     }

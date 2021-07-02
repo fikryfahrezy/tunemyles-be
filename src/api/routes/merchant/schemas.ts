@@ -184,19 +184,19 @@ export const requestBody = {
     additionalProperties: false,
   },
   postProduct: {
-    required: ['description', 'discount', 'price_default', 'price_selling', 'product_name', 'qty'],
+    required: ['product_name', 'description', 'normal_price', 'selling_price', 'qty', 'discount'],
     properties: {
-      product_name: {
-        type: 'string',
-      },
-      description: {
-        type: 'string',
-      },
       cover: {
         type: 'array',
         items: {
           $ref: '#MultiPartSchema',
         },
+      },
+      product_name: {
+        type: 'string',
+      },
+      description: {
+        type: 'string',
       },
       normal_price: {
         type: 'integer',
@@ -342,13 +342,13 @@ export const responses = {
             market_close_time: {
               type: 'string',
             },
-            profile_id: {
+            photo_id: {
               type: 'integer',
             },
-            profile_label: {
+            photo_label: {
               type: 'string',
             },
-            profile_url: {
+            photo_url: {
               type: 'string',
             },
             identity_id: {
@@ -481,6 +481,84 @@ export const responses = {
       },
     ],
   },
+  changedMerchantProductCover: {
+    type: 'object',
+    allOf: [
+      {
+        $ref: '#ApiResponse',
+      },
+      {
+        type: 'object',
+        properties: {
+          data: {
+            type: 'object',
+            properties: {
+              cover_label: {
+                type: 'string',
+              },
+              cover_url: {
+                type: 'string',
+              },
+            },
+          },
+        },
+      },
+    ],
+  },
+  updatedProductStatus: {
+    type: 'object',
+    allOf: [
+      {
+        $ref: '#ApiResponse',
+      },
+      {
+        type: 'object',
+        properties: {
+          data: {
+            type: 'object',
+            properties: {
+              status: {
+                type: 'integer',
+              },
+            },
+          },
+        },
+      },
+    ],
+  },
+  bindedProductCategory: {
+    type: 'object',
+    allOf: [
+      {
+        $ref: '#ApiResponse',
+      },
+      {
+        type: 'object',
+        properties: {
+          data: {
+            type: 'object',
+            properties: {
+              category_id: {
+                type: 'integer',
+              },
+              category: {
+                type: 'string',
+              },
+              slug: {
+                type: 'string',
+              },
+              description: {
+                type: 'string',
+              },
+              product_util_id: {
+                type: 'integer',
+              },
+            },
+          },
+        },
+      },
+    ],
+  },
   postedProductImage: {
     type: 'object',
     properties: {
@@ -576,7 +654,7 @@ export const responses = {
               photo_url: {
                 type: 'string',
               },
-              creaetd_at: {
+              created_at: {
                 type: 'string',
                 format: 'date-time',
               },
@@ -584,7 +662,7 @@ export const responses = {
                 type: 'string',
                 format: 'date-time',
               },
-              medias: {
+              images: {
                 type: 'array',
                 items: {
                   type: 'object',
@@ -633,60 +711,6 @@ export const responses = {
       },
     ],
   },
-  updatedProductStatus: {
-    type: 'object',
-    allOf: [
-      {
-        $ref: '#ApiResponse',
-      },
-      {
-        type: 'object',
-        properties: {
-          data: {
-            type: 'object',
-            properties: {
-              status: {
-                type: 'integer',
-              },
-            },
-          },
-        },
-      },
-    ],
-  },
-  bindedProductCategory: {
-    type: 'object',
-    allOf: [
-      {
-        $ref: '#ApiResponse',
-      },
-      {
-        type: 'object',
-        properties: {
-          data: {
-            type: 'object',
-            properties: {
-              category_id: {
-                type: 'integer',
-              },
-              category: {
-                type: 'string',
-              },
-              slug: {
-                type: 'string',
-              },
-              description: {
-                type: 'string',
-              },
-              product_util_id: {
-                type: 'integer',
-              },
-            },
-          },
-        },
-      },
-    ],
-  },
   merchantOrders: {
     type: 'object',
     allOf: [
@@ -727,9 +751,11 @@ export const responses = {
                 },
                 profile_label: {
                   type: 'string',
+                  nullable: true,
                 },
                 profile_url: {
                   type: 'string',
+                  nullable: true,
                 },
                 merchant_id: {
                   type: 'integer',
@@ -914,61 +940,59 @@ export const responses = {
             items: {
               type: 'object',
               properties: {
-                data: {
-                  merchant_id: {
-                    type: 'integer',
-                  },
-                  full_name: {
-                    type: 'string',
-                  },
-                  phone_number: {
-                    type: 'string',
-                  },
-                  market_id: {
-                    type: 'integer',
-                  },
-                  market_name: {
-                    type: 'string',
-                  },
-                  market_address: {
-                    type: 'string',
-                  },
-                  market_lat: {
-                    type: 'integer',
-                  },
-                  market_long: {
-                    type: 'integer',
-                  },
-                  market_close_time: {
-                    type: 'string',
-                  },
-                  profile_id: {
-                    type: 'integer',
-                  },
-                  profile_label: {
-                    type: 'string',
-                  },
-                  profile_url: {
-                    type: 'string',
-                  },
-                  identity_id: {
-                    type: 'integer',
-                  },
-                  identity_label: {
-                    type: 'string',
-                  },
-                  identity_url: {
-                    type: 'string',
-                  },
-                  status: {
-                    type: 'integer',
-                  },
-                  created_at: {
-                    type: 'string',
-                  },
-                  updated_at: {
-                    type: 'string',
-                  },
+                merchant_id: {
+                  type: 'integer',
+                },
+                full_name: {
+                  type: 'string',
+                },
+                phone_number: {
+                  type: 'string',
+                },
+                market_id: {
+                  type: 'integer',
+                },
+                market_name: {
+                  type: 'string',
+                },
+                market_address: {
+                  type: 'string',
+                },
+                market_lat: {
+                  type: 'integer',
+                },
+                market_long: {
+                  type: 'integer',
+                },
+                market_close_time: {
+                  type: 'string',
+                },
+                photo_id: {
+                  type: 'integer',
+                },
+                photo_label: {
+                  type: 'string',
+                },
+                photo_url: {
+                  type: 'string',
+                },
+                identity_id: {
+                  type: 'integer',
+                },
+                identity_label: {
+                  type: 'string',
+                },
+                identity_url: {
+                  type: 'string',
+                },
+                status: {
+                  type: 'integer',
+                },
+                created_at: {
+                  type: 'string',
+                },
+                updated_at: {
+                  type: 'string',
                 },
               },
             },
@@ -1077,61 +1101,59 @@ export const responses = {
             items: {
               type: 'object',
               properties: {
-                data: {
-                  merchant_id: {
-                    type: 'integer',
-                  },
-                  full_name: {
-                    type: 'string',
-                  },
-                  phone_number: {
-                    type: 'string',
-                  },
-                  market_id: {
-                    type: 'integer',
-                  },
-                  market_name: {
-                    type: 'string',
-                  },
-                  market_address: {
-                    type: 'string',
-                  },
-                  market_lat: {
-                    type: 'integer',
-                  },
-                  market_long: {
-                    type: 'integer',
-                  },
-                  market_close_time: {
-                    type: 'string',
-                  },
-                  profile_id: {
-                    type: 'integer',
-                  },
-                  profile_label: {
-                    type: 'string',
-                  },
-                  profile_url: {
-                    type: 'string',
-                  },
-                  identity_id: {
-                    type: 'integer',
-                  },
-                  identity_label: {
-                    type: 'string',
-                  },
-                  identity_url: {
-                    type: 'string',
-                  },
-                  status: {
-                    type: 'integer',
-                  },
-                  created_at: {
-                    type: 'string',
-                  },
-                  updated_at: {
-                    type: 'string',
-                  },
+                merchant_id: {
+                  type: 'integer',
+                },
+                full_name: {
+                  type: 'string',
+                },
+                phone_number: {
+                  type: 'string',
+                },
+                market_id: {
+                  type: 'integer',
+                },
+                market_name: {
+                  type: 'string',
+                },
+                market_address: {
+                  type: 'string',
+                },
+                market_lat: {
+                  type: 'integer',
+                },
+                market_long: {
+                  type: 'integer',
+                },
+                market_close_time: {
+                  type: 'string',
+                },
+                photo_id: {
+                  type: 'integer',
+                },
+                photo_label: {
+                  type: 'string',
+                },
+                photo_url: {
+                  type: 'string',
+                },
+                identity_id: {
+                  type: 'integer',
+                },
+                identity_label: {
+                  type: 'string',
+                },
+                identity_url: {
+                  type: 'string',
+                },
+                status: {
+                  type: 'integer',
+                },
+                created_at: {
+                  type: 'string',
+                },
+                updated_at: {
+                  type: 'string',
                 },
               },
             },

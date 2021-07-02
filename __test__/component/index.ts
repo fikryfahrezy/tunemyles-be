@@ -50,13 +50,14 @@ import type {
   UpdateTopUpStatusBody,
   UpdateWithdrawStatusBody,
 } from '../../src/api/types/schema';
+export { default as sequelize } from '../../src/databases/sequelize';
 import supertest, { Test } from 'supertest';
 import { issueJwt } from '../../src/api/utils/jwt';
 import { userRegistration, userLogin, makeUserAdmin } from '../../src/api/routes/account/service';
 import {
   getUser,
   createForgotPassword,
-  createImgs,
+  createMedias,
   createMerchant,
 } from '../../src/api/repositories/UserRepository';
 
@@ -125,7 +126,7 @@ const supertestReq = function supertestReq({
   token,
 }: SupertestReqType) {
   const init = supertest(server);
-  const newUrl = `/api/v2${url}`;
+  const newUrl = `/api/v1${url}`;
   let req: Test;
 
   switch (type) {
@@ -858,7 +859,6 @@ export const postMerchantProductImage = function postMerchantProductImage(
 
 export const deleteMerchantProductCategory = function deleteMerchantProductCategory(
   server: Server,
-  productId: number,
   categoryId: number,
   token?: string,
 ) {
@@ -866,7 +866,7 @@ export const deleteMerchantProductCategory = function deleteMerchantProductCateg
     server,
     token,
     type: 'DELETE',
-    url: `/merchants/products/${productId}/category/${categoryId}`,
+    url: `/merchants/products/category/${categoryId}`,
   });
 };
 
@@ -939,14 +939,9 @@ export const updateMerchantOrderStatus = function updateMerchantOrderStatus(
   });
 };
 
-export const getMerchantList = function getMerchantList(
-  server: Server,
-  query: string,
-  token?: string,
-) {
+export const getMerchantList = function getMerchantList(server: Server, query: string) {
   return supertestReq({
     server,
-    token,
     type: 'GET',
     url: `/merchants/list${query}`,
   });
@@ -955,24 +950,17 @@ export const getMerchantList = function getMerchantList(
 export const getMerchantProductList = function getMerchantProductList(
   server: Server,
   merchantId: number,
-  token?: string,
 ) {
   return supertestReq({
     server,
-    token,
     type: 'GET',
     url: `/merchants/list/${merchantId}`,
   });
 };
 
-export const getRandomMerchant = function getRandomMerchant(
-  server: Server,
-  query: string,
-  token?: string,
-) {
+export const getRandomMerchant = function getRandomMerchant(server: Server, query: string) {
   return supertestReq({
     server,
-    token,
     type: 'GET',
     url: `/merchants/random${query}`,
   });
@@ -991,7 +979,7 @@ export const getMerchantTransactionHistories = function getMerchantTransactionHi
   });
 };
 
-export const getMerchantIncomHistories = function getMerchantIncomHistories(
+export const getMerchantIncomeHistories = function getMerchantIncomeHistories(
   server: Server,
   query: string,
   token?: string,
@@ -1407,9 +1395,15 @@ export const registerThenLogin = async function registerThenLogin() {
   return { username, phone_number, token };
 };
 
-export const registerThenForgotPass = async function registerThenForgotPass() {
+export const createUser = async function createUser() {
   const { username, phone_number } = await registration();
-  const { utilId } = await getUser('USERNAME', username);
+  const { id: userId, utilId } = await getUser('USERNAME', username);
+
+  return { userId, utilId, username, phone_number };
+};
+
+export const registerThenForgotPass = async function registerThenForgotPass() {
+  const { utilId, username, phone_number } = await createUser();
   const { verification_token } = await createForgotPassword({
     utilId,
     phone: phone_number,
@@ -1426,19 +1420,18 @@ export const createAdminUser = async function createAdminUser() {
   return token;
 };
 
-export const createMercUser = async function createMerAccount() {
+export const createMerchantUser = async function createMerchantUser() {
   const { username, password } = await registration();
   const { id, utilId } = await getUser('USERNAME', username);
-  const [identityPhoto, marketPhoto] = await createImgs(['a', 'b']);
+  const [identityPhoto, marketPhoto] = await createMedias(['a', 'b']);
 
-  await createMerchant({
+  await createMerchant(utilId, {
     ...registerMerchPayload().fields,
     id_identity_photo: identityPhoto.id,
     id_market_photo: marketPhoto.id,
-    id_u_user: utilId,
   });
 
   const newToken = issueJwt(id, utilId, 'MERCHANT');
 
-  return { username, password, token: newToken };
+  return { id, username, password, token: newToken };
 };

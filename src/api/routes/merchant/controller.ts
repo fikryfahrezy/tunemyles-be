@@ -76,8 +76,8 @@ export const updateMerchantProfile: RequestHandler<
 
   await updateMerchantData(req.body, userToken.userId);
 
-  res.status(201).header('Content-Type', 'application/json; charset=utf-8').send({
-    code: 201,
+  res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
+    code: 200,
     success: true,
     message: 'success',
   });
@@ -198,7 +198,7 @@ export const getMerchantProductDetail: RequestHandler<
     return;
   }
 
-  const resData = await getProductDetail(productId, userToken.utilId);
+  const resData = await getProductDetail(productId, userToken.userId);
 
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
@@ -485,19 +485,12 @@ export const updateMerchantOrderStatus: RequestHandler<
 };
 
 export const getMerchantList: RequestHandler<
-  Request<{ Headers: ApiKeyHeader; Querystring: GetQuery }>
+  Request<{ Querystring: GetQuery }>
 > = async function getMerchantList(_, res): Promise<void> {
-  const userToken = this.requestContext.get<CustModelType['UserToken']>('usertoken');
   const query = this.requestContext.get<CustModelType['SearchQuery']>('query');
 
   if (!query) {
     res.badRequest();
-
-    return;
-  }
-
-  if (!userToken) {
-    res.unauthorized();
 
     return;
   }
@@ -513,7 +506,7 @@ export const getMerchantList: RequestHandler<
 };
 
 export const getMerchantProductList: RequestHandler<
-  Request<{ Headers: ApiKeyHeader; Params: IdRequestParams }>
+  Request<{ Params: IdRequestParams }>
 > = async function getMerchantProductList(req, res): Promise<void> {
   const merchantId = parseInt(req.params.id, 10) || -1;
 
@@ -534,7 +527,7 @@ export const getMerchantProductList: RequestHandler<
 };
 
 export const getRandomMerchants: RequestHandler<
-  Request<{ Headers: ApiKeyHeader; Querystring: GetRandomMerchantsQuery }>
+  Request<{ Querystring: GetRandomMerchantsQuery }>
 > = async function getRandomMerchants(req, res): Promise<void> {
   const limit = parseInt(req.query.limit, 10) || 10;
   const resData = await getRandomMerchantData(limit);

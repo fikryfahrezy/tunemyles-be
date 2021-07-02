@@ -6,7 +6,7 @@ const api = function api(
   _: FastifyPluginOptions,
   done: HookHandlerDoneFunction,
 ): void {
-  instance.register(route, { prefix: '/v2' });
+  instance.register(route, { prefix: '/v1' });
   done();
 };
 export default api;

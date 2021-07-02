@@ -66,7 +66,7 @@ export const createForgotPassword: (data: {
 export const createMedias: (
   labels: string[],
 ) => Promise<ModelType['Media'][]> = function createImgs(labels) {
-  return Media.bulkCreate(labels.map((label) => ({ label, uri: `/img/${label}` })));
+  return Media.bulkCreate(labels.map((label) => ({ label, uri: label })));
 };
 
 export const createMerchant: (
@@ -96,15 +96,15 @@ export const updateMedia: (
   return Media.update({ label, uri: `/img/${label}` }, { where: { id: imgId } });
 };
 
-export const updateForgotTokenStatus: (
-  token: string,
-  fromStatus: number,
-  toStatus: number,
-) => Promise<[number, ModelType['UserLostPassword'][]]> = function updateTokenStatus(
+export const updateForgotTokenStatus: (data: {
+  token: string;
+  fromStatus: number;
+  toStatus: number;
+}) => Promise<[number, ModelType['UserLostPassword'][]]> = function updateTokenStatus({
   token,
   fromStatus,
   toStatus,
-) {
+}) {
   return UserLostPassword.update(
     { status: toStatus },
     { where: { verification_token: token, status: fromStatus } },

@@ -11,6 +11,33 @@ export const requestParams = {
  * routes in Postman
  */
 export const requestQuery = {
+  topUpHistories: {
+    type: 'object',
+    properties: {
+      orderDirection: { $ref: '#OrderDirectionQuery' },
+      orderBy: {
+        allOf: [
+          { $ref: '#OrderByQuery' },
+          { enum: ['created_at', 'balance_request', 'balance_transfer'] },
+        ],
+      },
+      search: { $ref: '#SearchQuery' },
+      page: { $ref: '#PageQuery' },
+      limit: { $ref: '#LimitQuery' },
+    },
+  },
+  withdrawHistories: {
+    type: 'object',
+    properties: {
+      orderDirection: { $ref: '#OrderDirectionQuery' },
+      orderBy: {
+        allOf: [{ $ref: '#OrderByQuery' }, { enum: ['created_at', 'balance_request'] }],
+      },
+      search: { $ref: '#SearchQuery' },
+      page: { $ref: '#PageQuery' },
+      limit: { $ref: '#LimitQuery' },
+    },
+  },
   topUp: {
     type: 'object',
     properties: {

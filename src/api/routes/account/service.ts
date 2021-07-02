@@ -170,7 +170,7 @@ export const forgotUserPassword: (
 export const verifyUserToken: (
   data: VerifyTokenParams,
 ) => Promise<{ token: string }> = async function verifyUserToken({ token }) {
-  const [affectedRows] = await updateForgotTokenStatus(token, 0, 1);
+  const [affectedRows] = await updateForgotTokenStatus({ token, fromStatus: 0, toStatus: 1 });
 
   if (affectedRows < 1) throw new ErrorResponse('verify failed', 404);
 
@@ -182,7 +182,7 @@ export const resetUserPassword: (
 ) => Promise<void> = async function resetUserPassword({ token, new_password: newPassword }) {
   const [user, [affectedRows]] = await Promise.all([
     getUserForgotToken(token),
-    updateForgotTokenStatus(token, 1, 2),
+    updateForgotTokenStatus({ token, fromStatus: 1, toStatus: 2 }),
   ]);
 
   if (!user) throw new ErrorResponse('reset password failed', 404);

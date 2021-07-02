@@ -1,8 +1,18 @@
 import type { Server } from 'http';
 import type { FastifyInstance } from 'fastify';
 import app from '../../src/config/app';
-import sequelize from '../../src/databases/sequelize';
+import { createCategory } from '../../src/api/repositories/MasterRepository';
+import initModels from '../../src/api/models/sql/init-models';
 import {
+  createProduct,
+  createProductUtility,
+  createProductCategory,
+  createMedia,
+  createProductPhoto,
+} from '../../src/api/repositories/MerchantRepository';
+import {
+  sequelize,
+  fileDir,
   updateMerchantProfile,
   updateMerchantClosetime,
   getMerchantProfile,
@@ -24,11 +34,81 @@ import {
   getMerchantProductList,
   getRandomMerchant,
   getMerchantTransactionHistories,
-  getMerchantIncomHistories,
+  getMerchantIncomeHistories,
+  createUser,
+  createMerchantUser,
 } from '../component';
 
+const { UserTransaction, TransactionProduct } = initModels(sequelize);
 let server: Server = null;
 let appServer: FastifyInstance = null;
+
+const createMerchantProduct = async function updateMerchantProduct(userId: number) {
+  const { id: productId } = await createProduct(userId, {
+    product_name: 'name',
+    description: 'description',
+  });
+
+  const { id: productUtilId } = await createProductUtility(productId, {
+    normal_price: 123,
+    selling_price: 123,
+    qty: 1,
+    discount: 10,
+  });
+
+  return { productId, productUtilId };
+};
+
+const bindProductCategory = async function bindProductCategory(userId: number) {
+  const [{ id: categoryId }, { productId }] = await Promise.all([
+    createCategory({
+      category: 'category',
+      description: 'description',
+      slug: 'slug',
+    }),
+    createMerchantProduct(userId),
+  ]);
+
+  return { categoryId, productId };
+};
+
+const addProductImage = async function addProductImage(userId: number) {
+  const [{ productUtilId }, { id: mediaId }] = await Promise.all([
+    createMerchantProduct(userId),
+    createMedia('a'),
+  ]);
+  const { id } = await createProductPhoto(productUtilId, mediaId);
+
+  return { productImageId: id };
+};
+
+const createUserTransaction = async function createUserTransaction(merchantId: number) {
+  const { userId } = await createUser();
+  const { id: transactionId } = await UserTransaction.create({
+    id_m_users: userId,
+    id_merchant: merchantId,
+    transaction_token: '213213213',
+    total_price: 0,
+    status: 0,
+  });
+  return { userId, transactionId };
+};
+
+const createTransactionProduct = async function createTransactionProduct(merchantId: number) {
+  const { transactionId } = await createUserTransaction(merchantId);
+  const { productId } = await createMerchantProduct(merchantId);
+
+  await TransactionProduct.create({
+    id_u_user_transaction: transactionId,
+    id_m_products: productId,
+    transaction_token: 'wrwerwe',
+    qty: 1,
+    status: 0,
+    sub_total_price: 1,
+  });
+
+  return { transactionId };
+};
 
 beforeAll(async () => {
   await sequelize.authenticate();
@@ -43,10 +123,20 @@ afterAll(async () => {
 });
 
 describe('Update Merchant Profile', () => {
-  test('Success', async () => {
-    const token = 'this.is.token';
+  const payload = {
+    fields: {
+      market_name: 'new name',
+      market_address: 'new address',
+      market_close_time: '12:00',
+      market_lat: 123,
+      market_lon: 123,
+    },
+  };
 
-    const { status, headers, body } = await updateMerchantProfile(server, {}, token);
+  test('Success', async () => {
+    const { token } = await createMerchantUser();
+
+    const { status, headers, body } = await updateMerchantProfile(server, payload, token);
 
     expect(status).toBe(200);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -56,7 +146,7 @@ describe('Update Merchant Profile', () => {
   test('Fail, Wrong API Key', async () => {
     const token = 'this-is-wrong-token';
 
-    const { status, headers, body } = await updateMerchantProfile(server, {}, token);
+    const { status, headers, body } = await updateMerchantProfile(server, payload, token);
 
     expect(status).toBe(403);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -64,7 +154,7 @@ describe('Update Merchant Profile', () => {
   });
 
   test('Fail, API Key No Given', async () => {
-    const { status, headers, body } = await updateMerchantProfile(server, {});
+    const { status, headers, body } = await updateMerchantProfile(server, payload);
 
     expect(status).toBe(403);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -73,10 +163,12 @@ describe('Update Merchant Profile', () => {
 });
 
 describe('Update Merchant Close Time', () => {
-  test('Success', async () => {
-    const token = 'this.is.token';
+  const payload = { close_time: '10:00' };
 
-    const { status, headers, body } = await updateMerchantClosetime(server, {}, token);
+  test('Success', async () => {
+    const { token } = await createMerchantUser();
+
+    const { status, headers, body } = await updateMerchantClosetime(server, payload, token);
 
     expect(status).toBe(200);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -84,7 +176,7 @@ describe('Update Merchant Close Time', () => {
   });
 
   test('Fail, No `close_time` Provided', async () => {
-    const token = 'this.is.token';
+    const { token } = await createMerchantUser();
 
     const { status, headers, body } = await updateMerchantClosetime(server, {}, token);
 
@@ -96,7 +188,7 @@ describe('Update Merchant Close Time', () => {
   test('Fail, Wrong API Key', async () => {
     const token = 'this-is-wrong-token';
 
-    const { status, headers, body } = await updateMerchantClosetime(server, {}, token);
+    const { status, headers, body } = await updateMerchantClosetime(server, payload, token);
 
     expect(status).toBe(403);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -104,7 +196,7 @@ describe('Update Merchant Close Time', () => {
   });
 
   test('Fail, API Key No Given', async () => {
-    const { status, headers, body } = await updateMerchantClosetime(server, {});
+    const { status, headers, body } = await updateMerchantClosetime(server, payload);
 
     expect(status).toBe(403);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -114,7 +206,7 @@ describe('Update Merchant Close Time', () => {
 
 describe('Get Merchant Profile', () => {
   test('Fail, Wrong API Key', async () => {
-    const token = 'this.is.token';
+    const { token } = await createMerchantUser();
 
     const { status, headers, body } = await getMerchantProfile(server, token);
 
@@ -143,10 +235,33 @@ describe('Get Merchant Profile', () => {
 });
 
 describe('Post Merchant Product', () => {
-  test('Success', async () => {
-    const token = 'this.is.token';
+  const payload = {
+    fields: {
+      product_name: 'name',
+      description: 'description',
+      normal_price: 123,
+      selling_price: 123,
+      qty: 1,
+      discount: 10,
+    },
+    files: [{ fileDir, field: 'cover' }],
+  };
+  const { fields } = payload;
 
-    const { status, headers, body } = await postMerchantProduct(server, {}, token);
+  test('Success, With Cover', async () => {
+    const { token } = await createMerchantUser();
+
+    const { status, headers, body } = await postMerchantProduct(server, payload, token);
+
+    expect(status).toBe(201);
+    expect(headers['content-type']).toBe('application/json; charset=utf-8');
+    expect(body.success).toBe(true);
+  });
+
+  test('Success, Without Cover', async () => {
+    const { token } = await createMerchantUser();
+
+    const { status, headers, body } = await postMerchantProduct(server, { fields }, token);
 
     expect(status).toBe(201);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -154,7 +269,7 @@ describe('Post Merchant Product', () => {
   });
 
   test('Fail, No Data Provided', async () => {
-    const token = 'this.is.token';
+    const { token } = await createMerchantUser();
 
     const { status, headers, body } = await postMerchantProduct(server, {}, token);
 
@@ -162,11 +277,29 @@ describe('Post Merchant Product', () => {
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
     expect(body.success).toBe(false);
   });
+
+  test('Fail, Wrong API Key', async () => {
+    const token = 'this-is-wrong-token';
+
+    const { status, headers, body } = await postMerchantProduct(server, { fields }, token);
+
+    expect(status).toBe(403);
+    expect(headers['content-type']).toBe('application/json; charset=utf-8');
+    expect(body.success).toBe(false);
+  });
+
+  test('Fail, API Key No Given', async () => {
+    const { status, headers, body } = await postMerchantProduct(server, { fields });
+
+    expect(status).toBe(403);
+    expect(headers['content-type']).toBe('application/json; charset=utf-8');
+    expect(body.success).toBe(false);
+  });
 });
 
 describe('Get Merchant Products', () => {
   test('Success, Without Query', async () => {
-    const token = 'this.is.token';
+    const { token } = await createMerchantUser();
     const query = '';
 
     const { status, headers, body } = await getMerchantProducts(server, query, token);
@@ -177,19 +310,20 @@ describe('Get Merchant Products', () => {
   });
 
   test('Success, with Query `?limit=1`', async () => {
-    const token = 'this.is.token';
+    const { id, token } = await createMerchantUser();
     const query = '?limit=1';
+    await Promise.all([createMerchantProduct(id), createMerchantProduct(id)]);
 
     const { status, headers, body } = await getMerchantProducts(server, query, token);
 
     expect(status).toBe(200);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
     expect(body.success).toBe(true);
-    // expect(body.data.length).toBe(1);
+    expect(body.data.length).toBe(1);
   });
 
   test('Success, with Query `?orderDirection=DESC&orderBy=created_at&search=&page=`', async () => {
-    const token = 'this.is.token';
+    const { token } = await createMerchantUser();
     const query = '?orderDirection=DESC&orderBy=created_at&search=&page=';
 
     const { status, headers, body } = await getMerchantProducts(server, query, token);
@@ -200,7 +334,7 @@ describe('Get Merchant Products', () => {
   });
 
   test('Success, with Query `?orderDirection=DESC&orderBy=product_name&search=&page=`', async () => {
-    const token = 'this.is.token';
+    const { token } = await createMerchantUser();
     const query = '?orderDirection=DESC&orderBy=product_name&search=&page=';
 
     const { status, headers, body } = await getMerchantProducts(server, query, token);
@@ -211,7 +345,7 @@ describe('Get Merchant Products', () => {
   });
 
   test('Success, with Query `?orderDirection=DESC&orderBy=market_name&search=&page=`', async () => {
-    const token = 'this.is.token';
+    const { token } = await createMerchantUser();
     const query = '?orderDirection=DESC&orderBy=market_name&search=&page=';
 
     const { status, headers, body } = await getMerchantProducts(server, query, token);
@@ -222,7 +356,7 @@ describe('Get Merchant Products', () => {
   });
 
   test('Success, with Query `?orderDirection=DESC&orderBy=market_address&search=&page=`', async () => {
-    const token = 'this.is.token';
+    const { token } = await createMerchantUser();
     const query = '?orderDirection=DESC&orderBy=market_address&search=&page=';
 
     const { status, headers, body } = await getMerchantProducts(server, query, token);
@@ -233,7 +367,7 @@ describe('Get Merchant Products', () => {
   });
 
   test('Success, with Query `?orderDirection=ASC&orderBy=created_at&search=&page=`', async () => {
-    const token = 'this.is.token';
+    const { token } = await createMerchantUser();
     const query = '?orderDirection=ASC&orderBy=created_at&search=&page=';
 
     const { status, headers, body } = await getMerchantProducts(server, query, token);
@@ -244,7 +378,7 @@ describe('Get Merchant Products', () => {
   });
 
   test('Success, with Query `?orderDirection=ASC&orderBy=product_name&search=&page=`', async () => {
-    const token = 'this.is.token';
+    const { token } = await createMerchantUser();
     const query = '?orderDirection=ASC&orderBy=product_name&search=&page=';
 
     const { status, headers, body } = await getMerchantProducts(server, query, token);
@@ -255,7 +389,7 @@ describe('Get Merchant Products', () => {
   });
 
   test('Success, with Query `?orderDirection=ASC&orderBy=market_name&search=&page=`', async () => {
-    const token = 'this.is.token';
+    const { token } = await createMerchantUser();
     const query = '?orderDirection=ASC&orderBy=market_name&search=&page=';
 
     const { status, headers, body } = await getMerchantProducts(server, query, token);
@@ -266,7 +400,7 @@ describe('Get Merchant Products', () => {
   });
 
   test('Success, with Query `?orderDirection=ASC&orderBy=market_address&search=&page=`', async () => {
-    const token = 'this.is.token';
+    const { token } = await createMerchantUser();
     const query = '?orderDirection=ASC&orderBy=market_address&search=&page=';
 
     const { status, headers, body } = await getMerchantProducts(server, query, token);
@@ -276,9 +410,9 @@ describe('Get Merchant Products', () => {
     expect(body.success).toBe(true);
   });
 
-  test('Fail, with Query `?orderDirection=ASC&orderBy=market_name&search=&page=`', async () => {
-    const token = 'this.is.token';
-    const query = '?orderDirection=ASC&orderBy=market_name&search=&page=';
+  test('Fail, with Query `?orderDirection=DESCs&orderBy=created_at&search=&page=`', async () => {
+    const { token } = await createMerchantUser();
+    const query = '?orderDirection=DESCs&orderBy=created_at&search=&page=';
 
     const { status, headers, body } = await getMerchantProducts(server, query, token);
 
@@ -288,7 +422,7 @@ describe('Get Merchant Products', () => {
   });
 
   test('Fail, with Query `?orderDirection=DESC&orderBy=created_ats&search=&page=`', async () => {
-    const token = 'this.is.token';
+    const { token } = await createMerchantUser();
     const query = '?orderDirection=DESC&orderBy=created_ats&search=&page=';
 
     const { status, headers, body } = await getMerchantProducts(server, query, token);
@@ -320,36 +454,25 @@ describe('Get Merchant Products', () => {
   });
 });
 
-describe('Post Merchant Product Image', () => {
+describe('Update Merchant Product', () => {
   test('Success', async () => {
-    const token = 'this.is.token';
-    const productId = 0;
+    const { id, token } = await createMerchantUser();
+    const { productId } = await createMerchantProduct(id);
+    const payload = {
+      product_name: 'new name',
+      description: 'new description',
+      normal_price: 1234,
+      selling_price: 1234,
+      qty: 2,
+      discount: 11,
+    };
 
-    const { status, headers, body } = await postMerchantProductImage(server, productId, {}, token);
-
-    expect(status).toBe(201);
-    expect(headers['content-type']).toBe('application/json; charset=utf-8');
-    expect(body.success).toBe(true);
-  });
-
-  test('Fail, No `image` Provided', async () => {
-    const token = 'this.is.token';
-    const productId = 0;
-
-    const { status, headers, body } = await postMerchantProductImage(server, productId, {}, token);
-
-    expect(status).toBe(422);
-    expect(headers['content-type']).toBe('application/json; charset=utf-8');
-    expect(body.success).toBe(false);
-  });
-});
-
-describe('Get Merchant Product Detail', () => {
-  test('Success', async () => {
-    const token = 'this.is.token';
-    const productId = 0;
-
-    const { status, headers, body } = await getMerchantProductDetail(server, productId, token);
+    const { status, headers, body } = await updateMerchantProduct(
+      server,
+      productId,
+      payload,
+      token,
+    );
 
     expect(status).toBe(200);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -357,52 +480,7 @@ describe('Get Merchant Product Detail', () => {
   });
 
   test('Fail, Merchant Product Not Found', async () => {
-    const token = 'this.is.token';
-    const productId = 0;
-
-    const { status, headers, body } = await getMerchantProductDetail(server, productId, token);
-
-    expect(status).toBe(404);
-    expect(headers['content-type']).toBe('application/json; charset=utf-8');
-    expect(body.success).toBe(false);
-  });
-
-  test('Fail, Wrong API Key', async () => {
-    const token = 'this-is-wrong-token';
-    const productId = 0;
-
-    const { status, headers, body } = await getMerchantProductDetail(server, productId, token);
-
-    expect(status).toBe(403);
-    expect(headers['content-type']).toBe('application/json; charset=utf-8');
-    expect(body.success).toBe(false);
-  });
-
-  test('Fail, API Key Not Given', async () => {
-    const productId = 0;
-
-    const { status, headers, body } = await getMerchantProductDetail(server, productId);
-
-    expect(status).toBe(403);
-    expect(headers['content-type']).toBe('application/json; charset=utf-8');
-    expect(body.success).toBe(false);
-  });
-});
-
-describe('Update Merchant Product', () => {
-  test('Success', async () => {
-    const token = 'this.is.token';
-    const productId = 0;
-
-    const { status, headers, body } = await updateMerchantProduct(server, productId, {}, token);
-
-    expect(status).toBe(200);
-    expect(headers['content-type']).toBe('application/json; charset=utf-8');
-    expect(body.success).toBe(true);
-  });
-
-  test('Fail, Merchant Produc Not Found', async () => {
-    const token = 'this.is.token';
+    const { token } = await createMerchantUser();
     const productId = 0;
 
     const { status, headers, body } = await updateMerchantProduct(server, productId, {}, token);
@@ -435,14 +513,18 @@ describe('Update Merchant Product', () => {
 });
 
 describe('Change Merchant Product Cover', () => {
+  const payload = {
+    files: [{ fileDir, field: 'cover' }],
+  };
+
   test('Success', async () => {
-    const token = 'this.is.token';
-    const productId = 0;
+    const { id, token } = await createMerchantUser();
+    const { productId } = await createMerchantProduct(id);
 
     const { status, headers, body } = await updateMerchantProductCover(
       server,
       productId,
-      {},
+      payload,
       token,
     );
 
@@ -452,7 +534,7 @@ describe('Change Merchant Product Cover', () => {
   });
 
   test('Fail, No `cover` Provided', async () => {
-    const token = 'this.is.token';
+    const { token } = await createMerchantUser();
     const productId = 0;
 
     const { status, headers, body } = await updateMerchantProductCover(
@@ -466,17 +548,44 @@ describe('Change Merchant Product Cover', () => {
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
     expect(body.success).toBe(false);
   });
+
+  test('Fail, Wrong API Key', async () => {
+    const token = 'this-is-wrong-token';
+    const productId = 0;
+
+    const { status, headers, body } = await updateMerchantProductCover(
+      server,
+      productId,
+      payload,
+      token,
+    );
+
+    expect(status).toBe(403);
+    expect(headers['content-type']).toBe('application/json; charset=utf-8');
+    expect(body.success).toBe(false);
+  });
+
+  test('Fail, API Key Not Given', async () => {
+    const productId = 0;
+
+    const { status, headers, body } = await updateMerchantProductCover(server, productId, payload);
+
+    expect(status).toBe(403);
+    expect(headers['content-type']).toBe('application/json; charset=utf-8');
+    expect(body.success).toBe(false);
+  });
 });
 
 describe('Update Merchant Product Status', () => {
-  test('Success', async () => {
-    const token = 'this.is.token';
-    const productId = 0;
+  const payload = { status: 2 };
 
+  test('Success', async () => {
+    const { id, token } = await createMerchantUser();
+    const { productId } = await createMerchantProduct(id);
     const { status, headers, body } = await updateMerchantProductStatus(
       server,
       productId,
-      {},
+      payload,
       token,
     );
 
@@ -486,13 +595,13 @@ describe('Update Merchant Product Status', () => {
   });
 
   test('Fail, Merchant Product Not Found', async () => {
-    const token = 'this.is.token';
+    const { token } = await createMerchantUser();
     const productId = 0;
 
     const { status, headers, body } = await updateMerchantProductStatus(
       server,
       productId,
-      {},
+      payload,
       token,
     );
 
@@ -502,7 +611,7 @@ describe('Update Merchant Product Status', () => {
   });
 
   test('Fail, No `status` Provided', async () => {
-    const token = 'this.is.token';
+    const { token } = await createMerchantUser();
     const productId = 0;
 
     const { status, headers, body } = await updateMerchantProductStatus(
@@ -524,7 +633,7 @@ describe('Update Merchant Product Status', () => {
     const { status, headers, body } = await updateMerchantProductStatus(
       server,
       productId,
-      {},
+      payload,
       token,
     );
 
@@ -536,7 +645,7 @@ describe('Update Merchant Product Status', () => {
   test('Fail, API Key Not Given', async () => {
     const productId = 0;
 
-    const { status, headers, body } = await updateMerchantProductStatus(server, productId, {});
+    const { status, headers, body } = await updateMerchantProductStatus(server, productId, payload);
 
     expect(status).toBe(403);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -545,30 +654,33 @@ describe('Update Merchant Product Status', () => {
 });
 
 describe('Bind Merchant Product Category', () => {
+  const payload = { category_id: 0 };
+
   test('Success', async () => {
-    const token = 'this.is.token';
-    const productId = 0;
+    const { id, token } = await createMerchantUser();
+    const { productId, categoryId } = await bindProductCategory(id);
+    const payload = { category_id: categoryId };
 
     const { status, headers, body } = await bindMerchantProductCategory(
       server,
       productId,
-      {},
+      payload,
       token,
     );
 
     expect(status).toBe(200);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
-    expect(body.success).toBe(false);
+    expect(body.success).toBe(true);
   });
 
   test('Fail, Category Not Found', async () => {
-    const token = 'this.is.token';
-    const productId = 0;
+    const { id, token } = await createMerchantUser();
+    const { productId } = await createMerchantProduct(id);
 
     const { status, headers, body } = await bindMerchantProductCategory(
       server,
       productId,
-      {},
+      payload,
       token,
     );
 
@@ -578,13 +690,19 @@ describe('Bind Merchant Product Category', () => {
   });
 
   test('Fail, Merchant Product Category Not Found', async () => {
-    const token = 'this.is.token';
+    const { token } = await createMerchantUser();
     const productId = 0;
+    const { id: categoryId } = await createCategory({
+      category: 'category',
+      description: 'description',
+      slug: 'slug',
+    });
+    const payload = { category_id: categoryId };
 
     const { status, headers, body } = await bindMerchantProductCategory(
       server,
       productId,
-      {},
+      payload,
       token,
     );
 
@@ -594,7 +712,7 @@ describe('Bind Merchant Product Category', () => {
   });
 
   test('Fail, No `category_id` Provided', async () => {
-    const token = 'this.is.token';
+    const { token } = await createMerchantUser();
     const productId = 0;
 
     const { status, headers, body } = await bindMerchantProductCategory(
@@ -616,7 +734,7 @@ describe('Bind Merchant Product Category', () => {
     const { status, headers, body } = await bindMerchantProductCategory(
       server,
       productId,
-      {},
+      payload,
       token,
     );
 
@@ -628,7 +746,109 @@ describe('Bind Merchant Product Category', () => {
   test('Fail, API Key Not Given', async () => {
     const productId = 0;
 
-    const { status, headers, body } = await bindMerchantProductCategory(server, productId, {});
+    const { status, headers, body } = await bindMerchantProductCategory(server, productId, payload);
+
+    expect(status).toBe(403);
+    expect(headers['content-type']).toBe('application/json; charset=utf-8');
+    expect(body.success).toBe(false);
+  });
+});
+
+describe('Post Merchant Product Image', () => {
+  const payload = { files: [{ fileDir, field: 'image' }] };
+
+  test('Success', async () => {
+    const { id, token } = await createMerchantUser();
+    const { productId } = await createMerchantProduct(id);
+
+    const { status, headers, body } = await postMerchantProductImage(
+      server,
+      productId,
+      payload,
+      token,
+    );
+
+    expect(status).toBe(201);
+    expect(headers['content-type']).toBe('application/json; charset=utf-8');
+    expect(body.success).toBe(true);
+  });
+
+  test('Fail, No `image` Provided', async () => {
+    const { token } = await createMerchantUser();
+    const productId = 0;
+
+    const { status, headers, body } = await postMerchantProductImage(server, productId, {}, token);
+
+    expect(status).toBe(422);
+    expect(headers['content-type']).toBe('application/json; charset=utf-8');
+    expect(body.success).toBe(false);
+  });
+
+  test('Fail, Wrong API Key', async () => {
+    const token = 'this-is-wrong-token';
+    const productId = 0;
+
+    const { status, headers, body } = await postMerchantProductImage(
+      server,
+      productId,
+      payload,
+      token,
+    );
+
+    expect(status).toBe(403);
+    expect(headers['content-type']).toBe('application/json; charset=utf-8');
+    expect(body.success).toBe(false);
+  });
+
+  test('Fail, API Key Not Given', async () => {
+    const productId = 0;
+
+    const { status, headers, body } = await postMerchantProductImage(server, productId, payload);
+
+    expect(status).toBe(403);
+    expect(headers['content-type']).toBe('application/json; charset=utf-8');
+    expect(body.success).toBe(false);
+  });
+});
+
+describe('Get Merchant Product Detail', () => {
+  test('Success', async () => {
+    const { id, token } = await createMerchantUser();
+    const { productId } = await createMerchantProduct(id);
+
+    const { status, headers, body } = await getMerchantProductDetail(server, productId, token);
+
+    expect(status).toBe(200);
+    expect(headers['content-type']).toBe('application/json; charset=utf-8');
+    expect(body.success).toBe(true);
+  });
+
+  test('Fail, Product Not Found', async () => {
+    const { token } = await createMerchantUser();
+    const productId = 0;
+
+    const { status, headers, body } = await getMerchantProductDetail(server, productId, token);
+
+    expect(status).toBe(404);
+    expect(headers['content-type']).toBe('application/json; charset=utf-8');
+    expect(body.success).toBe(false);
+  });
+
+  test('Fail, Wrong API Key', async () => {
+    const token = 'this-is-wrong-token';
+    const productId = 0;
+
+    const { status, headers, body } = await getMerchantProductDetail(server, productId, token);
+
+    expect(status).toBe(403);
+    expect(headers['content-type']).toBe('application/json; charset=utf-8');
+    expect(body.success).toBe(false);
+  });
+
+  test('Fail, API Key Not Given', async () => {
+    const productId = 0;
+
+    const { status, headers, body } = await getMerchantProductDetail(server, productId);
 
     expect(status).toBe(403);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -638,14 +858,13 @@ describe('Bind Merchant Product Category', () => {
 
 describe('Delete Merchant Product Category', () => {
   test('Success', async () => {
-    const token = 'this.is.token';
-    const productId = 0;
-    const categoryId = 0;
+    const { id, token } = await createMerchantUser();
+    const { productId, categoryId } = await bindProductCategory(id);
+    const [{ id: productCategoryId }] = await createProductCategory(productId, categoryId);
 
     const { status, headers, body } = await deleteMerchantProductCategory(
       server,
-      productId,
-      categoryId,
+      productCategoryId,
       token,
     );
 
@@ -655,30 +874,11 @@ describe('Delete Merchant Product Category', () => {
   });
 
   test('Fail, Merchant Product Category Not Found', async () => {
-    const token = 'this.is.token';
-    const productId = 0;
+    const { token } = await createMerchantUser();
     const categoryId = 0;
 
     const { status, headers, body } = await deleteMerchantProductCategory(
       server,
-      productId,
-      categoryId,
-      token,
-    );
-
-    expect(status).toBe(404);
-    expect(headers['content-type']).toBe('application/json; charset=utf-8');
-    expect(body.success).toBe(false);
-  });
-
-  test('Fail, Merchant Product Not Found', async () => {
-    const token = 'this.is.token';
-    const productId = 0;
-    const categoryId = 0;
-
-    const { status, headers, body } = await deleteMerchantProductCategory(
-      server,
-      productId,
       categoryId,
       token,
     );
@@ -690,12 +890,10 @@ describe('Delete Merchant Product Category', () => {
 
   test('Fail, Wrong API Key', async () => {
     const token = 'this-is-wrong-token';
-    const productId = 0;
     const categoryId = 0;
 
     const { status, headers, body } = await deleteMerchantProductCategory(
       server,
-      productId,
       categoryId,
       token,
     );
@@ -706,14 +904,9 @@ describe('Delete Merchant Product Category', () => {
   });
 
   test('Fail, API Key Not Given', async () => {
-    const productId = 0;
     const categoryId = 0;
 
-    const { status, headers, body } = await deleteMerchantProductCategory(
-      server,
-      productId,
-      categoryId,
-    );
+    const { status, headers, body } = await deleteMerchantProductCategory(server, categoryId);
 
     expect(status).toBe(403);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -723,10 +916,14 @@ describe('Delete Merchant Product Category', () => {
 
 describe('Delete Merchant Product Image', () => {
   test('Success', async () => {
-    const token = 'this.is.token';
-    const imageId = 0;
+    const { id, token } = await createMerchantUser();
+    const { productImageId } = await addProductImage(id);
 
-    const { status, headers, body } = await deleteMerchantProductImage(server, imageId, token);
+    const { status, headers, body } = await deleteMerchantProductImage(
+      server,
+      productImageId,
+      token,
+    );
 
     expect(status).toBe(200);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -734,7 +931,7 @@ describe('Delete Merchant Product Image', () => {
   });
 
   test('Fail, Merchant Product Image Not Found', async () => {
-    const token = 'this.is.token';
+    const { token } = await createMerchantUser();
     const imageId = 0;
 
     const { status, headers, body } = await deleteMerchantProductImage(server, imageId, token);
@@ -768,8 +965,8 @@ describe('Delete Merchant Product Image', () => {
 
 describe('Delete Merchant Product', () => {
   test('Success', async () => {
-    const token = 'this.is.token';
-    const productId = 0;
+    const { id, token } = await createMerchantUser();
+    const { productId } = await createMerchantProduct(id);
 
     const { status, headers, body } = await deleteMerchantProduct(server, productId, token);
 
@@ -779,7 +976,7 @@ describe('Delete Merchant Product', () => {
   });
 
   test('Fail, Merchant Product Not Found', async () => {
-    const token = 'this.is.token';
+    const { token } = await createMerchantUser();
     const productId = 0;
 
     const { status, headers, body } = await deleteMerchantProduct(server, productId, token);
@@ -813,7 +1010,7 @@ describe('Delete Merchant Product', () => {
 
 describe('Get Merchant Orders', () => {
   test('Success, Without Query', async () => {
-    const token = 'this.is.token';
+    const { token } = await createMerchantUser();
     const query = '';
 
     const { status, headers, body } = await getMerchantOrders(server, query, token);
@@ -824,19 +1021,20 @@ describe('Get Merchant Orders', () => {
   });
 
   test('Success, with Query `?limit=1`', async () => {
-    const token = 'this.is.token';
+    const { id, token } = await createMerchantUser();
     const query = '?limit=1';
+    await Promise.all([createUserTransaction(id), createUserTransaction(id)]);
 
     const { status, headers, body } = await getMerchantOrders(server, query, token);
 
     expect(status).toBe(200);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
     expect(body.success).toBe(true);
-    // expect(body.data.length).toBe(1);
+    expect(body.data.length).toBe(1);
   });
 
   test('Success, with Query `?orderDirection=DESC&orderBy=created_at&search=&page=&limit=&status=0`', async () => {
-    const token = 'this.is.token';
+    const { token } = await createMerchantUser();
     const query = '?orderDirection=DESC&orderBy=created_at&search=&page=&limit=&status=0';
 
     const { status, headers, body } = await getMerchantOrders(server, query, token);
@@ -847,7 +1045,7 @@ describe('Get Merchant Orders', () => {
   });
 
   test('Success, with Query `?orderDirection=DESC&orderBy=full_name&search=&page=&limit=&status=0`', async () => {
-    const token = 'this.is.token';
+    const { token } = await createMerchantUser();
     const query = '?orderDirection=DESC&orderBy=full_name&search=&page=&limit=&status=0';
 
     const { status, headers, body } = await getMerchantOrders(server, query, token);
@@ -858,7 +1056,7 @@ describe('Get Merchant Orders', () => {
   });
 
   test('Success, with Query `?orderDirection=DESC&orderBy=phone_number&search=&page=&limit=&status=0`', async () => {
-    const token = 'this.is.token';
+    const { token } = await createMerchantUser();
     const query = '?orderDirection=DESC&orderBy=phone_number&search=&page=&limit=&status=0';
 
     const { status, headers, body } = await getMerchantOrders(server, query, token);
@@ -869,7 +1067,7 @@ describe('Get Merchant Orders', () => {
   });
 
   test('Success, with Query `?orderDirection=DESC&orderBy=address&search=&page=&limit=&status=0`', async () => {
-    const token = 'this.is.token';
+    const { token } = await createMerchantUser();
     const query = '?orderDirection=DESC&orderBy=address&search=&page=&limit=&status=0';
 
     const { status, headers, body } = await getMerchantOrders(server, query, token);
@@ -880,7 +1078,7 @@ describe('Get Merchant Orders', () => {
   });
 
   test('Success, with Query `?orderDirection=ASC&orderBy=created_at&search=&page=&limit=&status=0`', async () => {
-    const token = 'this.is.token';
+    const { token } = await createMerchantUser();
     const query = '?orderDirection=ASC&orderBy=created_at&search=&page=&limit=&status=0';
 
     const { status, headers, body } = await getMerchantOrders(server, query, token);
@@ -891,7 +1089,7 @@ describe('Get Merchant Orders', () => {
   });
 
   test('Success, with Query `?orderDirection=ASC&orderBy=full_name&search=&page=&limit=&status=0`', async () => {
-    const token = 'this.is.token';
+    const { token } = await createMerchantUser();
     const query = '?orderDirection=ASC&orderBy=full_name&search=&page=&limit=&status=0';
 
     const { status, headers, body } = await getMerchantOrders(server, query, token);
@@ -902,7 +1100,7 @@ describe('Get Merchant Orders', () => {
   });
 
   test('Success, with Query `?orderDirection=ASC&orderBy=phone_number&search=&page=&limit=&status=0`', async () => {
-    const token = 'this.is.token';
+    const { token } = await createMerchantUser();
     const query = '?orderDirection=ASC&orderBy=phone_number&search=&page=&limit=&status=0';
 
     const { status, headers, body } = await getMerchantOrders(server, query, token);
@@ -913,7 +1111,7 @@ describe('Get Merchant Orders', () => {
   });
 
   test('Success, with Query `?orderDirection=ASC&orderBy=address&search=&page=&limit=&status=0`', async () => {
-    const token = 'this.is.token';
+    const { token } = await createMerchantUser();
     const query = '?orderDirection=ASC&orderBy=address&search=&page=&limit=&status=0';
 
     const { status, headers, body } = await getMerchantOrders(server, query, token);
@@ -924,7 +1122,7 @@ describe('Get Merchant Orders', () => {
   });
 
   test('?orderDirection=DESCs&orderBy=created_at&search=&page=&limit=', async () => {
-    const token = 'this.is.token';
+    const { token } = await createMerchantUser();
     const query = '?orderDirection=DESCs&orderBy=created_at&search=&page=&limit=';
 
     const { status, headers, body } = await getMerchantOrders(server, query, token);
@@ -935,7 +1133,7 @@ describe('Get Merchant Orders', () => {
   });
 
   test('Fail, with Query `?orderDirection=DESC&orderBy=created_ats&search=&page=&limit=`', async () => {
-    const token = 'this.is.token';
+    const { token } = await createMerchantUser();
     const query = '?orderDirection=DESC&orderBy=created_ats&search=&page=&limit=';
 
     const { status, headers, body } = await getMerchantOrders(server, query, token);
@@ -969,8 +1167,8 @@ describe('Get Merchant Orders', () => {
 
 describe('Get Merchant Order Detail', () => {
   test('Success', async () => {
-    const token = 'this.is.token';
-    const orderId = 0;
+    const { id, token } = await createMerchantUser();
+    const { transactionId: orderId } = await createTransactionProduct(id);
 
     const { status, headers, body } = await getMerchantOrderDetail(server, orderId, token);
 
@@ -980,7 +1178,7 @@ describe('Get Merchant Order Detail', () => {
   });
 
   test('Fail, Merchant Order Not Found', async () => {
-    const token = 'this.is.token';
+    const { token } = await createMerchantUser();
     const orderId = 0;
 
     const { status, headers, body } = await getMerchantOrderDetail(server, orderId, token);
@@ -1013,11 +1211,18 @@ describe('Get Merchant Order Detail', () => {
 });
 
 describe('Update Merchant Order Status', () => {
-  test('Success', async () => {
-    const token = 'this.is.token';
-    const orderId = 0;
+  const payload = { status: 1 };
 
-    const { status, headers, body } = await updateMerchantOrderStatus(server, orderId, {}, token);
+  test('Success, Not Accept the Order', async () => {
+    const { id, token } = await createMerchantUser();
+    const { transactionId: orderId } = await createTransactionProduct(id);
+
+    const { status, headers, body } = await updateMerchantOrderStatus(
+      server,
+      orderId,
+      payload,
+      token,
+    );
 
     expect(status).toBe(200);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -1025,10 +1230,15 @@ describe('Update Merchant Order Status', () => {
   });
 
   test('Fail, Order Not Found', async () => {
-    const token = 'this.is.token';
+    const { token } = await createMerchantUser();
     const orderId = 0;
 
-    const { status, headers, body } = await updateMerchantOrderStatus(server, orderId, {}, token);
+    const { status, headers, body } = await updateMerchantOrderStatus(
+      server,
+      orderId,
+      payload,
+      token,
+    );
 
     expect(status).toBe(404);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -1036,7 +1246,7 @@ describe('Update Merchant Order Status', () => {
   });
 
   test('Fail, No `status` Provided', async () => {
-    const token = 'this.is.token';
+    const { token } = await createMerchantUser();
     const orderId = 0;
 
     const { status, headers, body } = await updateMerchantOrderStatus(server, orderId, {}, token);
@@ -1050,7 +1260,12 @@ describe('Update Merchant Order Status', () => {
     const token = 'this-is-wrong-token';
     const orderId = 0;
 
-    const { status, headers, body } = await updateMerchantOrderStatus(server, orderId, {}, token);
+    const { status, headers, body } = await updateMerchantOrderStatus(
+      server,
+      orderId,
+      payload,
+      token,
+    );
 
     expect(status).toBe(403);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -1060,7 +1275,7 @@ describe('Update Merchant Order Status', () => {
   test('Fail, API Key Not Given', async () => {
     const orderId = 0;
 
-    const { status, headers, body } = await updateMerchantOrderStatus(server, orderId, {});
+    const { status, headers, body } = await updateMerchantOrderStatus(server, orderId, payload);
 
     expect(status).toBe(403);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -1070,10 +1285,9 @@ describe('Update Merchant Order Status', () => {
 
 describe('Get Merchant List', () => {
   test('Success, Without Query', async () => {
-    const token = 'this.is.token';
     const query = '';
 
-    const { status, headers, body } = await getMerchantList(server, query, token);
+    const { status, headers, body } = await getMerchantList(server, query);
 
     expect(status).toBe(200);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -1081,22 +1295,21 @@ describe('Get Merchant List', () => {
   });
 
   test('Success, with Query `?limit=1`', async () => {
-    const token = 'this.is.token';
     const query = '?limit=1';
+    await Promise.all([createMerchantUser(), createMerchantUser()]);
 
-    const { status, headers, body } = await getMerchantList(server, query, token);
+    const { status, headers, body } = await getMerchantList(server, query);
 
     expect(status).toBe(200);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
     expect(body.success).toBe(true);
-    // expect(body.data.length).toBe(1);
+    expect(body.data.length).toBe(1);
   });
 
   test('Success, with Query `?orderDirection=DESC&orderBy=created_at&search=&page=`', async () => {
-    const token = 'this.is.token';
     const query = '?orderDirection=DESC&orderBy=created_at&search=&page=';
 
-    const { status, headers, body } = await getMerchantList(server, query, token);
+    const { status, headers, body } = await getMerchantList(server, query);
 
     expect(status).toBe(200);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -1104,10 +1317,9 @@ describe('Get Merchant List', () => {
   });
 
   test('Success, with Query `?orderDirection=DESC&orderBy=full_name&search=&page=`', async () => {
-    const token = 'this.is.token';
     const query = '?orderDirection=DESC&orderBy=full_name&search=&page=';
 
-    const { status, headers, body } = await getMerchantList(server, query, token);
+    const { status, headers, body } = await getMerchantList(server, query);
 
     expect(status).toBe(200);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -1115,10 +1327,9 @@ describe('Get Merchant List', () => {
   });
 
   test('Success, with Query `?orderDirection=DESC&orderBy=phone_number&search=&page=`', async () => {
-    const token = 'this.is.token';
     const query = '?orderDirection=DESC&orderBy=phone_number&search=&page=';
 
-    const { status, headers, body } = await getMerchantList(server, query, token);
+    const { status, headers, body } = await getMerchantList(server, query);
 
     expect(status).toBe(200);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -1126,10 +1337,9 @@ describe('Get Merchant List', () => {
   });
 
   test('Success, with Query `?orderDirection=DESC&orderBy=market_name&search=&page=`', async () => {
-    const token = 'this.is.token';
     const query = '?orderDirection=DESC&orderBy=market_name&search=&page=';
 
-    const { status, headers, body } = await getMerchantList(server, query, token);
+    const { status, headers, body } = await getMerchantList(server, query);
 
     expect(status).toBe(200);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -1137,10 +1347,9 @@ describe('Get Merchant List', () => {
   });
 
   test('Success, with Query `?orderDirection=DESC&orderBy=market_address&search=&page=`', async () => {
-    const token = 'this.is.token';
     const query = '?orderDirection=DESC&orderBy=market_address&search=&page=';
 
-    const { status, headers, body } = await getMerchantList(server, query, token);
+    const { status, headers, body } = await getMerchantList(server, query);
 
     expect(status).toBe(200);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -1148,10 +1357,9 @@ describe('Get Merchant List', () => {
   });
 
   test('Success, with Query `?orderDirection=ASC&orderBy=created_at&search=&page=`', async () => {
-    const token = 'this.is.token';
     const query = '?orderDirection=ASC&orderBy=created_at&search=&page=';
 
-    const { status, headers, body } = await getMerchantList(server, query, token);
+    const { status, headers, body } = await getMerchantList(server, query);
 
     expect(status).toBe(200);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -1159,10 +1367,9 @@ describe('Get Merchant List', () => {
   });
 
   test('Success, with Query `?orderDirection=ASC&orderBy=full_name&search=&page=`', async () => {
-    const token = 'this.is.token';
     const query = '?orderDirection=ASC&orderBy=full_name&search=&page=';
 
-    const { status, headers, body } = await getMerchantList(server, query, token);
+    const { status, headers, body } = await getMerchantList(server, query);
 
     expect(status).toBe(200);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -1170,10 +1377,9 @@ describe('Get Merchant List', () => {
   });
 
   test('Success, with Query `?orderDirection=ASC&orderBy=phone_number&search=&page=`', async () => {
-    const token = 'this.is.token';
     const query = '?orderDirection=ASC&orderBy=phone_number&search=&page=';
 
-    const { status, headers, body } = await getMerchantList(server, query, token);
+    const { status, headers, body } = await getMerchantList(server, query);
 
     expect(status).toBe(200);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -1181,10 +1387,9 @@ describe('Get Merchant List', () => {
   });
 
   test('Success, with Query `?orderDirection=ASC&orderBy=market_name&search=&page=`', async () => {
-    const token = 'this.is.token';
     const query = '?orderDirection=ASC&orderBy=market_name&search=&page=';
 
-    const { status, headers, body } = await getMerchantList(server, query, token);
+    const { status, headers, body } = await getMerchantList(server, query);
 
     expect(status).toBe(200);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -1192,21 +1397,19 @@ describe('Get Merchant List', () => {
   });
 
   test('Success, with Query `?orderDirection=ASC&orderBy=market_address&search=&page=`', async () => {
-    const token = 'this.is.token';
     const query = '?orderDirection=ASC&orderBy=market_address&search=&page=';
 
-    const { status, headers, body } = await getMerchantList(server, query, token);
+    const { status, headers, body } = await getMerchantList(server, query);
 
     expect(status).toBe(200);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
     expect(body.success).toBe(true);
   });
 
-  test('Fail, with Query `?orderDirection=ASC&orderBy=market_name&search=&page=`', async () => {
-    const token = 'this.is.token';
-    const query = '?orderDirection=ASC&orderBy=market_name&search=&page=';
+  test('Fail, with Query `?orderDirection=DESCs&orderBy=created_at&search=&page=`', async () => {
+    const query = '?orderDirection=DESCs&orderBy=created_at&search=&page=';
 
-    const { status, headers, body } = await getMerchantList(server, query, token);
+    const { status, headers, body } = await getMerchantList(server, query);
 
     expect(status).toBe(422);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -1214,33 +1417,11 @@ describe('Get Merchant List', () => {
   });
 
   test('Fail, with Query `?orderDirection=DESC&orderBy=created_ats&search=&page=`', async () => {
-    const token = 'this.is.token';
     const query = '?orderDirection=DESC&orderBy=created_ats&search=&page=';
-
-    const { status, headers, body } = await getMerchantList(server, query, token);
-
-    expect(status).toBe(422);
-    expect(headers['content-type']).toBe('application/json; charset=utf-8');
-    expect(body.success).toBe(false);
-  });
-
-  test('Fail, Wrong API Key', async () => {
-    const token = 'this-is-wrong-token';
-    const query = '';
-
-    const { status, headers, body } = await getMerchantList(server, query, token);
-
-    expect(status).toBe(403);
-    expect(headers['content-type']).toBe('application/json; charset=utf-8');
-    expect(body.success).toBe(false);
-  });
-
-  test('Fail, API Key Not Given', async () => {
-    const query = '';
 
     const { status, headers, body } = await getMerchantList(server, query);
 
-    expect(status).toBe(403);
+    expect(status).toBe(422);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
     expect(body.success).toBe(false);
   });
@@ -1248,10 +1429,9 @@ describe('Get Merchant List', () => {
 
 describe('Get Merchant Product List', () => {
   test('Success', async () => {
-    const token = 'this.is.token';
-    const merchantId = 0;
+    const { id: merchantId } = await createMerchantUser();
 
-    const { status, headers, body } = await getMerchantProductList(server, merchantId, token);
+    const { status, headers, body } = await getMerchantProductList(server, merchantId);
 
     expect(status).toBe(200);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -1259,33 +1439,11 @@ describe('Get Merchant Product List', () => {
   });
 
   test('Fail, Merchant Not Found', async () => {
-    const token = 'this.is.token';
-    const merchantId = 0;
-
-    const { status, headers, body } = await getMerchantProductList(server, merchantId, token);
-
-    expect(status).toBe(404);
-    expect(headers['content-type']).toBe('application/json; charset=utf-8');
-    expect(body.success).toBe(false);
-  });
-
-  test('Fail, Wrong API Key', async () => {
-    const token = 'this-is-wrong-token';
-    const merchantId = 0;
-
-    const { status, headers, body } = await getMerchantProductList(server, merchantId, token);
-
-    expect(status).toBe(403);
-    expect(headers['content-type']).toBe('application/json; charset=utf-8');
-    expect(body.success).toBe(false);
-  });
-
-  test('Fail, API Key Not Given', async () => {
     const merchantId = 0;
 
     const { status, headers, body } = await getMerchantProductList(server, merchantId);
 
-    expect(status).toBe(403);
+    expect(status).toBe(404);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
     expect(body.success).toBe(false);
   });
@@ -1293,10 +1451,9 @@ describe('Get Merchant Product List', () => {
 
 describe('Get Random Merchants', () => {
   test('Success, Without Query', async () => {
-    const token = 'this.is.token';
     const query = '';
 
-    const { status, headers, body } = await getRandomMerchant(server, query, token);
+    const { status, headers, body } = await getRandomMerchant(server, query);
 
     expect(status).toBe(200);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -1304,41 +1461,21 @@ describe('Get Random Merchants', () => {
   });
 
   test('Success, with Query `?limit=1`', async () => {
-    const token = 'this.is.token';
     const query = '?limit=1';
+    await Promise.all([createMerchantUser(), createMerchantUser()]);
 
-    const { status, headers, body } = await getRandomMerchant(server, query, token);
+    const { status, headers, body } = await getRandomMerchant(server, query);
 
     expect(status).toBe(200);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
     expect(body.success).toBe(true);
-  });
-
-  test('Fail, Wrong API Key', async () => {
-    const token = 'this-is-wrong-token';
-    const query = '';
-
-    const { status, headers, body } = await getRandomMerchant(server, query, token);
-
-    expect(status).toBe(403);
-    expect(headers['content-type']).toBe('application/json; charset=utf-8');
-    expect(body.success).toBe(false);
-  });
-
-  test('Fail, API Key Not Given', async () => {
-    const query = '';
-
-    const { status, headers, body } = await getRandomMerchant(server, query);
-
-    expect(status).toBe(403);
-    expect(headers['content-type']).toBe('application/json; charset=utf-8');
-    expect(body.success).toBe(false);
+    expect(body.data.length).toBe(1);
   });
 });
 
 describe('Get Merchant Transaction Histories', () => {
   test('Success, Without Query', async () => {
-    const token = 'this.is.token';
+    const { token } = await createMerchantUser();
     const query = '';
 
     const { status, headers, body } = await getMerchantTransactionHistories(server, query, token);
@@ -1349,7 +1486,7 @@ describe('Get Merchant Transaction Histories', () => {
   });
 
   test('Success, with Query `?date=2021-2-3`', async () => {
-    const token = 'this.is.token';
+    const { token } = await createMerchantUser();
     const query = '?date=2021-2-3';
 
     const { status, headers, body } = await getMerchantTransactionHistories(server, query, token);
@@ -1383,10 +1520,10 @@ describe('Get Merchant Transaction Histories', () => {
 
 describe('Get Merchant Income Histories', () => {
   test('Success, Without Query', async () => {
-    const token = 'this.is.token';
+    const { token } = await createMerchantUser();
     const query = '';
 
-    const { status, headers, body } = await getMerchantIncomHistories(server, query, token);
+    const { status, headers, body } = await getMerchantIncomeHistories(server, query, token);
 
     expect(status).toBe(200);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -1394,10 +1531,10 @@ describe('Get Merchant Income Histories', () => {
   });
 
   test('Success, with Query `?year=2021`', async () => {
-    const token = 'this.is.token';
+    const { token } = await createMerchantUser();
     const query = '?year=2021';
 
-    const { status, headers, body } = await getMerchantIncomHistories(server, query, token);
+    const { status, headers, body } = await getMerchantIncomeHistories(server, query, token);
 
     expect(status).toBe(200);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -1408,7 +1545,7 @@ describe('Get Merchant Income Histories', () => {
     const token = 'this-is-wrong-token';
     const query = '';
 
-    const { status, headers, body } = await getMerchantIncomHistories(server, query, token);
+    const { status, headers, body } = await getMerchantIncomeHistories(server, query, token);
 
     expect(status).toBe(403);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -1418,7 +1555,7 @@ describe('Get Merchant Income Histories', () => {
   test('Fail, API Key Not Given', async () => {
     const query = '';
 
-    const { status, headers, body } = await getMerchantIncomHistories(server, query);
+    const { status, headers, body } = await getMerchantIncomeHistories(server, query);
 
     expect(status).toBe(403);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');

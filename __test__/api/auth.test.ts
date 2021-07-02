@@ -2,7 +2,7 @@ import type { Server } from 'http';
 import type { FastifyInstance } from 'fastify';
 import app from '../../src/config/app';
 import sequelize from '../../src/databases/sequelize';
-import { createUserImg, updateUser, getUser } from '../../src/api/repositories/UserRepository';
+import { createMedia, updateUser, getUser } from '../../src/api/repositories/UserRepository';
 import {
   userRegistration,
   userLogin,
@@ -24,7 +24,7 @@ import {
   registration,
   registerThenLogin,
   registerThenForgotPass,
-  createMercUser,
+  createMerchantUser,
 } from '../component';
 
 let server: Server = null;
@@ -218,7 +218,7 @@ describe('Activate Merchant', () => {
   });
 
   test('Fail, User Already Merchant Identified by User ID', async () => {
-    const { token } = await createMercUser();
+    const { token } = await createMerchantUser();
     const payload = registerMerchPayload();
 
     const { status, headers, body } = await registerMerchant(server, payload, token);
@@ -229,7 +229,7 @@ describe('Activate Merchant', () => {
   });
 
   test('Fail, User Already Merchant Identified by Token Type', async () => {
-    const { username, password } = await createMercUser();
+    const { username, password } = await createMerchantUser();
     const { token } = await userLogin({ username, password });
 
     const { status, headers, body } = await registerMerchant(server, payload, token);
@@ -376,7 +376,7 @@ describe('Update Profile', () => {
     const payload = updateProfilePayload();
     const [{ id: userId }, { id: imgId }] = await Promise.all([
       getUser('USERNAME', username),
-      createUserImg(`${username}-not-valid.jpg`),
+      createMedia(`${username}-not-valid.jpg`),
     ]);
     await updateUser(userId, { id_photo: imgId });
 
@@ -619,7 +619,7 @@ describe('Reset Password', () => {
     expect(body.success).toBe(false);
   });
 
-  test('Fail, `password` too Short', async () => {
+  test('Fail, `new_password` too Short', async () => {
     const { verification_token } = await registerThenForgotPass();
     await verifyUserToken({ token: verification_token });
     const payload = {
