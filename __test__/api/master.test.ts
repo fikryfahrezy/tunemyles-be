@@ -1,16 +1,14 @@
 import type { Server } from 'http';
 import type { FastifyInstance } from 'fastify';
 import app from '../../src/config/app';
-import sequelize from '../../src/databases/sequelize';
 import {
+  sequelize,
   createBank,
   createBankStep,
   createCategory,
-  createMedia,
+  createMasterMedia,
   createWallet,
   createFaq,
-} from '../../src/api/repositories/MasterRepository';
-import {
   fileDir,
   postMasterBank,
   getMasterBanks,
@@ -865,7 +863,7 @@ describe('Get Medias', () => {
   test('Success, with Query `?limit=1`', async () => {
     const token = await createAdminUser();
     const payload = 'label';
-    await Promise.all([createMedia(payload), createMedia(payload)]);
+    await Promise.all([createMasterMedia(payload), createMasterMedia(payload)]);
     const query = '?limit=1';
 
     const { status, headers, body } = await getMedias(server, query, token);
@@ -967,7 +965,7 @@ describe('Get Medias', () => {
 describe('Update Media', () => {
   test('Success', async () => {
     const token = await createAdminUser();
-    const { id: mediaId } = await createMedia('label');
+    const { id: mediaId } = await createMasterMedia('label');
 
     const { status, headers, body } = await updateMedia(
       server,

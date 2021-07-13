@@ -15,7 +15,7 @@ import { renameFiles } from '../../utils/file-management';
 import dbQuerying from '../../middlewares/db-querying';
 import schemaValidation from '../../middlewares/schema-validation';
 import { protect } from '../../middlewares/protect-route';
-import { requestHeaders, requestQuery, requestBody, requestParams } from './schemas';
+import { requestHeaders, requestQuery, requestBody, requestParams, responses } from './schemas';
 import {
   topUp,
   withdraw,
@@ -39,6 +39,23 @@ const routes = function routes(
   /**
    * The order of the keys is following the order of the routes in Postman
    */
+
+  fastify.get<Request<{ Headers: ApiKeyHeader }>>(
+    '/',
+    {
+      attachValidation: true,
+      schema: {
+        headers: requestHeaders.private,
+        response: {
+          200: responses.wallets,
+          '4xx': { $ref: '#ApiResponse' },
+          '5xx': { $ref: '#ApiResponse' },
+        },
+      },
+      preHandler: [schemaValidation, handlerWrapper(protect('USER'))],
+    },
+    controllerWrapper(getWallets),
+  );
 
   fastify.post<Request<{ Headers: ApiKeyHeader; Body: TopUpBody }>>(
     '/topup',
@@ -76,23 +93,6 @@ const routes = function routes(
     controllerWrapper(withdraw),
   );
 
-  fastify.get<Request<{ Headers: ApiKeyHeader }>>(
-    '/',
-    {
-      attachValidation: true,
-      schema: {
-        headers: requestHeaders.private,
-        response: {
-          200: { $ref: '#ApiResponse' },
-          '4xx': { $ref: '#ApiResponse' },
-          '5xx': { $ref: '#ApiResponse' },
-        },
-      },
-      preHandler: [schemaValidation, handlerWrapper(protect('USER'))],
-    },
-    controllerWrapper(getWallets),
-  );
-
   fastify.get<Request<{ Headers: ApiKeyHeader; Querystring: GetQuery }>>(
     '/topup/histories',
     {
@@ -101,12 +101,16 @@ const routes = function routes(
         headers: requestHeaders.private,
         querystring: requestQuery.topUpHistories,
         response: {
-          200: { $ref: '#ApiResponse' },
+          200: responses.topUpHistories,
           '4xx': { $ref: '#ApiResponse' },
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preHandler: [schemaValidation, handlerWrapper(protect('USER'))],
+      preHandler: [
+        schemaValidation,
+        handlerWrapper(protect('USER')),
+        handlerWrapper(dbQuerying('TOP_UP')),
+      ],
     },
     controllerWrapper(getTopUpHistories),
   );
@@ -119,12 +123,16 @@ const routes = function routes(
         headers: requestHeaders.private,
         querystring: requestQuery.withdrawHistories,
         response: {
-          200: { $ref: '#ApiResponse' },
+          200: responses.withdrawHistories,
           '4xx': { $ref: '#ApiResponse' },
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preHandler: [schemaValidation, handlerWrapper(protect('USER'))],
+      preHandler: [
+        schemaValidation,
+        handlerWrapper(protect('USER')),
+        handlerWrapper(dbQuerying('WITHDRAW')),
+      ],
     },
     controllerWrapper(getWithdrawHistories),
   );
@@ -137,7 +145,7 @@ const routes = function routes(
         headers: requestHeaders.private,
         params: requestParams.id,
         response: {
-          200: { $ref: '#ApiResponse' },
+          200: responses.topUpDetail,
           '4xx': { $ref: '#ApiResponse' },
           '5xx': { $ref: '#ApiResponse' },
         },
@@ -155,7 +163,7 @@ const routes = function routes(
         headers: requestHeaders.private,
         params: requestParams.id,
         response: {
-          200: { $ref: '#ApiResponse' },
+          200: responses.withdrawDetail,
           '4xx': { $ref: '#ApiResponse' },
           '5xx': { $ref: '#ApiResponse' },
         },
@@ -173,7 +181,7 @@ const routes = function routes(
         headers: requestHeaders.private,
         querystring: requestQuery.topUp,
         response: {
-          200: { $ref: '#ApiResponse' },
+          200: responses.topUpHistories,
           '4xx': { $ref: '#ApiResponse' },
           '5xx': { $ref: '#ApiResponse' },
         },
@@ -195,7 +203,7 @@ const routes = function routes(
         headers: requestHeaders.private,
         querystring: requestQuery.withdraw,
         response: {
-          200: { $ref: '#ApiResponse' },
+          200: responses.withdrawHistories,
           '4xx': { $ref: '#ApiResponse' },
           '5xx': { $ref: '#ApiResponse' },
         },

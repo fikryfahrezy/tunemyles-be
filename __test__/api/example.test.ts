@@ -3,7 +3,7 @@ import type { FastifyInstance } from 'fastify';
 import supertest from 'supertest';
 import fs from 'fs';
 import app from '../../src/config/app';
-import sequelize from '../../src/databases/sequelize';
+import { sequelize } from '../component';
 
 let server: Server = null;
 let appServer: FastifyInstance = null;

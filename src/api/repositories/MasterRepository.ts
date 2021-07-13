@@ -211,7 +211,7 @@ export const getBank: (bankId: number) => Promise<BankType | null> = function ge
       mb.updated_at
     FROM m_banks mb
       LEFT JOIN m_medias mm ON mm.id = mb.id_logo
-    WHERE mb.id = :bankId;
+    WHERE mb.id = :bankId
   `;
 
   return sequelize.query<BankType>(sqlQuery, {
@@ -230,7 +230,7 @@ export const getBankUtilitiesByBankId: (
       id,
       step
     FROM u_bank
-    WHERE id_m_banks = :bankId;
+    WHERE id_m_banks = :bankId
   `;
 
   return sequelize.query(sqlQuery, {
@@ -250,7 +250,7 @@ export const getBankAccountsByBankId: (
       account_name,
       account_number
     FROM u_bank_account
-    WHERE id_m_banks = :bankId;
+    WHERE id_m_banks = :bankId
   `;
 
   return sequelize.query(sqlQuery, {
@@ -392,7 +392,7 @@ export const getWalletLogo: (
   });
 };
 
-export const getFaqs: () => Promise<unknown> = async function getFaqs() {
+export const getFaqs: () => Promise<unknown> = function getFaqs() {
   const sqlQuery = `
     SELECT
       mf.id,

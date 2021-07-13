@@ -227,16 +227,14 @@ export const responses = {
                     balance: {
                       type: 'integer',
                     },
-                    is_visible: {
+                    visibility: {
                       type: 'integer',
                     },
                     wallet_name: {
                       type: 'string',
-                      nullable: true,
                     },
                     wallet_description: {
                       type: 'string',
-                      nullable: true,
                     },
                     logo_label: {
                       type: 'string',
@@ -265,7 +263,7 @@ export const responses = {
         type: 'object',
         properties: {
           data: {
-            $ref: '#GetToken',
+            $ref: '#TokenResponse',
           },
         },
       },

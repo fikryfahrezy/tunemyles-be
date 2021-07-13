@@ -29,7 +29,9 @@ type UserForgotToken = {
   userId: number;
 };
 
-const { User, UserUtility, UserWallet, Media, UserLostPassword, Merchant } = initModels(sequelize);
+const { User, UserUtility, Wallet, UserWallet, Media, UserLostPassword, Merchant } = initModels(
+  sequelize,
+);
 
 export const createUser: (data: RegisterBody) => Promise<ModelType['User']> = function createUser(
   data: RegisterBody,
@@ -44,10 +46,15 @@ export const createUserUtility: (
   return UserUtility.create({ api_token: token, id_m_users: userId });
 };
 
+export const createWallet: () => Promise<ModelType['Wallet']> = function createWallet() {
+  return Wallet.create({ wallet_name: 'Wallet Name', wallet_description: 'Wallet Description' });
+};
+
 export const createUserWallet: (
+  walletId: number,
   userUtilityId: number,
-) => Promise<ModelType['UserWallet']> = function createUserWallet(userUtilityId) {
-  return UserWallet.create({ id_u_user: userUtilityId });
+) => Promise<ModelType['UserWallet']> = function createUserWallet(walletId, userUtilityId) {
+  return UserWallet.create({ id_m_wallets: walletId, id_u_user: userUtilityId });
 };
 
 export const createMedia: (label: string) => Promise<ModelType['Media']> = function createUserImg(
@@ -200,7 +207,7 @@ export const getUserWallets: (userId: number) => Promise<unknown> = function get
   const sqlQuery = `
         SELECT
             uuw.balance,
-            uuw.is_visible,
+            uuw.is_visible AS visibility,
             mw.wallet_name,
             mw.wallet_description,
             mm.label AS logo_label,

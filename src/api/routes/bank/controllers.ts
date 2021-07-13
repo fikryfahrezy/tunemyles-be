@@ -19,13 +19,6 @@ export const postBankUser: RequestHandler<
   Request<{ Headers: ApiKeyHeader; Body: PostBankUserBody }>
 > = async function postBankUser(req, res): Promise<void> {
   const userToken = this.requestContext.get<CustModelType['UserToken']>('usertoken');
-  const query = this.requestContext.get<CustModelType['SearchQuery']>('query');
-
-  if (!query) {
-    res.badRequest();
-
-    return;
-  }
 
   if (!userToken) {
     res.unauthorized();
@@ -102,9 +95,9 @@ export const updateBankUser: RequestHandler<
   Request<{ Headers: ApiKeyHeader; Params: IdRequestParams; Body: UpdateBankUserBody }>
 > = async function deleteBankUser(req, res): Promise<void> {
   const userToken = this.requestContext.get<CustModelType['UserToken']>('usertoken');
-  const bankId = parseInt(req.params.id, 10) || -1;
+  const userBankId = parseInt(req.params.id, 10) || -1;
 
-  if (bankId <= 0) {
+  if (userBankId <= 0) {
     res.notFound();
 
     return;
@@ -116,7 +109,7 @@ export const updateBankUser: RequestHandler<
     return;
   }
 
-  await updateUserBank(userToken.userId, bankId, req.body);
+  await updateUserBank(userBankId, userToken.userId, req.body);
 
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
@@ -129,9 +122,9 @@ export const deleteBankUser: RequestHandler<
   Request<{ Headers: ApiKeyHeader; Params: IdRequestParams }>
 > = async function deleteBankUser(req, res): Promise<void> {
   const userToken = this.requestContext.get<CustModelType['UserToken']>('usertoken');
-  const bankId = parseInt(req.params.id, 10) || -1;
+  const userBankId = parseInt(req.params.id, 10) || -1;
 
-  if (bankId <= 0) {
+  if (userBankId <= 0) {
     res.notFound();
 
     return;
@@ -143,7 +136,7 @@ export const deleteBankUser: RequestHandler<
     return;
   }
 
-  await deleteUserBank(userToken.userId, bankId);
+  await deleteUserBank(userBankId, userToken.userId);
 
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,

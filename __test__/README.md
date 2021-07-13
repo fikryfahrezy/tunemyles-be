@@ -2001,7 +2001,7 @@
 - Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
-- Property `data` on the body should have a `length of 1`
+- **[JEST]** Property `data` on the body should have a `length of 1`
 
 **[POSTMAN] [JEST]** Success, Without Query and Category Not Found
 
@@ -2074,32 +2074,6 @@
 
 ---
 
-#### [# Post User Bank](#post-user-bank)
-
-**[POSTMAN] [JEST]** Success
-
-- Status code should `201`
-- Header `Content-Type` should `application/json; charset=utf-8`
-- Body should object with `success` property `true`
-
-**[POSTMAN] [JEST]** Fail, No Data Provided
-
-- Status code should `422`
-- Header `Content-Type` should `application/json; charset=utf-8`
-- Body should object with `success` property `false`
-
-**[POSTMAN] [JEST]** Fail, Wrong API Key
-
-- Status code should `403`
-- Header `Content-Type` should `application/json; charset=utf-8`
-- Body should object with `success` property `false`
-
-**[POSTMAN] [JEST]** Fail, API Key Not Given
-
-- Status code should `403`
-- Header `Content-Type` should `application/json; charset=utf-8`
-- Body should object with `success` property `false`
-
 #### [# Get Banks](#get-banks)
 
 **[POSTMAN] [JEST]** Success
@@ -2131,6 +2105,32 @@
 **[POSTMAN] [JEST]** Fail, Bank Not Found
 
 - Status code should `404`
+- Header `Content-Type` should `application/json; charset=utf-8`
+- Body should object with `success` property `false`
+
+**[POSTMAN] [JEST]** Fail, Wrong API Key
+
+- Status code should `403`
+- Header `Content-Type` should `application/json; charset=utf-8`
+- Body should object with `success` property `false`
+
+**[POSTMAN] [JEST]** Fail, API Key Not Given
+
+- Status code should `403`
+- Header `Content-Type` should `application/json; charset=utf-8`
+- Body should object with `success` property `false`
+
+#### [# Post User Bank](#post-user-bank)
+
+**[POSTMAN] [JEST]** Success
+
+- Status code should `201`
+- Header `Content-Type` should `application/json; charset=utf-8`
+- Body should object with `success` property `true`
+
+**[POSTMAN] [JEST]** Fail, No Data Provided
+
+- Status code should `422`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `false`
 
@@ -2180,12 +2180,6 @@
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `false`
 
-**[POSTMAN] [JEST]** Fail, No `bank_id` Provided
-
-- Status code should `422`
-- Header `Content-Type` should `application/json; charset=utf-8`
-- Body should object with `success` property `false`
-
 **[POSTMAN] [JEST]** Fail, Wrong API Key
 
 - Status code should `403`
@@ -2228,6 +2222,26 @@
 
 ---
 
+#### [# Get Wallets](#get-wallets)
+
+**[POSTMAN] [JEST]** Success
+
+- Status code should `200`
+- Header `Content-Type` should `application/json; charset=utf-8`
+- Body should object with `success` property `false`
+
+**[POSTMAN] [JEST]** Fail, Wrong API Key
+
+- Status code should `403`
+- Header `Content-Type` should `application/json; charset=utf-8`
+- Body should object with `success` property `false`
+
+**[POSTMAN] [JEST]** Fail, API Key Not Given
+
+- Status code should `403`
+- Header `Content-Type` should `application/json; charset=utf-8`
+- Body should object with `success` property `false`
+
 #### [# Top Up](#top-up)
 
 **[POSTMAN] [JEST]** Success
@@ -2235,12 +2249,6 @@
 - Status code should `201`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
-
-**[POSTMAN] [JEST]** Fail, Wallet Not Found
-
-- Status code should `404`
-- Header `Content-Type` should `application/json; charset=utf-8`
-- Body should object with `success` property `false`
 
 **[POSTMAN] [JEST]** Fail, No Data Provided
 
@@ -2268,35 +2276,9 @@
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
-**[POSTMAN] [JEST]** Fail, Wallet Not Found
-
-- Status code should `404`
-- Header `Content-Type` should `application/json; charset=utf-8`
-- Body should object with `success` property `false`
-
 **[POSTMAN] [JEST]** Fail, No Data Provided
 
 - Status code should `422`
-- Header `Content-Type` should `application/json; charset=utf-8`
-- Body should object with `success` property `false`
-
-**[POSTMAN] [JEST]** Fail, Wrong API Key
-
-- Status code should `403`
-- Header `Content-Type` should `application/json; charset=utf-8`
-- Body should object with `success` property `false`
-
-**[POSTMAN] [JEST]** Fail, API Key Not Given
-
-- Status code should `403`
-- Header `Content-Type` should `application/json; charset=utf-8`
-- Body should object with `success` property `false`
-
-#### [# Get Wallets](#get-wallets)
-
-**[POSTMAN] [JEST]** Success
-
-- Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `false`
 

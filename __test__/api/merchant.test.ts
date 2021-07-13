@@ -1,17 +1,9 @@
 import type { Server } from 'http';
 import type { FastifyInstance } from 'fastify';
 import app from '../../src/config/app';
-import { createCategory } from '../../src/api/repositories/MasterRepository';
-import initModels from '../../src/api/models/sql/init-models';
-import {
-  createProduct,
-  createProductUtility,
-  createProductCategory,
-  createMedia,
-  createProductPhoto,
-} from '../../src/api/repositories/MerchantRepository';
 import {
   sequelize,
+  createProductCategory,
   fileDir,
   updateMerchantProfile,
   updateMerchantClosetime,
@@ -35,80 +27,17 @@ import {
   getRandomMerchant,
   getMerchantTransactionHistories,
   getMerchantIncomeHistories,
-  createUser,
   createMerchantUser,
+  createMerchantProduct,
+  addCategory,
+  bindProductCategory,
+  addProductImage,
+  createUserTransaction,
+  createTransactionProduct,
 } from '../component';
 
-const { UserTransaction, TransactionProduct } = initModels(sequelize);
 let server: Server = null;
 let appServer: FastifyInstance = null;
-
-const createMerchantProduct = async function updateMerchantProduct(userId: number) {
-  const { id: productId } = await createProduct(userId, {
-    product_name: 'name',
-    description: 'description',
-  });
-
-  const { id: productUtilId } = await createProductUtility(productId, {
-    normal_price: 123,
-    selling_price: 123,
-    qty: 1,
-    discount: 10,
-  });
-
-  return { productId, productUtilId };
-};
-
-const bindProductCategory = async function bindProductCategory(userId: number) {
-  const [{ id: categoryId }, { productId }] = await Promise.all([
-    createCategory({
-      category: 'category',
-      description: 'description',
-      slug: 'slug',
-    }),
-    createMerchantProduct(userId),
-  ]);
-
-  return { categoryId, productId };
-};
-
-const addProductImage = async function addProductImage(userId: number) {
-  const [{ productUtilId }, { id: mediaId }] = await Promise.all([
-    createMerchantProduct(userId),
-    createMedia('a'),
-  ]);
-  const { id } = await createProductPhoto(productUtilId, mediaId);
-
-  return { productImageId: id };
-};
-
-const createUserTransaction = async function createUserTransaction(merchantId: number) {
-  const { userId } = await createUser();
-  const { id: transactionId } = await UserTransaction.create({
-    id_m_users: userId,
-    id_merchant: merchantId,
-    transaction_token: '213213213',
-    total_price: 0,
-    status: 0,
-  });
-  return { userId, transactionId };
-};
-
-const createTransactionProduct = async function createTransactionProduct(merchantId: number) {
-  const { transactionId } = await createUserTransaction(merchantId);
-  const { productId } = await createMerchantProduct(merchantId);
-
-  await TransactionProduct.create({
-    id_u_user_transaction: transactionId,
-    id_m_products: productId,
-    transaction_token: 'wrwerwe',
-    qty: 1,
-    status: 0,
-    sub_total_price: 1,
-  });
-
-  return { transactionId };
-};
 
 beforeAll(async () => {
   await sequelize.authenticate();
@@ -689,14 +618,10 @@ describe('Bind Merchant Product Category', () => {
     expect(body.success).toBe(false);
   });
 
-  test('Fail, Merchant Product Category Not Found', async () => {
+  test('Fail, Merchant Product Not Found', async () => {
     const { token } = await createMerchantUser();
     const productId = 0;
-    const { id: categoryId } = await createCategory({
-      category: 'category',
-      description: 'description',
-      slug: 'slug',
-    });
+    const { id: categoryId } = await addCategory();
     const payload = { category_id: categoryId };
 
     const { status, headers, body } = await bindMerchantProductCategory(

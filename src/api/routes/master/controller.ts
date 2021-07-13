@@ -57,7 +57,7 @@ export const postMasterBank: RequestHandler<
   res.status(201).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 201,
     success: true,
-    message: 'successfully add bank',
+    message: 'success',
   });
 };
 
@@ -77,7 +77,7 @@ export const getMasterBanks: RequestHandler<
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
     success: true,
-    message: 'successfully fetch bank data',
+    message: 'success',
     data: resData,
   });
 };
@@ -98,7 +98,7 @@ export const getMasterBankDetail: RequestHandler<
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
     success: true,
-    message: 'successfully fetch bank detail',
+    message: 'success',
     data: resData,
   });
 };
@@ -119,7 +119,7 @@ export const updateMasterBank: RequestHandler<
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
     success: true,
-    message: 'successfully update bank',
+    message: 'success',
   });
 };
 
@@ -139,7 +139,7 @@ export const updateMasterBankAccount: RequestHandler<
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
     success: true,
-    message: 'successfully update bank account',
+    message: 'success',
   });
 };
 
@@ -159,7 +159,7 @@ export const changeMasterBankLogo: RequestHandler<
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
     success: true,
-    message: 'successfully change bank logo',
+    message: 'success',
   });
 };
 
@@ -179,7 +179,7 @@ export const postMasterBankStep: RequestHandler<
   res.status(201).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 201,
     success: true,
-    message: 'successfully add bank step',
+    message: 'success',
   });
 };
 
@@ -199,7 +199,7 @@ export const deleteMasterBankStep: RequestHandler<
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
     success: true,
-    message: 'successfully delete bank step',
+    message: 'success',
   });
 };
 
@@ -219,7 +219,7 @@ export const deleteMasterBank: RequestHandler<
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
     success: true,
-    message: 'successfully delete bank',
+    message: 'success',
   });
 };
 
@@ -231,7 +231,7 @@ export const postCategory: RequestHandler<
   res.status(201).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 201,
     success: true,
-    message: 'successfully add category',
+    message: 'success',
   });
 };
 
@@ -251,7 +251,7 @@ export const getCategories: RequestHandler<
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
     success: true,
-    message: 'successfully fetch category data',
+    message: 'success',
     data: resData,
   });
 };
@@ -272,7 +272,7 @@ export const updateCategory: RequestHandler<
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
     success: true,
-    message: 'successfully update category',
+    message: 'success',
   });
 };
 
@@ -292,7 +292,7 @@ export const changeCategoryIcon: RequestHandler<
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
     success: true,
-    message: 'successfulle change category icon',
+    message: 'success',
   });
 };
 
@@ -312,7 +312,7 @@ export const deleteCategory: RequestHandler<
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
     success: true,
-    message: 'successfully delete category',
+    message: 'success',
   });
 };
 
@@ -324,7 +324,7 @@ export const postMedia: RequestHandler<
   res.status(201).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 201,
     success: true,
-    message: 'successfully add media',
+    message: 'success',
   });
 };
 
@@ -344,7 +344,7 @@ export const getMedias: RequestHandler<
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
     success: true,
-    message: 'successfully fetch media data',
+    message: 'success',
     data: resData,
   });
 };
@@ -365,7 +365,7 @@ export const updateMedia: RequestHandler<
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
     success: true,
-    message: 'successfully update media',
+    message: 'success',
   });
 };
 
@@ -385,7 +385,7 @@ export const deleteMedia: RequestHandler<
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
     success: true,
-    message: 'successfully delete media',
+    message: 'success',
   });
 };
 
@@ -397,7 +397,7 @@ export const postMasterWallet: RequestHandler<
   res.status(201).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 201,
     success: true,
-    message: 'successfully add wallet',
+    message: 'success',
   });
 };
 
@@ -417,7 +417,7 @@ export const getMasterWallets: RequestHandler<
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
     success: true,
-    message: 'successfully fetch wallet data',
+    message: 'success',
     data: resData,
   });
 };
@@ -438,7 +438,7 @@ export const udpateMasterWallet: RequestHandler<
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
     success: true,
-    message: 'successfully update wallet',
+    message: 'success',
   });
 };
 
@@ -458,7 +458,7 @@ export const changeMasterWalletLogo: RequestHandler<
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
     success: true,
-    message: 'successfully change wallet logo',
+    message: 'success',
   });
 };
 
@@ -478,7 +478,7 @@ export const deleteMasterWallet: RequestHandler<
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
     success: true,
-    message: 'successfully delete wallet',
+    message: 'success',
   });
 };
 
@@ -490,7 +490,7 @@ export const postFaq: RequestHandler<
   res.status(201).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 201,
     success: true,
-    message: 'successfully add faq',
+    message: 'success',
   });
 };
 
@@ -500,7 +500,7 @@ export const getFaqs: RequestHandler<Request> = async function getFaqs(_, res): 
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
     success: true,
-    message: 'successfully fetch faq data',
+    message: 'success',
     data: resData,
   });
 };
@@ -521,7 +521,7 @@ export const updateFaq: RequestHandler<
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
     success: true,
-    message: 'successfully update faq',
+    message: 'success',
   });
 };
 
@@ -541,6 +541,6 @@ export const deleteFaq: RequestHandler<
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
     success: true,
-    message: 'successfully delete faq',
+    message: 'success',
   });
 };

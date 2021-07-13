@@ -9,7 +9,7 @@ import type {
 import { controllerWrapper, handlerWrapper } from '../../utils/serverfn-wrapper';
 import schemaValidation from '../../middlewares/schema-validation';
 import { protect } from '../../middlewares/protect-route';
-import { requestHeaders, requestBody, requestParams } from './schemas';
+import { requestHeaders, requestBody, requestParams, responses } from './schemas';
 import {
   postBankUser,
   getBanks,
@@ -53,7 +53,7 @@ const routes = function routes(
       schema: {
         headers: requestHeaders.private,
         response: {
-          200: { $ref: '#ApiResponse' },
+          200: responses.getBanksResponse,
           '4xx': { $ref: '#ApiResponse' },
           '5xx': { $ref: '#ApiResponse' },
         },
@@ -71,7 +71,7 @@ const routes = function routes(
         headers: requestHeaders.private,
         params: requestParams.id,
         response: {
-          200: { $ref: '#ApiResponse' },
+          200: responses.getBankDetailResponse,
           '4xx': { $ref: '#ApiResponse' },
           '5xx': { $ref: '#ApiResponse' },
         },
@@ -82,13 +82,13 @@ const routes = function routes(
   );
 
   fastify.get<Request<{ Headers: ApiKeyHeader }>>(
-    '/users/get',
+    '/users',
     {
       attachValidation: true,
       schema: {
         headers: requestHeaders.private,
         response: {
-          200: { $ref: '#ApiResponse' },
+          200: responses.getBankUsersResponse,
           '4xx': { $ref: '#ApiResponse' },
           '5xx': { $ref: '#ApiResponse' },
         },

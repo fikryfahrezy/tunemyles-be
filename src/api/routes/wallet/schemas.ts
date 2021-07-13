@@ -1,9 +1,13 @@
 export const requestHeaders = {
-  private: { $ref: '#ApiKeyHeader' },
+  private: {
+    $ref: '#ApiKeyHeader',
+  },
 };
 
 export const requestParams = {
-  id: { $ref: '#RouteIdParam' },
+  id: {
+    $ref: '#RouteIdParam',
+  },
 };
 
 /**
@@ -14,60 +18,128 @@ export const requestQuery = {
   topUpHistories: {
     type: 'object',
     properties: {
-      orderDirection: { $ref: '#OrderDirectionQuery' },
+      orderDirection: {
+        $ref: '#OrderDirectionQuery',
+      },
       orderBy: {
         allOf: [
-          { $ref: '#OrderByQuery' },
-          { enum: ['created_at', 'balance_request', 'balance_transfer'] },
+          {
+            $ref: '#OrderByQuery',
+          },
+          {
+            enum: ['created_at', 'balance_request', 'balance_transfer'],
+          },
         ],
       },
-      search: { $ref: '#SearchQuery' },
-      page: { $ref: '#PageQuery' },
-      limit: { $ref: '#LimitQuery' },
+      search: {
+        $ref: '#SearchQuery',
+      },
+      page: {
+        $ref: '#PageQuery',
+      },
+      limit: {
+        $ref: '#LimitQuery',
+      },
     },
   },
   withdrawHistories: {
     type: 'object',
     properties: {
-      orderDirection: { $ref: '#OrderDirectionQuery' },
-      orderBy: {
-        allOf: [{ $ref: '#OrderByQuery' }, { enum: ['created_at', 'balance_request'] }],
+      orderDirection: {
+        $ref: '#OrderDirectionQuery',
       },
-      search: { $ref: '#SearchQuery' },
-      page: { $ref: '#PageQuery' },
-      limit: { $ref: '#LimitQuery' },
+      orderBy: {
+        allOf: [
+          {
+            $ref: '#OrderByQuery',
+          },
+          {
+            enum: ['created_at', 'balance_request'],
+          },
+        ],
+      },
+      search: {
+        $ref: '#SearchQuery',
+      },
+      page: {
+        $ref: '#PageQuery',
+      },
+      limit: {
+        $ref: '#LimitQuery',
+      },
     },
   },
   topUp: {
     type: 'object',
     properties: {
-      orderDirection: { $ref: '#OrderDirectionQuery' },
+      orderDirection: {
+        $ref: '#OrderDirectionQuery',
+      },
       orderBy: {
         allOf: [
-          { $ref: '#OrderByQuery' },
-          { enum: ['created_at', 'balance_request', 'balance_transfer'] },
+          {
+            $ref: '#OrderByQuery',
+          },
+          {
+            enum: ['created_at', 'balance_request', 'balance_transfer'],
+          },
         ],
       },
-      search: { $ref: '#SearchQuery' },
-      page: { $ref: '#PageQuery' },
-      limit: { $ref: '#LimitQuery' },
+      search: {
+        $ref: '#SearchQuery',
+      },
+      page: {
+        $ref: '#PageQuery',
+      },
+      limit: {
+        $ref: '#LimitQuery',
+      },
       status: {
-        allOf: [{ $ref: '#StatusQuery' }, { enum: ['0', '1', '2'] }],
+        allOf: [
+          {
+            $ref: '#StatusQuery',
+          },
+          {
+            enum: ['0', '1', '2'],
+          },
+        ],
       },
     },
   },
   withdraw: {
     type: 'object',
     properties: {
-      orderDirection: { $ref: '#OrderDirectionQuery' },
-      orderBy: {
-        allOf: [{ $ref: '#OrderByQuery' }, { enum: ['created_at', 'balance_request'] }],
+      orderDirection: {
+        $ref: '#OrderDirectionQuery',
       },
-      search: { $ref: '#SearchQuery' },
-      page: { $ref: '#PageQuery' },
-      limit: { $ref: '#LimitQuery' },
+      orderBy: {
+        allOf: [
+          {
+            $ref: '#OrderByQuery',
+          },
+          {
+            enum: ['created_at', 'balance_request'],
+          },
+        ],
+      },
+      search: {
+        $ref: '#SearchQuery',
+      },
+      page: {
+        $ref: '#PageQuery',
+      },
+      limit: {
+        $ref: '#LimitQuery',
+      },
       status: {
-        allOf: [{ $ref: '#StatusQuery' }, { enum: ['0', '1', '2'] }],
+        allOf: [
+          {
+            $ref: '#StatusQuery',
+          },
+          {
+            enum: ['0', '1', '2'],
+          },
+        ],
       },
     },
   },
@@ -79,21 +151,31 @@ export const requestQuery = {
  */
 export const requestBody = {
   topUp: {
-    required: ['balance_request', 'balance_transfer', 'wallet_id'],
+    required: ['bank_id', 'balance_request', 'balance_transfer'],
     type: 'object',
     properties: {
-      wallet_id: { type: 'integer' },
-      balance_request: { type: 'integer' },
-      balance_transfer: { type: 'integer' },
+      bank_id: {
+        type: 'integer',
+      },
+      balance_request: {
+        type: 'integer',
+      },
+      balance_transfer: {
+        type: 'integer',
+      },
     },
     additionalProperties: false,
   },
   withdraw: {
-    required: ['balance_request', 'wallet_id'],
+    required: ['user_bank_id', 'balance_request'],
     type: 'object',
     properties: {
-      wallet_id: { type: 'integer' },
-      balance_request: { type: 'integer' },
+      user_bank_id: {
+        type: 'integer',
+      },
+      balance_request: {
+        type: 'integer',
+      },
     },
     additionalProperties: false,
   },
@@ -101,20 +183,37 @@ export const requestBody = {
     required: ['image'],
     type: 'object',
     properties: {
-      image: { type: 'array', items: { $ref: '#MultiPartSchema' } },
+      image: {
+        type: 'array',
+        items: {
+          $ref: '#MultiPartSchema',
+        },
+      },
     },
     additionalProperties: false,
   },
   updateTopUpStatus: {
     required: ['status'],
     type: 'object',
-    properties: { status: { type: 'integer' } },
+    properties: {
+      status: {
+        type: 'integer',
+        minimum: 0,
+        maximum: 1,
+      },
+    },
     additionalProperties: false,
   },
   updateWithdrawStatus: {
     required: ['status'],
     type: 'object',
-    properties: { status: { type: 'integer' } },
+    properties: {
+      status: {
+        type: 'integer',
+        minimum: 0,
+        maximum: 1,
+      },
+    },
     additionalProperties: false,
   },
 };
@@ -130,7 +229,24 @@ export const responses = {
         type: 'object',
         properties: {
           data: {
-            $ref: '#GetUserWallet',
+            type: 'array',
+            items: {
+              type: 'object',
+              properties: {
+                id: {
+                  type: 'integer',
+                },
+                wallet_name: {
+                  type: 'string',
+                },
+                wallet_description: {
+                  type: 'string',
+                },
+                balance: {
+                  type: 'integer',
+                },
+              },
+            },
           },
         },
       },
@@ -148,7 +264,40 @@ export const responses = {
           data: {
             type: 'array',
             items: {
-              $ref: '#GetTopUp',
+              type: 'object',
+              properties: {
+                id: {
+                  type: 'integer',
+                },
+                balance_request: {
+                  type: 'integer',
+                },
+                balance_transfer: {
+                  type: 'integer',
+                },
+                status: {
+                  type: 'integer',
+                },
+                bank_name: {
+                  type: 'string',
+                },
+                proof_label: {
+                  type: 'string',
+                  nullable: true,
+                },
+                proof_url: {
+                  type: 'string',
+                  nullable: true,
+                },
+                created_at: {
+                  type: 'string',
+                  format: 'date-time',
+                },
+                updated_at: {
+                  type: 'string',
+                  format: 'date-time',
+                },
+              },
             },
           },
         },
@@ -168,32 +317,28 @@ export const responses = {
             type: 'array',
             items: {
               type: 'object',
-              allOf: [
-                {
-                  $ref: '#GetWithdraw',
+              properties: {
+                id: {
+                  type: 'integer',
                 },
-                {
-                  type: 'object',
-                  properties: {
-                    UserBank: {
-                      type: 'object',
-                      allOf: [
-                        {
-                          $ref: '#GetBankUser',
-                        },
-                        {
-                          type: 'object',
-                          properties: {
-                            Bank: {
-                              $ref: '#GetBank',
-                            },
-                          },
-                        },
-                      ],
-                    },
-                  },
+                balance_request: {
+                  type: 'integer',
                 },
-              ],
+                status: {
+                  type: 'integer',
+                },
+                bank_name: {
+                  type: 'string',
+                },
+                created_at: {
+                  type: 'string',
+                  format: 'date-time',
+                },
+                updated_at: {
+                  type: 'string',
+                  format: 'date-time',
+                },
+              },
             },
           },
         },
@@ -210,71 +355,31 @@ export const responses = {
         type: 'object',
         properties: {
           data: {
-            type: 'array',
-            items: {
-              type: 'object',
-              allOf: [
-                {
-                  $ref: '#GetTopUp',
-                },
-                {
-                  type: 'object',
-                  properties: {
-                    Bank: {
-                      type: 'object',
-                      allOf: [
-                        {
-                          $ref: '#GetBank',
-                        },
-                        {
-                          type: 'object',
-                          properties: {
-                            Utilities: {
-                              type: 'array',
-                              items: {
-                                $ref: '#GetBankUtility',
-                              },
-                            },
-                            Accounts: {
-                              type: 'array',
-                              items: {
-                                $ref: '#GetBankUser',
-                              },
-                            },
-                          },
-                        },
-                      ],
-                    },
-                    Media: {
-                      $ref: '#GetMedia',
-                    },
-                    UserWallet: {
-                      type: 'object',
-                      properties: {
-                        id_u_user: {
-                          type: 'integer',
-                        },
-                        u_user: {
-                          type: 'object',
-                          properties: {
-                            id_m_users: {
-                              type: 'integer',
-                            },
-                            m_user: {
-                              type: 'object',
-                              properties: {
-                                full_name: {
-                                  type: 'string',
-                                },
-                              },
-                            },
-                          },
-                        },
-                      },
-                    },
-                  },
-                },
-              ],
+            type: 'object',
+            properties: {
+              id: {
+                type: 'integer',
+              },
+              balance_request: {
+                type: 'integer',
+              },
+              balance_transfer: {
+                type: 'integer',
+              },
+              status: {
+                type: 'integer',
+              },
+              user_name: {
+                type: 'string',
+              },
+              created_at: {
+                type: 'string',
+                format: 'date-time',
+              },
+              updated_at: {
+                type: 'string',
+                format: 'date-time',
+              },
             },
           },
         },
@@ -291,89 +396,28 @@ export const responses = {
         type: 'object',
         properties: {
           data: {
-            type: 'array',
-            items: {
-              type: 'object',
-              allOf: [
-                {
-                  $ref: '#GetTopUp',
-                },
-                {
-                  type: 'object',
-                  properties: {
-                    UserBank: {
-                      type: 'object',
-                      allOf: [
-                        {
-                          $ref: '#GetBankUser',
-                        },
-                        {
-                          type: 'object',
-                          properties: {
-                            Bank: {
-                              type: 'object',
-                              allOf: [
-                                {
-                                  $ref: '#GetBank',
-                                },
-                                {
-                                  type: 'object',
-                                  properties: {
-                                    Utilities: {
-                                      type: 'array',
-                                      items: {
-                                        $ref: '#GetBankUtility',
-                                      },
-                                    },
-                                  },
-                                },
-                              ],
-                            },
-                          },
-                        },
-                      ],
-                    },
-                  },
-                },
-              ],
-            },
-          },
-        },
-      },
-    ],
-  },
-  userTopUp: {
-    type: 'object',
-    allOf: [
-      {
-        $ref: '#ApiResponse',
-      },
-      {
-        type: 'object',
-        properties: {
-          data: {
-            type: 'array',
-            items: {
-              $ref: '#GetTopUp',
-            },
-          },
-        },
-      },
-    ],
-  },
-  userWithdraw: {
-    type: 'object',
-    allOf: [
-      {
-        $ref: '#ApiResponse',
-      },
-      {
-        type: 'object',
-        properties: {
-          data: {
-            type: 'array',
-            items: {
-              $ref: '#GetWithdraw',
+            type: 'object',
+            properties: {
+              id: {
+                type: 'integer',
+              },
+              balance_request: {
+                type: 'integer',
+              },
+              status: {
+                type: 'integer',
+              },
+              bank_name: {
+                type: 'string',
+              },
+              created_at: {
+                type: 'string',
+                format: 'date-time',
+              },
+              updated_at: {
+                type: 'string',
+                format: 'date-time',
+              },
             },
           },
         },

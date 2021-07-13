@@ -72,43 +72,196 @@ export default {
           message: { type: 'string' },
         },
       },
-      GetToken: {
-        $id: '#GetToken',
+      TokenResponse: {
+        $id: '#TokenResponse',
         type: 'object',
         properties: { token: { type: 'string' } },
       },
-      GetProduct: {
-        $id: '#GetProduct',
+      MerchantResponse: {
+        $id: '#MerchantResponse',
         type: 'object',
         properties: {
-          id: { type: 'integer' },
-          id_m_users: { type: 'integer' },
-          product_name: { type: 'string' },
-          description: { type: 'string' },
-          id_cover: { type: 'integer' },
-          is_visible: { type: 'integer' },
-          created_at: { type: 'string', format: 'date-time' },
-          updated_at: { type: 'string', format: 'date-time' },
-          price_default: { type: 'integer' },
-          price_selling: { type: 'integer' },
-          qty: { type: 'integer' },
-          discount: { type: 'integer' },
-          cover_uri: { type: 'string' },
-          cover_label: { type: 'string' },
-          id_merchant: { type: 'integer' },
-          no_identity: { type: 'string' },
-          id_identity_photo: { type: 'integer' },
-          id_market_photo: { type: 'integer' },
-          market_name: { type: 'string' },
-          market_address: { type: 'string' },
-          market_lat: { type: 'number' },
-          market_lon: { type: 'number' },
-          market_close_time: { type: 'string' },
-          market_visible: { type: 'integer' },
-          identity_uri: { type: 'string' },
-          identity_label: { type: 'string' },
-          market_uri: { type: 'string' },
-          market_label: { type: 'string' },
+          merchant_id: {
+            type: 'integer',
+          },
+          full_name: {
+            type: 'string',
+          },
+          phone_number: {
+            type: 'string',
+          },
+          market_id: {
+            type: 'integer',
+          },
+          market_name: {
+            type: 'string',
+          },
+          market_address: {
+            type: 'string',
+          },
+          market_lat: {
+            type: 'integer',
+          },
+          market_long: {
+            type: 'integer',
+          },
+          market_close_time: {
+            type: 'string',
+          },
+          photo_id: {
+            type: 'integer',
+          },
+          photo_label: {
+            type: 'string',
+          },
+          photo_url: {
+            type: 'string',
+          },
+          identity_id: {
+            type: 'integer',
+          },
+          identity_label: {
+            type: 'string',
+          },
+          identity_url: {
+            type: 'string',
+          },
+          status: {
+            type: 'integer',
+          },
+          created_at: {
+            type: 'string',
+          },
+          updated_at: {
+            type: 'string',
+          },
+        },
+      },
+      ProductResponse: {
+        $id: '#ProductResponse',
+        type: 'object',
+        properties: {
+          id: {
+            type: 'integer',
+          },
+          product_util_id: {
+            type: 'integer',
+          },
+          product_name: {
+            type: 'string',
+          },
+          description: {
+            type: 'string',
+          },
+          status: {
+            type: 'integer',
+          },
+          price_default: {
+            type: 'integer',
+          },
+          price_selling: {
+            type: 'integer',
+          },
+          qty: {
+            type: 'integer',
+          },
+          discount: {
+            type: 'integer',
+          },
+          cover_label: {
+            type: 'string',
+          },
+          cover_url: {
+            type: 'string',
+          },
+          merchant_id: {
+            type: 'integer',
+          },
+          market_id: {
+            type: 'integer',
+          },
+          market_name: {
+            type: 'string',
+          },
+          market_address: {
+            type: 'string',
+          },
+          market_close_time: {
+            type: 'string',
+          },
+          market_status: {
+            type: 'integer',
+          },
+          photo_label: {
+            type: 'string',
+          },
+          photo_url: {
+            type: 'string',
+          },
+          creaetd_at: {
+            type: 'string',
+            format: 'date-time',
+          },
+          updated_at: {
+            type: 'string',
+            format: 'date-time',
+          },
+        },
+      },
+      MerchantOrderResponse: {
+        $id: '#MerchantOrderResponse',
+        type: 'object',
+        properties: {
+          id: {
+            type: 'integer',
+          },
+          transaction_id: {
+            type: 'integer',
+          },
+          product_id: {
+            type: 'integer',
+          },
+          transaction_token: {
+            type: 'string',
+          },
+          qty: {
+            type: 'integer',
+          },
+          sub_total_price: {
+            type: 'integer',
+          },
+          status: {
+            type: 'integer',
+          },
+          product_name: {
+            type: 'string',
+          },
+          description: {
+            type: 'string',
+          },
+          product_status: {
+            type: 'integer',
+          },
+          cover_label: {
+            type: 'string',
+          },
+          cover_url: {
+            type: 'string',
+          },
+          buyer_id: {
+            type: 'integer',
+          },
+          merchant_id: {
+            type: 'integer',
+          },
+          created_at: {
+            type: 'string',
+            format: 'date-time',
+          },
+          updated_at: {
+            type: 'string',
+            format: 'date-time',
+          },
         },
       },
       GetOrder: {
@@ -184,110 +337,6 @@ export default {
           max_qty: { type: 'integer' },
           created_at: { type: 'string', format: 'date-time' },
           updated_at: { type: 'string', format: 'date-time' },
-        },
-      },
-      GetMedia: {
-        $id: '#GetMedia',
-        type: 'object',
-        properties: {
-          id: { type: 'integer' },
-          uri: { type: 'string' },
-          label: { type: 'string' },
-          is_visible: { type: 'integer' },
-          created_at: { type: 'string', format: 'date-time' },
-          updated_at: { type: 'string', format: 'date-time' },
-          createdAt: { type: 'string', format: 'date-time' },
-          updatedAt: { type: 'string', format: 'date-time' },
-        },
-      },
-      GetBank: {
-        $id: '#GetBank',
-        type: 'object',
-        properties: {
-          id: { type: 'integer' },
-          id_logo: { type: 'integer' },
-          bank_name: { type: 'string' },
-          is_visible: { type: 'integer' },
-          created_at: { type: 'string', format: 'date-time' },
-          updated_at: { type: 'string', format: 'date-time' },
-          createdAt: { type: 'string', format: 'date-time' },
-          updatedAt: { type: 'string', format: 'date-time' },
-        },
-      },
-      GetBankUser: {
-        $id: '#GetBankUser',
-        type: 'object',
-        properties: {
-          id: { type: 'integer' },
-          id_m_banks: { type: 'integer' },
-          id_m_users: { type: 'integer' },
-          account_number: { type: 'string' },
-          account_name: { type: 'string' },
-          is_visible: { type: 'integer' },
-          created_at: { type: 'string', format: 'date-time' },
-          updated_at: { type: 'string', format: 'date-time' },
-          createdAt: { type: 'string', format: 'date-time' },
-          updatedAt: { type: 'string', format: 'date-time' },
-        },
-      },
-      GetBankUtility: {
-        $id: '#GetBankUtility',
-        type: 'object',
-        properties: {
-          id: { type: 'integer' },
-          id_m_banks: { type: 'integer' },
-          step: { type: 'string' },
-          created_at: { type: 'string', format: 'date-time' },
-          updated_at: { type: 'string', format: 'date-time' },
-          createdAt: { type: 'string', format: 'date-time' },
-          updatedAt: { type: 'string', format: 'date-time' },
-        },
-      },
-      GetUserWallet: {
-        $id: '#GetUserWallet',
-        type: 'object',
-        properties: {
-          id: { type: 'integer' },
-          id_u_user: { type: 'integer' },
-          id_m_wallets: { type: 'integer' },
-          balance: { type: 'integer' },
-          is_visible: { type: 'integer' },
-          created_at: { type: 'string', format: 'date-time' },
-          updated_at: { type: 'string', format: 'date-time' },
-          createdAt: { type: 'string', format: 'date-time' },
-          updatedAt: { type: 'string', format: 'date-time' },
-        },
-      },
-      GetTopUp: {
-        $id: '#GetTopUp',
-        type: 'object',
-        properties: {
-          id: { type: 'integer' },
-          id_u_user_wallet: { type: 'integer' },
-          id_m_banks: { type: 'integer' },
-          balance_request: { type: 'integer' },
-          balance_transfer: { type: 'integer' },
-          status: { type: 'integer' },
-          proof_id: { type: 'integer' },
-          created_at: { type: 'string', format: 'date-time' },
-          updated_at: { type: 'string', format: 'date-time' },
-          createdAt: { type: 'string', format: 'date-time' },
-          updatedAt: { type: 'string', format: 'date-time' },
-        },
-      },
-      GetWithdraw: {
-        $id: '#GetWithdraw',
-        type: 'object',
-        properties: {
-          id: { type: 'integer' },
-          id_u_user_wallet: { type: 'integer' },
-          id_u_user_bank_account: { type: 'integer' },
-          balance_request: { type: 'integer' },
-          status: { type: 'integer' },
-          created_at: { type: 'string', format: 'date-time' },
-          updated_at: { type: 'string', format: 'date-time' },
-          createdAt: { type: 'string', format: 'date-time' },
-          updatedAt: { type: 'string', format: 'date-time' },
         },
       },
     },

@@ -1,15 +1,15 @@
 import type { Server } from 'http';
 import type { FastifyInstance } from 'fastify';
 import app from '../../src/config/app';
-import sequelize from '../../src/databases/sequelize';
-import { createMedia, updateUser, getUser } from '../../src/api/repositories/UserRepository';
 import {
+  sequelize,
+  createUserMedia,
+  updateUser,
+  getUser,
   userRegistration,
   userLogin,
   resetUserPassword,
   verifyUserToken,
-} from '../../src/api/routes/account/service';
-import {
   registerPayload,
   registerMerchPayload,
   updateProfilePayload,
@@ -376,7 +376,7 @@ describe('Update Profile', () => {
     const payload = updateProfilePayload();
     const [{ id: userId }, { id: imgId }] = await Promise.all([
       getUser('USERNAME', username),
-      createMedia(`${username}-not-valid.jpg`),
+      createUserMedia(`${username}-not-valid.jpg`),
     ]);
     await updateUser(userId, { id_photo: imgId });
 

@@ -2142,7 +2142,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetRandomMerchantsResponse'
+                $ref: '#/components/schemas/GetMerchantListResponse'
         4XX:
           description: Request Error
           content:
@@ -2323,7 +2323,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetProductsByCategoryResponse'
+                $ref: '#/components/schemas/GetProductsResponse'
         4XX:
           description: Request Error
           content:
@@ -2371,6 +2371,33 @@ paths:
       security:
         - APIKeyHeader: []
       x-codegen-request-body-name: body
+    get:
+      tags:
+        - banks
+      summary: Get User Bank (Route All Roles)
+      description: Get User Bank (Route All Roles)
+      operationId: userBank
+      responses:
+        '200':
+          description: Request Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetBankUsersResponse'
+        4XX:
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        5XX:
+          description: Sever Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+        - APIKeyHeader: []
   /banks:
     get:
       tags:
@@ -2419,34 +2446,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetBankDetailResponse'
-        4XX:
-          description: Request Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        5XX:
-          description: Sever Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-      security:
-        - APIKeyHeader: []
-  /banks/users/get:
-    get:
-      tags:
-        - banks
-      summary: Get User Bank (Route All Roles)
-      description: Get User Bank (Route All Roles)
-      operationId: userBank
-      responses:
-        '200':
-          description: Request Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetBankUsersResponse'
         4XX:
           description: Request Error
           content:
@@ -2535,6 +2534,34 @@ paths:
                 $ref: '#/components/schemas/ApiResponse'
       security:
         - APIKeyHeader: []
+  /wallets:
+    get:
+      tags:
+        - wallets
+      summary: Get User Wallet (Route All Roles)
+      description: Get User Wallet (Route All Roles)
+      operationId: getUserWallet
+      responses:
+        '200':
+          description: Request Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetWalletsResponse'
+        4XX:
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        5XX:
+          description: Sever Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+        - APIKeyHeader: []
   /wallets/topup:
     post:
       tags:
@@ -2607,34 +2634,6 @@ paths:
       security:
         - APIKeyHeader: []
       x-codegen-request-body-name: body
-  /wallets:
-    get:
-      tags:
-        - wallets
-      summary: Get User Wallet (Route All Roles)
-      description: Get User Wallet (Route All Roles)
-      operationId: getUserWallet
-      responses:
-        '200':
-          description: Request Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetWalletsResponse'
-        4XX:
-          description: Request Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        5XX:
-          description: Sever Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-      security:
-        - APIKeyHeader: []
   /wallets/topup/histories:
     get:
       tags:
@@ -3498,7 +3497,7 @@ components:
           type: boolean
         messages:
           type: string
-    GetToken:
+    TokenResponse:
       type: object
       properties:
         token:
@@ -3611,14 +3610,12 @@ components:
                     properties:
                       balance:
                         type: integer
-                      is_visible:
+                      visibility:
                         type: integer
                       wallet_name:
                         type: string
-                        nullable: true
                       wallet_description:
                         type: string
-                        nullable: true
                       logo_label:
                         type: string
                         nullable: true
@@ -3651,7 +3648,7 @@ components:
         - type: object
           properties:
             data:
-              $ref: '#/components/schemas/GetToken'
+              $ref: '#/components/schemas/TokenResponse'
     ResetPasswordBody:
       required:
         - new_password
@@ -3959,49 +3956,7 @@ components:
       type: object
       allOf:
         - $ref: '#/components/schemas/ApiResponse'
-        - type: object
-          properties:
-            data:
-              type: object
-              properties:
-                merchant_id:
-                  type: integer
-                full_name:
-                  type: string
-                phone_number:
-                  type: string
-                market_id:
-                  type: integer
-                market_name:
-                  type: string
-                market_address:
-                  type: string
-                market_lat:
-                  type: integer
-                market_long:
-                  type: integer
-                market_close_time:
-                  type: string
-                photo_id:
-                  type: integer
-                photo_label:
-                  type: string
-                photo_url:
-                  type: string
-                identity_id:
-                  type: integer
-                identity_label:
-                  type: string
-                identity_url:
-                  type: string
-                status:
-                  type: integer
-                created_at:
-                  type: string
-                  format: date-time
-                updated_at:
-                  type: string
-                  format: date-time
+        - $ref: '#/components/schemas/MerchantResponse'
     UpdateMerchantProfileBody:
       properties:
         identity_photo:
@@ -4080,52 +4035,7 @@ components:
             data:
               type: array
               items:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                  product_util_id:
-                    type: integer
-                  product_name:
-                    type: string
-                  description:
-                    type: string
-                  status:
-                    type: integer
-                  price_default:
-                    type: integer
-                  price_selling:
-                    type: integer
-                  qty:
-                    type: integer
-                  discount:
-                    type: integer
-                  cover_label:
-                    type: string
-                  cover_url:
-                    type: string
-                  merchant_id:
-                    type: integer
-                  market_id:
-                    type: integer
-                  market_name:
-                    type: string
-                  market_address:
-                    type: string
-                  market_close_time:
-                    type: string
-                  market_status:
-                    type: integer
-                  photo_label:
-                    type: string
-                  photo_url:
-                    type: string
-                  creaetd_at:
-                    type: string
-                    format: date-time
-                  updated_at:
-                    type: string
-                    format: date-time
+                $ref: '#/components/schemas/ProductResponse'
     UpdateMerchantProductBody:
       type: object
       properties:
@@ -4247,80 +4157,38 @@ components:
         - type: object
           properties:
             data:
-              type: object
-              properties:
-                id:
-                  type: integer
-                product_util_id:
-                  type: integer
-                product_name:
-                  type: string
-                description:
-                  type: string
-                status:
-                  type: integer
-                price_default:
-                  type: integer
-                price_selling:
-                  type: integer
-                qty:
-                  type: integer
-                discount:
-                  type: integer
-                cover_label:
-                  type: string
-                cover_url:
-                  type: string
-                merchant_id:
-                  type: integer
-                market_id:
-                  type: integer
-                market_name:
-                  type: string
-                market_address:
-                  type: string
-                market_close_time:
-                  type: string
-                market_status:
-                  type: integer
-                photo_label:
-                  type: string
-                photo_url:
-                  type: string
-                creaetd_at:
-                  type: string
-                  format: date-time
-                updated_at:
-                  type: string
-                  format: date-time
-                images:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      product_image_id:
-                        type: integer
-                      image_label:
-                        type: string
-                      image_url:
-                        type: string
-                categories:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      product_category_id:
-                        type: number
-                      category:
-                        type: string
-                      slug:
-                        type: string
-                      description:
-                        type: string
-                      icon_label:
-                        type: string
-                      icon_url:
-                        type: string
+              allOf:
+                - $ref: '#/components/schemas/ProductResponse'
+                - type: object
+                  properties:
+                    images:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          product_image_id:
+                            type: integer
+                          image_label:
+                            type: string
+                          image_url:
+                            type: string
+                    categories:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          product_category_id:
+                            type: number
+                          category:
+                            type: string
+                          slug:
+                            type: string
+                          description:
+                            type: string
+                          icon_label:
+                            type: string
+                          icon_url:
+                            type: string
     GetMerchantOrdersResponse:
       type: object
       allOf:
@@ -4379,42 +4247,7 @@ components:
             data:
               type: array
               items:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                  transaction_id:
-                    type: integer
-                  product_id:
-                    type: integer
-                  transaction_token:
-                    type: string
-                  qty:
-                    type: integer
-                  sub_total_price:
-                    type: integer
-                  status:
-                    type: integer
-                  product_name:
-                    type: string
-                  description:
-                    type: string
-                  product_status:
-                    type: integer
-                  cover_label:
-                    type: string
-                  cover_url:
-                    type: string
-                  buyer_id:
-                    type: integer
-                  merchant_id:
-                    type: integer
-                  created_at:
-                    type: string
-                    format: date-time
-                  updated_at:
-                    type: string
-                    format: date-time
+                $ref: '#/components/schemas/MerchantOrderResponse'
     UpdateMerchantOrderStatusBody:
       type: object
       properties:
@@ -4427,42 +4260,7 @@ components:
         - type: object
           properties:
             data:
-              type: object
-              properties:
-                id:
-                  type: integer
-                transaction_id:
-                  type: integer
-                product_id:
-                  type: integer
-                transaction_token:
-                  type: string
-                qty:
-                  type: integer
-                sub_total_price:
-                  type: integer
-                status:
-                  type: integer
-                product_name:
-                  type: string
-                description:
-                  type: string
-                product_status:
-                  type: integer
-                cover_label:
-                  type: string
-                cover_url:
-                  type: string
-                buyer_id:
-                  type: integer
-                merchant_id:
-                  type: integer
-                created_at:
-                  type: string
-                  format: date-time
-                updated_at:
-                  type: string
-                  format: date-time
+              $ref: '#/components/schemas/MerchantOrderResponse'
     GetMerchantListResponse:
       type: object
       allOf:
@@ -4472,46 +4270,7 @@ components:
             data:
               type: array
               items:
-                type: object
-                properties:
-                  merchant_id:
-                    type: integer
-                  full_name:
-                    type: string
-                  phone_number:
-                    type: string
-                  market_id:
-                    type: integer
-                  market_name:
-                    type: string
-                  market_address:
-                    type: string
-                  market_lat:
-                    type: integer
-                  market_long:
-                    type: integer
-                  market_close_time:
-                    type: string
-                  photo_id:
-                    type: integer
-                  photo_label:
-                    type: string
-                  photo_url:
-                    type: string
-                  identity_id:
-                    type: integer
-                  identity_label:
-                    type: string
-                  identity_url:
-                    type: string
-                  status:
-                    type: integer
-                  created_at:
-                    type: string
-                    format: date-time
-                  updated_at:
-                    type: string
-                    format: date-time
+                $ref: '#/components/schemas/MerchantResponse'
     GetMerchantProductListResponse:
       type: object
       allOf:
@@ -4521,101 +4280,7 @@ components:
             data:
               type: array
               items:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                  product_util_id:
-                    type: integer
-                  product_name:
-                    type: string
-                  description:
-                    type: string
-                  status:
-                    type: integer
-                  price_default:
-                    type: integer
-                  price_selling:
-                    type: integer
-                  qty:
-                    type: integer
-                  discount:
-                    type: integer
-                  cover_label:
-                    type: string
-                  cover_url:
-                    type: string
-                  merchant_id:
-                    type: integer
-                  market_id:
-                    type: integer
-                  market_name:
-                    type: string
-                  market_address:
-                    type: string
-                  market_close_time:
-                    type: string
-                  market_status:
-                    type: integer
-                  photo_label:
-                    type: string
-                  photo_url:
-                    type: string
-                  creaetd_at:
-                    type: string
-                    format: date-time
-                  updated_at:
-                    type: string
-                    format: date-time
-    GetRandomMerchantsResponse:
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/ApiResponse'
-        - type: object
-          properties:
-            data:
-              type: array
-              items:
-                type: object
-                properties:
-                  merchant_id:
-                    type: integer
-                  full_name:
-                    type: string
-                  phone_number:
-                    type: string
-                  market_id:
-                    type: integer
-                  market_name:
-                    type: string
-                  market_address:
-                    type: string
-                  market_lat:
-                    type: integer
-                  market_long:
-                    type: integer
-                  market_close_time:
-                    type: string
-                  photo_id:
-                    type: integer
-                  photo_label:
-                    type: string
-                  photo_url:
-                    type: string
-                  identity_id:
-                    type: integer
-                  identity_label:
-                    type: string
-                  identity_url:
-                    type: string
-                  status:
-                    type: integer
-                  created_at:
-                    type: string
-                    format: date-time
-                  updated_at:
-                    type: string
-                    format: date-time
+                $ref: '#/components/schemas/ProductResponse'
     GetMerchantTransactionHistoriesResponse:
       type: object
       allOf:
@@ -4667,17 +4332,7 @@ components:
             data:
               type: array
               items:
-                $ref: '#/components/schemas/GetProduct'
-    GetProductsByCategoryResponse:
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/ApiResponse'
-        - type: object
-          properties:
-            data:
-              type: array
-              items:
-                $ref: '#/components/schemas/GetProduct'
+                $ref: '#/components/schemas/ProductResponse'
     PostBankUserBody:
       required:
         - bank_id
@@ -4701,16 +4356,32 @@ components:
               type: array
               items:
                 type: object
-                allOf:
-                  - $ref: '#/components/schemas/GetBank'
-                  - type: object
-                    properties:
-                      Logo:
-                        $ref: '#/components/schemas/GetMedia'
-                      Account:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/GetBankUser'
+                properties:
+                  id:
+                    type: integer
+                  bank_name:
+                    type: string
+                  visibility:
+                    type: integer
+                  logo_label:
+                    type: string
+                  logo_url:
+                    type: string
+                  created_at:
+                    type: string
+                    format: date-time
+                  updated_at:
+                    type: string
+                    format: date-time
+                  accounts:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        account_name:
+                          type: string
+                        account_number:
+                          type: string
     GetBankDetailResponse:
       type: object
       allOf:
@@ -4718,19 +4389,31 @@ components:
         - type: object
           properties:
             data:
-              type: array
-              items:
-                type: object
-                allOf:
-                  - $ref: '#/components/schemas/GetBank'
-                  - type: object
+              type: object
+              properties:
+                id:
+                  type: integer
+                bank_name:
+                  type: string
+                visibility:
+                  type: integer
+                logo_label:
+                  type: string
+                logo_url:
+                  type: string
+                created_at:
+                  type: string
+                  format: date-time
+                updated_at:
+                  type: string
+                  format: date-time
+                steps:
+                  type: array
+                  items:
+                    type: object
                     properties:
-                      Logo:
-                        $ref: '#/components/schemas/GetMedia'
-                      Utilities:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/GetBankUtility'
+                      step:
+                        type: string
     GetBankUsersResponse:
       type: object
       allOf:
@@ -4741,18 +4424,27 @@ components:
               type: array
               items:
                 type: object
-                allOf:
-                  - $ref: '#/components/schemas/GetBankUser'
-                  - type: object
-                    properties:
-                      Bank:
-                        type: object
-                        allOf:
-                          - $ref: '#/components/schemas/GetBank'
-                          - type: object
-                            properties:
-                              Logo:
-                                $ref: '#/components/schemas/GetMedia'
+                properties:
+                  id:
+                    type: integer
+                  account_number:
+                    type: string
+                  account_name:
+                    type: string
+                  visibility:
+                    type: integer
+                  bank_name:
+                    type: string
+                  logo_label:
+                    type: string
+                  logo_url:
+                    type: string
+                  created_at:
+                    type: string
+                    format: date-time
+                  updated_at:
+                    type: string
+                    format: date-time
     UpdateBankUserBody:
       required:
         - bank_id
@@ -4764,29 +4456,6 @@ components:
           type: string
         account_name:
           type: string
-    TopUpBody:
-      required:
-        - wallet_id
-        - balance_request
-        - balance_transfer
-      type: object
-      properties:
-        wallet_id:
-          type: integer
-        balance_request:
-          type: integer
-        balance_transfer:
-          type: integer
-    WithdrawBody:
-      required:
-        - wallet_id
-        - balance_request
-      type: object
-      properties:
-        wallet_id:
-          type: integer
-        balance_request:
-          type: integer
     GetWalletsResponse:
       type: object
       allOf:
@@ -4794,7 +4463,41 @@ components:
         - type: object
           properties:
             data:
-              $ref: '#/components/schemas/GetUserWallet'
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  wallet_name:
+                    type: string
+                  wallet_description:
+                    type: string
+                  balance:
+                    type: integer
+    TopUpBody:
+      required:
+        - bank_id
+        - balance_request
+        - balance_transfer
+      type: object
+      properties:
+        bank_id:
+          type: integer
+        balance_request:
+          type: integer
+        balance_transfer:
+          type: integer
+    WithdrawBody:
+      required:
+        - user_bank_id
+        - balance_request
+      type: object
+      properties:
+        user_bank_id:
+          type: integer
+        balance_request:
+          type: integer
     GetTopUpHistoriesResponse:
       type: object
       allOf:
@@ -4804,7 +4507,30 @@ components:
             data:
               type: array
               items:
-                $ref: '#/components/schemas/GetTopUp'
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  balance_request:
+                    type: integer
+                  balance_transfer:
+                    type: integer
+                  status:
+                    type: integer
+                  bank_name:
+                    type: string
+                  proof_label:
+                    type: string
+                    nullable: true
+                  proof_url:
+                    type: string
+                    nullable: true
+                  created_at:
+                    type: string
+                    format: date-time
+                  updated_at:
+                    type: string
+                    format: date-time
     GetWithdrawHistoriesResponse:
       type: object
       allOf:
@@ -4815,18 +4541,21 @@ components:
               type: array
               items:
                 type: object
-                allOf:
-                  - $ref: '#/components/schemas/GetWithdraw'
-                  - type: object
-                    properties:
-                      UserBank:
-                        type: object
-                        allOf:
-                          - $ref: '#/components/schemas/GetBankUser'
-                          - type: object
-                            properties:
-                              Bank:
-                                $ref: '#/components/schemas/GetBank'
+                properties:
+                  id:
+                    type: integer
+                  balance_request:
+                    type: integer
+                  status:
+                    type: integer
+                  bank_name:
+                    type: string
+                  created_at:
+                    type: string
+                    format: date-time
+                  updated_at:
+                    type: string
+                    format: date-time
     GetTopUpDetailResponse:
       type: object
       allOf:
@@ -4834,44 +4563,24 @@ components:
         - type: object
           properties:
             data:
-              type: array
-              items:
-                type: object
-                allOf:
-                  - $ref: '#/components/schemas/GetTopUp'
-                  - type: object
-                    properties:
-                      Bank:
-                        type: object
-                        allOf:
-                          - $ref: '#/components/schemas/GetBank'
-                          - type: object
-                            properties:
-                              Utilities:
-                                type: array
-                                items:
-                                  $ref: '#/components/schemas/GetBankUtility'
-                              Accounts:
-                                type: array
-                                items:
-                                  $ref: '#/components/schemas/GetBankUser'
-                      Media:
-                        $ref: '#/components/schemas/GetMedia'
-                      UserWallet:
-                        type: object
-                        properties:
-                          id_u_user:
-                            type: integer
-                          u_user:
-                            type: object
-                            properties:
-                              id_m_users:
-                                type: integer
-                              m_user:
-                                type: object
-                                properties:
-                                  full_name:
-                                    type: string
+              type: object
+              properties:
+                id:
+                  type: integer
+                balance_request:
+                  type: integer
+                balance_transfer:
+                  type: integer
+                status:
+                  type: integer
+                user_name:
+                  type: string
+                created_at:
+                  type: string
+                  format: date-time
+                updated_at:
+                  type: string
+                  format: date-time
     GetWithdrawDetailResponse:
       type: object
       allOf:
@@ -4879,29 +4588,22 @@ components:
         - type: object
           properties:
             data:
-              type: array
-              items:
-                type: object
-                allOf:
-                  - $ref: '#/components/schemas/GetTopUp'
-                  - type: object
-                    properties:
-                      UserBank:
-                        type: object
-                        allOf:
-                          - $ref: '#/components/schemas/GetBankUser'
-                          - type: object
-                            properties:
-                              Bank:
-                                type: object
-                                allOf:
-                                  - $ref: '#/components/schemas/GetBank'
-                                  - type: object
-                                    properties:
-                                      Utilities:
-                                        type: array
-                                        items:
-                                          $ref: '#/components/schemas/GetBankUtility'
+              type: object
+              properties:
+                id:
+                  type: integer
+                balance_request:
+                  type: integer
+                status:
+                  type: integer
+                bank_name:
+                  type: string
+                created_at:
+                  type: string
+                  format: date-time
+                updated_at:
+                  type: string
+                  format: date-time
     GetAllUserTopUpResponse:
       type: object
       allOf:
@@ -4911,7 +4613,30 @@ components:
             data:
               type: array
               items:
-                $ref: '#/components/schemas/GetTopUp'
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  balance_request:
+                    type: integer
+                  balance_transfer:
+                    type: integer
+                  status:
+                    type: integer
+                  bank_name:
+                    type: string
+                  proof_label:
+                    type: string
+                    nullable: true
+                  proof_url:
+                    type: string
+                    nullable: true
+                  created_at:
+                    type: string
+                    format: date-time
+                  updated_at:
+                    type: string
+                    format: date-time
     GetAllUserWithdrawResponse:
       type: object
       allOf:
@@ -4921,7 +4646,22 @@ components:
             data:
               type: array
               items:
-                $ref: '#/components/schemas/GetWithdraw'
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  balance_request:
+                    type: integer
+                  status:
+                    type: integer
+                  bank_name:
+                    type: string
+                  created_at:
+                    type: string
+                    format: date-time
+                  updated_at:
+                    type: string
+                    format: date-time
     TopUpProofBody:
       required:
         - image
@@ -4934,11 +4674,15 @@ components:
       properties:
         status:
           type: integer
+          minimum: 0
+          maximum: 1
     UpdateWithdrawStatusBody:
       type: object
       properties:
         status:
           type: integer
+          minimum: 0
+          maximum: 1
     AddToCartBody:
       required:
         - qty
@@ -5046,27 +4790,63 @@ components:
                 updated_at:
                   type: string
                   format: date-time
-    GetProduct:
+    MerchantResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            merchant_id:
+              type: integer
+            full_name:
+              type: string
+            phone_number:
+              type: string
+            market_id:
+              type: integer
+            market_name:
+              type: string
+            market_address:
+              type: string
+            market_lat:
+              type: integer
+            market_long:
+              type: integer
+            market_close_time:
+              type: string
+            photo_id:
+              type: integer
+            photo_label:
+              type: string
+            photo_url:
+              type: string
+            identity_id:
+              type: integer
+            identity_label:
+              type: string
+            identity_url:
+              type: string
+            status:
+              type: integer
+            created_at:
+              type: string
+              format: date-time
+            updated_at:
+              type: string
+              format: date-time
+    ProductResponse:
       type: object
       properties:
         id:
           type: integer
-        id_m_users:
+        product_util_id:
           type: integer
         product_name:
           type: string
         description:
           type: string
-        id_cover:
+        status:
           type: integer
-        is_visible:
-          type: integer
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
         price_default:
           type: integer
         price_selling:
@@ -5075,38 +4855,69 @@ components:
           type: integer
         discount:
           type: integer
-        cover_uri:
-          type: string
         cover_label:
           type: string
-        id_merchant:
-          type: integer
-        no_identity:
+        cover_url:
           type: string
-        id_identity_photo:
+        merchant_id:
           type: integer
-        id_market_photo:
+        market_id:
           type: integer
         market_name:
           type: string
         market_address:
           type: string
-        market_lat:
-          type: number
-        market_lon:
-          type: number
         market_close_time:
           type: string
-        market_visible:
+        market_status:
           type: integer
-        identity_uri:
+        photo_label:
           type: string
-        identity_label:
+        photo_url:
           type: string
-        market_uri:
+        creaetd_at:
           type: string
-        market_label:
+          format: date-time
+        updated_at:
           type: string
+          format: date-time
+    MerchantOrderResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        transaction_id:
+          type: integer
+        product_id:
+          type: integer
+        transaction_token:
+          type: string
+        qty:
+          type: integer
+        sub_total_price:
+          type: integer
+        status:
+          type: integer
+        product_name:
+          type: string
+        description:
+          type: string
+        product_status:
+          type: integer
+        cover_label:
+          type: string
+        cover_url:
+          type: string
+        buyer_id:
+          type: integer
+        merchant_id:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
     GetOrder:
       type: object
       properties:
@@ -5234,179 +5045,6 @@ components:
           type: string
           format: date-time
         updated_at:
-          type: string
-          format: date-time
-    GetMedia:
-      type: object
-      properties:
-        id:
-          type: integer
-        uri:
-          type: string
-        label:
-          type: string
-        is_visible:
-          type: integer
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-    GetBank:
-      type: object
-      properties:
-        id:
-          type: integer
-        id_logo:
-          type: integer
-        bank_name:
-          type: string
-        is_visible:
-          type: integer
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-    GetBankUser:
-      type: object
-      properties:
-        id:
-          type: integer
-        id_m_banks:
-          type: integer
-        id_m_users:
-          type: integer
-        account_number:
-          type: string
-        account_name:
-          type: string
-        is_visible:
-          type: integer
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-    GetBankUtility:
-      type: object
-      properties:
-        id:
-          type: integer
-        id_m_banks:
-          type: integer
-        step:
-          type: string
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-    GetUserWallet:
-      type: object
-      properties:
-        id:
-          type: integer
-        id_u_user:
-          type: integer
-        id_m_wallets:
-          type: integer
-        balance:
-          type: integer
-        is_visible:
-          type: integer
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-    GetTopUp:
-      type: object
-      properties:
-        id:
-          type: integer
-        id_u_user_wallet:
-          type: integer
-        id_m_banks:
-          type: integer
-        balance_request:
-          type: integer
-        balance_transfer:
-          type: integer
-        status:
-          type: integer
-        proof_id:
-          type: integer
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-    GetWithdraw:
-      type: object
-      properties:
-        id:
-          type: integer
-        id_u_user_wallet:
-          type: integer
-        id_u_user_bank_account:
-          type: integer
-        balance_request:
-          type: integer
-        status:
-          type: integer
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
           type: string
           format: date-time
   securitySchemes:

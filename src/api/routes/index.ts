@@ -21,10 +21,10 @@ const routeV1 = function routeV1(
   instance.register(master, { prefix: '/masters' });
   instance.register(merchant, { prefix: '/merchants' });
   instance.register(product, { prefix: '/products' });
-  instance.register(cart, { prefix: '/carts' });
-  instance.register(transaction, { prefix: '/transactions' });
   instance.register(bank, { prefix: '/banks' });
   instance.register(wallet, { prefix: '/wallets' });
+  instance.register(cart, { prefix: '/carts' });
+  instance.register(transaction, { prefix: '/transactions' });
 
   donePlugin();
 };

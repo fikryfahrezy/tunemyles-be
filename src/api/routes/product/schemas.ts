@@ -40,7 +40,7 @@ export const responses = {
           data: {
             type: 'array',
             items: {
-              $ref: '#GetProduct',
+              $ref: '#ProductResponse',
             },
           },
         },

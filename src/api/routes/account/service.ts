@@ -15,6 +15,7 @@ import { saveFile, saveFiles, deleteLocalFile } from '../../utils/file-managemen
 import {
   createUser,
   createUserUtility,
+  createWallet,
   createUserWallet,
   createMedia,
   createForgotPassword,
@@ -39,9 +40,12 @@ export const userRegistration: (
   data: RegisterBody,
 ) => Promise<UserAuth> = async function userRegistration(data) {
   const user = await createUser(data);
-  const { id, type } = await createUserUtility(data.password, user.id);
+  const [{ id, type }, { id: walletId }] = await Promise.all([
+    createUserUtility(data.password, user.id),
+    createWallet(),
+  ]);
 
-  await createUserWallet(id);
+  await createUserWallet(walletId, id);
 
   const userType = type as number;
   const jwtToken = issueJwt(user.id, id, 'USER');

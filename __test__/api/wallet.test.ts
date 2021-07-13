@@ -1,8 +1,8 @@
 import type { Server } from 'http';
 import type { FastifyInstance } from 'fastify';
 import app from '../../src/config/app';
-import sequelize from '../../src/databases/sequelize';
 import {
+  sequelize,
   topUp,
   withdraw,
   getWallets,
@@ -43,16 +43,6 @@ describe('Top Up', () => {
     expect(body.success).toBe(true);
   });
 
-  test('Fail, Wallet Not Found', async () => {
-    const token = 'this.is.token';
-
-    const { status, headers, body } = await topUp(server, {}, token);
-
-    expect(status).toBe(404);
-    expect(headers['content-type']).toBe('application/json; charset=utf-8');
-    expect(body.success).toBe(false);
-  });
-
   test('Fail, No Data Provided', async () => {
     const token = 'this.is.token';
 
@@ -91,16 +81,6 @@ describe('Withdraw', () => {
     expect(status).toBe(201);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
     expect(body.success).toBe(true);
-  });
-
-  test('Fail, Wallet Not Found', async () => {
-    const token = 'this.is.token';
-
-    const { status, headers, body } = await withdraw(server, {}, token);
-
-    expect(status).toBe(404);
-    expect(headers['content-type']).toBe('application/json; charset=utf-8');
-    expect(body.success).toBe(false);
   });
 
   test('Fail, No Data Provided', async () => {
@@ -183,7 +163,7 @@ describe('Get Top Up Histories', () => {
     expect(status).toBe(200);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
     expect(body.success).toBe(true);
-    // expect(body.data.length).toBe(1);
+    expect(body.data.length).toBe(1);
   });
 
   test('Success, with Query `?orderDirection=DESC&orderBy=created_at&search=&page=&limit=`', async () => {

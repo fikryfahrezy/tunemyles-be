@@ -98,7 +98,7 @@ export const updateBankData: (
 ) => Promise<void> = async function updateBankData(bankId, data) {
   const [affectedRows] = await updateBank(bankId, data);
 
-  if (!affectedRows) throw new ErrorResponse(`bank with id ${bankId} not found`, 404);
+  if (affectedRows < 0) throw new ErrorResponse(`bank with id ${bankId} not found`, 404);
 };
 
 export const updateBankDetail: (
@@ -162,7 +162,7 @@ export const deleteBankData: (bankId: number) => Promise<void> = async function 
   const { logoId, logo_url: logoUrl } = bank;
   const affectedRows = await deleteBank(bankId);
 
-  if (affectedRows && logoId && logoUrl) {
+  if (affectedRows > 0 && logoId && logoUrl) {
     await deleteMedia(logoId);
     deleteLocalFile(logoUrl);
   }
@@ -194,7 +194,7 @@ export const updateCategoryData: (
 ) => Promise<void> = async function updateCategoryData(categoryId, data) {
   const [affectedRows] = await updateCategory(categoryId, data);
 
-  if (!affectedRows) throw new ErrorResponse(`category with id ${categoryId} not found`, 404);
+  if (affectedRows < 0) throw new ErrorResponse(`category with id ${categoryId} not found`, 404);
 };
 
 export const updateCategoryIcon: (
@@ -276,7 +276,7 @@ export const deleteMediaData: (mediaId: number) => Promise<void> = async functio
 
   const affectedRows = await deleteMedia(mediaId);
 
-  if (affectedRows) deleteLocalFile(media.url);
+  if (affectedRows > 0) deleteLocalFile(media.url);
 };
 
 export const postWalletData: (
@@ -305,7 +305,7 @@ export const updateWalletData: (
 ) => Promise<void> = async function updateWalletData(walletId, data) {
   const [affectedRows] = await updateWallet(walletId, data);
 
-  if (!affectedRows) throw new ErrorResponse(`wallet with id ${walletId} not found`, 404);
+  if (affectedRows < 0) throw new ErrorResponse(`wallet with id ${walletId} not found`, 404);
 };
 
 export const changeWalletLogo: (
@@ -341,7 +341,7 @@ export const deleteWalletData: (
   const { logoId, logoUrl } = walletLogo;
   const affectedRows = await deleteWallet(walletId);
 
-  if (affectedRows && logoId && logoUrl) {
+  if (affectedRows > 0 && logoId && logoUrl) {
     await deleteMedia(logoId);
     deleteLocalFile(logoUrl);
   }
@@ -363,11 +363,11 @@ export const updateFaqData: (
 ) => Promise<void> = async function updateFaqData(faqId, data) {
   const [affectedRows] = await updateFaq(faqId, data);
 
-  if (!affectedRows) throw new ErrorResponse(`faq with id ${faqId} not found`, 404);
+  if (affectedRows < 1) throw new ErrorResponse(`faq with id ${faqId} not found`, 404);
 };
 
 export const deleteFaqData: (faqId: number) => Promise<void> = async function deleteFaqData(faqId) {
   const affectedRows = await deleteFaq(faqId);
 
-  if (!affectedRows) throw new ErrorResponse(`faq with id ${faqId} not found`, 404);
+  if (affectedRows < 1) throw new ErrorResponse(`faq with id ${faqId} not found`, 404);
 };

@@ -32,7 +32,7 @@ export const register: RequestHandler<Request<{ Body: RegisterBody }>> = async f
   res.status(201).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 201,
     success: true,
-    message: 'registration success',
+    message: 'success',
     data: resData,
   });
 };
@@ -67,7 +67,7 @@ export const login: RequestHandler<Request<{ Body: LoginBody }>> = async functio
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
     success: true,
-    message: 'login success',
+    message: 'success',
     data: resData,
   });
 };
@@ -88,7 +88,7 @@ export const getProfile: RequestHandler<
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
     success: true,
-    message: 'validate success',
+    message: 'success',
     data: resData,
   });
 };
@@ -109,7 +109,7 @@ export const updateProfile: RequestHandler<
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
     success: true,
-    message: 'successfully updated',
+    message: 'success',
   });
 };
 
@@ -121,7 +121,7 @@ export const forgotPassword: RequestHandler<
   res.status(201).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 201,
     success: true,
-    message: 'request sent',
+    message: 'success',
     data: resData,
   });
 };
@@ -134,7 +134,7 @@ export const verifyToken: RequestHandler<
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
     success: true,
-    message: 'verified token success',
+    message: 'success',
     data: resData,
   });
 };
@@ -147,7 +147,7 @@ export const resetPassword: RequestHandler<
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
     success: true,
-    message: 'password successfully changed',
+    message: 'success',
   });
 };
 
@@ -168,7 +168,7 @@ export const createAdmin: RequestHandler<Request> = async function createAdmin(
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
     success: true,
-    message: 'success make the user as an admin',
+    message: 'success',
     data: token,
   });
 };
@@ -187,6 +187,6 @@ export const banned: RequestHandler<Request> = async function banned(_, res): Pr
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
     success: true,
-    message: 'successful banning user',
+    message: 'success',
   });
 };

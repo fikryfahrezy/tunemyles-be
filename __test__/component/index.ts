@@ -50,16 +50,61 @@ import type {
   UpdateTopUpStatusBody,
   UpdateWithdrawStatusBody,
 } from '../../src/api/types/schema';
-export { default as sequelize } from '../../src/databases/sequelize';
+import sequelize from '../../src/databases/sequelize';
 import supertest, { Test } from 'supertest';
 import { issueJwt } from '../../src/api/utils/jwt';
-import { userRegistration, userLogin, makeUserAdmin } from '../../src/api/routes/account/service';
+import initModels from '../../src/api/models/sql/init-models';
 import {
-  getUser,
   createForgotPassword,
   createMedias,
   createMerchant,
+  createMedia as createUserMedia,
+  updateUser,
+  getUser,
 } from '../../src/api/repositories/UserRepository';
+import {
+  createProduct,
+  createProductUtility,
+  createMedia,
+  createProductCategory,
+  createProductPhoto,
+} from '../../src/api/repositories/MerchantRepository';
+import {
+  createBank,
+  createBankStep,
+  createCategory,
+  createMedia as createMasterMedia,
+  createWallet,
+  createFaq,
+} from '../../src/api/repositories/MasterRepository';
+import { createBankUser } from '../../src/api/repositories/BankRepository';
+import {
+  userRegistration,
+  userLogin,
+  makeUserAdmin,
+  resetUserPassword,
+  verifyUserToken,
+} from '../../src/api/routes/account/service';
+
+export { default as sequelize } from '../../src/databases/sequelize';
+export {
+  userRegistration,
+  userLogin,
+  resetUserPassword,
+  verifyUserToken,
+  createUserMedia,
+  updateUser,
+  getUser,
+  createBank,
+  createBankStep,
+  createCategory,
+  createMasterMedia,
+  createWallet,
+  createFaq,
+  createProductCategory,
+};
+
+const { UserTransaction, TransactionProduct } = initModels(sequelize);
 
 type FilesType = { field?: string; fileDir?: string }[];
 
@@ -996,7 +1041,7 @@ export const getProducts = function getProducts(server: Server, query: string) {
   return supertestReq({
     server,
     type: 'GET',
-    url: `/prducts${query}`,
+    url: `/products${query}`,
   });
 };
 
@@ -1008,7 +1053,7 @@ export const getProductsByCategory = function getProductsByCategory(
   return supertestReq({
     server,
     type: 'GET',
-    url: `/prducts/categories/${categoryId}${query}`,
+    url: `/products/categories/${categoryId}${query}`,
   });
 };
 
@@ -1182,13 +1227,13 @@ export const getBankUsers = function getBankUsers(server: Server, token?: string
     server,
     token,
     type: 'GET',
-    url: '/banks/users/get',
+    url: '/banks/users',
   });
 };
 
 export const updateBankUser = function updateBankUser(
   server: Server,
-  userId: number,
+  userBankId: number,
   payload: Partial<UpdateBankUserBody>,
   token?: string,
 ) {
@@ -1196,7 +1241,7 @@ export const updateBankUser = function updateBankUser(
     server,
     token,
     type: 'PATCH',
-    url: `/banks/users/${userId}`,
+    url: `/banks/users/${userBankId}`,
     payload: {
       obj: payload,
     },
@@ -1205,14 +1250,14 @@ export const updateBankUser = function updateBankUser(
 
 export const deleteBankUser = function deleteBankUser(
   server: Server,
-  userId: number,
+  userBankId: number,
   token?: string,
 ) {
   return supertestReq({
     server,
     token,
     type: 'DELETE',
-    url: `/banks/users/${userId}`,
+    url: `/banks/users/${userBankId}`,
   });
 };
 
@@ -1396,10 +1441,10 @@ export const registerThenLogin = async function registerThenLogin() {
 };
 
 export const createUser = async function createUser() {
-  const { username, phone_number } = await registration();
+  const { username, phone_number, token } = await registration();
   const { id: userId, utilId } = await getUser('USERNAME', username);
 
-  return { userId, utilId, username, phone_number };
+  return { userId, utilId, username, phone_number, token };
 };
 
 export const registerThenForgotPass = async function registerThenForgotPass() {
@@ -1434,4 +1479,105 @@ export const createMerchantUser = async function createMerchantUser() {
   const newToken = issueJwt(id, utilId, 'MERCHANT');
 
   return { id, username, password, token: newToken };
+};
+
+export const createMerchantProduct = async function createMerchantProduct(userId: number) {
+  const { id: productId } = await createProduct(userId, {
+    product_name: 'name',
+    description: 'description',
+  });
+
+  const { id: productUtilId } = await createProductUtility(productId, {
+    normal_price: 123,
+    selling_price: 123,
+    qty: 1,
+    discount: 10,
+  });
+
+  return { productId, productUtilId };
+};
+
+export const addCategory = async function addCategory() {
+  const { id } = await createCategory({
+    category: 'category',
+    description: 'description',
+    slug: 'slug',
+  });
+
+  return { id };
+};
+
+export const bindProductCategory = async function bindProductCategory(userId: number) {
+  const [{ id: categoryId }, { productId }] = await Promise.all([
+    addCategory(),
+    createMerchantProduct(userId),
+  ]);
+
+  return { categoryId, productId };
+};
+
+export const addProductImage = async function addProductImage(userId: number) {
+  const [{ productUtilId }, { id: mediaId }] = await Promise.all([
+    createMerchantProduct(userId),
+    createMedia('a'),
+  ]);
+  const { id } = await createProductPhoto(productUtilId, mediaId);
+
+  return { productImageId: id };
+};
+
+export const createUserTransaction = async function createUserTransaction(merchantId: number) {
+  const { userId } = await createUser();
+  const { id: transactionId } = await UserTransaction.create({
+    id_m_users: userId,
+    id_merchant: merchantId,
+    transaction_token: '213213213',
+    total_price: 0,
+    status: 0,
+  });
+  return { userId, transactionId };
+};
+
+export const createTransactionProduct = async function createTransactionProduct(
+  merchantId: number,
+) {
+  const { transactionId } = await createUserTransaction(merchantId);
+  const { productId } = await createMerchantProduct(merchantId);
+
+  await TransactionProduct.create({
+    id_u_user_transaction: transactionId,
+    id_m_products: productId,
+    transaction_token: 'wrwerwe',
+    qty: 1,
+    status: 0,
+    sub_total_price: 1,
+  });
+
+  return { transactionId };
+};
+
+export const createProductWithCategory = async function createProductWithCategory(n: number) {
+  const [{ id }, { id: categoryId }] = await Promise.all([createMerchantUser(), addCategory()]);
+  const products = await Promise.all([...Array(n)].map(() => createMerchantProduct(id)));
+
+  await Promise.all(products.map(({ productId }) => createProductCategory(productId, categoryId)));
+
+  return { categoryId };
+};
+
+export const createMasterBank = async function createMasterBank() {
+  const { id } = await createBank({ bank_name: 'bank name' });
+
+  return { id };
+};
+
+export const addBankUser = async function addBankUser(userId: number) {
+  const { id } = await createMasterBank();
+  const { id: userBankId } = await createBankUser(userId, {
+    bank_id: id,
+    account_name: 'name',
+    account_number: '123213',
+  });
+
+  return { userBankId };
 };

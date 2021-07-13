@@ -25,6 +25,27 @@ import {
   changeWithdrawStatus,
 } from './service';
 
+export const getWallets: RequestHandler<
+  Request<{ Headers: ApiKeyHeader }>
+> = async function getWallets(_, res): Promise<void> {
+  const userToken = this.requestContext.get<CustModelType['UserToken']>('usertoken');
+
+  if (!userToken) {
+    res.unauthorized();
+
+    return;
+  }
+
+  const resData = await getWalletData(userToken.userId);
+
+  res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
+    code: 200,
+    success: true,
+    message: 'success',
+    data: resData,
+  });
+};
+
 export const topUp: RequestHandler<
   Request<{ Headers: ApiKeyHeader; Body: TopUpBody }>
 > = async function topUp(req, res): Promise<void> {
@@ -36,7 +57,7 @@ export const topUp: RequestHandler<
     return;
   }
 
-  await requestTopUp(userToken.utilId, req.body);
+  await requestTopUp(userToken.userId, req.body);
 
   res.status(201).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 201,
@@ -56,33 +77,12 @@ export const withdraw: RequestHandler<
     return;
   }
 
-  await requestWithdraw(userToken.utilId, req.body);
+  await requestWithdraw(userToken.userId, req.body);
 
   res.status(201).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 201,
     success: true,
     message: 'success',
-  });
-};
-
-export const getWallets: RequestHandler<
-  Request<{ Headers: ApiKeyHeader }>
-> = async function getWallets(_, res): Promise<void> {
-  const userToken = this.requestContext.get<CustModelType['UserToken']>('usertoken');
-
-  if (!userToken) {
-    res.unauthorized();
-
-    return;
-  }
-
-  const resData = await getWalletData(userToken.utilId);
-
-  res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
-    code: 200,
-    success: true,
-    message: 'success',
-    data: resData,
   });
 };
 
@@ -132,7 +132,7 @@ export const getWithdrawHistories: RequestHandler<
     return;
   }
 
-  const resData = await withdrawHistoryData(userToken.utilId, query);
+  const resData = await withdrawHistoryData(userToken.userId, query);
 
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
@@ -160,7 +160,7 @@ export const getTopUpDetail: RequestHandler<
     return;
   }
 
-  const resData = await topUpDetail(userToken.utilId, topUpId);
+  const resData = await topUpDetail(userToken.userId, topUpId);
 
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
@@ -188,7 +188,7 @@ export const getWithdrawDetail: RequestHandler<
     return;
   }
 
-  const resData = await withdrawDetail(userToken.utilId, withdrawId);
+  const resData = await withdrawDetail(userToken.userId, withdrawId);
 
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
@@ -258,7 +258,7 @@ export const uploadTopUpProof: RequestHandler<
     return;
   }
 
-  await topUpProof(userToken.utilId, topUpId, req.body);
+  await topUpProof(topUpId, userToken.userId, req.body);
 
   res.status(201).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 201,

@@ -183,7 +183,7 @@ export const updateProductData: (
     product_name: name,
   });
 
-  if (affectedRows < 1) throw new ErrorResponse(`product with id ${productId} not found`, 404);
+  if (affectedRows < 1) throw new ErrorResponse('product not found', 404);
 
   await updateProductUtility(productId, data);
 };
@@ -195,7 +195,7 @@ export const changeProductCover: (
 ) => Promise<unknown> = async function changeProductCover(productId, { cover }, userId) {
   const productCover = await getProductCover(productId, userId);
 
-  if (!productCover) throw new ErrorResponse(`product with id ${productId} not found`, 404);
+  if (!productCover) throw new ErrorResponse('product not found', 404);
 
   const { coverId, coverUrl } = productCover;
   const img = cover[0];
@@ -223,7 +223,7 @@ export const updateProductStatus: (
     status,
   });
 
-  if (affectedRows < 1) throw new ErrorResponse(`product with id ${productId} not found`, 404);
+  if (affectedRows < 1) throw new ErrorResponse('product not found', 404);
 
   return { status };
 };
@@ -242,8 +242,8 @@ export const bindProductCategory: (
     getCategory(categoryId),
   ]);
 
-  if (!product) throw new ErrorResponse(`product with id ${productId} not found`, 404);
-  else if (!category) throw new ErrorResponse(`category with id ${categoryId} not found`, 404);
+  if (!product) throw new ErrorResponse('product not found', 404);
+  else if (!category) throw new ErrorResponse('category not found', 404);
 
   const { product_util_id: utilId } = product;
 
@@ -265,7 +265,7 @@ export const postProductImage: (
     countProductImagesByProductId(productId, userId),
   ]);
 
-  if (!product) throw new ErrorResponse(`product with id ${productId} not found`, 404);
+  if (!product) throw new ErrorResponse('product not found', 404);
   else if (productImg && productImg.images >= 4)
     throw new ErrorResponse('reach maximum number of photos', 422);
 
@@ -296,7 +296,7 @@ export const getProductDetail: (
 ) => Promise<unknown> = async function getProductDetail(productId, userId) {
   const product = await getProduct(productId, userId);
 
-  if (!product) throw new ErrorResponse(`product with id ${productId} not found`, 404);
+  if (!product) throw new ErrorResponse('product not found', 404);
 
   const [productImages, productCategories] = await Promise.all([
     getProductImagesByProductId(productId),
@@ -312,8 +312,7 @@ export const removeProductCategory: (
 ) => Promise<void> = async function removeProductCategory(categoryId, userId) {
   const productCategory = await getProductCategory(categoryId, userId);
 
-  if (!productCategory)
-    throw new ErrorResponse(`product category with id ${categoryId} not found`, 404);
+  if (!productCategory) throw new ErrorResponse('product category not found', 404);
 
   await deleteProductCategory(categoryId);
 };
@@ -324,7 +323,7 @@ export const removeProductImage: (
 ) => Promise<void> = async function removeProductImage(imageId, userId) {
   const productImage = await getProductImage(imageId, userId);
 
-  if (!productImage) throw new ErrorResponse(`product image with id ${imageId} not found`, 404);
+  if (!productImage) throw new ErrorResponse('product image not found', 404);
 
   await deleteProductImage(imageId);
 };
@@ -335,7 +334,7 @@ export const deleteProduct: (
 ) => Promise<void> = async function deleteProduct(productId, userId) {
   const [affectedRows] = await updateProduct(productId, userId, { status: 3 });
 
-  if (!affectedRows) throw new ErrorResponse(`product with id ${productId} not found`, 404);
+  if (affectedRows < 0) throw new ErrorResponse('product not found', 404);
 };
 
 export const getOrderData: (
@@ -363,7 +362,7 @@ export const updateOrderStatus: (
 ) => Promise<unknown> = async function updateOrderStatus(transactionId, { status }, userId) {
   const order = await getMerchantProductOrder(userId, transactionId);
 
-  if (!order) throw new ErrorResponse(`order with id ${transactionId} not found`, 404);
+  if (!order) throw new ErrorResponse('order not found', 404);
 
   const { id, qty, sub_total_price: subTotalPrice, buyer_id: buyerId } = order;
   const promises: unknown[] = [updateTransactionProduct(id, { status })];
@@ -371,7 +370,7 @@ export const updateOrderStatus: (
   if (status === 4) {
     const userWallet = await getUserWalletBalance(buyerId);
 
-    if (!userWallet) throw new ErrorResponse(`order with id ${transactionId} not found`, 404);
+    if (!userWallet) throw new ErrorResponse('order not found', 404);
 
     promises.push(
       updateUserWallet(userWallet.id, { balance: userWallet.balance - qty * subTotalPrice }),

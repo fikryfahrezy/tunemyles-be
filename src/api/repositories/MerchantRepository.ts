@@ -77,17 +77,14 @@ export const createMedia: (label: string) => Promise<ModelType['Media']> = funct
 export const createProduct: (
   userId: number,
   data: Pick<PostProductBody, 'product_name' | 'description' | 'status'> & { coverId?: number },
-) => Promise<ModelType['Product']> = async function createProduct(
-  userId,
-  { status, coverId, ...data },
-) {
+) => Promise<ModelType['Product']> = function createProduct(userId, { status, coverId, ...data }) {
   return Product.create({ ...data, is_visible: status, id_cover: coverId, id_m_users: userId });
 };
 
 export const createProductUtility: (
   productId: number,
   data: Omit<PostProductBody, 'product_name' | 'description' | 'status' | 'cover'>,
-) => Promise<ModelType['ProductUtility']> = async function createProductUtility(
+) => Promise<ModelType['ProductUtility']> = function createProductUtility(
   productId,
   { normal_price, selling_price, ...data },
 ) {
@@ -102,17 +99,14 @@ export const createProductUtility: (
 export const createProductPhoto: (
   productUtilId: number,
   photoId: number,
-) => Promise<ModelType['ProductPhoto']> = async function createProductPhoto(
-  productUtilId,
-  photoId,
-) {
+) => Promise<ModelType['ProductPhoto']> = function createProductPhoto(productUtilId, photoId) {
   return ProductPhoto.create({ id_u_product: productUtilId, id_m_medias: photoId });
 };
 
 export const createProductCategory: (
   productId: number,
   categoryId: number,
-) => Promise<[ModelType['ProductCategory'], boolean]> = async function createProductCategory(
+) => Promise<[ModelType['ProductCategory'], boolean]> = function createProductCategory(
   productId,
   categoryId,
 ) {
@@ -130,7 +124,7 @@ export const updateMerchant: (
     id_identity_photo?: number;
     id_market_photo?: number;
   },
-) => Promise<[number, ModelType['Merchant'][]]> = async function updateMerchant(userId, data) {
+) => Promise<[number, ModelType['Merchant'][]]> = function updateMerchant(userId, data) {
   return Merchant.update(data, { where: { id_u_user: userId } });
 };
 
@@ -145,7 +139,7 @@ export const updateProduct: (
   productId: number,
   userId: number,
   data: Pick<UpdateProductBody, 'product_name' | 'description' | 'status'> & { coverId?: number },
-) => Promise<[number, ModelType['Product'][]]> = async function updateProduct(
+) => Promise<[number, ModelType['Product'][]]> = function updateProduct(
   productId,
   userId,
   { status, coverId, ...data },
@@ -159,7 +153,7 @@ export const updateProduct: (
 export const updateProductUtility: (
   productId: number,
   data: Omit<UpdateProductBody, 'product_name' | 'description' | 'status' | 'cover'>,
-) => Promise<[number, ModelType['ProductUtility'][]]> = async function updateProductUtility(
+) => Promise<[number, ModelType['ProductUtility'][]]> = function updateProductUtility(
   productId,
   { normal_price, selling_price, ...data },
 ) {
@@ -176,7 +170,7 @@ export const updateProductUtility: (
 export const updateTransactionProduct: (
   transactionProductId: number,
   data: UpdateOrderStatusBody,
-) => Promise<[number, ModelType['TransactionProduct'][]]> = async function updateTransactionProduct(
+) => Promise<[number, ModelType['TransactionProduct'][]]> = function updateTransactionProduct(
   transactionProductId,
   { status },
 ) {
@@ -186,28 +180,23 @@ export const updateTransactionProduct: (
 export const updateUserWallet: (
   id: number,
   data: { balance: number; [index: string]: unknown },
-) => Promise<[number, ModelType['UserWallet'][]]> = async function updateUserWallet(
-  id,
-  { balance },
-) {
+) => Promise<[number, ModelType['UserWallet'][]]> = function updateUserWallet(id, { balance }) {
   return UserWallet.update({ balance }, { where: { id } });
 };
 
 export const deleteProductCategory: (
   id: number,
-) => Promise<number> = async function deleteProductCategory(id) {
+) => Promise<number> = function deleteProductCategory(id) {
   return ProductCategory.destroy({ where: { id } });
 };
 
-export const deleteProductImage: (
-  id: number,
-) => Promise<number> = async function deleteProductImage(id) {
+export const deleteProductImage: (id: number) => Promise<number> = function deleteProductImage(id) {
   return ProductPhoto.destroy({ where: { id } });
 };
 
-export const getMerchant: (
-  userId: number,
-) => Promise<MerchantType | null> = async function getMerchant(userId) {
+export const getMerchant: (userId: number) => Promise<MerchantType | null> = function getMerchant(
+  userId,
+) {
   const sqlQuery = `
     SELECT * 
     FROM v_merchant vm
@@ -225,7 +214,7 @@ export const getMerchant: (
 export const getProducts: (
   userId: number,
   query?: CustModelType['SearchQuery'],
-) => Promise<unknown> = async function getProducts(userId, query) {
+) => Promise<unknown> = function getProducts(userId, query) {
   let sqlQuery = `
     SELECT *
     FROM (
@@ -249,7 +238,7 @@ export const getProducts: (
 export const getProductCover: (
   productId: number,
   userId: number,
-) => Promise<ProductCoverType | null> = async function getProductCover(productId, userId) {
+) => Promise<ProductCoverType | null> = function getProductCover(productId, userId) {
   const sqlQuery = `
     SELECT
       mm.id AS coverId,
@@ -272,7 +261,7 @@ export const getProductCover: (
 export const getProduct: (
   productId: number,
   userId: number,
-) => Promise<ProductType | null> = async function getProduct(productId, userId) {
+) => Promise<ProductType | null> = function getProduct(productId, userId) {
   const sqlQuery = `
     SELECT *
     FROM v_products vp
@@ -291,7 +280,7 @@ export const getProduct: (
 
 export const getProductImagesByProductId: (
   productId: number,
-) => Promise<Record<string, unknown>[]> = async function getProductImagesByProductId(productId) {
+) => Promise<Record<string, unknown>[]> = function getProductImagesByProductId(productId) {
   const sqlQuery = `
     SELECT 
       upp.id AS product_image_id, 
@@ -314,7 +303,7 @@ export const getProductImagesByProductId: (
 
 export const getProductCategoriesByProductId: (
   productId: number,
-) => Promise<unknown> = async function getProductCategoriesByProductId(productId) {
+) => Promise<unknown> = function getProductCategoriesByProductId(productId) {
   const sqlQuery = `
     SELECT 
       upc.id AS product_category_id, 
@@ -341,7 +330,7 @@ export const getProductCategoriesByProductId: (
 
 export const getCategory: (
   categoryId: number,
-) => Promise<Record<string, unknown> | null> = async function getCategory(categoryId) {
+) => Promise<Record<string, unknown> | null> = function getCategory(categoryId) {
   const sqlQuery = `
     SELECT
       mc.id AS category_id,
@@ -363,7 +352,7 @@ export const getCategory: (
 export const getProductCategory: (
   categoryId: number,
   userId: number,
-) => Promise<unknown | null> = async function getProductCategory(categoryId, userId) {
+) => Promise<unknown | null> = function getProductCategory(categoryId, userId) {
   const sqlQuery = `
     SELECT
       upc.id AS product_category_id
@@ -386,7 +375,7 @@ export const getProductCategory: (
 export const getProductImage: (
   imageId: number,
   userId: number,
-) => Promise<unknown | null> = async function getProductImage(imageId, userId) {
+) => Promise<unknown | null> = function getProductImage(imageId, userId) {
   const sqlQuery = `
     SELECT
       upp.id AS product_image_id
@@ -409,7 +398,7 @@ export const getProductImage: (
 export const getMerchantOrders: (
   merchantId: number,
   query: CustModelType['SearchQuery'],
-) => Promise<unknown> = async function getMerchantOrders(merchantId, { status, ...query }) {
+) => Promise<unknown> = function getMerchantOrders(merchantId, { status, ...query }) {
   let sqlQuery = `
     SELECT *
     FROM v_user_transaction vut 
@@ -438,7 +427,7 @@ export const getMerchantOrders: (
 export const getMerchantProductsOrder: (
   merchantId: number,
   transactionId: number,
-) => Promise<unknown> = async function getMerchantProductsOrder(merchantId, transactionId) {
+) => Promise<unknown> = function getMerchantProductsOrder(merchantId, transactionId) {
   const sqlQuery = `
     SELECT *
     FROM v_user_transaction_products vutp
@@ -457,7 +446,7 @@ export const getMerchantProductsOrder: (
 export const getMerchantProductOrder: (
   merchantId: number,
   transactionId: number,
-) => Promise<ProductOrderType | null> = async function getMerchantProductOrder(
+) => Promise<ProductOrderType | null> = function getMerchantProductOrder(
   merchantId,
   transactionId,
 ) {
@@ -479,7 +468,7 @@ export const getMerchantProductOrder: (
 
 export const getUserWalletBalance: (
   userId: number,
-) => Promise<UserWalletBalanceType | null> = async function getUserWalletBalance(userId) {
+) => Promise<UserWalletBalanceType | null> = function getUserWalletBalance(userId) {
   const sqlQuery = `
     SELECT
       uuw.id,
@@ -499,7 +488,7 @@ export const getUserWalletBalance: (
 
 export const getMerchants: (
   query: CustModelType['SearchQuery'],
-) => Promise<unknown> = async function getMerchants(query) {
+) => Promise<unknown> = function getMerchants(query) {
   let sqlQuery = 'SELECT * FROM v_merchant';
 
   sqlQuery += queryingBuilder(query);
@@ -511,9 +500,9 @@ export const getMerchants: (
   });
 };
 
-export const getRandomMerchants: (
-  limit: number,
-) => Promise<unknown> = async function getRandomMerchants(limit) {
+export const getRandomMerchants: (limit: number) => Promise<unknown> = function getRandomMerchants(
+  limit,
+) {
   const sqlQuery = `
     SELECT * 
     FROM v_merchant 
@@ -532,7 +521,7 @@ export const getRandomMerchants: (
 export const getMerchantTransactions: (
   merchantId: number,
   date: string,
-) => Promise<MerchantTransactionType[]> = async function getMerchantTransactions(merchantId, date) {
+) => Promise<MerchantTransactionType[]> = function getMerchantTransactions(merchantId, date) {
   const sqlQuery = `
     SELECT
       uut.id,
@@ -560,10 +549,7 @@ export const getMerchantTransactions: (
 export const countProductImagesByProductId: (
   productId: number,
   userId: number,
-) => Promise<ProductImagesType | null> = async function countProductImagesByProductId(
-  productId,
-  userId,
-) {
+) => Promise<ProductImagesType | null> = function countProductImagesByProductId(productId, userId) {
   const sqlQuery = `
     SELECT
       up.id as producUtilId,

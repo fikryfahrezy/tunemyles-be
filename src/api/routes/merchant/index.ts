@@ -469,7 +469,7 @@ const routes = function routes(
       schema: {
         querystring: requestQuery.getRandomMerchants,
         response: {
-          200: responses.randomMerchants,
+          200: responses.merchantList,
           '4xx': { $ref: '#ApiResponse' },
           '5xx': { $ref: '#ApiResponse' },
         },

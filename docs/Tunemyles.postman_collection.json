@@ -6297,7 +6297,7 @@
                       "});\r",
                       "\r",
                       "pm.sendRequest(makeRequest(reqBody, pm.environment.get('MERCHANT_TOKEN')), (_, response) => {\r",
-                      "    pm.test('Fail, Merchant Product Category Not Found', () => {\r",
+                      "    pm.test('Fail, Merchant Product Not Found', () => {\r",
                       "        const { code, headers } = response;\r",
                       "\r",
                       "        pm.expect(code).to.eql(404);\r",
@@ -8031,7 +8031,7 @@
                   "        pm.expect(code).to.eql(200);\r",
                   "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
                   "        pm.expect(body.success).to.eql(true);\r",
-                  "        // pm.expect(body.data.length).to.eql(1);\r",
+                  "        pm.expect(body.data.length).to.eql(1);\r",
                   "    });\r",
                   "});\r",
                   "\r",
@@ -8222,26 +8222,25 @@
                   "    });\r",
                   "});\r",
                   "\r",
-                  "pm.sendRequest(makeRequest(''), (_, response) => {\r",
+                  "pm.sendRequest(makeRequest('', 9999), (_, response) => {\r",
                   "    pm.test('Success, Without Query and Category Not Found', () => {\r",
-                  "        const { code, headers } = response;\r",
-                  "\r",
-                  "        pm.expect(code).to.eql(200);\r",
-                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(response.json().success).to.eql(true);\r",
-                  "        // pm.expect(body.data.length).to.eql(0);\r",
-                  "    });\r",
-                  "});\r",
-                  "\r",
-                  "pm.sendRequest(makeRequest('?limit=1', pm.environment.get('PRODUCT_CATEGORY_ID')), (_, response) => {\r",
-                  "    pm.test('Success, with Query `?limit=1`', () => {\r",
                   "        const { code, headers } = response;\r",
                   "        const body = response.json();\r",
                   "\r",
                   "        pm.expect(code).to.eql(200);\r",
                   "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
                   "        pm.expect(body.success).to.eql(true);\r",
-                  "        // pm.expect(body.data.length).to.eql(1);\r",
+                  "        pm.expect(body.data.length).to.eql(0);\r",
+                  "    });\r",
+                  "});\r",
+                  "\r",
+                  "pm.sendRequest(makeRequest('?limit=1', pm.environment.get('PRODUCT_CATEGORY_ID')), (_, response) => {\r",
+                  "    pm.test('Success, with Query `?limit=1`', () => {\r",
+                  "        const { code, headers } = response;\r",
+                  "\r",
+                  "        pm.expect(code).to.eql(200);\r",
+                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(true);\r",
                   "    });\r",
                   "});\r",
                   "\r",
@@ -8426,7 +8425,7 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": ""
+                  "value": "42"
                 }
               ]
             }
@@ -8438,119 +8437,6 @@
     {
       "name": "bank",
       "item": [
-        {
-          "name": "Post Bank User",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "const { Request } = require('postman-collection')\r",
-                  "\r",
-                  "const reqBody = {\r",
-                  "    bank_id: 1,\r",
-                  "    account_number: 49218470,\r",
-                  "    account_name: \"hfkdshflas\",\r",
-                  "};\r",
-                  "\r",
-                  "const makeRequest = function makeRequest(payload, token = undefined) {\r",
-                  "    const header = {\r",
-                  "        'Content-Type': 'application/json',\r",
-                  "    };\r",
-                  "\r",
-                  "    if (token) header.authorization = `Bearer ${token}`;\r",
-                  "\r",
-                  "    return new Request({\r",
-                  "        header,\r",
-                  "        method: 'POST',\r",
-                  "        url: pm.environment.replaceIn('{{URL}}/banks/users'),\r",
-                  "        body: {\r",
-                  "            mode: 'raw',\r",
-                  "            raw: JSON.stringify(payload),\r",
-                  "        },\r",
-                  "    });\r",
-                  "};\r",
-                  "\r",
-                  "pm.sendRequest(makeRequest(\r",
-                  "    reqBody,\r",
-                  "    pm.environment.get('USER_TOKEN'),\r",
-                  "), (_, response) => {\r",
-                  "    pm.test('Success', () => {\r",
-                  "        const { code, headers } = response;\r",
-                  "\r",
-                  "        pm.expect(code).to.eql(201);\r",
-                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(response.json().success).to.eql(true);\r",
-                  "    })\r",
-                  "});\r",
-                  "\r",
-                  "pm.sendRequest(makeRequest({}, pm.environment.get('USER_TOKEN')), (_, response) => {\r",
-                  "    pm.test('Fail, No Data Provided', () => {\r",
-                  "        const { code, headers } = response;\r",
-                  "\r",
-                  "        pm.expect(code).to.eql(422);\r",
-                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(response.json().success).to.eql(false);\r",
-                  "    })\r",
-                  "});\r",
-                  "\r",
-                  "pm.sendRequest(makeRequest(reqBody, 'this-is-wrong'), (_, response) => {\r",
-                  "    pm.test('Fail, Wrong API Key', () => {\r",
-                  "        const { code, headers } = response;\r",
-                  "\r",
-                  "        pm.expect(code).to.eql(403);\r",
-                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(response.json().success).to.eql(false);\r",
-                  "    });\r",
-                  "});\r",
-                  "\r",
-                  "pm.sendRequest(makeRequest(reqBody), (_, response) => {\r",
-                  "    pm.test('Fail, API Key Not Given', () => {\r",
-                  "        const { code, headers } = response;\r",
-                  "\r",
-                  "        pm.expect(code).to.eql(403);\r",
-                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(response.json().success).to.eql(false);\r",
-                  "    });\r",
-                  "});\r",
-                  ""
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{USER_TOKEN}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json",
-                "description": "JSON Type",
-                "type": "text"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"bank_id\": 1,\r\n    \"account_number\": \"49218470\",\r\n    \"account_name\": \"hfkdshflas\"\r\n}"
-            },
-            "url": {
-              "raw": "{{URL}}/banks/users",
-              "host": ["{{URL}}"],
-              "path": ["banks", "users"]
-            }
-          },
-          "response": []
-        },
         {
           "name": "Get Banks",
           "event": [
@@ -8575,10 +8461,13 @@
                   "pm.sendRequest(makeRequest(pm.environment.get('USER_TOKEN')), (_, response) => {\r",
                   "    pm.test('Success', () => {\r",
                   "        const { code, headers } = response;\r",
+                  "        const body = response.json();\r",
+                  "\r",
+                  "        pm.environment.set('BANK_USER_ID', body.data[0].id)\r",
                   "\r",
                   "        pm.expect(code).to.eql(200);\r",
                   "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(response.json().success).to.eql(true);\r",
+                  "        pm.expect(body.success).to.eql(true);\r",
                   "    });\r",
                   "});\r",
                   "\r",
@@ -8658,7 +8547,7 @@
                   "\r",
                   "pm.sendRequest(makeRequest(\r",
                   "    pm.environment.get('USER_TOKEN'),\r",
-                  "    pm.environment.get('BANK_ID'),\r",
+                  "    pm.environment.get('BANK_USER_ID'),\r",
                   "), (_, response) => {\r",
                   "    pm.test('Success', () => {\r",
                   "        const { code, headers } = response;\r",
@@ -8731,10 +8620,125 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": "2",
+                  "value": "67",
                   "type": "string"
                 }
               ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Post Bank User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const { Request } = require('postman-collection')\r",
+                  "\r",
+                  "const reqBody = {\r",
+                  "    bank_id: pm.environment.get(\"MASTER_BANK_ID\"),\r",
+                  "    account_number: 49218470,\r",
+                  "    account_name: \"hfkdshflas\",\r",
+                  "};\r",
+                  "\r",
+                  "const makeRequest = function makeRequest(payload, token = undefined) {\r",
+                  "    const header = {\r",
+                  "        'Content-Type': 'application/json',\r",
+                  "    };\r",
+                  "\r",
+                  "    if (token) header.authorization = `Bearer ${token}`;\r",
+                  "\r",
+                  "    return new Request({\r",
+                  "        header,\r",
+                  "        method: 'POST',\r",
+                  "        url: pm.environment.replaceIn('{{URL}}/banks/users'),\r",
+                  "        body: {\r",
+                  "            mode: 'raw',\r",
+                  "            raw: JSON.stringify(payload),\r",
+                  "        },\r",
+                  "    });\r",
+                  "};\r",
+                  "\r",
+                  "pm.sendRequest(makeRequest(\r",
+                  "    reqBody,\r",
+                  "    pm.environment.get('USER_TOKEN'),\r",
+                  "), (_, response) => {\r",
+                  "    pm.test('Success', () => {\r",
+                  "        const { code, headers } = response;\r",
+                  "\r",
+                  "        pm.expect(code).to.eql(201);\r",
+                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(true);\r",
+                  "    })\r",
+                  "});\r",
+                  "\r",
+                  "pm.sendRequest(makeRequest(reqBody, pm.environment.get('USER_TOKEN')));\r",
+                  "\r",
+                  "pm.sendRequest(makeRequest({}, pm.environment.get('USER_TOKEN')), (_, response) => {\r",
+                  "    pm.test('Fail, No Data Provided', () => {\r",
+                  "        const { code, headers } = response;\r",
+                  "\r",
+                  "        pm.expect(code).to.eql(422);\r",
+                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(false);\r",
+                  "    })\r",
+                  "});\r",
+                  "\r",
+                  "pm.sendRequest(makeRequest(reqBody, 'this-is-wrong'), (_, response) => {\r",
+                  "    pm.test('Fail, Wrong API Key', () => {\r",
+                  "        const { code, headers } = response;\r",
+                  "\r",
+                  "        pm.expect(code).to.eql(403);\r",
+                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(false);\r",
+                  "    });\r",
+                  "});\r",
+                  "\r",
+                  "pm.sendRequest(makeRequest(reqBody), (_, response) => {\r",
+                  "    pm.test('Fail, API Key Not Given', () => {\r",
+                  "        const { code, headers } = response;\r",
+                  "\r",
+                  "        pm.expect(code).to.eql(403);\r",
+                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(false);\r",
+                  "    });\r",
+                  "});\r",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{USER_TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "description": "JSON Type",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"bank_id\": 1,\r\n    \"account_number\": \"49218470\",\r\n    \"account_name\": \"hfkdshflas\"\r\n}"
+            },
+            "url": {
+              "raw": "{{URL}}/banks/users",
+              "host": ["{{URL}}"],
+              "path": ["banks", "users"]
             }
           },
           "response": []
@@ -8756,17 +8760,21 @@
                   "    return new Request({\r",
                   "        header,\r",
                   "        method: 'GET',\r",
-                  "        url: pm.environment.replaceIn('{{URL}}/banks/users/get'),\r",
+                  "        url: pm.environment.replaceIn('{{URL}}/banks/users'),\r",
                   "    });\r",
                   "};\r",
                   "\r",
                   "pm.sendRequest(makeRequest(pm.environment.get('USER_TOKEN')), (_, response) => {\r",
                   "    pm.test('Success', () => {\r",
                   "        const { code, headers } = response;\r",
+                  "        const body = response.json();\r",
+                  "\r",
+                  "        pm.environment.set('TEMP_USER_BANK_ID', body.data[0].id);\r",
+                  "        pm.environment.set('USER_BANK_ID', body.data[1].id);\r",
                   "\r",
                   "        pm.expect(code).to.eql(200);\r",
                   "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(response.json().success).to.eql(true);\r",
+                  "        pm.expect(body.success).to.eql(true);\r",
                   "    });\r",
                   "});\r",
                   "\r",
@@ -8816,9 +8824,9 @@
               "raw": ""
             },
             "url": {
-              "raw": "{{URL}}/banks/users/get",
+              "raw": "{{URL}}/banks/users",
               "host": ["{{URL}}"],
-              "path": ["banks", "users", "get"]
+              "path": ["banks", "users"]
             }
           },
           "response": []
@@ -8833,8 +8841,7 @@
                   "const { Request } = require('postman-collection')\r",
                   "\r",
                   "const reqBody = {\r",
-                  "    bank_id: 1,\r",
-                  "    account_number: 49218470,\r",
+                  "    account_number: Date.now(),\r",
                   "    account_name: \"hfkdshflas\",\r",
                   "};\r",
                   "\r",
@@ -8859,7 +8866,7 @@
                   "pm.sendRequest(makeRequest(\r",
                   "    reqBody,\r",
                   "    pm.environment.get('USER_TOKEN'),\r",
-                  "    pm.environment.get('BANK_USER_ID'),\r",
+                  "    pm.environment.get('TEMP_USER_BANK_ID'),\r",
                   "), (_, response) => {\r",
                   "    pm.test('Success', () => {\r",
                   "        const { code, headers } = response;\r",
@@ -8875,22 +8882,6 @@
                   "        const { code, headers } = response;\r",
                   "\r",
                   "        pm.expect(code).to.eql(404);\r",
-                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(response.json().success).to.eql(false);\r",
-                  "    })\r",
-                  "});\r",
-                  "\r",
-                  "pm.sendRequest(makeRequest(\r",
-                  "    {\r",
-                  "        account_number: 49218470,\r",
-                  "        account_name: \"hfkdshflas\"\r",
-                  "    },\r",
-                  "    pm.environment.get('USER_TOKEN'),\r",
-                  "), (_, response) => {\r",
-                  "    pm.test('Fail, No `bank_id` Provided', () => {\r",
-                  "        const { code, headers } = response;\r",
-                  "\r",
-                  "        pm.expect(code).to.eql(422);\r",
                   "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
                   "        pm.expect(response.json().success).to.eql(false);\r",
                   "    })\r",
@@ -8943,7 +8934,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"bank_id\": 1,\r\n    \"account_number\": \"49218470\",\r\n    \"account_name\": \"hfkdshflas\"\r\n}"
+              "raw": "{\r\n    \"account_number\": \"49218470\",\r\n    \"account_name\": \"hfkdshflasdfdss\"\r\n}"
             },
             "url": {
               "raw": "{{URL}}/banks/users/:id",
@@ -8952,7 +8943,7 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": "3",
+                  "value": "67",
                   "type": "string"
                 }
               ]
@@ -8983,7 +8974,7 @@
                   "\r",
                   "pm.sendRequest(makeRequest(\r",
                   "    pm.environment.get('USER_TOKEN'),\r",
-                  "    pm.environment.get('BANK_USER_ID'),\r",
+                  "    pm.environment.get('TEMP_USER_BANK_ID'),\r",
                   "), (_, response) => {\r",
                   "    pm.test('Success', () => {\r",
                   "        const { code, headers } = response;\r",
@@ -9066,6 +9057,97 @@
     {
       "name": "wallet",
       "item": [
+        {
+          "name": "Get Wallets",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [""],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const { Request } = require('postman-collection');\r",
+                  "\r",
+                  "const makeRequest = function makeRequest(token = undefined) {\r",
+                  "    const header = {};\r",
+                  "\r",
+                  "    if (token) header.authorization = `Bearer ${token}`;\r",
+                  "\r",
+                  "    return new Request({\r",
+                  "        header,\r",
+                  "        method: 'GET',\r",
+                  "        url: pm.environment.replaceIn('{{URL}}/wallets'),\r",
+                  "    });\r",
+                  "};\r",
+                  "\r",
+                  "pm.sendRequest(makeRequest(pm.environment.get('USER_TOKEN')), (_, response) => {\r",
+                  "    pm.test('Success', () => {\r",
+                  "        const { code, headers } = response;\r",
+                  "\r",
+                  "        pm.expect(code).to.eql(200);\r",
+                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(true);\r",
+                  "    });\r",
+                  "});\r",
+                  "\r",
+                  "pm.sendRequest(makeRequest('this-is-wrong'), (_, response) => {\r",
+                  "    pm.test('Fail, Wrong API Key', () => {\r",
+                  "        const { code, headers } = response;\r",
+                  "\r",
+                  "        pm.expect(code).to.eql(403);\r",
+                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(false);\r",
+                  "    });\r",
+                  "});\r",
+                  "\r",
+                  "pm.sendRequest(makeRequest(), (_, response) => {\r",
+                  "    pm.test('Fail, API Key Not Given', () => {\r",
+                  "        const { code, headers } = response;\r",
+                  "\r",
+                  "        pm.expect(code).to.eql(403);\r",
+                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(false);\r",
+                  "    });\r",
+                  "});\r",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{USER_TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{URL}}/wallets",
+              "host": ["{{URL}}"],
+              "path": ["wallets"]
+            }
+          },
+          "response": []
+        },
         {
           "name": "Top Up",
           "event": [
@@ -9301,97 +9383,6 @@
               "raw": "{{URL}}/wallets/withdraw",
               "host": ["{{URL}}"],
               "path": ["wallets", "withdraw"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Get Wallets",
-          "event": [
-            {
-              "listen": "prerequest",
-              "script": {
-                "exec": [""],
-                "type": "text/javascript"
-              }
-            },
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "const { Request } = require('postman-collection');\r",
-                  "\r",
-                  "const makeRequest = function makeRequest(token = undefined) {\r",
-                  "    const header = {};\r",
-                  "\r",
-                  "    if (token) header.authorization = `Bearer ${token}`;\r",
-                  "\r",
-                  "    return new Request({\r",
-                  "        header,\r",
-                  "        method: 'GET',\r",
-                  "        url: pm.environment.replaceIn('{{URL}}/wallets'),\r",
-                  "    });\r",
-                  "};\r",
-                  "\r",
-                  "pm.sendRequest(makeRequest(pm.environment.get('USER_TOKEN')), (_, response) => {\r",
-                  "    pm.test('Success', () => {\r",
-                  "        const { code, headers } = response;\r",
-                  "\r",
-                  "        pm.expect(code).to.eql(200);\r",
-                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(response.json().success).to.eql(true);\r",
-                  "    });\r",
-                  "});\r",
-                  "\r",
-                  "pm.sendRequest(makeRequest('this-is-wrong'), (_, response) => {\r",
-                  "    pm.test('Fail, Wrong API Key', () => {\r",
-                  "        const { code, headers } = response;\r",
-                  "\r",
-                  "        pm.expect(code).to.eql(403);\r",
-                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(response.json().success).to.eql(false);\r",
-                  "    });\r",
-                  "});\r",
-                  "\r",
-                  "pm.sendRequest(makeRequest(), (_, response) => {\r",
-                  "    pm.test('Fail, API Key Not Given', () => {\r",
-                  "        const { code, headers } = response;\r",
-                  "\r",
-                  "        pm.expect(code).to.eql(403);\r",
-                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(response.json().success).to.eql(false);\r",
-                  "    });\r",
-                  "});\r",
-                  ""
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          },
-          "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{USER_TOKEN}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "method": "GET",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": ""
-            },
-            "url": {
-              "raw": "{{URL}}/wallets",
-              "host": ["{{URL}}"],
-              "path": ["wallets"]
             }
           },
           "response": []

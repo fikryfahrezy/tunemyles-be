@@ -1,8 +1,8 @@
 import type { Server } from 'http';
 import type { FastifyInstance } from 'fastify';
 import app from '../../src/config/app';
-import sequelize from '../../src/databases/sequelize';
 import {
+  sequelize,
   getUserProcessedTransactions,
   getUserTransactionDetail,
   finishTransaction,

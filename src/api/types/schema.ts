@@ -187,18 +187,16 @@ export type PostBankUserBody = {
   account_name: string;
 };
 
-export type UpdateBankUserBody = Partial<PostBankBody> & {
-  bank_id: number;
-};
+export type UpdateBankUserBody = Partial<Omit<PostBankUserBody, 'bank_id'>>;
 
 export type TopUpBody = {
-  wallet_id: number;
+  bank_id: number;
   balance_request: number;
   balance_transfer: number;
 };
 
 export type WithdrawBody = {
-  wallet_id: number;
+  user_bank_id: number;
   balance_request: number;
 };
 

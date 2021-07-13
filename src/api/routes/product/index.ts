@@ -4,7 +4,7 @@ import type { IdRequestParams, GetQuery } from '../../types/schema';
 import dbQuerying from '../../middlewares/db-querying';
 import schemaValidation from '../../middlewares/schema-validation';
 import { controllerWrapper, handlerWrapper } from '../../utils/serverfn-wrapper';
-import { requestQuery, requestParams } from './schemas';
+import { requestQuery, requestParams, responses } from './schemas';
 import { getProducts, getProductsByCategory } from './controller';
 
 const routes = function routes(
@@ -23,7 +23,7 @@ const routes = function routes(
       schema: {
         querystring: requestQuery.getProduct,
         response: {
-          200: { $ref: '#ApiResponse' },
+          200: responses.products,
           '4xx': { $ref: '#ApiResponse' },
           '5xx': { $ref: '#ApiResponse' },
         },
@@ -41,7 +41,7 @@ const routes = function routes(
         params: requestParams.id,
         querystring: requestQuery.getProduct,
         response: {
-          200: { $ref: '#ApiResponse' },
+          200: responses.products,
           '4xx': { $ref: '#ApiResponse' },
           '5xx': { $ref: '#ApiResponse' },
         },

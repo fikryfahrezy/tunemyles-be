@@ -1,9 +1,13 @@
 export const requestHeaders = {
-  private: { $ref: '#ApiKeyHeader' },
+  private: {
+    $ref: '#ApiKeyHeader',
+  },
 };
 
 export const requestParams = {
-  id: { $ref: '#RouteIdParam' },
+  id: {
+    $ref: '#RouteIdParam',
+  },
 };
 
 /**
@@ -15,19 +19,27 @@ export const requestBody = {
     required: ['account_name', 'account_number', 'bank_id'],
     type: 'object',
     properties: {
-      bank_id: { type: 'integer' },
-      account_number: { type: 'string' },
-      account_name: { type: 'string' },
+      bank_id: {
+        type: 'integer',
+      },
+      account_number: {
+        type: 'string',
+      },
+      account_name: {
+        type: 'string',
+      },
     },
     additionalProperties: false,
   },
   updateBankUser: {
-    required: ['bank_id'],
     type: 'object',
     properties: {
-      id_m_banks: { type: 'integer' },
-      account_number: { type: 'string' },
-      account_name: { type: 'string' },
+      account_number: {
+        type: 'string',
+      },
+      account_name: {
+        type: 'string',
+      },
     },
     additionalProperties: false,
   },
@@ -37,7 +49,7 @@ export const requestBody = {
  * The order of the keys is following the order of the routes in Postman
  */
 export const responses = {
-  bank: {
+  getBanksResponse: {
     type: 'object',
     allOf: [
       {
@@ -50,32 +62,52 @@ export const responses = {
             type: 'array',
             items: {
               type: 'object',
-              allOf: [
-                {
-                  $ref: '#GetBank',
+              properties: {
+                id: {
+                  type: 'integer',
                 },
-                {
-                  type: 'object',
-                  properties: {
-                    Logo: {
-                      $ref: '#GetMedia',
-                    },
-                    Account: {
-                      type: 'array',
-                      items: {
-                        $ref: '#GetBankUser',
+                bank_name: {
+                  type: 'string',
+                },
+                visibility: {
+                  type: 'integer',
+                },
+                logo_label: {
+                  type: 'string',
+                },
+                logo_url: {
+                  type: 'string',
+                },
+                created_at: {
+                  type: 'string',
+                  format: 'date-time',
+                },
+                updated_at: {
+                  type: 'string',
+                  format: 'date-time',
+                },
+                accounts: {
+                  type: 'array',
+                  items: {
+                    type: 'object',
+                    properties: {
+                      account_name: {
+                        type: 'string',
+                      },
+                      account_number: {
+                        type: 'string',
                       },
                     },
                   },
                 },
-              ],
+              },
             },
           },
         },
       },
     ],
   },
-  bankDetail: {
+  getBankDetailResponse: {
     type: 'object',
     allOf: [
       {
@@ -85,35 +117,49 @@ export const responses = {
         type: 'object',
         properties: {
           data: {
-            type: 'array',
-            items: {
-              type: 'object',
-              allOf: [
-                {
-                  $ref: '#GetBank',
-                },
-                {
+            type: 'object',
+            properties: {
+              id: {
+                type: 'integer',
+              },
+              bank_name: {
+                type: 'string',
+              },
+              visibility: {
+                type: 'integer',
+              },
+              logo_label: {
+                type: 'string',
+              },
+              logo_url: {
+                type: 'string',
+              },
+              created_at: {
+                type: 'string',
+                format: 'date-time',
+              },
+              updated_at: {
+                type: 'string',
+                format: 'date-time',
+              },
+              steps: {
+                type: 'array',
+                items: {
                   type: 'object',
                   properties: {
-                    Logo: {
-                      $ref: '#GetMedia',
-                    },
-                    Utilities: {
-                      type: 'array',
-                      items: {
-                        $ref: '#GetBankUtility',
-                      },
+                    step: {
+                      type: 'string',
                     },
                   },
                 },
-              ],
+              },
             },
           },
         },
       },
     ],
   },
-  bankUser: {
+  getBankUsersResponse: {
     type: 'object',
     allOf: [
       {
@@ -126,32 +172,37 @@ export const responses = {
             type: 'array',
             items: {
               type: 'object',
-              allOf: [
-                {
-                  $ref: '#GetBankUser',
+              properties: {
+                id: {
+                  type: 'integer',
                 },
-                {
-                  type: 'object',
-                  properties: {
-                    Bank: {
-                      type: 'object',
-                      allOf: [
-                        {
-                          $ref: '#GetBank',
-                        },
-                        {
-                          type: 'object',
-                          properties: {
-                            Logo: {
-                              $ref: '#GetMedia',
-                            },
-                          },
-                        },
-                      ],
-                    },
-                  },
+                account_number: {
+                  type: 'string',
                 },
-              ],
+                account_name: {
+                  type: 'string',
+                },
+                visibility: {
+                  type: 'integer',
+                },
+                bank_name: {
+                  type: 'string',
+                },
+                logo_label: {
+                  type: 'string',
+                },
+                logo_url: {
+                  type: 'string',
+                },
+                created_at: {
+                  type: 'string',
+                  format: 'date-time',
+                },
+                updated_at: {
+                  type: 'string',
+                  format: 'date-time',
+                },
+              },
             },
           },
         },
