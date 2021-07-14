@@ -10,7 +10,7 @@ import type {
 import { controllerWrapper, handlerWrapper } from '../../utils/serverfn-wrapper';
 import schemaValidation from '../../middlewares/schema-validation';
 import { protect } from '../../middlewares/protect-route';
-import { requestHeaders, requestBody, requestParams } from './schemas';
+import { requestHeaders, requestBody, requestParams, responses } from './schemas';
 import {
   addItemToCart,
   getCartItems,
@@ -53,7 +53,7 @@ const routes = function routes(
       schema: {
         headers: requestHeaders.private,
         response: {
-          200: { $ref: '#ApiResponse' },
+          200: responses.cartItems,
           '4xx': { $ref: '#ApiResponse' },
           '5xx': { $ref: '#ApiResponse' },
         },

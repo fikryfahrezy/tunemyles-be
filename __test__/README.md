@@ -2268,32 +2268,6 @@
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `false`
 
-#### [# Withdraw](#withdraw)
-
-**[POSTMAN] [JEST]** Success
-
-- Status code should `201`
-- Header `Content-Type` should `application/json; charset=utf-8`
-- Body should object with `success` property `true`
-
-**[POSTMAN] [JEST]** Fail, No Data Provided
-
-- Status code should `422`
-- Header `Content-Type` should `application/json; charset=utf-8`
-- Body should object with `success` property `false`
-
-**[POSTMAN] [JEST]** Fail, Wrong API Key
-
-- Status code should `403`
-- Header `Content-Type` should `application/json; charset=utf-8`
-- Body should object with `success` property `false`
-
-**[POSTMAN] [JEST]** Fail, API Key Not Given
-
-- Status code should `403`
-- Header `Content-Type` should `application/json; charset=utf-8`
-- Body should object with `success` property `false`
-
 #### [# Get Top Up Histories](#get-topup-histories)
 
 **[POSTMAN] [JEST]** Success, Without Query
@@ -2369,69 +2343,6 @@
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `false`
 
-#### [# Get Withdraw Histories](#get-withdraw-histories)
-
-**[POSTMAN] [JEST]** Success, Without Query
-
-- Status code should `200`
-- Header `Content-Type` should `application/json; charset=utf-8`
-- Body should object with `success` property `true`
-
-**[POSTMAN] [JEST]** Success, with Query `?limit=1`
-
-- Status code should `200`
-- Header `Content-Type` should `application/json; charset=utf-8`
-- Body should object with `success` property `true`
-- Property `data` on the body should have a `length of 1`
-
-**[POSTMAN] [JEST]** Success, with Query `?orderDirection=DESC&orderBy=created_at&search=&page=&limit=`
-
-- Status code should `200`
-- Header `Content-Type` should `application/json; charset=utf-8`
-- Body should object with `success` property `true`
-
-**[POSTMAN] [JEST]** Success, with Query `?orderDirection=DESC&orderBy=balance_request&search=&page=&limit=`
-
-- Status code should `200`
-- Header `Content-Type` should `application/json; charset=utf-8`
-- Body should object with `success` property `true`
-
-**[POSTMAN] [JEST]** Success, with Query `?orderDirection=ASC&orderBy=created_at&search=&page=&limit=`
-
-- Status code should `200`
-- Header `Content-Type` should `application/json; charset=utf-8`
-- Body should object with `success` property `true`
-
-**[POSTMAN] [JEST]** Success, with Query `?orderDirection=ASC&orderBy=balance_request&search=&page=&limit=`
-
-- Status code should `200`
-- Header `Content-Type` should `application/json; charset=utf-8`
-- Body should object with `success` property `true`
-
-**[POSTMAN] [JEST]** Fail, with Query `?orderDirection=DESCs&orderBy=created_at&search=&page=&limit=`
-
-- Status code should `422`
-- Header `Content-Type` should `application/json; charset=utf-8`
-- Body should object with `success` property `false`
-
-**[POSTMAN] [JEST]** Fail, with Query `?orderDirection=DESC&orderBy=created_ats&search=&page=&limit=`
-
-- Status code should `422`
-- Header `Content-Type` should `application/json; charset=utf-8`
-- Body should object with `success` property `false`
-
-**[POSTMAN] [JEST]** Fail, Wrong API Key
-
-- Status code should `403`
-- Header `Content-Type` should `application/json; charset=utf-8`
-- Body should object with `success` property `false`
-
-**[POSTMAN] [JEST]** Fail, API Key Not Given
-
-- Status code should `403`
-- Header `Content-Type` should `application/json; charset=utf-8`
-- Body should object with `success` property `false`
-
 #### [# Get Top Up Detail](#get-topup-user-detail)
 
 **[POSTMAN] [JEST]** Success
@@ -2441,32 +2352,6 @@
 - Body should object with `success` property `true`
 
 **[POSTMAN] [JEST]** Fail, Top Up Data Not Found
-
-- Status code should `404`
-- Header `Content-Type` should `application/json; charset=utf-8`
-- Body should object with `success` property `false`
-
-**[POSTMAN] [JEST]** Fail, Wrong API Key
-
-- Status code should `403`
-- Header `Content-Type` should `application/json; charset=utf-8`
-- Body should object with `success` property `false`
-
-**[POSTMAN] [JEST]** Fail, API Key Not Given
-
-- Status code should `403`
-- Header `Content-Type` should `application/json; charset=utf-8`
-- Body should object with `success` property `false`
-
-#### [# Get Withdraw Detail](#get-withdraw-detail)
-
-**[POSTMAN] [JEST]** Success
-
-- Status code should `200`
-- Header `Content-Type` should `application/json; charset=utf-8`
-- Body should object with `success` property `true`
-
-**[POSTMAN] [JEST]** Fail, Withdraw Data Not Found
 
 - Status code should `404`
 - Header `Content-Type` should `application/json; charset=utf-8`
@@ -2559,6 +2444,179 @@
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `false`
 
+#### [# Upload Top Up Proof](#upload-topup-proof)
+
+**[POSTMAN] [JEST]** Success
+
+- Status code should `201`
+- Header `Content-Type` should `application/json; charset=utf-8`
+- Body should object with `success` property `true`
+
+**[POSTMAN] [JEST]** Fail, No `image` Provided
+
+- Status code should `422`
+- Header `Content-Type` should `application/json; charset=utf-8`
+- Body should object with `success` property `false`
+
+**[JEST]** Fail, Wrong API Key
+
+- Status code should `403`
+- Header `Content-Type` should `application/json; charset=utf-8`
+- Body should object with `success` property `false`
+
+**[JEST]** Fail, API Key Not Given
+
+- Status code should `403`
+- Header `Content-Type` should `application/json; charset=utf-8`
+- Body should object with `success` property `false`
+
+#### [# Update Top Up Status](#update-topup-status)
+
+**[POSTMAN] [JEST]** Success
+
+- Status code should `200`
+- Header `Content-Type` should `application/json; charset=utf-8`
+- Body should object with `success` property `true`
+
+**[POSTMAN] [JEST]** Fail, Top Up Data Not Found
+
+- Status code should `404`
+- Header `Content-Type` should `application/json; charset=utf-8`
+- Body should object with `success` property `false`
+
+**[POSTMAN] [JEST]** Fail, No `status` Provided
+
+- Status code should `422`
+- Header `Content-Type` should `application/json; charset=utf-8`
+- Body should object with `success` property `false`
+
+**[POSTMAN] [JEST]** Fail, Wrong API Key
+
+- Status code should `403`
+- Header `Content-Type` should `application/json; charset=utf-8`
+- Body should object with `success` property `false`
+
+**[POSTMAN] [JEST]** Fail, API Key Not Given
+
+- Status code should `403`
+- Header `Content-Type` should `application/json; charset=utf-8`
+- Body should object with `success` property `false`
+
+#### [# Withdraw](#withdraw)
+
+**[POSTMAN] [JEST]** Success
+
+- Status code should `201`
+- Header `Content-Type` should `application/json; charset=utf-8`
+- Body should object with `success` property `true`
+
+**[POSTMAN] [JEST]** Fail, No Data Provided
+
+- Status code should `422`
+- Header `Content-Type` should `application/json; charset=utf-8`
+- Body should object with `success` property `false`
+
+**[POSTMAN] [JEST]** Fail, Wrong API Key
+
+- Status code should `403`
+- Header `Content-Type` should `application/json; charset=utf-8`
+- Body should object with `success` property `false`
+
+**[POSTMAN] [JEST]** Fail, API Key Not Given
+
+- Status code should `403`
+- Header `Content-Type` should `application/json; charset=utf-8`
+- Body should object with `success` property `false`
+
+#### [# Get Withdraw Histories](#get-withdraw-histories)
+
+**[POSTMAN] [JEST]** Success, Without Query
+
+- Status code should `200`
+- Header `Content-Type` should `application/json; charset=utf-8`
+- Body should object with `success` property `true`
+
+**[POSTMAN] [JEST]** Success, with Query `?limit=1`
+
+- Status code should `200`
+- Header `Content-Type` should `application/json; charset=utf-8`
+- Body should object with `success` property `true`
+- Property `data` on the body should have a `length of 1`
+
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=DESC&orderBy=created_at&search=&page=&limit=`
+
+- Status code should `200`
+- Header `Content-Type` should `application/json; charset=utf-8`
+- Body should object with `success` property `true`
+
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=DESC&orderBy=balance_request&search=&page=&limit=`
+
+- Status code should `200`
+- Header `Content-Type` should `application/json; charset=utf-8`
+- Body should object with `success` property `true`
+
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=ASC&orderBy=created_at&search=&page=&limit=`
+
+- Status code should `200`
+- Header `Content-Type` should `application/json; charset=utf-8`
+- Body should object with `success` property `true`
+
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=ASC&orderBy=balance_request&search=&page=&limit=`
+
+- Status code should `200`
+- Header `Content-Type` should `application/json; charset=utf-8`
+- Body should object with `success` property `true`
+
+**[POSTMAN] [JEST]** Fail, with Query `?orderDirection=DESCs&orderBy=created_at&search=&page=&limit=`
+
+- Status code should `422`
+- Header `Content-Type` should `application/json; charset=utf-8`
+- Body should object with `success` property `false`
+
+**[POSTMAN] [JEST]** Fail, with Query `?orderDirection=DESC&orderBy=created_ats&search=&page=&limit=`
+
+- Status code should `422`
+- Header `Content-Type` should `application/json; charset=utf-8`
+- Body should object with `success` property `false`
+
+**[POSTMAN] [JEST]** Fail, Wrong API Key
+
+- Status code should `403`
+- Header `Content-Type` should `application/json; charset=utf-8`
+- Body should object with `success` property `false`
+
+**[POSTMAN] [JEST]** Fail, API Key Not Given
+
+- Status code should `403`
+- Header `Content-Type` should `application/json; charset=utf-8`
+- Body should object with `success` property `false`
+
+#### [# Get Withdraw Detail](#get-withdraw-detail)
+
+**[POSTMAN] [JEST]** Success
+
+- Status code should `200`
+- Header `Content-Type` should `application/json; charset=utf-8`
+- Body should object with `success` property `true`
+
+**[POSTMAN] [JEST]** Fail, Withdraw Data Not Found
+
+- Status code should `404`
+- Header `Content-Type` should `application/json; charset=utf-8`
+- Body should object with `success` property `false`
+
+**[POSTMAN] [JEST]** Fail, Wrong API Key
+
+- Status code should `403`
+- Header `Content-Type` should `application/json; charset=utf-8`
+- Body should object with `success` property `false`
+
+**[POSTMAN] [JEST]** Fail, API Key Not Given
+
+- Status code should `403`
+- Header `Content-Type` should `application/json; charset=utf-8`
+- Body should object with `success` property `false`
+
 #### [# Get All User Withdraw](#get-all-user-withdraw)
 
 **[POSTMAN] [JEST]** Success, Without Query
@@ -2605,52 +2663,6 @@
 - Body should object with `success` property `false`
 
 **[POSTMAN] [JEST]** Fail, with Query `?orderDirection=DESC&orderBy=created_ats&search=&page=&limit=`
-
-- Status code should `422`
-- Header `Content-Type` should `application/json; charset=utf-8`
-- Body should object with `success` property `false`
-
-**[POSTMAN] [JEST]** Fail, Wrong API Key
-
-- Status code should `403`
-- Header `Content-Type` should `application/json; charset=utf-8`
-- Body should object with `success` property `false`
-
-**[POSTMAN] [JEST]** Fail, API Key Not Given
-
-- Status code should `403`
-- Header `Content-Type` should `application/json; charset=utf-8`
-- Body should object with `success` property `false`
-
-#### [# Upload Top Up Proof](#upload-topup-proof)
-
-**[POSTMAN] [JEST]** Success
-
-- Status code should `201`
-- Header `Content-Type` should `application/json; charset=utf-8`
-- Body should object with `success` property `true`
-
-**[POSTMAN] [JEST]** Fail, No `image` Provided
-
-- Status code should `422`
-- Header `Content-Type` should `application/json; charset=utf-8`
-- Body should object with `success` property `false`
-
-#### [# Update Top Up Status](#update-topup-status)
-
-**[POSTMAN] [JEST]** Success
-
-- Status code should `200`
-- Header `Content-Type` should `application/json; charset=utf-8`
-- Body should object with `success` property `true`
-
-**[POSTMAN] [JEST]** Fail, Top Up Data Not Found
-
-- Status code should `404`
-- Header `Content-Type` should `application/json; charset=utf-8`
-- Body should object with `success` property `false`
-
-**[POSTMAN] [JEST]** Fail, No `status` Provided
 
 - Status code should `422`
 - Header `Content-Type` should `application/json; charset=utf-8`
@@ -2812,7 +2824,7 @@
 
 **[POSTMAN] [JEST]** Success
 
-- Status code should `200`
+- Status code should `201`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 

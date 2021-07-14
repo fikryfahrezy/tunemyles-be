@@ -9,6 +9,7 @@ import {
   getBankUsers,
   updateBankUser,
   deleteBankUser,
+  registration,
   createUser,
   createMasterBank,
   addBankUser,
@@ -37,8 +38,7 @@ describe('Post Bank User', () => {
   };
 
   test('Success', async () => {
-    const { token } = await createUser();
-    const { id } = await createMasterBank();
+    const [{ token }, { id }] = await Promise.all([registration(), createMasterBank()]);
     const newPayload = {
       ...payload,
       bank_id: id,
@@ -52,7 +52,7 @@ describe('Post Bank User', () => {
   });
 
   test('Fail, No Data Provided', async () => {
-    const { token } = await createUser();
+    const { token } = await registration();
 
     const { status, headers, body } = await postBankUser(server, {}, token);
 
@@ -82,7 +82,7 @@ describe('Post Bank User', () => {
 
 describe('Get Banks', () => {
   test('Success', async () => {
-    const { token } = await createUser();
+    const { token } = await registration();
 
     const { status, headers, body } = await getBanks(server, token);
 
@@ -112,8 +112,7 @@ describe('Get Banks', () => {
 
 describe('Get Bank Detail', () => {
   test('Success', async () => {
-    const { token } = await createUser();
-    const { id: bankId } = await createMasterBank();
+    const [{ token }, { id: bankId }] = await Promise.all([registration(), createMasterBank()]);
 
     const { status, headers, body } = await getBankDetail(server, bankId, token);
 
@@ -123,7 +122,7 @@ describe('Get Bank Detail', () => {
   });
 
   test('Fail, Bank Not Found', async () => {
-    const { token } = await createUser();
+    const { token } = await registration();
     const bankId = 0;
 
     const { status, headers, body } = await getBankDetail(server, bankId, token);
@@ -157,7 +156,7 @@ describe('Get Bank Detail', () => {
 
 describe('Get Bank Users', () => {
   test('Success', async () => {
-    const { token } = await createUser();
+    const { token } = await registration();
 
     const { status, headers, body } = await getBankUsers(server, token);
 
@@ -202,7 +201,7 @@ describe('Update Bank User', () => {
   });
 
   test('Fail, Wrong API Key', async () => {
-    const { token } = await createUser();
+    const { token } = await registration();
     const userBankId = 0;
 
     const { status, headers, body } = await updateBankUser(server, userBankId, {}, token);
@@ -247,7 +246,7 @@ describe('Delete Bank User', () => {
   });
 
   test('Fail, Bank User Not Found', async () => {
-    const { token } = await createUser();
+    const { token } = await registration();
     const userBankId = 0;
 
     const { status, headers, body } = await deleteBankUser(server, userBankId, token);

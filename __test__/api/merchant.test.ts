@@ -511,6 +511,7 @@ describe('Update Merchant Product Status', () => {
   test('Success', async () => {
     const { id, token } = await createMerchantUser();
     const { productId } = await createMerchantProduct(id);
+
     const { status, headers, body } = await updateMerchantProductStatus(
       server,
       productId,
@@ -619,9 +620,11 @@ describe('Bind Merchant Product Category', () => {
   });
 
   test('Fail, Merchant Product Not Found', async () => {
-    const { token } = await createMerchantUser();
+    const [{ token }, { id: categoryId }] = await Promise.all([
+      createMerchantUser(),
+      addCategory(),
+    ]);
     const productId = 0;
-    const { id: categoryId } = await addCategory();
     const payload = { category_id: categoryId };
 
     const { status, headers, body } = await bindMerchantProductCategory(

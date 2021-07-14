@@ -20,12 +20,12 @@ import {
   getMasterBank,
   getUserBank,
   getUserTopUps,
-  getUserWithdraws,
   getUserTopUp,
-  getUserWithdraw,
   getAllTopUp,
-  getAllWithdraw,
   getUserTopUpRequest,
+  getUserWithdraws,
+  getUserWithdraw,
+  getAllWithdraw,
   getUserWithdrawRequest,
 } from '../../repositories/WalletRepository';
 
@@ -52,44 +52,11 @@ export const requestTopUp: (
   await createUserTopUp(userWallet.id, data);
 };
 
-export const requestWithdraw: (
-  userId: CustModelType['UserToken']['userId'],
-  data: WithdrawBody,
-) => Promise<unknown> = async function requestWithdraw(
-  userId,
-  { user_bank_id: userBankId, balance_request: balanceRequest },
-) {
-  const [userWallet, userBank] = await Promise.all([
-    getUserWalletBalance(userId),
-    getUserBank(userBankId, userId),
-  ]);
-
-  if (!userWallet) throw new ErrorResponse('user wallet not found', 404);
-  else if (!userBank) throw new ErrorResponse('bank not found', 404);
-
-  const { id, balance } = userWallet;
-
-  if (balance < balanceRequest) throw new ErrorResponse('wallet balance is not sufficient', 400);
-
-  const newBalance = balance - balanceRequest;
-
-  await createUserWithdraw(id, { user_bank_id: userBankId, balance_request: newBalance });
-};
-
 export const topUpHistoryData: (
   userId: CustModelType['UserToken']['utilId'],
   query: CustModelType['SearchQuery'],
 ) => Promise<unknown> = async function topUpHistoryData(userId, query) {
   const resData = await getUserTopUps(userId, query);
-
-  return resData;
-};
-
-export const withdrawHistoryData: (
-  userId: CustModelType['UserToken']['userId'],
-  query: CustModelType['SearchQuery'],
-) => Promise<unknown> = async function withdrawHistoryData(userId, query) {
-  const resData = await getUserWithdraws(userId, query);
 
   return resData;
 };
@@ -103,27 +70,10 @@ export const topUpDetail: (
   return resData;
 };
 
-export const withdrawDetail: (
-  userId: CustModelType['UserToken']['userId'],
-  wihdrawId: number,
-) => Promise<unknown> = async function withdrawDetail(userId, withdrawId) {
-  const resData = await getUserWithdraw(userId, withdrawId);
-
-  return resData;
-};
-
 export const allUserTopUp: (
   query: CustModelType['SearchQuery'],
 ) => Promise<unknown> = async function allUserTopUp(query) {
   const resData = await getAllTopUp(query);
-
-  return resData;
-};
-
-export const allUserWithdraw: (
-  query: CustModelType['SearchQuery'],
-) => Promise<unknown> = async function allUserWithdraw(query) {
-  const resData = await getAllWithdraw(query);
 
   return resData;
 };
@@ -162,6 +112,56 @@ export const changeTopUpStatus: (
       updateUserTopUp(topUpId, { status }),
     ]);
   } else await updateUserTopUp(topUpId, { status });
+};
+
+export const requestWithdraw: (
+  userId: CustModelType['UserToken']['userId'],
+  data: WithdrawBody,
+) => Promise<unknown> = async function requestWithdraw(
+  userId,
+  { user_bank_id: userBankId, balance_request: balanceRequest },
+) {
+  const [userWallet, userBank] = await Promise.all([
+    getUserWalletBalance(userId),
+    getUserBank(userBankId, userId),
+  ]);
+
+  if (!userWallet) throw new ErrorResponse('user wallet not found', 404);
+  else if (!userBank) throw new ErrorResponse('bank not found', 404);
+
+  const { id, balance } = userWallet;
+
+  if (balance < balanceRequest) throw new ErrorResponse('wallet balance is not sufficient', 400);
+
+  const newBalance = balance - balanceRequest;
+
+  await createUserWithdraw(id, { user_bank_id: userBankId, balance_request: newBalance });
+};
+
+export const withdrawHistoryData: (
+  userId: CustModelType['UserToken']['userId'],
+  query: CustModelType['SearchQuery'],
+) => Promise<unknown> = async function withdrawHistoryData(userId, query) {
+  const resData = await getUserWithdraws(userId, query);
+
+  return resData;
+};
+
+export const withdrawDetail: (
+  userId: CustModelType['UserToken']['userId'],
+  wihdrawId: number,
+) => Promise<unknown> = async function withdrawDetail(userId, withdrawId) {
+  const resData = await getUserWithdraw(userId, withdrawId);
+
+  return resData;
+};
+
+export const allUserWithdraw: (
+  query: CustModelType['SearchQuery'],
+) => Promise<unknown> = async function allUserWithdraw(query) {
+  const resData = await getAllWithdraw(query);
+
+  return resData;
 };
 
 export const changeWithdrawStatus: (

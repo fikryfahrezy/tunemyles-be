@@ -63,13 +63,6 @@ import {
   getUser,
 } from '../../src/api/repositories/UserRepository';
 import {
-  createProduct,
-  createProductUtility,
-  createMedia,
-  createProductCategory,
-  createProductPhoto,
-} from '../../src/api/repositories/MerchantRepository';
-import {
   createBank,
   createBankStep,
   createCategory,
@@ -77,7 +70,20 @@ import {
   createWallet,
   createFaq,
 } from '../../src/api/repositories/MasterRepository';
+import {
+  createProduct,
+  createProductUtility,
+  createMedia,
+  createProductCategory,
+  createProductPhoto,
+} from '../../src/api/repositories/MerchantRepository';
 import { createBankUser } from '../../src/api/repositories/BankRepository';
+import {
+  createUserTopUp,
+  createUserWithdraw,
+  updateUserWallet,
+  getUserWallets,
+} from '../../src/api/repositories/WalletRepository';
 import {
   userRegistration,
   userLogin,
@@ -93,8 +99,6 @@ export {
   resetUserPassword,
   verifyUserToken,
   createUserMedia,
-  updateUser,
-  getUser,
   createBank,
   createBankStep,
   createCategory,
@@ -102,6 +106,8 @@ export {
   createWallet,
   createFaq,
   createProductCategory,
+  updateUser,
+  getUser,
 };
 
 const { UserTransaction, TransactionProduct } = initModels(sequelize);
@@ -1404,7 +1410,7 @@ export const updateTopUpStatus = function updateTopUpStatus(
   return supertestReq({
     server,
     token,
-    type: 'POST',
+    type: 'PATCH',
     url: `/wallets/topup/${topUpId}/status`,
     payload: { obj: payload },
   });
@@ -1419,7 +1425,7 @@ export const updateWithdrawStatus = function updateWithdrawStatus(
   return supertestReq({
     server,
     token,
-    type: 'POST',
+    type: 'PATCH',
     url: `/wallets/withdraw/${withdrawId}/status`,
     payload: { obj: payload },
   });
@@ -1462,7 +1468,7 @@ export const createAdminUser = async function createAdminUser() {
   const { id, utilId } = await getUser('USERNAME', username);
   const token = await makeUserAdmin(id, utilId);
 
-  return token;
+  return { token };
 };
 
 export const createMerchantUser = async function createMerchantUser() {
@@ -1580,4 +1586,40 @@ export const addBankUser = async function addBankUser(userId: number) {
   });
 
   return { userBankId };
+};
+
+export const createUserGetWallet = async function createUserGetWaller() {
+  const { token, userId } = await createUser();
+  const wallets = await getUserWallets(userId);
+
+  return { token, userId, walletId: wallets[0].id };
+};
+
+export const addUserTopUp = async function addUserTopUp(walletId: number, bankId: number) {
+  const { id } = await createUserTopUp(walletId, {
+    bank_id: bankId,
+    balance_request: 9999999,
+    balance_transfer: 9999999,
+  });
+
+  return { topUpId: id };
+};
+
+export const createUserAddWallet = async function createUserAddWallet() {
+  const { token, walletId, userId } = await createUserGetWallet();
+  await updateUserWallet(walletId, { balance: 999999999 });
+
+  return { token, userId, walletId };
+};
+
+export const addUserWithdraw = async function addUserWithdraw(
+  walletId: number,
+  userBankId: number,
+) {
+  const { id } = await createUserWithdraw(walletId, {
+    user_bank_id: userBankId,
+    balance_request: 999,
+  });
+
+  return { withdrawId: id };
 };

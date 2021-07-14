@@ -226,10 +226,10 @@ export const requestBody = {
       description: {
         type: 'string',
       },
-      price_default: {
+      normal_price: {
         type: 'integer',
       },
-      price_selling: {
+      selling_price: {
         type: 'integer',
       },
       qty: {
@@ -545,6 +545,9 @@ export const responses = {
                 id: {
                   type: 'integer',
                 },
+                buyer_id: {
+                  type: 'integer',
+                },
                 transaction_token: {
                   type: 'string',
                 },
@@ -552,9 +555,6 @@ export const responses = {
                   type: 'integer',
                 },
                 status: {
-                  type: 'integer',
-                },
-                buyer_id: {
                   type: 'integer',
                 },
                 full_name: {

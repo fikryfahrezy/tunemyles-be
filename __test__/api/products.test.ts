@@ -1,13 +1,11 @@
 import type { Server } from 'http';
 import type { FastifyInstance } from 'fastify';
 import app from '../../src/config/app';
-import { createProductCategory } from '../../src/api/repositories/MerchantRepository';
 import {
   sequelize,
   getProducts,
   getProductsByCategory,
   createMerchantUser,
-  addCategory,
   createMerchantProduct,
   createProductWithCategory,
 } from '../component';
@@ -156,6 +154,7 @@ describe('Get Products by Category', () => {
   test('Success, Without Query', async () => {
     const query = '';
     const { categoryId } = await createProductWithCategory(1);
+
     const { status, headers, body } = await getProductsByCategory(server, categoryId, query);
 
     expect(status).toBe(200);

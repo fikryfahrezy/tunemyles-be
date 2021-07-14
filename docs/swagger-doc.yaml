@@ -16,7 +16,7 @@ externalDocs:
   description: Find out more about Swagger
   url: 'http://swagger.io'
 servers:
-  - url: 'http://localhost:5000/api/v2'
+  - url: 'http://localhost:5000/api/v1'
     description: Dev Server API URL
 tags:
   - name: check
@@ -2598,42 +2598,6 @@ paths:
       security:
         - APIKeyHeader: []
       x-codegen-request-body-name: body
-  /wallets/withdraw:
-    post:
-      tags:
-        - wallets
-      summary: Withdraw (Route All Roles)
-      description: Withdraw (Route All Roles)
-      operationId: withdraw
-      requestBody:
-        description: Request Data
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/WithdrawBody'
-        required: true
-      responses:
-        '200':
-          description: Request Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        4XX:
-          description: Request Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        5XX:
-          description: Sever Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-      security:
-        - APIKeyHeader: []
-      x-codegen-request-body-name: body
   /wallets/topup/histories:
     get:
       tags:
@@ -2689,60 +2653,6 @@ paths:
                 $ref: '#/components/schemas/ApiResponse'
       security:
         - APIKeyHeader: []
-  /wallets/withdraw/histories:
-    get:
-      tags:
-        - wallets
-      summary: Get User Withdraw Histories (Route All Roles)
-      description: Get User Withdraw Histories (Route All Roles)
-      operationId: withdrawHistories
-      parameters:
-        - name: orderDirection
-          in: query
-          schema:
-            $ref: '#/components/schemas/OrderDirectionQuery'
-        - name: orderBy
-          in: query
-          schema:
-            allOf:
-              - $ref: '#/components/schemas/OrderByQuery'
-              - enum:
-                  - created_at
-                  - balance_request
-        - name: search
-          in: query
-          description: Available search field balance_request
-          schema:
-            $ref: '#/components/schemas/SearchQuery'
-        - name: page
-          in: query
-          schema:
-            $ref: '#/components/schemas/PageQuery'
-        - name: limit
-          in: query
-          schema:
-            $ref: '#/components/schemas/LimitQuery'
-      responses:
-        '200':
-          description: Request Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetWithdrawHistoriesResponse'
-        4XX:
-          description: Request Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        5XX:
-          description: Sever Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-      security:
-        - APIKeyHeader: []
   '/wallets/topup/{id}':
     get:
       tags:
@@ -2763,40 +2673,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetTopUpDetailResponse'
-        4XX:
-          description: Request Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        5XX:
-          description: Sever Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-      security:
-        - APIKeyHeader: []
-  '/wallets/withdraw/{id}':
-    get:
-      tags:
-        - wallets
-      summary: Get Withdraw Detail (Route All Roles)
-      description: Get Withdraw Detail (Route All Roles)
-      operationId: withdrawDetail
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Request Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetWithdrawDetailResponse'
         4XX:
           description: Request Error
           content:
@@ -2860,70 +2736,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetAllUserTopUpResponse'
-        4XX:
-          description: Request Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-        5XX:
-          description: Sever Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-      security:
-        - APIKeyHeader: []
-  /wallets/withdraw/users/all:
-    get:
-      tags:
-        - wallets
-      summary: Get All User Withdraw (Admin Route)
-      description: Get All User Withdraw (Admin Route)
-      operationId: allUserWithdraw
-      parameters:
-        - name: orderDirection
-          in: query
-          schema:
-            $ref: '#/components/schemas/OrderDirectionQuery'
-        - name: orderBy
-          in: query
-          schema:
-            allOf:
-              - $ref: '#/components/schemas/OrderByQuery'
-              - enum:
-                  - created_at
-                  - balance_request
-        - name: search
-          in: query
-          description: Available search field balance_request
-          schema:
-            $ref: '#/components/schemas/SearchQuery'
-        - name: page
-          in: query
-          schema:
-            $ref: '#/components/schemas/PageQuery'
-        - name: limit
-          in: query
-          schema:
-            $ref: '#/components/schemas/LimitQuery'
-        - name: status
-          in: query
-          schema:
-            allOf:
-              - $ref: '#/components/schemas/StatusQuery'
-              - enum:
-                  - '0'
-                  - '1'
-                  - '2'
-      responses:
-        '200':
-          description: Request Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetAllUserWithdrawResponse'
+                $ref: '#/components/schemas/GetTopUpHistoriesResponse'
         4XX:
           description: Request Error
           content:
@@ -3020,6 +2833,193 @@ paths:
       security:
         - APIKeyHeader: []
       x-codegen-request-body-name: body
+  /wallets/withdraw:
+    post:
+      tags:
+        - wallets
+      summary: Withdraw (Route All Roles)
+      description: Withdraw (Route All Roles)
+      operationId: withdraw
+      requestBody:
+        description: Request Data
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WithdrawBody'
+        required: true
+      responses:
+        '200':
+          description: Request Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        4XX:
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        5XX:
+          description: Sever Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+        - APIKeyHeader: []
+      x-codegen-request-body-name: body
+  /wallets/withdraw/histories:
+    get:
+      tags:
+        - wallets
+      summary: Get User Withdraw Histories (Route All Roles)
+      description: Get User Withdraw Histories (Route All Roles)
+      operationId: withdrawHistories
+      parameters:
+        - name: orderDirection
+          in: query
+          schema:
+            $ref: '#/components/schemas/OrderDirectionQuery'
+        - name: orderBy
+          in: query
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/OrderByQuery'
+              - enum:
+                  - created_at
+                  - balance_request
+        - name: search
+          in: query
+          description: Available search field balance_request
+          schema:
+            $ref: '#/components/schemas/SearchQuery'
+        - name: page
+          in: query
+          schema:
+            $ref: '#/components/schemas/PageQuery'
+        - name: limit
+          in: query
+          schema:
+            $ref: '#/components/schemas/LimitQuery'
+      responses:
+        '200':
+          description: Request Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetWithdrawHistoriesResponse'
+        4XX:
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        5XX:
+          description: Sever Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+        - APIKeyHeader: []
+  '/wallets/withdraw/{id}':
+    get:
+      tags:
+        - wallets
+      summary: Get Withdraw Detail (Route All Roles)
+      description: Get Withdraw Detail (Route All Roles)
+      operationId: withdrawDetail
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Request Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetWithdrawDetailResponse'
+        4XX:
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        5XX:
+          description: Sever Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+        - APIKeyHeader: []
+  /wallets/withdraw/users/all:
+    get:
+      tags:
+        - wallets
+      summary: Get All User Withdraw (Admin Route)
+      description: Get All User Withdraw (Admin Route)
+      operationId: allUserWithdraw
+      parameters:
+        - name: orderDirection
+          in: query
+          schema:
+            $ref: '#/components/schemas/OrderDirectionQuery'
+        - name: orderBy
+          in: query
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/OrderByQuery'
+              - enum:
+                  - created_at
+                  - balance_request
+        - name: search
+          in: query
+          description: Available search field balance_request
+          schema:
+            $ref: '#/components/schemas/SearchQuery'
+        - name: page
+          in: query
+          schema:
+            $ref: '#/components/schemas/PageQuery'
+        - name: limit
+          in: query
+          schema:
+            $ref: '#/components/schemas/LimitQuery'
+        - name: status
+          in: query
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/StatusQuery'
+              - enum:
+                  - '0'
+                  - '1'
+                  - '2'
+      responses:
+        '200':
+          description: Request Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetWithdrawHistoriesResponse'
+        4XX:
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        5XX:
+          description: Sever Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+        - APIKeyHeader: []
   '/wallets/withdraw/{id}/status':
     patch:
       tags:
@@ -3991,14 +3991,14 @@ components:
         - qty
         - discount
       properties:
-        product_name:
-          type: string
-        description:
-          type: string
         cover:
           type: string
           format: binary
           default: '1'
+        product_name:
+          type: string
+        description:
+          type: string
         normal_price:
           type: integer
           format: int32
@@ -4047,10 +4047,10 @@ components:
           type: string
           format: binary
           default: '1'
-        price_default:
+        normal_price:
           type: integer
           format: int32
-        price_selling:
+        selling_price:
           type: integer
           format: int32
         qty:
@@ -4202,13 +4202,13 @@ components:
                 properties:
                   id:
                     type: integer
+                  buyer_id:
+                    type: integer
                   transaction_token:
                     type: string
                   total_price:
                     type: integer
                   status:
-                    type: integer
-                  buyer_id:
                     type: integer
                   full_name:
                     type: string
@@ -4488,16 +4488,6 @@ components:
           type: integer
         balance_transfer:
           type: integer
-    WithdrawBody:
-      required:
-        - user_bank_id
-        - balance_request
-      type: object
-      properties:
-        user_bank_id:
-          type: integer
-        balance_request:
-          type: integer
     GetTopUpHistoriesResponse:
       type: object
       allOf:
@@ -4531,31 +4521,6 @@ components:
                   updated_at:
                     type: string
                     format: date-time
-    GetWithdrawHistoriesResponse:
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/ApiResponse'
-        - type: object
-          properties:
-            data:
-              type: array
-              items:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                  balance_request:
-                    type: integer
-                  status:
-                    type: integer
-                  bank_name:
-                    type: string
-                  created_at:
-                    type: string
-                    format: date-time
-                  updated_at:
-                    type: string
-                    format: date-time
     GetTopUpDetailResponse:
       type: object
       allOf:
@@ -4581,6 +4546,55 @@ components:
                 updated_at:
                   type: string
                   format: date-time
+    TopUpProofBody:
+      required:
+        - image
+      properties:
+        image:
+          type: string
+          format: binary
+    UpdateTopUpStatusBody:
+      type: object
+      properties:
+        status:
+          type: integer
+          minimum: 0
+          maximum: 1
+    WithdrawBody:
+      required:
+        - user_bank_id
+        - balance_request
+      type: object
+      properties:
+        user_bank_id:
+          type: integer
+        balance_request:
+          type: integer
+    GetWithdrawHistoriesResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  balance_request:
+                    type: integer
+                  status:
+                    type: integer
+                  bank_name:
+                    type: string
+                  created_at:
+                    type: string
+                    format: date-time
+                  updated_at:
+                    type: string
+                    format: date-time
     GetWithdrawDetailResponse:
       type: object
       allOf:
@@ -4604,78 +4618,6 @@ components:
                 updated_at:
                   type: string
                   format: date-time
-    GetAllUserTopUpResponse:
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/ApiResponse'
-        - type: object
-          properties:
-            data:
-              type: array
-              items:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                  balance_request:
-                    type: integer
-                  balance_transfer:
-                    type: integer
-                  status:
-                    type: integer
-                  bank_name:
-                    type: string
-                  proof_label:
-                    type: string
-                    nullable: true
-                  proof_url:
-                    type: string
-                    nullable: true
-                  created_at:
-                    type: string
-                    format: date-time
-                  updated_at:
-                    type: string
-                    format: date-time
-    GetAllUserWithdrawResponse:
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/ApiResponse'
-        - type: object
-          properties:
-            data:
-              type: array
-              items:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                  balance_request:
-                    type: integer
-                  status:
-                    type: integer
-                  bank_name:
-                    type: string
-                  created_at:
-                    type: string
-                    format: date-time
-                  updated_at:
-                    type: string
-                    format: date-time
-    TopUpProofBody:
-      required:
-        - image
-      properties:
-        image:
-          type: string
-          format: binary
-    UpdateTopUpStatusBody:
-      type: object
-      properties:
-        status:
-          type: integer
-          minimum: 0
-          maximum: 1
     UpdateWithdrawStatusBody:
       type: object
       properties:
@@ -4705,7 +4647,44 @@ components:
             data:
               type: array
               items:
-                $ref: '#/components/schemas/GetCart'
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  buyer_id:
+                    type: integer
+                  merchant_id:
+                    type: integer
+                  product_id:
+                    type: integer
+                  qty:
+                    type: integer
+                  status:
+                    type: integer
+                  product_name:
+                    type: string
+                  description:
+                    type: string
+                  cover_label:
+                    type: string
+                    nullable: true
+                  cover_url:
+                    type: string
+                    nullable: true
+                  normal_price:
+                    type: integer
+                  price_default:
+                    type: integer
+                  discount:
+                    type: integer
+                  available_qty:
+                    type: integer
+                  created_at:
+                    type: string
+                    format: date-time
+                  updated_at:
+                    type: string
+                    format: date-time
     UpdateCartQtyBody:
       required:
         - qty
@@ -4847,9 +4826,9 @@ components:
           type: string
         status:
           type: integer
-        price_default:
+        normal_price:
           type: integer
-        price_selling:
+        selling_price:
           type: integer
         qty:
           type: integer
@@ -5008,45 +4987,6 @@ components:
           type: string
         cover_label:
           type: string
-    GetCart:
-      type: object
-      properties:
-        id:
-          type: integer
-        id_m_users:
-          type: integer
-        id_merchant:
-          type: integer
-        id_m_products:
-          type: integer
-        id_cover:
-          type: integer
-        qty:
-          type: integer
-        status:
-          type: integer
-        product_name:
-          type: string
-        description:
-          type: string
-        uri:
-          type: string
-        label:
-          type: string
-        price_default:
-          type: integer
-        price_selling:
-          type: integer
-        discount:
-          type: integer
-        max_qty:
-          type: integer
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
   securitySchemes:
     APIKeyHeader:
       type: apiKey

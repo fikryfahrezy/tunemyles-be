@@ -10,6 +10,11 @@ import sequelize from '../../databases/sequelize';
 import { queryingBuilder } from '../utils/sql-query-builder';
 import initModels, { ModelType } from '../models/sql/init-models';
 
+type UserWalletType = {
+  id: number;
+  [index: string]: unknown;
+};
+
 type UserWalletBalanceType = {
   id: number;
   balance: number;
@@ -82,9 +87,9 @@ export const updateUserWithdraw: (
   return UserWithdraw.update(data, { where: { id: withdrawId } });
 };
 
-export const getUserWallets: (userId: number) => Promise<unknown> = function getUserWallets(
-  userId,
-) {
+export const getUserWallets: (
+  userId: number,
+) => Promise<UserWalletType[]> = function getUserWallets(userId) {
   const sqlQuery = `
     SELECT
       uuw.id,

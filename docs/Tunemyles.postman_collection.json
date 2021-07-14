@@ -5529,6 +5529,8 @@
                       "    });\r",
                       "});\r",
                       "\r",
+                      "pm.sendRequest(makeRequest(reqBodyWithoutFile, pm.environment.get('MERCHANT_TOKEN')));\r",
+                      "\r",
                       "pm.sendRequest(makeRequest([{}], pm.environment.get('MERCHANT_TOKEN')), (_, response) => {\r",
                       "    pm.test('Fail, No Data Provided', () => {\r",
                       "        const { code, headers } = response;\r",
@@ -5669,7 +5671,9 @@
                       "        const { code, headers } = response;\r",
                       "        const body = response.json();\r",
                       "\r",
-                      "        pm.environment.set('MERCHANT_PRODUCT_ID', body.data[0].id)\r",
+                      "        pm.environment.set('TEMP_MERCHANT_PRODUCT_ID', body.data[0].id)\r",
+                      "        pm.environment.set('MERCHANT_PRODUCT_ID', body.data[1].id)\r",
+                      "        pm.environment.set('MERCHANT_ID', body.data[1].merchant_id)\r",
                       "\r",
                       "        pm.expect(code).to.eql(200);\r",
                       "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
@@ -6807,7 +6811,7 @@
                       "\r",
                       "pm.sendRequest(makeRequest(\r",
                       "    pm.environment.get('MERCHANT_TOKEN'),\r",
-                      "    pm.environment.get('MERCHANT_PRODUCT_ID'),\r",
+                      "    pm.environment.get('TEMP_MERCHANT_PRODUCT_ID'),\r",
                       "), (_, response) => {\r",
                       "    pm.test('Success', () => {\r",
                       "        const { code, headers } = response;\r",
@@ -8463,7 +8467,7 @@
                   "        const { code, headers } = response;\r",
                   "        const body = response.json();\r",
                   "\r",
-                  "        pm.environment.set('BANK_USER_ID', body.data[0].id)\r",
+                  "        pm.environment.set('MASTER_BANK_ID', body.data[0].id)\r",
                   "\r",
                   "        pm.expect(code).to.eql(200);\r",
                   "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
@@ -8547,7 +8551,7 @@
                   "\r",
                   "pm.sendRequest(makeRequest(\r",
                   "    pm.environment.get('USER_TOKEN'),\r",
-                  "    pm.environment.get('BANK_USER_ID'),\r",
+                  "    pm.environment.get('MASTER_BANK_ID'),\r",
                   "), (_, response) => {\r",
                   "    pm.test('Success', () => {\r",
                   "        const { code, headers } = response;\r",
@@ -8866,7 +8870,7 @@
                   "pm.sendRequest(makeRequest(\r",
                   "    reqBody,\r",
                   "    pm.environment.get('USER_TOKEN'),\r",
-                  "    pm.environment.get('TEMP_USER_BANK_ID'),\r",
+                  "    pm.environment.get('USER_BANK_ID'),\r",
                   "), (_, response) => {\r",
                   "    pm.test('Success', () => {\r",
                   "        const { code, headers } = response;\r",
@@ -9158,8 +9162,8 @@
                   "const { Request } = require('postman-collection')\r",
                   "\r",
                   "const reqBody = {\r",
-                  "    wallet_id: 1,\r",
-                  "    balance_request: 43221,\r",
+                  "    bank_id: pm.environment.get('MASTER_BANK_ID'),\r",
+                  "    balance_request: 321321312,\r",
                   "    balance_transfer: 46382912,\r",
                   "};\r",
                   "\r",
@@ -9191,16 +9195,6 @@
                   "    })\r",
                   "});\r",
                   "\r",
-                  "pm.sendRequest(makeRequest(reqBody, pm.environment.get('USER_TOKEN')), (_, response) => {\r",
-                  "    pm.test('Fail, Wallet Not Found', () => {\r",
-                  "        const { code, headers } = response;\r",
-                  "\r",
-                  "        pm.expect(code).to.eql(404);\r",
-                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(response.json().success).to.eql(false);\r",
-                  "    })\r",
-                  "});\r",
-                  "\r",
                   "pm.sendRequest(makeRequest({}, pm.environment.get('USER_TOKEN')), (_, response) => {\r",
                   "    pm.test('Fail, No Data Provided', () => {\r",
                   "        const { code, headers } = response;\r",
@@ -9258,131 +9252,12 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"wallet_id\": 1,\r\n    \"balance_request\": 43221,\r\n    \"balance_transfer\": 46382912\r\n}"
+              "raw": "{\r\n    \"bank_id\": 1,\r\n    \"balance_request\": 43221,\r\n    \"balance_transfer\": 46382912\r\n}"
             },
             "url": {
               "raw": "{{URL}}/wallets/topup",
               "host": ["{{URL}}"],
               "path": ["wallets", "topup"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Withdraw",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "const { Request } = require('postman-collection')\r",
-                  "\r",
-                  "const reqBody = {\r",
-                  "    wallet_id: 2,\r",
-                  "    balance_request: 43221,\r",
-                  "};\r",
-                  "\r",
-                  "const makeRequest = function makeRequest(payload, token = undefined) {\r",
-                  "    const header = {\r",
-                  "        'Content-Type': 'application/json',\r",
-                  "    };\r",
-                  "\r",
-                  "    if (token) header.authorization = `Bearer ${token}`;\r",
-                  "\r",
-                  "    return new Request({\r",
-                  "        header,\r",
-                  "        method: 'POST',\r",
-                  "        url: pm.environment.replaceIn('{{URL}}/wallets/withdraw'),\r",
-                  "        body: {\r",
-                  "            mode: 'raw',\r",
-                  "            raw: JSON.stringify(payload),\r",
-                  "        },\r",
-                  "    });\r",
-                  "};\r",
-                  "\r",
-                  "pm.sendRequest(makeRequest(reqBody, pm.environment.get('USER_TOKEN')), (_, response) => {\r",
-                  "    pm.test('Success', () => {\r",
-                  "        const { code, headers } = response;\r",
-                  "\r",
-                  "        pm.expect(code).to.eql(201);\r",
-                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(response.json().success).to.eql(true);\r",
-                  "    })\r",
-                  "});\r",
-                  "\r",
-                  "pm.sendRequest(makeRequest(reqBody, pm.environment.get('USER_TOKEN')), (_, response) => {\r",
-                  "    pm.test('Fail, Wallet Not Found', () => {\r",
-                  "        const { code, headers } = response;\r",
-                  "\r",
-                  "        pm.expect(code).to.eql(404);\r",
-                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(response.json().success).to.eql(false);\r",
-                  "    })\r",
-                  "});\r",
-                  "\r",
-                  "pm.sendRequest(makeRequest({}, pm.environment.get('USER_TOKEN')), (_, response) => {\r",
-                  "    pm.test('Fail, No Data Provided', () => {\r",
-                  "        const { code, headers } = response;\r",
-                  "\r",
-                  "        pm.expect(code).to.eql(422);\r",
-                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(response.json().success).to.eql(false);\r",
-                  "    })\r",
-                  "});\r",
-                  "\r",
-                  "pm.sendRequest(makeRequest(reqBody, 'this-is-wrong'), (_, response) => {\r",
-                  "    pm.test('Fail, Wrong API Key', () => {\r",
-                  "        const { code, headers } = response;\r",
-                  "\r",
-                  "        pm.expect(code).to.eql(403);\r",
-                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(response.json().success).to.eql(false);\r",
-                  "    });\r",
-                  "});\r",
-                  "\r",
-                  "pm.sendRequest(makeRequest(reqBody), (_, response) => {\r",
-                  "    pm.test('Fail, API Key Not Given', () => {\r",
-                  "        const { code, headers } = response;\r",
-                  "\r",
-                  "        pm.expect(code).to.eql(403);\r",
-                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(response.json().success).to.eql(false);\r",
-                  "    });\r",
-                  "});\r",
-                  ""
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{USER_TOKEN}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json",
-                "description": "JSON Type",
-                "type": "text"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"wallet_id\": 2,\r\n    \"balance_request\": 43221\r\n}"
-            },
-            "url": {
-              "raw": "{{URL}}/wallets/withdraw",
-              "host": ["{{URL}}"],
-              "path": ["wallets", "withdraw"]
             }
           },
           "response": []
@@ -9411,10 +9286,13 @@
                   "pm.sendRequest(makeRequest(pm.environment.get('USER_TOKEN')), (_, response) => {\r",
                   "    pm.test('Success, Without Query', () => {\r",
                   "        const { code, headers } = response;\r",
+                  "        const body = response.json();\r",
+                  "\r",
+                  "        pm.environment.set('TOPUP_ID', body.data[0].id);\r",
                   "\r",
                   "        pm.expect(code).to.eql(200);\r",
                   "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(response.json().success).to.eql(true);\r",
+                  "        pm.expect(body.success).to.eql(true);\r",
                   "    });\r",
                   "});\r",
                   "\r",
@@ -9429,7 +9307,7 @@
                   "        pm.expect(code).to.eql(200);\r",
                   "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
                   "        pm.expect(body.success).to.eql(true);\r",
-                  "        // pm.expect(body.data.length).to.eql(1);\r",
+                  "        pm.expect(body.data.length).to.eql(1);\r",
                   "    });\r",
                   "});\r",
                   "\r",
@@ -9623,215 +9501,6 @@
           "response": []
         },
         {
-          "name": "Get Withdraw Histories",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "const { Request } = require('postman-collection');\r",
-                  "\r",
-                  "const makeRequest = function makeRequest(token, query = '') {\r",
-                  "    const header = {};\r",
-                  "\r",
-                  "    if (token) header.authorization = `Bearer ${token}`;\r",
-                  "\r",
-                  "    return new Request({\r",
-                  "        header,\r",
-                  "        method: 'GET',\r",
-                  "        url: pm.environment.replaceIn(`{{URL}}/wallets/withdraw/histories${query}`),\r",
-                  "    });\r",
-                  "};\r",
-                  "\r",
-                  "pm.sendRequest(makeRequest(pm.environment.get('USER_TOKEN')), (_, response) => {\r",
-                  "    pm.test('Success, Without Query', () => {\r",
-                  "        const { code, headers } = response;\r",
-                  "\r",
-                  "        pm.expect(code).to.eql(200);\r",
-                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(response.json().success).to.eql(true);\r",
-                  "    });\r",
-                  "});\r",
-                  "\r",
-                  "pm.sendRequest(makeRequest(\r",
-                  "    pm.environment.get('USER_TOKEN'),\r",
-                  "    '?limit=1',\r",
-                  "), (_, response) => {\r",
-                  "    pm.test('Success, with Query `?limit=1`', () => {\r",
-                  "        const { code, headers } = response;\r",
-                  "        const body = response.json();\r",
-                  "\r",
-                  "        pm.expect(code).to.eql(200);\r",
-                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(body.success).to.eql(true);\r",
-                  "        // pm.expect(body.data.length).to.eql(1);\r",
-                  "    });\r",
-                  "});\r",
-                  "\r",
-                  "pm.sendRequest(makeRequest(\r",
-                  "    pm.environment.get('USER_TOKEN'),\r",
-                  "    '?orderDirection=DESC&orderBy=created_at&search=&page=&limit=',\r",
-                  "), (_, response) => {\r",
-                  "    pm.test('Success, with Query `?orderDirection=DESC&orderBy=created_at&search=&page=&limit=`', () => {\r",
-                  "        const { code, headers } = response;\r",
-                  "\r",
-                  "        pm.expect(code).to.eql(200);\r",
-                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(response.json().success).to.eql(true);\r",
-                  "    });\r",
-                  "});\r",
-                  "\r",
-                  "pm.sendRequest(makeRequest(\r",
-                  "    pm.environment.get('USER_TOKEN'),\r",
-                  "    '?orderDirection=DESC&orderBy=balance_request&search=&page=&limit=',\r",
-                  "), (_, response) => {\r",
-                  "    pm.test('Success, with Query `?orderDirection=DESC&orderBy=balance_request&search=&page=&limit=`', () => {\r",
-                  "        const { code, headers } = response;\r",
-                  "\r",
-                  "        pm.expect(code).to.eql(200);\r",
-                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(response.json().success).to.eql(true);\r",
-                  "    });\r",
-                  "});\r",
-                  "\r",
-                  "pm.sendRequest(makeRequest(\r",
-                  "    pm.environment.get('USER_TOKEN'),\r",
-                  "    '?orderDirection=ASC&orderBy=created_at&search=&page=&limit=',\r",
-                  "), (_, response) => {\r",
-                  "    pm.test('Success, with Query `?orderDirection=ASC&orderBy=created_at&search=&page=&limit=`', () => {\r",
-                  "        const { code, headers } = response;\r",
-                  "\r",
-                  "        pm.expect(code).to.eql(200);\r",
-                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(response.json().success).to.eql(true);\r",
-                  "    });\r",
-                  "});\r",
-                  "\r",
-                  "pm.sendRequest(makeRequest(\r",
-                  "    pm.environment.get('USER_TOKEN'),\r",
-                  "    '?orderDirection=ASC&orderBy=balance_request&search=&page=&limit=',\r",
-                  "), (_, response) => {\r",
-                  "    pm.test('Success, with Query `?orderDirection=ASC&orderBy=balance_request&search=&page=&limit=`', () => {\r",
-                  "        const { code, headers } = response;\r",
-                  "\r",
-                  "        pm.expect(code).to.eql(200);\r",
-                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(response.json().success).to.eql(true);\r",
-                  "    });\r",
-                  "});\r",
-                  "\r",
-                  "pm.sendRequest(makeRequest(\r",
-                  "    pm.environment.get('USER_TOKEN'),\r",
-                  "    '?orderDirection=DESCs&orderBy=created_at&search=&page=&limit=',\r",
-                  "), (_, response) => {\r",
-                  "    pm.test('Fail, with Query `?orderDirection=DESCs&orderBy=created_at&search=&page=&limit=`', () => {\r",
-                  "        const { code, headers } = response;\r",
-                  "\r",
-                  "        pm.expect(code).to.eql(422);\r",
-                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(response.json().success).to.eql(false);\r",
-                  "    });\r",
-                  "});\r",
-                  "\r",
-                  "pm.sendRequest(makeRequest(\r",
-                  "    pm.environment.get('USER_TOKEN'),\r",
-                  "    '?orderDirection=DESC&orderBy=created_ats&search=&page=&limit=',\r",
-                  "), (_, response) => {\r",
-                  "    pm.test('Fail, with Query `?orderDirection=DESC&orderBy=created_ats&search=&page=&limit=`', () => {\r",
-                  "        const { code, headers } = response;\r",
-                  "\r",
-                  "        pm.expect(code).to.eql(422);\r",
-                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(response.json().success).to.eql(false);\r",
-                  "    });\r",
-                  "});\r",
-                  "\r",
-                  "pm.sendRequest(makeRequest('this-is-wrong'), (_, response) => {\r",
-                  "    pm.test('Fail, Wrong API Key', () => {\r",
-                  "        const { code, headers } = response;\r",
-                  "\r",
-                  "        pm.expect(code).to.eql(403);\r",
-                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(response.json().success).to.eql(false);\r",
-                  "    });\r",
-                  "});\r",
-                  "\r",
-                  "pm.sendRequest(makeRequest(), (_, response) => {\r",
-                  "    pm.test('Fail, API Key Not Given', () => {\r",
-                  "        const { code, headers } = response;\r",
-                  "\r",
-                  "        pm.expect(code).to.eql(403);\r",
-                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(response.json().success).to.eql(false);\r",
-                  "    });\r",
-                  "});\r",
-                  ""
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          },
-          "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{USER_TOKEN}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "method": "GET",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": ""
-            },
-            "url": {
-              "raw": "{{URL}}/wallets/withdraw/histories",
-              "host": ["{{URL}}"],
-              "path": ["wallets", "withdraw", "histories"],
-              "query": [
-                {
-                  "key": "orderDirection",
-                  "value": "",
-                  "description": "Available values: ASC, DESC",
-                  "disabled": true
-                },
-                {
-                  "key": "orderBy",
-                  "value": "",
-                  "description": "Available Fields: created_at, balance_request",
-                  "disabled": true
-                },
-                {
-                  "key": "search",
-                  "value": "",
-                  "description": "Available Fields: balance_request",
-                  "disabled": true
-                },
-                {
-                  "key": "page",
-                  "value": "",
-                  "description": "Available values: 0...n",
-                  "disabled": true
-                },
-                {
-                  "key": "limit",
-                  "value": "",
-                  "description": "Available values: 0...n",
-                  "disabled": true
-                }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
           "name": "Get Top Up Detail",
           "event": [
             {
@@ -9936,110 +9605,6 @@
           "response": []
         },
         {
-          "name": "Get Withdraw Detail",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "const { Request } = require('postman-collection')\r",
-                  "\r",
-                  "const makeRequest = function makeRequest(token = undefined, withdrawId = 0) {\r",
-                  "    const header = {};\r",
-                  "\r",
-                  "    if (token) header.authorization = `Bearer ${token}`;\r",
-                  "\r",
-                  "    return new Request({\r",
-                  "        header,\r",
-                  "        method: 'GET',\r",
-                  "        url: pm.environment.replaceIn(`{{URL}}/wallets/withdraw/${withdrawId}`),\r",
-                  "    });\r",
-                  "};\r",
-                  "\r",
-                  "pm.sendRequest(makeRequest(\r",
-                  "    pm.environment.get('USER_TOKEN'),\r",
-                  "    pm.environment.get('WITHDRAW_ID'),\r",
-                  "), (_, response) => {\r",
-                  "    pm.test('Success', () => {\r",
-                  "        const { code, headers } = response;\r",
-                  "\r",
-                  "        pm.expect(code).to.eql(200);\r",
-                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(response.json().success).to.eql(true);\r",
-                  "    })\r",
-                  "});\r",
-                  "\r",
-                  "pm.sendRequest(makeRequest(pm.environment.get('USER_TOKEN')), (_, response) => {\r",
-                  "    pm.test('Fail, Withdraw Data Not Found', () => {\r",
-                  "        const { code, headers } = response;\r",
-                  "\r",
-                  "        pm.expect(code).to.eql(404);\r",
-                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(response.json().success).to.eql(false);\r",
-                  "    })\r",
-                  "});\r",
-                  "\r",
-                  "pm.sendRequest(makeRequest('this-is-wrong'), (_, response) => {\r",
-                  "    pm.test('Fail, Wrong API Key', () => {\r",
-                  "        const { code, headers } = response;\r",
-                  "\r",
-                  "        pm.expect(code).to.eql(403);\r",
-                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(response.json().success).to.eql(false);\r",
-                  "    });\r",
-                  "});\r",
-                  "\r",
-                  "pm.sendRequest(makeRequest(), (_, response) => {\r",
-                  "    pm.test('Fail, API Key Not Given', () => {\r",
-                  "        const { code, headers } = response;\r",
-                  "\r",
-                  "        pm.expect(code).to.eql(403);\r",
-                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(response.json().success).to.eql(false);\r",
-                  "    });\r",
-                  "});\r",
-                  ""
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          },
-          "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{USER_TOKEN}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "method": "GET",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": ""
-            },
-            "url": {
-              "raw": "{{URL}}/wallets/withdraw/:id",
-              "host": ["{{URL}}"],
-              "path": ["wallets", "withdraw", ":id"],
-              "variable": [
-                {
-                  "key": "id",
-                  "value": "1",
-                  "type": "string"
-                }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
           "name": "Get All User Top Up",
           "event": [
             {
@@ -10081,7 +9646,7 @@
                   "        pm.expect(code).to.eql(200);\r",
                   "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
                   "        pm.expect(body.success).to.eql(true);\r",
-                  "        // pm.expect(body.data.length).to.eql(1);\r",
+                  "        pm.expect(body.data.length).to.eql(1);\r",
                   "    });\r",
                   "});\r",
                   "\r",
@@ -10281,6 +9846,644 @@
           "response": []
         },
         {
+          "name": "Upload Top Up Proof",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const { Request } = require('postman-collection');\r",
+                  "\r",
+                  "const makeRequest = function makeRequest(formdata, token = undefined, topUpId = 0) {\r",
+                  "    const header = {};\r",
+                  "\r",
+                  "    if (token) header.authorization = `Bearer ${token}`;\r",
+                  "\r",
+                  "    return new Request({\r",
+                  "        header,\r",
+                  "        method: 'POST',\r",
+                  "        url: pm.environment.replaceIn(`{{URL}}/wallets/topup/${topUpId}/image`),\r",
+                  "        body: {\r",
+                  "            formdata,\r",
+                  "            mode: 'formdata',\r",
+                  "        },\r",
+                  "    });\r",
+                  "};\r",
+                  "\r",
+                  "pm.test('Success', () => {\r",
+                  "    const { code, headers } = pm.response;\r",
+                  "\r",
+                  "    pm.expect(code).to.eql(201);\r",
+                  "    pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "    pm.expect(pm.response.json().success).to.eql(true);\r",
+                  "});\r",
+                  "\r",
+                  "pm.sendRequest(makeRequest([{}], pm.environment.get('USER_TOKEN')), (_, response) => {\r",
+                  "    pm.test('Fail, No `image` Provided', () => {\r",
+                  "        const { code, headers } = response;\r",
+                  "\r",
+                  "        pm.expect(code).to.eql(422);\r",
+                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(false);\r",
+                  "    });\r",
+                  "});\r",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{USER_TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "image",
+                  "type": "file",
+                  "src": "Bliss.png"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{URL}}/wallets/topup/:id/image",
+              "host": ["{{URL}}"],
+              "path": ["wallets", "topup", ":id", "image"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{TOPUP_ID}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Top Up Status",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const { Request } = require('postman-collection')\r",
+                  "\r",
+                  "const reqBody = { status: 1 };\r",
+                  "\r",
+                  "const makeRequest = function makeRequest(payload, token = undefined, topUpId = 0) {\r",
+                  "    const header = {\r",
+                  "        'Content-Type': 'application/json',\r",
+                  "    };\r",
+                  "\r",
+                  "    if (token) header.authorization = `Bearer ${token}`;\r",
+                  "\r",
+                  "    return new Request({\r",
+                  "        header,\r",
+                  "        method: 'PATCH',\r",
+                  "        url: pm.environment.replaceIn(`{{URL}}/wallets/topup/${topUpId}/status`),\r",
+                  "        body: {\r",
+                  "            mode: 'raw',\r",
+                  "            raw: JSON.stringify(payload),\r",
+                  "        },\r",
+                  "    });\r",
+                  "};\r",
+                  "\r",
+                  "pm.sendRequest(makeRequest(\r",
+                  "    reqBody,\r",
+                  "    pm.environment.get('ADMIN_TOKEN'),\r",
+                  "    pm.environment.get('TOPUP_ID'),\r",
+                  "), (_, response) => {\r",
+                  "    pm.test('Success', () => {\r",
+                  "        const { code, headers } = response;\r",
+                  "\r",
+                  "        pm.expect(code).to.eql(200);\r",
+                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(true);\r",
+                  "    })\r",
+                  "});\r",
+                  "\r",
+                  "pm.sendRequest(makeRequest(reqBody, pm.environment.get('ADMIN_TOKEN')), (_, response) => {\r",
+                  "    pm.test('Fail, Top Up Data Not Found', () => {\r",
+                  "        const { code, headers } = response;\r",
+                  "\r",
+                  "        pm.expect(code).to.eql(404);\r",
+                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(false);\r",
+                  "    })\r",
+                  "});\r",
+                  "\r",
+                  "pm.sendRequest(makeRequest({}, pm.environment.get('ADMIN_TOKEN')), (_, response) => {\r",
+                  "    pm.test('Fail No `status` Provided', () => {\r",
+                  "        const { code, headers } = response;\r",
+                  "\r",
+                  "        pm.expect(code).to.eql(422);\r",
+                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(false);\r",
+                  "    })\r",
+                  "});\r",
+                  "\r",
+                  "pm.sendRequest(makeRequest(reqBody, 'this-is-wrong'), (_, response) => {\r",
+                  "    pm.test('Fail, Wrong API Key', () => {\r",
+                  "        const { code, headers } = response;\r",
+                  "\r",
+                  "        pm.expect(code).to.eql(403);\r",
+                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(false);\r",
+                  "    });\r",
+                  "});\r",
+                  "\r",
+                  "pm.sendRequest(makeRequest(reqBody), (_, response) => {\r",
+                  "    pm.test('Fail, API Key Not Given', () => {\r",
+                  "        const { code, headers } = response;\r",
+                  "\r",
+                  "        pm.expect(code).to.eql(403);\r",
+                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(false);\r",
+                  "    });\r",
+                  "});\r",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{ADMIN_TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "description": "JSON Type",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"status\": 1\r\n}"
+            },
+            "url": {
+              "raw": "{{URL}}/wallets/topup/:id/status",
+              "host": ["{{URL}}"],
+              "path": ["wallets", "topup", ":id", "status"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "2",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Withdraw",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const { Request } = require('postman-collection')\r",
+                  "\r",
+                  "const reqBody = {\r",
+                  "    user_bank_id: pm.environment.get('USER_BANK_ID'),\r",
+                  "    balance_request: 43221,\r",
+                  "};\r",
+                  "\r",
+                  "const makeRequest = function makeRequest(payload, token = undefined) {\r",
+                  "    const header = {\r",
+                  "        'Content-Type': 'application/json',\r",
+                  "    };\r",
+                  "\r",
+                  "    if (token) header.authorization = `Bearer ${token}`;\r",
+                  "\r",
+                  "    return new Request({\r",
+                  "        header,\r",
+                  "        method: 'POST',\r",
+                  "        url: pm.environment.replaceIn('{{URL}}/wallets/withdraw'),\r",
+                  "        body: {\r",
+                  "            mode: 'raw',\r",
+                  "            raw: JSON.stringify(payload),\r",
+                  "        },\r",
+                  "    });\r",
+                  "};\r",
+                  "\r",
+                  "pm.sendRequest(makeRequest(reqBody, pm.environment.get('USER_TOKEN')), (_, response) => {\r",
+                  "    pm.test('Success', () => {\r",
+                  "        const { code, headers } = response;\r",
+                  "\r",
+                  "        pm.expect(code).to.eql(201);\r",
+                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(true);\r",
+                  "    })\r",
+                  "});\r",
+                  "\r",
+                  "pm.sendRequest(makeRequest({}, pm.environment.get('USER_TOKEN')), (_, response) => {\r",
+                  "    pm.test('Fail, No Data Provided', () => {\r",
+                  "        const { code, headers } = response;\r",
+                  "\r",
+                  "        pm.expect(code).to.eql(422);\r",
+                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(false);\r",
+                  "    })\r",
+                  "});\r",
+                  "\r",
+                  "pm.sendRequest(makeRequest(reqBody, 'this-is-wrong'), (_, response) => {\r",
+                  "    pm.test('Fail, Wrong API Key', () => {\r",
+                  "        const { code, headers } = response;\r",
+                  "\r",
+                  "        pm.expect(code).to.eql(403);\r",
+                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(false);\r",
+                  "    });\r",
+                  "});\r",
+                  "\r",
+                  "pm.sendRequest(makeRequest(reqBody), (_, response) => {\r",
+                  "    pm.test('Fail, API Key Not Given', () => {\r",
+                  "        const { code, headers } = response;\r",
+                  "\r",
+                  "        pm.expect(code).to.eql(403);\r",
+                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(false);\r",
+                  "    });\r",
+                  "});\r",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{USER_TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "description": "JSON Type",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"user_bank_id\": 2,\r\n    \"balance_request\": 43221\r\n}"
+            },
+            "url": {
+              "raw": "{{URL}}/wallets/withdraw",
+              "host": ["{{URL}}"],
+              "path": ["wallets", "withdraw"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Withdraw Histories",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const { Request } = require('postman-collection');\r",
+                  "\r",
+                  "const makeRequest = function makeRequest(token, query = '') {\r",
+                  "    const header = {};\r",
+                  "\r",
+                  "    if (token) header.authorization = `Bearer ${token}`;\r",
+                  "\r",
+                  "    return new Request({\r",
+                  "        header,\r",
+                  "        method: 'GET',\r",
+                  "        url: pm.environment.replaceIn(`{{URL}}/wallets/withdraw/histories${query}`),\r",
+                  "    });\r",
+                  "};\r",
+                  "\r",
+                  "pm.sendRequest(makeRequest(pm.environment.get('USER_TOKEN')), (_, response) => {\r",
+                  "    pm.test('Success, Without Query', () => {\r",
+                  "        const { code, headers } = response;\r",
+                  "        const body = response.json();\r",
+                  "        \r",
+                  "        pm.environment.set('WITHDRAW_ID', body.data[0].id);\r",
+                  "\r",
+                  "        pm.expect(code).to.eql(200);\r",
+                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(body.success).to.eql(true);\r",
+                  "    });\r",
+                  "});\r",
+                  "\r",
+                  "pm.sendRequest(makeRequest(\r",
+                  "    pm.environment.get('USER_TOKEN'),\r",
+                  "    '?limit=1',\r",
+                  "), (_, response) => {\r",
+                  "    pm.test('Success, with Query `?limit=1`', () => {\r",
+                  "        const { code, headers } = response;\r",
+                  "        const body = response.json();\r",
+                  "\r",
+                  "        pm.expect(code).to.eql(200);\r",
+                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(body.success).to.eql(true);\r",
+                  "        pm.expect(body.data.length).to.eql(1);\r",
+                  "    });\r",
+                  "});\r",
+                  "\r",
+                  "pm.sendRequest(makeRequest(\r",
+                  "    pm.environment.get('USER_TOKEN'),\r",
+                  "    '?orderDirection=DESC&orderBy=created_at&search=&page=&limit=',\r",
+                  "), (_, response) => {\r",
+                  "    pm.test('Success, with Query `?orderDirection=DESC&orderBy=created_at&search=&page=&limit=`', () => {\r",
+                  "        const { code, headers } = response;\r",
+                  "\r",
+                  "        pm.expect(code).to.eql(200);\r",
+                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(true);\r",
+                  "    });\r",
+                  "});\r",
+                  "\r",
+                  "pm.sendRequest(makeRequest(\r",
+                  "    pm.environment.get('USER_TOKEN'),\r",
+                  "    '?orderDirection=DESC&orderBy=balance_request&search=&page=&limit=',\r",
+                  "), (_, response) => {\r",
+                  "    pm.test('Success, with Query `?orderDirection=DESC&orderBy=balance_request&search=&page=&limit=`', () => {\r",
+                  "        const { code, headers } = response;\r",
+                  "\r",
+                  "        pm.expect(code).to.eql(200);\r",
+                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(true);\r",
+                  "    });\r",
+                  "});\r",
+                  "\r",
+                  "pm.sendRequest(makeRequest(\r",
+                  "    pm.environment.get('USER_TOKEN'),\r",
+                  "    '?orderDirection=ASC&orderBy=created_at&search=&page=&limit=',\r",
+                  "), (_, response) => {\r",
+                  "    pm.test('Success, with Query `?orderDirection=ASC&orderBy=created_at&search=&page=&limit=`', () => {\r",
+                  "        const { code, headers } = response;\r",
+                  "\r",
+                  "        pm.expect(code).to.eql(200);\r",
+                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(true);\r",
+                  "    });\r",
+                  "});\r",
+                  "\r",
+                  "pm.sendRequest(makeRequest(\r",
+                  "    pm.environment.get('USER_TOKEN'),\r",
+                  "    '?orderDirection=ASC&orderBy=balance_request&search=&page=&limit=',\r",
+                  "), (_, response) => {\r",
+                  "    pm.test('Success, with Query `?orderDirection=ASC&orderBy=balance_request&search=&page=&limit=`', () => {\r",
+                  "        const { code, headers } = response;\r",
+                  "\r",
+                  "        pm.expect(code).to.eql(200);\r",
+                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(true);\r",
+                  "    });\r",
+                  "});\r",
+                  "\r",
+                  "pm.sendRequest(makeRequest(\r",
+                  "    pm.environment.get('USER_TOKEN'),\r",
+                  "    '?orderDirection=DESCs&orderBy=created_at&search=&page=&limit=',\r",
+                  "), (_, response) => {\r",
+                  "    pm.test('Fail, with Query `?orderDirection=DESCs&orderBy=created_at&search=&page=&limit=`', () => {\r",
+                  "        const { code, headers } = response;\r",
+                  "\r",
+                  "        pm.expect(code).to.eql(422);\r",
+                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(false);\r",
+                  "    });\r",
+                  "});\r",
+                  "\r",
+                  "pm.sendRequest(makeRequest(\r",
+                  "    pm.environment.get('USER_TOKEN'),\r",
+                  "    '?orderDirection=DESC&orderBy=created_ats&search=&page=&limit=',\r",
+                  "), (_, response) => {\r",
+                  "    pm.test('Fail, with Query `?orderDirection=DESC&orderBy=created_ats&search=&page=&limit=`', () => {\r",
+                  "        const { code, headers } = response;\r",
+                  "\r",
+                  "        pm.expect(code).to.eql(422);\r",
+                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(false);\r",
+                  "    });\r",
+                  "});\r",
+                  "\r",
+                  "pm.sendRequest(makeRequest('this-is-wrong'), (_, response) => {\r",
+                  "    pm.test('Fail, Wrong API Key', () => {\r",
+                  "        const { code, headers } = response;\r",
+                  "\r",
+                  "        pm.expect(code).to.eql(403);\r",
+                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(false);\r",
+                  "    });\r",
+                  "});\r",
+                  "\r",
+                  "pm.sendRequest(makeRequest(), (_, response) => {\r",
+                  "    pm.test('Fail, API Key Not Given', () => {\r",
+                  "        const { code, headers } = response;\r",
+                  "\r",
+                  "        pm.expect(code).to.eql(403);\r",
+                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(false);\r",
+                  "    });\r",
+                  "});\r",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{USER_TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{URL}}/wallets/withdraw/histories",
+              "host": ["{{URL}}"],
+              "path": ["wallets", "withdraw", "histories"],
+              "query": [
+                {
+                  "key": "orderDirection",
+                  "value": "",
+                  "description": "Available values: ASC, DESC",
+                  "disabled": true
+                },
+                {
+                  "key": "orderBy",
+                  "value": "",
+                  "description": "Available Fields: created_at, balance_request",
+                  "disabled": true
+                },
+                {
+                  "key": "search",
+                  "value": "",
+                  "description": "Available Fields: balance_request",
+                  "disabled": true
+                },
+                {
+                  "key": "page",
+                  "value": "",
+                  "description": "Available values: 0...n",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "",
+                  "description": "Available values: 0...n",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Withdraw Detail",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const { Request } = require('postman-collection')\r",
+                  "\r",
+                  "const makeRequest = function makeRequest(token = undefined, withdrawId = 0) {\r",
+                  "    const header = {};\r",
+                  "\r",
+                  "    if (token) header.authorization = `Bearer ${token}`;\r",
+                  "\r",
+                  "    return new Request({\r",
+                  "        header,\r",
+                  "        method: 'GET',\r",
+                  "        url: pm.environment.replaceIn(`{{URL}}/wallets/withdraw/${withdrawId}`),\r",
+                  "    });\r",
+                  "};\r",
+                  "\r",
+                  "pm.sendRequest(makeRequest(\r",
+                  "    pm.environment.get('USER_TOKEN'),\r",
+                  "    pm.environment.get('WITHDRAW_ID'),\r",
+                  "), (_, response) => {\r",
+                  "    pm.test('Success', () => {\r",
+                  "        const { code, headers } = response;\r",
+                  "\r",
+                  "        pm.expect(code).to.eql(200);\r",
+                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(true);\r",
+                  "    })\r",
+                  "});\r",
+                  "\r",
+                  "pm.sendRequest(makeRequest(pm.environment.get('USER_TOKEN')), (_, response) => {\r",
+                  "    pm.test('Fail, Withdraw Data Not Found', () => {\r",
+                  "        const { code, headers } = response;\r",
+                  "\r",
+                  "        pm.expect(code).to.eql(404);\r",
+                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(false);\r",
+                  "    })\r",
+                  "});\r",
+                  "\r",
+                  "pm.sendRequest(makeRequest('this-is-wrong'), (_, response) => {\r",
+                  "    pm.test('Fail, Wrong API Key', () => {\r",
+                  "        const { code, headers } = response;\r",
+                  "\r",
+                  "        pm.expect(code).to.eql(403);\r",
+                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(false);\r",
+                  "    });\r",
+                  "});\r",
+                  "\r",
+                  "pm.sendRequest(makeRequest(), (_, response) => {\r",
+                  "    pm.test('Fail, API Key Not Given', () => {\r",
+                  "        const { code, headers } = response;\r",
+                  "\r",
+                  "        pm.expect(code).to.eql(403);\r",
+                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "        pm.expect(response.json().success).to.eql(false);\r",
+                  "    });\r",
+                  "});\r",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{USER_TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{URL}}/wallets/withdraw/:id",
+              "host": ["{{URL}}"],
+              "path": ["wallets", "withdraw", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
           "name": "Get All User Withdraw",
           "event": [
             {
@@ -10322,7 +10525,7 @@
                   "        pm.expect(code).to.eql(200);\r",
                   "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
                   "        pm.expect(body.success).to.eql(true);\r",
-                  "        // pm.expect(body.data.length).to.eql(1);\r",
+                  "        pm.expect(body.data.length).to.eql(1);\r",
                   "    });\r",
                   "});\r",
                   "\r",
@@ -10496,219 +10699,6 @@
           "response": []
         },
         {
-          "name": "Upload Top Up Proof",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "const { Request } = require('postman-collection');\r",
-                  "\r",
-                  "const makeRequest = function makeRequest(formdata, token = undefined, topUpId = 0) {\r",
-                  "    const header = {};\r",
-                  "\r",
-                  "    if (token) header.authorization = `Bearer ${token}`;\r",
-                  "\r",
-                  "    return new Request({\r",
-                  "        header,\r",
-                  "        method: 'POST',\r",
-                  "        url: pm.environment.replaceIn(`{{URL}}/wallets/topup/${topUpId}/image`),\r",
-                  "        body: {\r",
-                  "            formdata,\r",
-                  "            mode: 'formdata',\r",
-                  "        },\r",
-                  "    });\r",
-                  "};\r",
-                  "\r",
-                  "pm.test('Success', () => {\r",
-                  "    const { code, headers } = pm.response;\r",
-                  "\r",
-                  "    pm.expect(code).to.eql(201);\r",
-                  "    pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "    pm.expect(pm.response.json().success).to.eql(true);\r",
-                  "});\r",
-                  "\r",
-                  "pm.sendRequest(makeRequest([{}], pm.environment.get('USER_TOKEN')), (_, response) => {\r",
-                  "    pm.test('Fail, No `image` Provided', () => {\r",
-                  "        const { code, headers } = response;\r",
-                  "\r",
-                  "        pm.expect(code).to.eql(422);\r",
-                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(response.json().success).to.eql(false);\r",
-                  "    });\r",
-                  "});\r",
-                  ""
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{USER_TOKEN}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "formdata",
-              "formdata": [
-                {
-                  "key": "image",
-                  "type": "file",
-                  "src": "Bliss.png"
-                }
-              ]
-            },
-            "url": {
-              "raw": "{{URL}}/wallets/topup/:id/image",
-              "host": ["{{URL}}"],
-              "path": ["wallets", "topup", ":id", "image"],
-              "variable": [
-                {
-                  "key": "id",
-                  "value": "1",
-                  "type": "string"
-                }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Update Top Up Status",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "const { Request } = require('postman-collection')\r",
-                  "\r",
-                  "const reqBody = { status: 1 };\r",
-                  "\r",
-                  "const makeRequest = function makeRequest(payload, token = undefined, topUpId = 0) {\r",
-                  "    const header = {\r",
-                  "        'Content-Type': 'application/json',\r",
-                  "    };\r",
-                  "\r",
-                  "    if (token) header.authorization = `Bearer ${token}`;\r",
-                  "\r",
-                  "    return new Request({\r",
-                  "        header,\r",
-                  "        method: 'PATCH',\r",
-                  "        url: pm.environment.replaceIn(`{{URL}}/wallets/topup/${topUpId}/status`),\r",
-                  "        body: {\r",
-                  "            mode: 'raw',\r",
-                  "            raw: JSON.stringify(payload),\r",
-                  "        },\r",
-                  "    });\r",
-                  "};\r",
-                  "\r",
-                  "pm.sendRequest(makeRequest(\r",
-                  "    reqBody,\r",
-                  "    pm.environment.get('ADMIN_TOKEN'),\r",
-                  "    pm.environment.get('TOPUP_ID'),\r",
-                  "), (_, response) => {\r",
-                  "    pm.test('Success', () => {\r",
-                  "        const { code, headers } = response;\r",
-                  "\r",
-                  "        pm.expect(code).to.eql(200);\r",
-                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(response.json().success).to.eql(true);\r",
-                  "    })\r",
-                  "});\r",
-                  "\r",
-                  "pm.sendRequest(makeRequest(reqBody, pm.environment.get('ADMIN_TOKEN')), (_, response) => {\r",
-                  "    pm.test('Fail, Top Up Data Not Found', () => {\r",
-                  "        const { code, headers } = response;\r",
-                  "\r",
-                  "        pm.expect(code).to.eql(404);\r",
-                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(response.json().success).to.eql(false);\r",
-                  "    })\r",
-                  "});\r",
-                  "\r",
-                  "pm.sendRequest(makeRequest({}, pm.environment.get('ADMIN_TOKEN')), (_, response) => {\r",
-                  "    pm.test('Fail No `status` Provided', () => {\r",
-                  "        const { code, headers } = response;\r",
-                  "\r",
-                  "        pm.expect(code).to.eql(422);\r",
-                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(response.json().success).to.eql(false);\r",
-                  "    })\r",
-                  "});\r",
-                  "\r",
-                  "pm.sendRequest(makeRequest(reqBody, 'this-is-wrong'), (_, response) => {\r",
-                  "    pm.test('Fail, Wrong API Key', () => {\r",
-                  "        const { code, headers } = response;\r",
-                  "\r",
-                  "        pm.expect(code).to.eql(403);\r",
-                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(response.json().success).to.eql(false);\r",
-                  "    });\r",
-                  "});\r",
-                  "\r",
-                  "pm.sendRequest(makeRequest(reqBody), (_, response) => {\r",
-                  "    pm.test('Fail, API Key Not Given', () => {\r",
-                  "        const { code, headers } = response;\r",
-                  "\r",
-                  "        pm.expect(code).to.eql(403);\r",
-                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(response.json().success).to.eql(false);\r",
-                  "    });\r",
-                  "});\r",
-                  ""
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{ADMIN_TOKEN}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "method": "PATCH",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json",
-                "description": "JSON Type",
-                "type": "text"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"status\": 1\r\n}"
-            },
-            "url": {
-              "raw": "{{URL}}/wallets/topup/:id/status",
-              "host": ["{{URL}}"],
-              "path": ["wallets", "topup", ":id", "status"],
-              "variable": [
-                {
-                  "key": "id",
-                  "value": "2",
-                  "type": "string"
-                }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
           "name": "Update Withdraw Status",
           "event": [
             {
@@ -10851,8 +10841,8 @@
                   "\r",
                   "const reqBody = {\r",
                   "    qty: 1,\r",
-                  "    merchant_id: 3,\r",
-                  "    product_id: 2,\r",
+                  "    merchant_id: pm.environment.get('MERCHANT_ID'),\r",
+                  "    product_id: pm.environment.get('MERCHANT_PRODUCT_ID'),\r",
                   "};\r",
                   "\r",
                   "const makeRequest = function makeRequest(payload, token = undefined) {\r",
@@ -10882,6 +10872,8 @@
                   "        pm.expect(response.json().success).to.eql(true);\r",
                   "    })\r",
                   "});\r",
+                  "\r",
+                  "pm.sendRequest(makeRequest(reqBody, pm.environment.get('USER_TOKEN')));\r",
                   "\r",
                   "pm.sendRequest(makeRequest({}, pm.environment.get('USER_TOKEN')), (_, response) => {\r",
                   "    pm.test('Fail, No Data Provided', () => {\r",
@@ -10974,10 +10966,13 @@
                   "pm.sendRequest(makeRequest(pm.environment.get('USER_TOKEN')), (_, response) => {\r",
                   "    pm.test('Success', () => {\r",
                   "        const { code, headers } = response;\r",
+                  "        const body = response.json();\r",
+                  "\r",
+                  "        pm.environment.set('CART_ITEM_ID', body.data[0].id);\r",
                   "\r",
                   "        pm.expect(code).to.eql(200);\r",
                   "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(response.json().success).to.eql(true);\r",
+                  "        pm.expect(body.success).to.eql(true);\r",
                   "    })\r",
                   "});\r",
                   "\r",

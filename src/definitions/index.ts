@@ -156,10 +156,10 @@ export default {
           status: {
             type: 'integer',
           },
-          price_default: {
+          normal_price: {
             type: 'integer',
           },
-          price_selling: {
+          selling_price: {
             type: 'integer',
           },
           qty: {
@@ -314,29 +314,6 @@ export default {
           product_visible: { type: 'integer' },
           cover_uri: { type: 'string' },
           cover_label: { type: 'string' },
-        },
-      },
-      GetCart: {
-        $id: '#GetCart',
-        type: 'object',
-        properties: {
-          id: { type: 'integer' },
-          id_m_users: { type: 'integer' },
-          id_merchant: { type: 'integer' },
-          id_m_products: { type: 'integer' },
-          id_cover: { type: 'integer' },
-          qty: { type: 'integer' },
-          status: { type: 'integer' },
-          product_name: { type: 'string' },
-          description: { type: 'string' },
-          uri: { type: 'string' },
-          label: { type: 'string' },
-          price_default: { type: 'integer' },
-          price_selling: { type: 'integer' },
-          discount: { type: 'integer' },
-          max_qty: { type: 'integer' },
-          created_at: { type: 'string', format: 'date-time' },
-          updated_at: { type: 'string', format: 'date-time' },
         },
       },
     },

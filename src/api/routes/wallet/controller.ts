@@ -11,17 +11,17 @@ import type {
   WithdrawBody,
 } from '../../types/schema';
 import {
-  requestTopUp,
-  requestWithdraw,
   getWalletData,
+  requestTopUp,
   topUpHistoryData,
-  withdrawHistoryData,
   topUpDetail,
-  withdrawDetail,
   allUserTopUp,
-  allUserWithdraw,
   topUpProof,
   changeTopUpStatus,
+  requestWithdraw,
+  withdrawHistoryData,
+  withdrawDetail,
+  allUserWithdraw,
   changeWithdrawStatus,
 } from './service';
 

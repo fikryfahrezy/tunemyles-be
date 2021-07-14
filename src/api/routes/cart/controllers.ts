@@ -74,7 +74,7 @@ export const updateCartItemQty: RequestHandler<
     return;
   }
 
-  await changeCartItemQty(userToken.userId, cartItemId, req.body);
+  await changeCartItemQty(cartItemId, userToken.userId, req.body);
 
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
@@ -101,7 +101,7 @@ export const deleteCartItem: RequestHandler<
     return;
   }
 
-  await removeCartItem(userToken.userId, cartItemId);
+  await removeCartItem(cartItemId, userToken.userId);
 
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,

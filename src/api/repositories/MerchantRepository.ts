@@ -86,12 +86,12 @@ export const createProductUtility: (
   data: Omit<PostProductBody, 'product_name' | 'description' | 'status' | 'cover'>,
 ) => Promise<ModelType['ProductUtility']> = function createProductUtility(
   productId,
-  { normal_price, selling_price, ...data },
+  { normal_price: normalPrice, selling_price: sellingPrice, ...data },
 ) {
   return ProductUtility.create({
     ...data,
-    price_default: normal_price,
-    price_selling: selling_price,
+    price_default: normalPrice,
+    price_selling: sellingPrice,
     id_m_products: productId,
   });
 };
@@ -155,13 +155,13 @@ export const updateProductUtility: (
   data: Omit<UpdateProductBody, 'product_name' | 'description' | 'status' | 'cover'>,
 ) => Promise<[number, ModelType['ProductUtility'][]]> = function updateProductUtility(
   productId,
-  { normal_price, selling_price, ...data },
+  { normal_price: normalPrice, selling_price: sellingPrice, ...data },
 ) {
   return ProductUtility.update(
     {
       ...data,
-      price_default: normal_price,
-      price_selling: selling_price,
+      price_default: normalPrice,
+      price_selling: sellingPrice,
     },
     { where: { id_m_products: productId } },
   );

@@ -63,7 +63,7 @@ describe('Post Master Bank', () => {
   const { fields } = payload;
 
   test('Success, With Logo', async () => {
-    const token = await createAdminUser();
+    const { token } = await createAdminUser();
 
     const { status, headers, body } = await postMasterBank(server, payload, token);
 
@@ -73,7 +73,8 @@ describe('Post Master Bank', () => {
   });
 
   test('Success, Without Logo', async () => {
-    const token = await createAdminUser();
+    const { token } = await createAdminUser();
+
     const { status, headers, body } = await postMasterBank(server, { fields }, token);
 
     expect(status).toBe(201);
@@ -82,7 +83,7 @@ describe('Post Master Bank', () => {
   });
 
   test('Fail, No `bank_name` Provided', async () => {
-    const token = await createAdminUser();
+    const { token } = await createAdminUser();
 
     const { status, headers, body } = await postMasterBank(server, {}, token);
 
@@ -112,7 +113,7 @@ describe('Post Master Bank', () => {
 
 describe('Get Master Banks', () => {
   test('Success, Without Query', async () => {
-    const token = await createAdminUser();
+    const { token } = await createAdminUser();
     const query = '';
 
     const { status, headers, body } = await getMasterBanks(server, query, token);
@@ -123,7 +124,7 @@ describe('Get Master Banks', () => {
   });
 
   test('Success, with Query `limit=1', async () => {
-    const token = await createAdminUser();
+    const { token } = await createAdminUser();
     const payload = { bank_name: 'bank_name' };
     await Promise.all([createBank(payload), createBank(payload)]);
     const query = '?limit=1';
@@ -137,7 +138,7 @@ describe('Get Master Banks', () => {
   });
 
   test('Success, with Query `?orderDirection=DESC&orderBy=created_at&search=&page=&limit=`', async () => {
-    const token = await createAdminUser();
+    const { token } = await createAdminUser();
     const query = '?orderDirection=DESC&orderBy=created_at&search=&page=&limit=';
 
     const { status, headers, body } = await getMasterBanks(server, query, token);
@@ -148,7 +149,7 @@ describe('Get Master Banks', () => {
   });
 
   test('Success, with Query `?orderDirection=DESC&orderBy=bank_name&search=&page=&limit=`', async () => {
-    const token = await createAdminUser();
+    const { token } = await createAdminUser();
     const query = '?orderDirection=DESC&orderBy=bank_name&search=&page=&limit=';
 
     const { status, headers, body } = await getMasterBanks(server, query, token);
@@ -159,7 +160,7 @@ describe('Get Master Banks', () => {
   });
 
   test('Success, with Query `?orderDirection=ASC&orderBy=created_at&search=&page=&limit=`', async () => {
-    const token = await createAdminUser();
+    const { token } = await createAdminUser();
     const query = '?orderDirection=ASC&orderBy=created_at&search=&page=&limit=';
 
     const { status, headers, body } = await getMasterBanks(server, query, token);
@@ -170,7 +171,7 @@ describe('Get Master Banks', () => {
   });
 
   test('Success, with Query `?orderDirection=ASC&orderBy=bank_name&search=&page=&limit=`', async () => {
-    const token = await createAdminUser();
+    const { token } = await createAdminUser();
     const query = '?orderDirection=ASC&orderBy=bank_name&search=&page=&limit=';
 
     const { status, headers, body } = await getMasterBanks(server, query, token);
@@ -181,7 +182,7 @@ describe('Get Master Banks', () => {
   });
 
   test('Fail, with Query `?orderDirection=DESCs&orderBy=created_at&search=&page=&limit=`', async () => {
-    const token = await createAdminUser();
+    const { token } = await createAdminUser();
     const query = '?orderDirection=DESCs&orderBy=created_at&search=&page=&limit=';
 
     const { status, headers, body } = await getMasterBanks(server, query, token);
@@ -192,7 +193,7 @@ describe('Get Master Banks', () => {
   });
 
   test('Fail, with Query `?orderDirection=DESC&orderBy=created_ats&search=&page=&limit=`', async () => {
-    const token = await createAdminUser();
+    const { token } = await createAdminUser();
     const query = '?orderDirection=DESC&orderBy=created_ats&search=&page=&limit=';
 
     const { status, headers, body } = await getMasterBanks(server, query, token);
@@ -229,8 +230,10 @@ describe('Post Master Bank Step', () => {
   const bankPayload = { bank_name: 'bank_name' };
 
   test('Success', async () => {
-    const token = await createAdminUser();
-    const { id: bankId } = await createBank(bankPayload);
+    const [{ token }, { id: bankId }] = await Promise.all([
+      createAdminUser(),
+      createBank(bankPayload),
+    ]);
 
     const { status, headers, body } = await postMasterBankStep(server, bankId, payload, token);
 
@@ -240,8 +243,10 @@ describe('Post Master Bank Step', () => {
   });
 
   test('Fail, No `step` Provided', async () => {
-    const token = await createAdminUser();
-    const { id: bankId } = await createBank(bankPayload);
+    const [{ token }, { id: bankId }] = await Promise.all([
+      createAdminUser(),
+      createBank(bankPayload),
+    ]);
 
     const { status, headers, body } = await postMasterBankStep(server, bankId, {}, token);
 
@@ -274,8 +279,10 @@ describe('Post Master Bank Step', () => {
 
 describe('Get Master Bank Detail', () => {
   test('Success', async () => {
-    const token = await createAdminUser();
-    const { id: bankId } = await createBank({ bank_name: 'bank_name' });
+    const [{ token }, { id: bankId }] = await Promise.all([
+      createAdminUser(),
+      createBank({ bank_name: 'bank name' }),
+    ]);
 
     const { status, headers, body } = await getMasterBankDetail(server, bankId, token);
 
@@ -285,7 +292,7 @@ describe('Get Master Bank Detail', () => {
   });
 
   test('Fail, Master Bank Not Found', async () => {
-    const token = await createAdminUser();
+    const { token } = await createAdminUser();
     const bankId = 0;
 
     const { status, headers, body } = await getMasterBankDetail(server, bankId, token);
@@ -321,8 +328,10 @@ describe('Update Master Bank', () => {
   const payload = { bank_name: 'new bank name', visibility: 2 };
 
   test('Success', async () => {
-    const token = await createAdminUser();
-    const { id: bankId } = await createBank({ bank_name: 'bank_name' });
+    const [{ token }, { id: bankId }] = await Promise.all([
+      createAdminUser(),
+      createBank({ bank_name: 'bank name' }),
+    ]);
 
     const { status, headers, body } = await updateMasterBank(server, bankId, payload, token);
 
@@ -332,7 +341,7 @@ describe('Update Master Bank', () => {
   });
 
   test('Fail, Master Bank Not Found', async () => {
-    const token = await createAdminUser();
+    const { token } = await createAdminUser();
     const bankId = 0;
 
     const { status, headers, body } = await updateMasterBank(server, bankId, payload, token);
@@ -368,8 +377,10 @@ describe('Update Master Bank Account', () => {
   const payload = { account_name: 'new account name', account_number: '2378947239042' };
 
   test('Success', async () => {
-    const token = await createAdminUser();
-    const { id: bankId } = await createBank({ bank_name: 'bank_name' });
+    const [{ token }, { id: bankId }] = await Promise.all([
+      createAdminUser(),
+      createBank({ bank_name: 'bank name' }),
+    ]);
 
     const { status, headers, body } = await updateMasterBankDetail(server, bankId, payload, token);
 
@@ -379,7 +390,7 @@ describe('Update Master Bank Account', () => {
   });
 
   test('Fail, Master Bank Not Found', async () => {
-    const token = await createAdminUser();
+    const { token } = await createAdminUser();
     const bankId = 0;
 
     const { status, headers, body } = await updateMasterBankDetail(server, bankId, payload, token);
@@ -413,8 +424,10 @@ describe('Update Master Bank Account', () => {
 
 describe('Change Master Bank Logo', () => {
   test('Success', async () => {
-    const token = await createAdminUser();
-    const { id: bankId } = await createBank({ bank_name: 'bank_name' });
+    const [{ token }, { id: bankId }] = await Promise.all([
+      createAdminUser(),
+      createBank({ bank_name: 'bank name' }),
+    ]);
     const payload = { files: [{ fileDir, field: 'logo' }] };
 
     const { status, headers, body } = await changeMasterBankLogo(server, bankId, payload, token);
@@ -425,7 +438,7 @@ describe('Change Master Bank Logo', () => {
   });
 
   test('Fail, No `logo` Provided', async () => {
-    const token = await createAdminUser();
+    const { token } = await createAdminUser();
     const bankId = 0;
 
     const { status, headers, body } = await changeMasterBankLogo(server, bankId, {}, token);
@@ -438,8 +451,10 @@ describe('Change Master Bank Logo', () => {
 
 describe('Delete Master Bank Step', () => {
   test('Success', async () => {
-    const token = await createAdminUser();
-    const { id: bankId } = await createBank({ bank_name: 'bank_name' });
+    const [{ token }, { id: bankId }] = await Promise.all([
+      createAdminUser(),
+      createBank({ bank_name: 'bank name' }),
+    ]);
     const { id: stepId } = await createBankStep(bankId, 'step');
 
     const { status, headers, body } = await deleteMasterBankStep(server, stepId, token);
@@ -450,7 +465,7 @@ describe('Delete Master Bank Step', () => {
   });
 
   test('Fail, Master Bank Step Not Found', async () => {
-    const token = await createAdminUser();
+    const { token } = await createAdminUser();
     const stepId = 0;
 
     const { status, headers, body } = await deleteMasterBankStep(server, stepId, token);
@@ -484,7 +499,7 @@ describe('Delete Master Bank Step', () => {
 
 describe('Delete Master Bank', () => {
   test('Fail, Master Bank Not Found', async () => {
-    const token = await createAdminUser();
+    const { token } = await createAdminUser();
     const bankId = 0;
 
     const { status, headers, body } = await deleteMasterBank(server, bankId, token);
@@ -524,7 +539,7 @@ describe('Post Category', () => {
   const { fields } = payload;
 
   test('Success, With Icon', async () => {
-    const token = await createAdminUser();
+    const { token } = await createAdminUser();
 
     const { status, headers, body } = await postCategory(server, payload, token);
 
@@ -534,7 +549,7 @@ describe('Post Category', () => {
   });
 
   test('Success, Without Icon', async () => {
-    const token = await createAdminUser();
+    const { token } = await createAdminUser();
 
     const { status, headers, body } = await postCategory(server, { fields }, token);
 
@@ -544,7 +559,7 @@ describe('Post Category', () => {
   });
 
   test('Fail, No Data Provided', async () => {
-    const token = await createAdminUser();
+    const { token } = await createAdminUser();
 
     const { status, headers, body } = await postCategory(server, {}, token);
 
@@ -574,7 +589,7 @@ describe('Post Category', () => {
 
 describe('Get Categories', () => {
   test('Success, Without Query', async () => {
-    const token = await createAdminUser();
+    const { token } = await createAdminUser();
     const query = '';
 
     const { status, headers, body } = await getCategories(server, query, token);
@@ -585,9 +600,12 @@ describe('Get Categories', () => {
   });
 
   test('Success, with Query `limit=1', async () => {
-    const token = await createAdminUser();
     const payload = { category: 'category', description: 'description', slug: 'slug' };
-    await Promise.all([createCategory(payload), createCategory(payload)]);
+    const [{ token }] = await Promise.all([
+      createAdminUser(),
+      createCategory(payload),
+      createCategory(payload),
+    ]);
     const query = '?limit=1';
 
     const { status, headers, body } = await getCategories(server, query, token);
@@ -599,7 +617,7 @@ describe('Get Categories', () => {
   });
 
   test('Success, with Query `?orderDirection=DESC&orderBy=created_at&search=&page=&limit=`', async () => {
-    const token = await createAdminUser();
+    const { token } = await createAdminUser();
     const query = '?orderDirection=DESC&orderBy=created_at&search=&page=&limit=';
 
     const { status, headers, body } = await getCategories(server, query, token);
@@ -610,7 +628,7 @@ describe('Get Categories', () => {
   });
 
   test('Success, with Query `?orderDirection=DESC&orderBy=category&search=&page=&limit=`', async () => {
-    const token = await createAdminUser();
+    const { token } = await createAdminUser();
     const query = '?orderDirection=DESC&orderBy=category&search=&page=&limit=';
 
     const { status, headers, body } = await getCategories(server, query, token);
@@ -621,7 +639,7 @@ describe('Get Categories', () => {
   });
 
   test('Success, with Query `?orderDirection=DESC&orderBy=description&search=&page=&limit=`', async () => {
-    const token = await createAdminUser();
+    const { token } = await createAdminUser();
     const query = '?orderDirection=DESC&orderBy=description&search=&page=&limit=';
 
     const { status, headers, body } = await getCategories(server, query, token);
@@ -632,7 +650,7 @@ describe('Get Categories', () => {
   });
 
   test('Success, with Query `?orderDirection=ASC&orderBy=created_at&search=&page=&limit=`', async () => {
-    const token = await createAdminUser();
+    const { token } = await createAdminUser();
     const query = '?orderDirection=ASC&orderBy=created_at&search=&page=&limit=';
 
     const { status, headers, body } = await getCategories(server, query, token);
@@ -643,7 +661,7 @@ describe('Get Categories', () => {
   });
 
   test('Success, with Query `?orderDirection=ASC&orderBy=category&search=&page=&limit=`', async () => {
-    const token = await createAdminUser();
+    const { token } = await createAdminUser();
     const query = '?orderDirection=ASC&orderBy=category&search=&page=&limit=';
 
     const { status, headers, body } = await getCategories(server, query, token);
@@ -654,7 +672,7 @@ describe('Get Categories', () => {
   });
 
   test('Success, with Query `?orderDirection=ASC&orderBy=created_at&search=&page=&limit=`', async () => {
-    const token = await createAdminUser();
+    const { token } = await createAdminUser();
     const query = '?orderDirection=ASC&orderBy=description&search=&page=&limit=';
 
     const { status, headers, body } = await getCategories(server, query, token);
@@ -665,7 +683,7 @@ describe('Get Categories', () => {
   });
 
   test('Fail, with Query `?orderDirection=DESCs&orderBy=created_at&search=&page=&limit=`', async () => {
-    const token = await createAdminUser();
+    const { token } = await createAdminUser();
     const query = '?orderDirection=DESCs&orderBy=created_at&search=&page=&limit=';
 
     const { status, headers, body } = await getCategories(server, query, token);
@@ -676,7 +694,7 @@ describe('Get Categories', () => {
   });
 
   test('Fail, with Query `?orderDirection=DESC&orderBy=created_ats&search=&page=&limit=`', async () => {
-    const token = await createAdminUser();
+    const { token } = await createAdminUser();
     const query = '?orderDirection=DESC&orderBy=created_ats&search=&page=&limit=';
 
     const { status, headers, body } = await getCategories(server, query, token);
@@ -712,12 +730,14 @@ describe('Update Category', () => {
   const payload = { category: 'new category', description: 'new description', slug: 'new slug' };
 
   test('Success, With Icon', async () => {
-    const token = await createAdminUser();
-    const { id: categoryId } = await createCategory({
-      category: 'category',
-      description: 'description',
-      slug: 'slug',
-    });
+    const [{ token }, { id: categoryId }] = await Promise.all([
+      createAdminUser(),
+      createCategory({
+        category: 'category',
+        description: 'description',
+        slug: 'slug',
+      }),
+    ]);
 
     const { status, headers, body } = await updateCategory(server, categoryId, payload, token);
 
@@ -727,7 +747,7 @@ describe('Update Category', () => {
   });
 
   test('Fail, Category Not Found', async () => {
-    const token = await createAdminUser();
+    const { token } = await createAdminUser();
     const categoryId = 0;
 
     const { status, headers, body } = await updateCategory(server, categoryId, payload, token);
@@ -761,12 +781,14 @@ describe('Update Category', () => {
 
 describe('Change Category Icon', () => {
   test('Success', async () => {
-    const token = await createAdminUser();
-    const { id: categoryId } = await createCategory({
-      category: 'category',
-      description: 'description',
-      slug: 'slug',
-    });
+    const [{ token }, { id: categoryId }] = await Promise.all([
+      createAdminUser(),
+      createCategory({
+        category: 'category',
+        description: 'description',
+        slug: 'slug',
+      }),
+    ]);
     const payload = { files: [{ fileDir, field: 'icon' }] };
 
     const { status, headers, body } = await changeCategoryIcon(server, categoryId, payload, token);
@@ -777,7 +799,7 @@ describe('Change Category Icon', () => {
   });
 
   test('Fail, No `icon` Provided', async () => {
-    const token = await createAdminUser();
+    const { token } = await createAdminUser();
     const categoryId = 0;
 
     const { status, headers, body } = await changeCategoryIcon(server, categoryId, {}, token);
@@ -790,7 +812,7 @@ describe('Change Category Icon', () => {
 
 describe('Delete Category', () => {
   test('Fail, Category Not Found', async () => {
-    const token = await createAdminUser();
+    const { token } = await createAdminUser();
     const categoryId = 0;
 
     const { status, headers, body } = await deleteCategory(server, categoryId, token);
@@ -824,7 +846,7 @@ describe('Delete Category', () => {
 
 describe('Post Media', () => {
   test('Success', async () => {
-    const token = await createAdminUser();
+    const { token } = await createAdminUser();
 
     const { status, headers, body } = await postMedia(
       server,
@@ -838,7 +860,7 @@ describe('Post Media', () => {
   });
 
   test('Fail, No `image` Provided', async () => {
-    const token = await createAdminUser();
+    const { token } = await createAdminUser();
 
     const { status, headers, body } = await postMedia(server, {}, token);
 
@@ -850,7 +872,7 @@ describe('Post Media', () => {
 
 describe('Get Medias', () => {
   test('Success, Without Query', async () => {
-    const token = await createAdminUser();
+    const { token } = await createAdminUser();
     const query = '';
 
     const { status, headers, body } = await getMedias(server, query, token);
@@ -861,9 +883,12 @@ describe('Get Medias', () => {
   });
 
   test('Success, with Query `?limit=1`', async () => {
-    const token = await createAdminUser();
     const payload = 'label';
-    await Promise.all([createMasterMedia(payload), createMasterMedia(payload)]);
+    const [{ token }] = await Promise.all([
+      createAdminUser(),
+      createMasterMedia(payload),
+      createMasterMedia(payload),
+    ]);
     const query = '?limit=1';
 
     const { status, headers, body } = await getMedias(server, query, token);
@@ -875,7 +900,7 @@ describe('Get Medias', () => {
   });
 
   test('Success, with Query `?orderDirection=DESC&orderBy=created_at&search=&page=&limit=`', async () => {
-    const token = await createAdminUser();
+    const { token } = await createAdminUser();
     const query = '?orderDirection=DESC&orderBy=created_at&search=&page=&limit=';
 
     const { status, headers, body } = await getMedias(server, query, token);
@@ -886,7 +911,7 @@ describe('Get Medias', () => {
   });
 
   test('Success, with Query `?orderDirection=DESC&orderBy=label&search=&page=&limit=`', async () => {
-    const token = await createAdminUser();
+    const { token } = await createAdminUser();
     const query = '?orderDirection=DESC&orderBy=label&search=&page=&limit=';
 
     const { status, headers, body } = await getMedias(server, query, token);
@@ -897,7 +922,7 @@ describe('Get Medias', () => {
   });
 
   test('Success, with Query `?orderDirection=ASC&orderBy=created_at&search=&page=&limit=`', async () => {
-    const token = await createAdminUser();
+    const { token } = await createAdminUser();
     const query = '?orderDirection=ASC&orderBy=created_at&search=&page=&limit=';
 
     const { status, headers, body } = await getMedias(server, query, token);
@@ -908,7 +933,7 @@ describe('Get Medias', () => {
   });
 
   test('Success, with Query `?orderDirection=ASC&orderBy=label&search=&page=&limit=`', async () => {
-    const token = await createAdminUser();
+    const { token } = await createAdminUser();
     const query = '?orderDirection=ASC&orderBy=label&search=&page=&limit=';
 
     const { status, headers, body } = await getMedias(server, query, token);
@@ -919,7 +944,7 @@ describe('Get Medias', () => {
   });
 
   test('Fail, with Query `?orderDirection=DESCs&orderBy=created_at&search=&page=&limit=`', async () => {
-    const token = await createAdminUser();
+    const { token } = await createAdminUser();
     const query = '?orderDirection=DESCs&orderBy=created_at&search=&page=&limit=';
 
     const { status, headers, body } = await getMedias(server, query, token);
@@ -930,7 +955,7 @@ describe('Get Medias', () => {
   });
 
   test('Fail, with Query `?orderDirection=DESC&orderBy=created_ats&search=&page=&limit=`', async () => {
-    const token = await createAdminUser();
+    const { token } = await createAdminUser();
     const query = '?orderDirection=DESC&orderBy=created_ats&search=&page=&limit=';
 
     const { status, headers, body } = await getMedias(server, query, token);
@@ -964,8 +989,10 @@ describe('Get Medias', () => {
 
 describe('Update Media', () => {
   test('Success', async () => {
-    const token = await createAdminUser();
-    const { id: mediaId } = await createMasterMedia('label');
+    const [{ token }, { id: mediaId }] = await Promise.all([
+      createAdminUser(),
+      createMasterMedia('label'),
+    ]);
 
     const { status, headers, body } = await updateMedia(
       server,
@@ -982,7 +1009,7 @@ describe('Update Media', () => {
   });
 
   test('Fail, No `image` Provided', async () => {
-    const token = await createAdminUser();
+    const { token } = await createAdminUser();
     const mediaId = 0;
 
     const { status, headers, body } = await updateMedia(server, mediaId, {}, token);
@@ -995,7 +1022,7 @@ describe('Update Media', () => {
 
 describe('Delete Media', () => {
   test('Fail, Media Not Found', async () => {
-    const token = await createAdminUser();
+    const { token } = await createAdminUser();
     const mediaId = 0;
 
     const { status, headers, body } = await deleteMedia(server, mediaId, token);
@@ -1035,7 +1062,7 @@ describe('Post Master Wallet', () => {
   const { fields } = payload;
 
   test('Success, With Logo', async () => {
-    const token = await createAdminUser();
+    const { token } = await createAdminUser();
 
     const { status, headers, body } = await postMasterWallet(server, payload, token);
 
@@ -1045,7 +1072,7 @@ describe('Post Master Wallet', () => {
   });
 
   test('Success, Without Logo', async () => {
-    const token = await createAdminUser();
+    const { token } = await createAdminUser();
 
     const { status, headers, body } = await postMasterWallet(server, { fields }, token);
 
@@ -1055,7 +1082,7 @@ describe('Post Master Wallet', () => {
   });
 
   test('Fail, No Data Provided', async () => {
-    const token = await createAdminUser();
+    const { token } = await createAdminUser();
 
     const { status, headers, body } = await postMasterWallet(server, {}, token);
 
@@ -1085,7 +1112,7 @@ describe('Post Master Wallet', () => {
 
 describe('Get Master Wallets', () => {
   test('Success, Without Query', async () => {
-    const token = await createAdminUser();
+    const { token } = await createAdminUser();
     const query = '';
 
     const { status, headers, body } = await getMasterWallets(server, query, token);
@@ -1096,9 +1123,12 @@ describe('Get Master Wallets', () => {
   });
 
   test('Success, with Query `?limit=1`', async () => {
-    const token = await createAdminUser();
     const payload = { wallet_name: 'wallet name', wallet_description: 'wallet description' };
-    await Promise.all([createWallet(payload), createWallet(payload)]);
+    const [{ token }] = await Promise.all([
+      createAdminUser(),
+      createWallet(payload),
+      createWallet(payload),
+    ]);
     const query = '?limit=1';
 
     const { status, headers, body } = await getMasterWallets(server, query, token);
@@ -1110,7 +1140,7 @@ describe('Get Master Wallets', () => {
   });
 
   test('Success, with Query `?orderDirection=DESC&orderBy=created_at&search=&page=&limit=`', async () => {
-    const token = await createAdminUser();
+    const { token } = await createAdminUser();
     const query = '?orderDirection=DESC&orderBy=created_at&search=&page=&limit=';
 
     const { status, headers, body } = await getMasterWallets(server, query, token);
@@ -1121,7 +1151,7 @@ describe('Get Master Wallets', () => {
   });
 
   test('Success, with Query `?orderDirection=DESC&orderBy=wallet_name&search=&page=&limit=`', async () => {
-    const token = await createAdminUser();
+    const { token } = await createAdminUser();
     const query = '?orderDirection=DESC&orderBy=wallet_name&search=&page=&limit=';
 
     const { status, headers, body } = await getMasterWallets(server, query, token);
@@ -1132,7 +1162,7 @@ describe('Get Master Wallets', () => {
   });
 
   test('Success, with Query `?orderDirection=DESC&orderBy=wallet_description&search=&page=&limit=`', async () => {
-    const token = await createAdminUser();
+    const { token } = await createAdminUser();
     const query = '?orderDirection=DESC&orderBy=wallet_description&search=&page=&limit=';
 
     const { status, headers, body } = await getMasterWallets(server, query, token);
@@ -1143,7 +1173,7 @@ describe('Get Master Wallets', () => {
   });
 
   test('Success, with Query `?orderDirection=ASC&orderBy=created_at&search=&page=&limit=`', async () => {
-    const token = await createAdminUser();
+    const { token } = await createAdminUser();
     const query = '?orderDirection=ASC&orderBy=created_at&search=&page=&limit=';
 
     const { status, headers, body } = await getMasterWallets(server, query, token);
@@ -1154,7 +1184,7 @@ describe('Get Master Wallets', () => {
   });
 
   test('Success, with Query `?orderDirection=ASC&orderBy=wallet_name&search=&page=&limit=`', async () => {
-    const token = await createAdminUser();
+    const { token } = await createAdminUser();
     const query = '?orderDirection=ASC&orderBy=wallet_name&search=&page=&limit=';
 
     const { status, headers, body } = await getMasterWallets(server, query, token);
@@ -1165,7 +1195,7 @@ describe('Get Master Wallets', () => {
   });
 
   test('Success, with Query `?orderDirection=ASC&orderBy=wallet_description&search=&page=&limit=`', async () => {
-    const token = await createAdminUser();
+    const { token } = await createAdminUser();
     const query = '?orderDirection=ASC&orderBy=wallet_description&search=&page=&limit=';
 
     const { status, headers, body } = await getMasterWallets(server, query, token);
@@ -1176,7 +1206,7 @@ describe('Get Master Wallets', () => {
   });
 
   test('Fail, with Query `?orderDirection=DESCs&orderBy=created_at&search=&page=&limit=`', async () => {
-    const token = await createAdminUser();
+    const { token } = await createAdminUser();
     const query = '?orderDirection=DESCs&orderBy=created_at&search=&page=&limit=';
 
     const { status, headers, body } = await getMasterWallets(server, query, token);
@@ -1187,7 +1217,7 @@ describe('Get Master Wallets', () => {
   });
 
   test('Fail, with Query `?orderDirection=DESC&orderBy=created_ats&search=&page=&limit=', async () => {
-    const token = await createAdminUser();
+    const { token } = await createAdminUser();
     const query = '?orderDirection=DESC&orderBy=created_ats&search=&page=&limit=';
 
     const { status, headers, body } = await getMasterWallets(server, query, token);
@@ -1221,11 +1251,13 @@ describe('Get Master Wallets', () => {
 
 describe('Update Master Wallet', () => {
   test('Success', async () => {
-    const token = await createAdminUser();
-    const { id: walletId } = await createWallet({
-      wallet_name: 'wallet name',
-      wallet_description: 'wallet description',
-    });
+    const [{ token }, { id: walletId }] = await Promise.all([
+      createAdminUser(),
+      createWallet({
+        wallet_name: 'wallet name',
+        wallet_description: 'wallet description',
+      }),
+    ]);
     const payload = {
       wallet_name: 'new wallet name',
       wallet_description: 'new wallet description',
@@ -1239,7 +1271,7 @@ describe('Update Master Wallet', () => {
   });
 
   test('Fail, Wallet Not Found', async () => {
-    const token = await createAdminUser();
+    const { token } = await createAdminUser();
     const walletId = 0;
 
     const { status, headers, body } = await updateMasterWallet(server, walletId, {}, token);
@@ -1273,11 +1305,13 @@ describe('Update Master Wallet', () => {
 
 describe('Change Master Wallet Logo', () => {
   test('Success', async () => {
-    const token = await createAdminUser();
-    const { id: walletId } = await createWallet({
-      wallet_name: 'wallet name',
-      wallet_description: 'wallet description',
-    });
+    const [{ token }, { id: walletId }] = await Promise.all([
+      createAdminUser(),
+      createWallet({
+        wallet_name: 'wallet name',
+        wallet_description: 'wallet description',
+      }),
+    ]);
     const payload = { files: [{ fileDir, field: 'logo' }] };
 
     const { status, headers, body } = await changeMasterWalletLogo(
@@ -1293,7 +1327,7 @@ describe('Change Master Wallet Logo', () => {
   });
 
   test('Change Wallet Logo Fail, No `logo` Provided', async () => {
-    const token = await createAdminUser();
+    const { token } = await createAdminUser();
     const walletId = 0;
 
     const { status, headers, body } = await changeMasterWalletLogo(server, walletId, {}, token);
@@ -1306,7 +1340,7 @@ describe('Change Master Wallet Logo', () => {
 
 describe('Delete Master Wallet', () => {
   test('Fail, Wallet Not Found', async () => {
-    const token = await createAdminUser();
+    const { token } = await createAdminUser();
     const walletId = 0;
 
     const { status, headers, body } = await deleteMasterWallet(server, walletId, token);
@@ -1342,7 +1376,7 @@ describe('Post Faq', () => {
   const payload = { question: 'question', answer: 'answer' };
 
   test('Success', async () => {
-    const token = await createAdminUser();
+    const { token } = await createAdminUser();
 
     const { status, headers, body } = await postFaq(server, payload, token);
 
@@ -1352,7 +1386,7 @@ describe('Post Faq', () => {
   });
 
   test('Fail, No Data Provided', async () => {
-    const token = await createAdminUser();
+    const { token } = await createAdminUser();
 
     const { status, headers, body } = await postFaq(server, {}, token);
 
@@ -1392,8 +1426,10 @@ describe('Get Faqs', () => {
 
 describe('Update Faq', () => {
   test('Success', async () => {
-    const token = await createAdminUser();
-    const { id: faqId } = await createFaq({ question: 'question', answer: 'answer' });
+    const [{ token }, { id: faqId }] = await Promise.all([
+      createAdminUser(),
+      createFaq({ question: 'question', answer: 'answer' }),
+    ]);
     const payload = { question: 'new question', answer: 'new answer' };
 
     const { status, headers, body } = await updateFaq(server, faqId, payload, token);
@@ -1404,7 +1440,7 @@ describe('Update Faq', () => {
   });
 
   test('Fail, Faq Not Found', async () => {
-    const token = await createAdminUser();
+    const { token } = await createAdminUser();
     const faqId = 0;
 
     const { status, headers, body } = await updateFaq(server, faqId, {}, token);
@@ -1438,8 +1474,10 @@ describe('Update Faq', () => {
 
 describe('Delete Faq', () => {
   test('Success', async () => {
-    const token = await createAdminUser();
-    const { id: faqId } = await createFaq({ question: 'question', answer: 'answer' });
+    const [{ token }, { id: faqId }] = await Promise.all([
+      createAdminUser(),
+      createFaq({ question: 'question', answer: 'answer' }),
+    ]);
 
     const { status, headers, body } = await deleteFaq(server, faqId, token);
 
@@ -1449,7 +1487,7 @@ describe('Delete Faq', () => {
   });
 
   test('Fail, Faq Not Found', async () => {
-    const token = await createAdminUser();
+    const { token } = await createAdminUser();
     const faqId = 0;
 
     const { status, headers, body } = await deleteFaq(server, faqId, token);

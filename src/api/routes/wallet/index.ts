@@ -11,6 +11,7 @@ import type {
   WithdrawBody,
 } from '../../types/schema';
 import { controllerWrapper, handlerWrapper } from '../../utils/serverfn-wrapper';
+import { isBodyEmpty } from '../../utils/request-validation';
 import { renameFiles } from '../../utils/file-management';
 import dbQuerying from '../../middlewares/db-querying';
 import schemaValidation from '../../middlewares/schema-validation';
@@ -75,24 +76,6 @@ const routes = function routes(
     controllerWrapper(topUp),
   );
 
-  fastify.post<Request<{ Headers: ApiKeyHeader; Body: WithdrawBody }>>(
-    '/withdraw',
-    {
-      attachValidation: true,
-      schema: {
-        headers: requestHeaders.private,
-        body: requestBody.withdraw,
-        response: {
-          200: { $ref: '#ApiResponse' },
-          '4xx': { $ref: '#ApiResponse' },
-          '5xx': { $ref: '#ApiResponse' },
-        },
-      },
-      preHandler: [schemaValidation, handlerWrapper(protect('USER'))],
-    },
-    controllerWrapper(withdraw),
-  );
-
   fastify.get<Request<{ Headers: ApiKeyHeader; Querystring: GetQuery }>>(
     '/topup/histories',
     {
@@ -115,28 +98,6 @@ const routes = function routes(
     controllerWrapper(getTopUpHistories),
   );
 
-  fastify.get<Request<{ Headers: ApiKeyHeader; Querystring: GetQuery }>>(
-    '/withdraw/histories',
-    {
-      attachValidation: true,
-      schema: {
-        headers: requestHeaders.private,
-        querystring: requestQuery.withdrawHistories,
-        response: {
-          200: responses.withdrawHistories,
-          '4xx': { $ref: '#ApiResponse' },
-          '5xx': { $ref: '#ApiResponse' },
-        },
-      },
-      preHandler: [
-        schemaValidation,
-        handlerWrapper(protect('USER')),
-        handlerWrapper(dbQuerying('WITHDRAW')),
-      ],
-    },
-    controllerWrapper(getWithdrawHistories),
-  );
-
   fastify.get<Request<{ Headers: ApiKeyHeader; Params: IdRequestParams }>>(
     '/topup/:id',
     {
@@ -153,24 +114,6 @@ const routes = function routes(
       preHandler: [schemaValidation, handlerWrapper(protect('USER'))],
     },
     controllerWrapper(getTopUpDetail),
-  );
-
-  fastify.get<Request<{ Headers: ApiKeyHeader; Params: IdRequestParams }>>(
-    '/withdraw/:id',
-    {
-      attachValidation: true,
-      schema: {
-        headers: requestHeaders.private,
-        params: requestParams.id,
-        response: {
-          200: responses.withdrawDetail,
-          '4xx': { $ref: '#ApiResponse' },
-          '5xx': { $ref: '#ApiResponse' },
-        },
-      },
-      preHandler: [schemaValidation, handlerWrapper(protect('USER'))],
-    },
-    controllerWrapper(getWithdrawDetail),
   );
 
   fastify.get<Request<{ Headers: ApiKeyHeader; Querystring: GetQuery }>>(
@@ -195,28 +138,6 @@ const routes = function routes(
     controllerWrapper(getAllUserTopUp),
   );
 
-  fastify.get<Request<{ Headers: ApiKeyHeader; Querystring: GetQuery }>>(
-    '/withdraw/users/all',
-    {
-      attachValidation: true,
-      schema: {
-        headers: requestHeaders.private,
-        querystring: requestQuery.withdraw,
-        response: {
-          200: responses.withdrawHistories,
-          '4xx': { $ref: '#ApiResponse' },
-          '5xx': { $ref: '#ApiResponse' },
-        },
-      },
-      preHandler: [
-        schemaValidation,
-        handlerWrapper(protect('ADMIN')),
-        handlerWrapper(dbQuerying('WITHDRAW')),
-      ],
-    },
-    controllerWrapper(getAllUserWithdraw),
-  );
-
   fastify.post<Request<{ Headers: ApiKeyHeader; Params: IdRequestParams; Body: TopUpProofBody }>>(
     '/topup/:id/image',
     {
@@ -231,7 +152,12 @@ const routes = function routes(
           '5xx': { $ref: '#ApiResponse' },
         },
       },
-      preValidation: (req, __, done) => {
+      preValidation: (req, res, done) => {
+        if (isBodyEmpty(req.body)) {
+          res.unprocessableEntity();
+          return;
+        }
+
         req.body = { ...req.body, image: renameFiles(req.url, req.body.image) ?? req.body.image };
 
         done();
@@ -260,6 +186,86 @@ const routes = function routes(
       preHandler: [schemaValidation, handlerWrapper(protect('ADMIN'))],
     },
     controllerWrapper(updateTopUpStatus),
+  );
+
+  fastify.post<Request<{ Headers: ApiKeyHeader; Body: WithdrawBody }>>(
+    '/withdraw',
+    {
+      attachValidation: true,
+      schema: {
+        headers: requestHeaders.private,
+        body: requestBody.withdraw,
+        response: {
+          200: { $ref: '#ApiResponse' },
+          '4xx': { $ref: '#ApiResponse' },
+          '5xx': { $ref: '#ApiResponse' },
+        },
+      },
+      preHandler: [schemaValidation, handlerWrapper(protect('USER'))],
+    },
+    controllerWrapper(withdraw),
+  );
+
+  fastify.get<Request<{ Headers: ApiKeyHeader; Querystring: GetQuery }>>(
+    '/withdraw/histories',
+    {
+      attachValidation: true,
+      schema: {
+        headers: requestHeaders.private,
+        querystring: requestQuery.withdrawHistories,
+        response: {
+          200: responses.withdrawHistories,
+          '4xx': { $ref: '#ApiResponse' },
+          '5xx': { $ref: '#ApiResponse' },
+        },
+      },
+      preHandler: [
+        schemaValidation,
+        handlerWrapper(protect('USER')),
+        handlerWrapper(dbQuerying('WITHDRAW')),
+      ],
+    },
+    controllerWrapper(getWithdrawHistories),
+  );
+
+  fastify.get<Request<{ Headers: ApiKeyHeader; Params: IdRequestParams }>>(
+    '/withdraw/:id',
+    {
+      attachValidation: true,
+      schema: {
+        headers: requestHeaders.private,
+        params: requestParams.id,
+        response: {
+          200: responses.withdrawDetail,
+          '4xx': { $ref: '#ApiResponse' },
+          '5xx': { $ref: '#ApiResponse' },
+        },
+      },
+      preHandler: [schemaValidation, handlerWrapper(protect('USER'))],
+    },
+    controllerWrapper(getWithdrawDetail),
+  );
+
+  fastify.get<Request<{ Headers: ApiKeyHeader; Querystring: GetQuery }>>(
+    '/withdraw/users/all',
+    {
+      attachValidation: true,
+      schema: {
+        headers: requestHeaders.private,
+        querystring: requestQuery.withdraw,
+        response: {
+          200: responses.withdrawHistories,
+          '4xx': { $ref: '#ApiResponse' },
+          '5xx': { $ref: '#ApiResponse' },
+        },
+      },
+      preHandler: [
+        schemaValidation,
+        handlerWrapper(protect('ADMIN')),
+        handlerWrapper(dbQuerying('WITHDRAW')),
+      ],
+    },
+    controllerWrapper(getAllUserWithdraw),
   );
 
   fastify.patch<
