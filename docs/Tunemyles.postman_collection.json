@@ -6,403 +6,6 @@
   },
   "item": [
     {
-      "name": "[TEMP] Reg",
-      "item": [
-        {
-          "name": "Regiter Copy",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "const { Request } = require('postman-collection');\r",
-                  "\r",
-                  "const usedPhoneNumber = Date.now().toString();\r",
-                  "const usedUsername = Math.random().toString(36).substring(2);\r",
-                  "const userPassword = 'password';\r",
-                  "const token = pm.response.json()?.data?.token;\r",
-                  "\r",
-                  "pm.environment.set('USER_USERNAME', usedUsername);\r",
-                  "pm.environment.set('USER_PASSWORD', userPassword);\r",
-                  "pm.environment.set('USER_PHONE', usedPhoneNumber);\r",
-                  "\r",
-                  "if (token) pm.environment.set('USER_TOKEN', token);\r",
-                  "\r",
-                  "const makeRequest = function makeRequest(payload) {\r",
-                  "    return new Request({\r",
-                  "        header: {\r",
-                  "            'Content-Type': 'application/json',\r",
-                  "        },\r",
-                  "        method: 'POST',\r",
-                  "        url: pm.environment.replaceIn('{{URL}}/account/register'),\r",
-                  "        body: {\r",
-                  "            mode: 'raw',\r",
-                  "            raw: JSON.stringify(payload),\r",
-                  "        },\r",
-                  "    });\r",
-                  "};\r",
-                  "\r",
-                  "const regPayload = function regPayload() {\r",
-                  "    return {\r",
-                  "        full_name: 'Name',\r",
-                  "        username: usedUsername,\r",
-                  "        password: userPassword,\r",
-                  "        phone_number: usedPhoneNumber,\r",
-                  "        address: 'address',\r",
-                  "    };\r",
-                  "};\r",
-                  "\r",
-                  "pm.sendRequest(makeRequest(regPayload()), (_, response) => {\r",
-                  "    pm.test('Success', () => {\r",
-                  "        const { code, headers } = response;\r",
-                  "        const body = response.json()\r",
-                  "        \r",
-                  "        pm.environment.set('USER_TOKEN', body.data.token);\r",
-                  "\r",
-                  "        pm.expect(code).to.eql(201);\r",
-                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(body.success).to.eql(true);\r",
-                  "    });\r",
-                  "});\r",
-                  "\r",
-                  "pm.sendRequest(makeRequest({ ...regPayload(), phone_number: usedPhoneNumber }), (_, response) => {\r",
-                  "    pm.test('Fail, `phone_number` Already Exist', () => {\r",
-                  "        const { code, headers } = response;\r",
-                  "\r",
-                  "        pm.expect(code).to.eql(400);\r",
-                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(response.json().success).to.eql(false);\r",
-                  "    });\r",
-                  "});\r",
-                  "\r",
-                  "pm.sendRequest(makeRequest({ ...regPayload(), username: usedUsername }), (_, response) => {\r",
-                  "    pm.test('Fail, `username` Already Exist', () => {\r",
-                  "        const { code, headers } = response;\r",
-                  "\r",
-                  "        pm.expect(code).to.eql(400);\r",
-                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(response.json().success).to.eql(false);\r",
-                  "    });\r",
-                  "});\r",
-                  "\r",
-                  "pm.sendRequest(makeRequest({ ...regPayload(), full_name: '' }), (_, response) => {\r",
-                  "    pm.test('Fail, Empty `full_name`', () => {\r",
-                  "        const { code, headers } = response;\r",
-                  "\r",
-                  "        pm.expect(code).to.eql(422);\r",
-                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(response.json().success).to.eql(false);\r",
-                  "    });\r",
-                  "});\r",
-                  "\r",
-                  "pm.sendRequest(makeRequest({ ...regPayload(), address: '' }), (_, response) => {\r",
-                  "    pm.test('Fail, Empty `address`', () => {\r",
-                  "        const { code, headers } = response;\r",
-                  "\r",
-                  "        pm.expect(code).to.eql(422);\r",
-                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(response.json().success).to.eql(false);\r",
-                  "    });\r",
-                  "});\r",
-                  "\r",
-                  "pm.sendRequest(makeRequest({ ...regPayload(), full_name: 'x' }), (_, response) => {\r",
-                  "    pm.test('Fail, `full_name` too Short', () => {\r",
-                  "        const { code, headers } = response;\r",
-                  "\r",
-                  "        pm.expect(code).to.eql(422);\r",
-                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(response.json().success).to.eql(false);\r",
-                  "    });\r",
-                  "});\r",
-                  "\r",
-                  "pm.sendRequest(makeRequest({ ...regPayload(), full_name: Array(257).toString() }), (_, response) => {\r",
-                  "    pm.test('Fail, `full_name` too Long', () => {\r",
-                  "        const { code, headers } = response;\r",
-                  "\r",
-                  "        pm.expect(code).to.eql(422);\r",
-                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(response.json().success).to.eql(false);\r",
-                  "    });\r",
-                  "});\r",
-                  "\r",
-                  "pm.sendRequest(makeRequest({\r",
-                  "    ...regPayload(),\r",
-                  "    username: Math.random().toString(36).substring(7),\r",
-                  "}), (_, response) => {\r",
-                  "    pm.test('Fail, `username` too Short', () => {\r",
-                  "        const { code, headers } = response;\r",
-                  "\r",
-                  "        pm.expect(code).to.eql(422);\r",
-                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(response.json().success).to.eql(false);\r",
-                  "    });\r",
-                  "});\r",
-                  "\r",
-                  "pm.sendRequest(makeRequest({ ...regPayload(), username: Array(22).toString() }), (_, response) => {\r",
-                  "    pm.test('Fail, `username` too Long', () => {\r",
-                  "        const { code, headers } = response;\r",
-                  "\r",
-                  "        pm.expect(code).to.eql(422);\r",
-                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(response.json().success).to.eql(false);\r",
-                  "    });\r",
-                  "});\r",
-                  "\r",
-                  "pm.sendRequest(makeRequest({ ...regPayload(), phone_number: '1234' }), (_, response) => {\r",
-                  "    pm.test('Fail, `phone_number` too Short', () => {\r",
-                  "        const { code, headers } = response;\r",
-                  "\r",
-                  "        pm.expect(code).to.eql(422);\r",
-                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(response.json().success).to.eql(false);\r",
-                  "    });\r",
-                  "});\r",
-                  "\r",
-                  "pm.sendRequest(makeRequest({ ...regPayload(), phone_number: '123456789012345' }), (_, response) => {\r",
-                  "    pm.test('Fail, `phone_number` too Long', () => {\r",
-                  "        const { code, headers } = response;\r",
-                  "\r",
-                  "        pm.expect(code).to.eql(422);\r",
-                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(response.json().success).to.eql(false);\r",
-                  "    });\r",
-                  "});\r",
-                  "\r",
-                  "pm.sendRequest(makeRequest({ ...regPayload(), address: 'addr' }), (_, response) => {\r",
-                  "    pm.test('Fail, `phone_number` too Short', () => {\r",
-                  "        const { code, headers } = response;\r",
-                  "\r",
-                  "        pm.expect(code).to.eql(422);\r",
-                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(response.json().success).to.eql(false);\r",
-                  "    });\r",
-                  "});\r",
-                  "\r",
-                  "pm.sendRequest(makeRequest({ ...regPayload(), address: Array(1002).toString() }), (_, response) => {\r",
-                  "    pm.test('Fail, `address` too Long', () => {\r",
-                  "        const { code, headers } = response;\r",
-                  "\r",
-                  "        pm.expect(code).to.eql(422);\r",
-                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(response.json().success).to.eql(false);\r",
-                  "    });\r",
-                  "});\r",
-                  "\r",
-                  "pm.sendRequest(makeRequest({}), (_, response) => {\r",
-                  "    pm.test('Fail, No Data Provided', () => {\r",
-                  "        const { code, headers } = response;\r",
-                  "\r",
-                  "        pm.expect(code).to.eql(422);\r",
-                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(response.json().success).to.eql(false);\r",
-                  "    });\r",
-                  "});\r",
-                  ""
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json",
-                "description": "JSON Type",
-                "type": "text"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"full_name\": \"Name\",\r\n    \"phone_number\": \"12345678931232\",\r\n    \"address\": \"address\",\r\n    \"username\": \"username\",\r\n    \"password\": \"password\"\r\n}"
-            },
-            "url": {
-              "raw": "{{URL}}/account/register",
-              "host": ["{{URL}}"],
-              "path": ["account", "register"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Activate Merchant Copy",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "const { Request } = require('postman-collection');\r",
-                  "\r",
-                  "const makeRequest = function makeRequest(formdata, token = undefined) {\r",
-                  "    const header = {};\r",
-                  "\r",
-                  "    if (token) header.authorization = `Bearer ${token}`;\r",
-                  "\r",
-                  "    return new Request({\r",
-                  "        header,\r",
-                  "        method: 'POST',\r",
-                  "        url: pm.environment.replaceIn('{{URL}}/account/merchant'),\r",
-                  "        body: {\r",
-                  "            formdata,\r",
-                  "            mode: 'formdata',\r",
-                  "        },\r",
-                  "    });\r",
-                  "};\r",
-                  "\r",
-                  "pm.test('Success', () => {\r",
-                  "    const { code, headers } = pm.response;\r",
-                  "    const body = pm.response.json();\r",
-                  "        \r",
-                  "    pm.environment.set('MERCHANT_TOKEN', body.data.token);\r",
-                  "\r",
-                  "    pm.expect(code).to.eql(201);\r",
-                  "    pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "    pm.expect(body.success).to.eql(true);\r",
-                  "});\r",
-                  "\r",
-                  "pm.sendRequest(makeRequest([{}], pm.environment.get('TOKEN')), (_, response) => {\r",
-                  "    pm.test('Fail, No Data Provided', () => {\r",
-                  "        const { code, headers } = response;\r",
-                  "\r",
-                  "        pm.expect(code).to.eql(422);\r",
-                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(response.json().success).to.eql(false);\r",
-                  "    });\r",
-                  "});\r",
-                  ""
-                ],
-                "type": "text/javascript"
-              }
-            },
-            {
-              "listen": "prerequest",
-              "script": {
-                "exec": ["pm.environment.set(\"NO_IDENTITY\", Date.now());"],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{USER_TOKEN}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "formdata",
-              "formdata": [
-                {
-                  "key": "identity_photo",
-                  "type": "file",
-                  "src": "Bliss.png"
-                },
-                {
-                  "key": "market_photo",
-                  "type": "file",
-                  "src": "Bliss.png"
-                },
-                {
-                  "key": "no_identity",
-                  "value": "{{NO_IDENTITY}}",
-                  "type": "text"
-                },
-                {
-                  "key": "market_name",
-                  "value": "name",
-                  "type": "text"
-                },
-                {
-                  "key": "market_address",
-                  "value": "address",
-                  "type": "text"
-                },
-                {
-                  "key": "market_lat",
-                  "value": "-6.213131231",
-                  "type": "text"
-                },
-                {
-                  "key": "market_lon",
-                  "value": "-6.213131231",
-                  "type": "text"
-                },
-                {
-                  "key": "market_close_time",
-                  "value": "21:00",
-                  "type": "text"
-                }
-              ]
-            },
-            "url": {
-              "raw": "{{URL}}/account/merchant",
-              "host": ["{{URL}}"],
-              "path": ["account", "merchant"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "[AVAILABLE IN TEST] Make User an Admin Copy",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  " pm.test('User Success Become Admin', () => {\r",
-                  "        const { code, headers } = pm.response;\r",
-                  "        const body = pm.response.json();\r",
-                  "        \r",
-                  "        pm.environment.set('ADMIN_TOKEN', body.data);\r",
-                  "\r",
-                  "        pm.expect(code).to.eql(200);\r",
-                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(body.success).to.eql(true);\r",
-                  "});"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{USER_TOKEN}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "method": "PATCH",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": ""
-            },
-            "url": {
-              "raw": "{{URL}}/account/admin",
-              "host": ["{{URL}}"],
-              "path": ["account", "admin"]
-            }
-          },
-          "response": []
-        }
-      ]
-    },
-    {
-      "name": "RUNNER",
-      "item": []
-    },
-    {
       "name": "example",
       "item": [
         {
@@ -5656,10 +5259,15 @@
                       "pm.sendRequest(makeRequest(pm.environment.get('MERCHANT_TOKEN')), (_, response) => {\r",
                       "    pm.test('Success, Without Query', () => {\r",
                       "        const { code, headers } = response;\r",
+                      "        const body = response.json();\r",
+                      "\r",
+                      "        pm.environment.set('TEMP_MERCHANT_PRODUCT_ID', body.data[0].id);\r",
+                      "        pm.environment.set('MERCHANT_PRODUCT_ID', body.data[1].id);\r",
+                      "        pm.environment.set('MERCHANT_ID', body.data[1].merchant_id);\r",
                       "\r",
                       "        pm.expect(code).to.eql(200);\r",
                       "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                      "        pm.expect(response.json().success).to.eql(true);\r",
+                      "        pm.expect(body.success).to.eql(true);\r",
                       "    });\r",
                       "});\r",
                       "\r",
@@ -5670,10 +5278,6 @@
                       "    pm.test('Success, with Query `?limit=1`', () => {\r",
                       "        const { code, headers } = response;\r",
                       "        const body = response.json();\r",
-                      "\r",
-                      "        pm.environment.set('TEMP_MERCHANT_PRODUCT_ID', body.data[0].id)\r",
-                      "        pm.environment.set('MERCHANT_PRODUCT_ID', body.data[1].id)\r",
-                      "        pm.environment.set('MERCHANT_ID', body.data[1].merchant_id)\r",
                       "\r",
                       "        pm.expect(code).to.eql(200);\r",
                       "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
@@ -7388,13 +6992,10 @@
                       "pm.sendRequest(makeRequest(pm.environment.get('MERCHANT_TOKEN')), (_, response) => {\r",
                       "    pm.test('Success, Without Query', () => {\r",
                       "        const { code, headers } = response;\r",
-                      "        const body = response.json();\r",
-                      "\r",
-                      "        pm.environment.set('MERCHANT_ID', body.data[0].merchant_id);\r",
                       "\r",
                       "        pm.expect(code).to.eql(200);\r",
                       "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                      "        pm.expect(body.success).to.eql(true);\r",
+                      "        pm.expect(response.json().success).to.eql(true);\r",
                       "    });\r",
                       "});\r",
                       "\r",
@@ -11266,37 +10867,25 @@
                 "exec": [
                   "const { Request } = require('postman-collection');\r",
                   "\r",
-                  "const reqBody = { price_total: 1000 };\r",
-                  "\r",
-                  "const makeRequest = function makeRequest(payload, token = undefined) {\r",
-                  "    const header = {\r",
-                  "        'Content-Type': 'application/json',\r",
-                  "    };\r",
-                  "\r",
-                  "    if (token) header.authorization = `Bearer ${token}`;\r",
-                  "\r",
+                  "const makeRequest = function makeRequest(token = undefined) {\r",
                   "    return new Request({\r",
-                  "        header,\r",
-                  "        method: 'POST',\r",
-                  "        url: pm.environment.replaceIn('{{URL}}/carts/checkout'),\r",
-                  "        body: {\r",
-                  "            mode: 'raw',\r",
-                  "            raw: JSON.stringify(payload),\r",
+                  "        header: {\r",
+                  "            authorization: `Bearer ${token}`,\r",
                   "        },\r",
+                  "        method: 'PATCH',\r",
+                  "        url: pm.environment.replaceIn('{{URL}}/carts/checkout'),\r",
                   "    });\r",
                   "};\r",
                   "\r",
-                  "pm.sendRequest(makeRequest(reqBody, pm.environment.get('USER_TOKEN')), (_, response) => {\r",
-                  "    pm.test('Success', () => {\r",
-                  "        const { code, headers } = response;\r",
+                  "pm.test('Success', () => {\r",
+                  "    const { code, headers } = pm.response;\r",
                   "\r",
-                  "        pm.expect(code).to.eql(201);\r",
-                  "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(response.json().success).to.eql(true);\r",
-                  "    });\r",
+                  "    pm.expect(code).to.eql(200);\r",
+                  "    pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
+                  "    pm.expect(pm.response.json().success).to.eql(true);\r",
                   "});\r",
                   "\r",
-                  "pm.sendRequest(makeRequest(reqBody, 'this-is-wrong'), (_, response) => {\r",
+                  "pm.sendRequest(makeRequest('this-is-wrong'), (_, response) => {\r",
                   "    pm.test('Fail, Wrong API Key', () => {\r",
                   "        const { code, headers } = response;\r",
                   "\r",
@@ -11306,7 +10895,7 @@
                   "    });\r",
                   "});\r",
                   "\r",
-                  "pm.sendRequest(makeRequest(reqBody), (_, response) => {\r",
+                  "pm.sendRequest(makeRequest(), (_, response) => {\r",
                   "    pm.test('Fail, API Key Not Given', () => {\r",
                   "        const { code, headers } = response;\r",
                   "\r",
@@ -11332,18 +10921,11 @@
                 }
               ]
             },
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json",
-                "description": "JSON Type",
-                "type": "text"
-              }
-            ],
+            "method": "PATCH",
+            "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"price_total\": 1000\r\n}"
+              "raw": ""
             },
             "url": {
               "raw": "{{URL}}/carts/checkout",
@@ -11359,7 +10941,7 @@
       "name": "transaction",
       "item": [
         {
-          "name": "Get Processed Transactions",
+          "name": "Get User Transactions",
           "event": [
             {
               "listen": "test",
@@ -11397,10 +10979,12 @@
                   "        const { code, headers } = response;\r",
                   "        const body = response.json();\r",
                   "\r",
+                  "        pm.environment.set('USER_TRANSACTION_ID', body.data[0].id);\r",
+                  "\r",
                   "        pm.expect(code).to.eql(200);\r",
                   "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
                   "        pm.expect(body.success).to.eql(true);\r",
-                  "        // pm.expect(body.data.length).to.eql(1);\r",
+                  "        pm.expect(body.data.length).to.eql(1);\r",
                   "    });\r",
                   "});\r",
                   "\r",
@@ -11652,10 +11236,13 @@
                   "), (_, response) => {\r",
                   "    pm.test('Success', () => {\r",
                   "        const { code, headers } = response;\r",
+                  "        const body = response.json();\r",
+                  "\r",
+                  "        pm.environment.set('TRANSACTION_PRODUCT_ID', body.data.products[0].id);\r",
                   "\r",
                   "        pm.expect(code).to.eql(200);\r",
                   "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
-                  "        pm.expect(response.json().success).to.eql(true);\r",
+                  "        pm.expect(body.success).to.eql(true);\r",
                   "    })\r",
                   "});\r",
                   "\r",
@@ -11831,7 +11418,7 @@
           "response": []
         },
         {
-          "name": "Review Transaction",
+          "name": "Review Product",
           "event": [
             {
               "listen": "test",
@@ -11844,7 +11431,7 @@
                   "    review: \"Mantap\",\r",
                   "};\r",
                   "\r",
-                  "const makeRequest = function makeRequest(payload, token = undefined, userTransactionId = 0) {\r",
+                  "const makeRequest = function makeRequest(payload, token = undefined, transactionProductId = 0) {\r",
                   "    const header = {\r",
                   "        'Content-Type': 'application/json',\r",
                   "    };\r",
@@ -11854,7 +11441,7 @@
                   "    return new Request({\r",
                   "        header,\r",
                   "        method: 'POST',\r",
-                  "        url: pm.environment.replaceIn(`{{URL}}/transactions/${userTransactionId}`),\r",
+                  "        url: pm.environment.replaceIn(`{{URL}}/transactions/${transactionProductId}`),\r",
                   "        body: {\r",
                   "            mode: 'raw',\r",
                   "            raw: JSON.stringify(payload),\r",
@@ -11865,7 +11452,7 @@
                   "pm.sendRequest(makeRequest(\r",
                   "    reqBody,\r",
                   "    pm.environment.get('USER_TOKEN'),\r",
-                  "    pm.environment.get('USER_TRANSACTION_ID'),\r",
+                  "    pm.environment.get('TRANSACTION_PRODUCT_ID'),\r",
                   "), (_, response) => {\r",
                   "    pm.test('Success', () => {\r",
                   "        const { code, headers } = response;\r",
@@ -11951,7 +11538,7 @@
           "response": []
         },
         {
-          "name": "Get Reviewed Transactions",
+          "name": "Get Reviewed Products",
           "event": [
             {
               "listen": "test",
@@ -11985,7 +11572,7 @@
                   "    pm.environment.get('USER_TOKEN'),\r",
                   "    '?limit=1',\r",
                   "), (_, response) => {\r",
-                  "    pm.test('Success, with Query `limit=1`', () => {\r",
+                  "    pm.test('Success, with Query `?limit=1`', () => {\r",
                   "        const { code, headers } = response;\r",
                   "        const body = response.json();\r",
                   "\r",
@@ -11994,7 +11581,7 @@
                   "        pm.expect(code).to.eql(200);\r",
                   "        pm.expect(headers.toObject()['content-type']).to.eql('application/json; charset=utf-8');\r",
                   "        pm.expect(body.success).to.eql(true);\r",
-                  "        // pm.expect(body.data.length).to.eql(1);\r",
+                  "        pm.expect(body.data.length).to.eql(1);\r",
                   "    });\r",
                   "});\r",
                   "\r",
@@ -12013,9 +11600,9 @@
                   "\r",
                   "pm.sendRequest(makeRequest(\r",
                   "    pm.environment.get('USER_TOKEN'),\r",
-                  "    '?orderDirection=DESC&orderBy=bank_name&search=&page=&limit=',\r",
+                  "    '?orderDirection=DESC&orderBy=rating&search=&page=&limit=',\r",
                   "), (_, response) => {\r",
-                  "    pm.test('Success, with Query `?orderDirection=DESC&orderBy=bank_name&search=&page=&limit=`', () => {\r",
+                  "    pm.test('Success, with Query `?orderDirection=DESC&orderBy=rating&search=&page=&limit=`', () => {\r",
                   "        const { code, headers } = response;\r",
                   "\r",
                   "        pm.expect(code).to.eql(200);\r",
@@ -12039,9 +11626,9 @@
                   "\r",
                   "pm.sendRequest(makeRequest(\r",
                   "    pm.environment.get('USER_TOKEN'),\r",
-                  "    '?orderDirection=ASC&orderBy=bank_name&search=&page=&limit=',\r",
+                  "    '?orderDirection=ASC&orderBy=rating&search=&page=&limit=',\r",
                   "), (_, response) => {\r",
-                  "    pm.test('Success, with Query `?orderDirection=ASC&orderBy=bank_name&search=&page=&limit=`', () => {\r",
+                  "    pm.test('Success, with Query `?orderDirection=ASC&orderBy=rating&search=&page=&limit=`', () => {\r",
                   "        const { code, headers } = response;\r",
                   "\r",
                   "        pm.expect(code).to.eql(200);\r",
@@ -12106,21 +11693,11 @@
           },
           "request": {
             "auth": {
-              "type": "apikey",
-              "apikey": [
+              "type": "bearer",
+              "bearer": [
                 {
-                  "key": "value",
+                  "key": "token",
                   "value": "{{USER_TOKEN}}",
-                  "type": "string"
-                },
-                {
-                  "key": "key",
-                  "value": "authorization",
-                  "type": "string"
-                },
-                {
-                  "key": "in",
-                  "value": "header",
                   "type": "string"
                 }
               ]
@@ -12145,7 +11722,7 @@
                 {
                   "key": "orderBy",
                   "value": "",
-                  "description": "Available Fields: created_at, rating, review",
+                  "description": "Available Fields: created_at, rating",
                   "disabled": true
                 },
                 {

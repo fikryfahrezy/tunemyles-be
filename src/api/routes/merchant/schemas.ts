@@ -540,64 +540,7 @@ export const responses = {
           data: {
             type: 'array',
             items: {
-              type: 'object',
-              properties: {
-                id: {
-                  type: 'integer',
-                },
-                buyer_id: {
-                  type: 'integer',
-                },
-                transaction_token: {
-                  type: 'string',
-                },
-                total_price: {
-                  type: 'integer',
-                },
-                status: {
-                  type: 'integer',
-                },
-                full_name: {
-                  type: 'string',
-                },
-                phone_number: {
-                  type: 'string',
-                },
-                address: {
-                  type: 'string',
-                },
-                profile_label: {
-                  type: 'string',
-                  nullable: true,
-                },
-                profile_url: {
-                  type: 'string',
-                  nullable: true,
-                },
-                merchant_id: {
-                  type: 'integer',
-                },
-                market_id: {
-                  type: 'integer',
-                },
-                market_name: {
-                  type: 'string',
-                },
-                photo_label: {
-                  type: 'string',
-                },
-                photo_url: {
-                  type: 'string',
-                },
-                created_at: {
-                  type: 'string',
-                  format: 'date-time',
-                },
-                updated_at: {
-                  type: 'string',
-                  format: 'date-time',
-                },
-              },
+              $ref: '#TransactionResponse',
             },
           },
         },
@@ -616,7 +559,7 @@ export const responses = {
           data: {
             type: 'array',
             items: {
-              $ref: '#MerchantOrderResponse',
+              $ref: '#OrderResponse',
             },
           },
         },
@@ -633,7 +576,7 @@ export const responses = {
         type: 'object',
         properties: {
           data: {
-            $ref: '#MerchantOrderResponse',
+            $ref: '#OrderResponse',
           },
         },
       },

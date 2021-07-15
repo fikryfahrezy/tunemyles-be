@@ -208,8 +208,8 @@ export default {
           },
         },
       },
-      MerchantOrderResponse: {
-        $id: '#MerchantOrderResponse',
+      OrderResponse: {
+        $id: '#OrderResponse',
         type: 'object',
         properties: {
           id: {
@@ -264,56 +264,65 @@ export default {
           },
         },
       },
-      GetOrder: {
-        $id: '#GetOrder',
+      TransactionResponse: {
+        $id: '#TransactionResponse',
         type: 'object',
         properties: {
-          id: { type: 'integer' },
-          id_m_users: { type: 'integer' },
-          id_merchant: { type: 'integer' },
-          transaction_token: { type: 'string' },
-          total_price: { type: 'integer' },
-          status: { type: 'integer' },
-          created_at: { type: 'string', format: 'date-time' },
-          updated_at: { type: 'string', format: 'date-time' },
-          full_name: { type: 'string' },
-          phone_number: { type: 'string' },
-          address: { type: 'string' },
-          id_photo: { type: 'integer' },
-          uri: { type: 'string' },
-          label: { type: 'string' },
-          id_user_merchant: { type: 'integer' },
-          id_market_photo: { type: 'integer' },
-          market_name: { type: 'string' },
-          market_address: { type: 'string' },
-          market_lat: { type: 'integer' },
-          market_lon: { type: 'integer' },
-          market_close_time: { type: 'string' },
-          market_visivle: { type: 'integer' },
-          merchant_uri: { type: 'string' },
-          merchant_label: { type: 'string' },
-          cover_uri: { type: 'string' },
-        },
-      },
-      GetProductOrder: {
-        $id: '#GetProductOrder',
-        type: 'object',
-        properties: {
-          id: { type: 'integer' },
-          id_u_user_transaction: { type: 'integer' },
-          id_m_products: { type: 'integer' },
-          qty: { type: 'integer' },
-          transaction_token: { type: 'string' },
-          sub_total_price: { type: 'integer' },
-          status: { type: 'integer' },
-          created_at: { type: 'string', format: 'date-time' },
-          updated_at: { type: 'string', format: 'date-time' },
-          product_name: { type: 'string' },
-          description: { type: 'string' },
-          id_cover: { type: 'integer' },
-          product_visible: { type: 'integer' },
-          cover_uri: { type: 'string' },
-          cover_label: { type: 'string' },
+          id: {
+            type: 'integer',
+          },
+          buyer_id: {
+            type: 'integer',
+          },
+          transaction_token: {
+            type: 'string',
+          },
+          total_price: {
+            type: 'integer',
+          },
+          status: {
+            type: 'integer',
+          },
+          full_name: {
+            type: 'string',
+          },
+          phone_number: {
+            type: 'string',
+          },
+          address: {
+            type: 'string',
+          },
+          profile_label: {
+            type: 'string',
+            nullable: true,
+          },
+          profile_url: {
+            type: 'string',
+            nullable: true,
+          },
+          merchant_id: {
+            type: 'integer',
+          },
+          market_id: {
+            type: 'integer',
+          },
+          market_name: {
+            type: 'string',
+          },
+          photo_label: {
+            type: 'string',
+          },
+          photo_url: {
+            type: 'string',
+          },
+          created_at: {
+            type: 'string',
+            format: 'date-time',
+          },
+          updated_at: {
+            type: 'string',
+            format: 'date-time',
+          },
         },
       },
     },

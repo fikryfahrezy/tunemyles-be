@@ -30,3 +30,6 @@ https://community.postman.com/t/how-to-add-file-in-a-pre-request-script-using-fo
 
 How do I test for an empty JavaScript object?
 https://stackoverflow.com/questions/679915/how-do-i-test-for-an-empty-javascript-object
+
+How to Generate Random numbers in Javascript based on the provided range Minimum and Maximum characters
+https://stackoverflow.com/questions/62468165/how-to-generate-random-numbers-in-javascript-based-on-the-provided-range-minimum

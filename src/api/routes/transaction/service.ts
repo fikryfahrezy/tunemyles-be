@@ -1,44 +1,80 @@
 import type CustModelType from '../../types/model';
-import type { ReviewTransactionBody } from '../../types/schema';
+import type { ReviewProductBody } from '../../types/schema';
+import { ErrorResponse } from '../../utils/error-handler';
+import {
+  createProductReview,
+  updateUserWallet,
+  updateUserTransaction,
+  getUserTransactions,
+  getUserTransaction,
+  getUserTransactionProducts,
+  getUserReviewedTransactions,
+  getUserWalletBalance,
+  getUserTransactionProduct,
+} from '../../repositories/TransactionRepository';
 
-export const processedTransactionData: (
+export const userTransactionData: (
   userId: CustModelType['UserToken']['userId'],
   query: CustModelType['SearchQuery'],
 ) => Promise<unknown> = async function processedTransactionData(userId, query) {
-  const resData = await Promise.resolve('hi');
+  const resData = await getUserTransactions(userId, query);
 
   return resData;
 };
 
 export const transactionDetailData: (
-  userId: CustModelType['UserToken']['userId'],
   transactionId: number,
-) => Promise<unknown> = async function transactionDetailData(userId, transactionId) {
-  const resData = await Promise.resolve('hi');
+  userId: CustModelType['UserToken']['userId'],
+) => Promise<unknown> = async function transactionDetailData(transactionId, userId) {
+  const transaction = await getUserTransaction(transactionId, userId);
 
-  return resData;
+  if (!transaction) throw new ErrorResponse('user transaction not found', 404);
+
+  transaction.products = await getUserTransactionProducts(transactionId, userId);
+
+  return transaction;
 };
 
 export const completeTransaction: (
-  userId: CustModelType['UserToken']['userId'],
   transactionId: number,
-) => Promise<void> = async function completeTransaction(userId, transactionId) {
-  await Promise.resolve('hi');
+  userId: CustModelType['UserToken']['userId'],
+) => Promise<void> = async function completeTransaction(transactionId, userId) {
+  const transaction = await getUserTransaction(transactionId, userId);
+
+  if (!transaction) throw new ErrorResponse('user transaction not found', 404);
+
+  const merchantWallet = await getUserWalletBalance(transaction.merchant_id);
+
+  if (!merchantWallet) throw new ErrorResponse('something gone wrong', 400);
+
+  const newBalance = merchantWallet.balance + transaction.total_price;
+
+  await Promise.all([
+    updateUserTransaction(transactionId, userId),
+    updateUserWallet(merchantWallet.id, { balance: newBalance }),
+  ]);
 };
 
-export const addTransactionReview: (
+export const addProductReview: (
+  transactionProductId: number,
   userId: CustModelType['UserToken']['userId'],
-  transactionId: number,
-  data: ReviewTransactionBody,
-) => Promise<void> = async function addTransactionReview(userId, transactionId, data) {
-  await Promise.resolve('hi');
+  data: ReviewProductBody,
+) => Promise<void> = async function addTransactionReview(transactionProductId, userId, data) {
+  const transactionProduct = await getUserTransactionProduct(transactionProductId, userId);
+
+  if (!transactionProduct || transactionProduct.status !== 3)
+    throw new ErrorResponse('transaction product not found', 404);
+
+  const [, created] = await createProductReview(transactionProductId, data);
+
+  if (!created) throw new ErrorResponse('transaction product not found', 404);
 };
 
-export const reviewedTransactionData: (
+export const reviewedProductData: (
   userId: CustModelType['UserToken']['userId'],
   query: CustModelType['SearchQuery'],
 ) => Promise<unknown> = async function reviewedTransactionData(userId, query) {
-  const resData = await Promise.resolve('hi');
+  const resData = await getUserReviewedTransactions(userId, query);
 
   return resData;
 };

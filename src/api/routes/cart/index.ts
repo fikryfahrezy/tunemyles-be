@@ -4,7 +4,6 @@ import type {
   ApiKeyHeader,
   IdRequestParams,
   AddToCartBody,
-  CheckoutBody,
   UpdateCartItemQtyBody,
 } from '../../types/schema';
 import { controllerWrapper, handlerWrapper } from '../../utils/serverfn-wrapper';
@@ -102,13 +101,12 @@ const routes = function routes(
     controllerWrapper(deleteCartItem),
   );
 
-  fastify.post<Request<{ Headers: ApiKeyHeader; Body: CheckoutBody }>>(
+  fastify.patch<Request<{ Headers: ApiKeyHeader }>>(
     '/checkout',
     {
       attachValidation: true,
       schema: {
         headers: requestHeaders.private,
-        body: requestBody.checkout,
         response: {
           200: { $ref: '#ApiResponse' },
           '4xx': { $ref: '#ApiResponse' },

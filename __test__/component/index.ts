@@ -41,8 +41,7 @@ import type {
   UpdateOrderStatusBody,
   AddToCartBody,
   UpdateCartItemQtyBody,
-  CheckoutBody,
-  ReviewTransactionBody,
+  ReviewProductBody,
   PostBankUserBody,
   UpdateBankUserBody,
   TopUpBody,
@@ -50,10 +49,8 @@ import type {
   UpdateTopUpStatusBody,
   UpdateWithdrawStatusBody,
 } from '../../src/api/types/schema';
-import sequelize from '../../src/databases/sequelize';
 import supertest, { Test } from 'supertest';
 import { issueJwt } from '../../src/api/utils/jwt';
-import initModels from '../../src/api/models/sql/init-models';
 import {
   createForgotPassword,
   createMedias,
@@ -85,6 +82,15 @@ import {
   getUserWallets,
 } from '../../src/api/repositories/WalletRepository';
 import {
+  addCartItem,
+  createUserTransaction,
+  createTransactionProducts,
+} from '../../src/api/repositories/CartRepository';
+import {
+  createProductReview,
+  updateUserTransaction,
+} from '../../src/api/repositories/TransactionRepository';
+import {
   userRegistration,
   userLogin,
   makeUserAdmin,
@@ -110,8 +116,6 @@ export {
   getUser,
 };
 
-const { UserTransaction, TransactionProduct } = initModels(sequelize);
-
 type FilesType = { field?: string; fileDir?: string }[];
 
 type SupertestReqType = {
@@ -128,14 +132,20 @@ export const fileDir = './__test__/image-test.png';
 
 export const registerPayload = function registerPayload() {
   /**
-   * NOTE: Generate random string/characters in JavaScript
+   * REF: Generate random string/characters in JavaScript
    * https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript
+   *
+   * REF: How to Generate Random numbers in Javascript based on the provided range Minimum and Maximum characters
+   * https://stackoverflow.com/questions/62468165/how-to-generate-random-numbers-in-javascript-based-on-the-provided-range-minimum
    */
   return {
     full_name: 'Name',
-    username: Math.random().toString(36).substring(2),
+    username: Math.random().toString(36).substring(2) + Math.random().toString(36).substring(7),
     password: 'password',
-    phone_number: Date.now().toString(),
+    phone_number: Array.from(
+      { length: 0 | (Math.random() * (14 - 10 + 1) + 10) },
+      () => 0 | (Math.random() * 9),
+    ).join(''),
     address: 'address',
   };
 };
@@ -1063,6 +1073,247 @@ export const getProductsByCategory = function getProductsByCategory(
   });
 };
 
+export const getBanks = function getBanks(server: Server, token?: string) {
+  return supertestReq({
+    server,
+    token,
+    type: 'GET',
+    url: '/banks',
+  });
+};
+
+export const getBankDetail = function getBankDetail(
+  server: Server,
+  bankId: number,
+  token?: string,
+) {
+  return supertestReq({
+    server,
+    token,
+    type: 'GET',
+    url: `/banks/${bankId}`,
+  });
+};
+
+export const postBankUser = function postBankUser(
+  server: Server,
+  payload: Partial<PostBankUserBody>,
+  token?: string,
+) {
+  return supertestReq({
+    server,
+    token,
+    type: 'POST',
+    url: '/banks/users',
+    payload: {
+      obj: payload,
+    },
+  });
+};
+
+export const getBankUsers = function getBankUsers(server: Server, token?: string) {
+  return supertestReq({
+    server,
+    token,
+    type: 'GET',
+    url: '/banks/users',
+  });
+};
+
+export const updateBankUser = function updateBankUser(
+  server: Server,
+  userBankId: number,
+  payload: Partial<UpdateBankUserBody>,
+  token?: string,
+) {
+  return supertestReq({
+    server,
+    token,
+    type: 'PATCH',
+    url: `/banks/users/${userBankId}`,
+    payload: {
+      obj: payload,
+    },
+  });
+};
+
+export const deleteBankUser = function deleteBankUser(
+  server: Server,
+  userBankId: number,
+  token?: string,
+) {
+  return supertestReq({
+    server,
+    token,
+    type: 'DELETE',
+    url: `/banks/users/${userBankId}`,
+  });
+};
+
+export const getWallets = function getWallets(server: Server, token?: string) {
+  return supertestReq({
+    server,
+    token,
+    type: 'GET',
+    url: '/wallets',
+  });
+};
+
+export const topUp = function topUp(server: Server, payload: Partial<TopUpBody>, token?: string) {
+  return supertestReq({
+    server,
+    token,
+    type: 'POST',
+    url: `/wallets/topup`,
+    payload: {
+      obj: payload,
+    },
+  });
+};
+
+export const getTopUpHistories = function getTopUpHistories(
+  server: Server,
+  query: string,
+  token?: string,
+) {
+  return supertestReq({
+    server,
+    token,
+    type: 'GET',
+    url: `/wallets/topup/histories${query}`,
+  });
+};
+
+export const getTopUpDetail = function getTopUpDetail(
+  server: Server,
+  topUpId: number,
+  token?: string,
+) {
+  return supertestReq({
+    server,
+    token,
+    type: 'GET',
+    url: `/wallets/topup/${topUpId}`,
+  });
+};
+
+export const getAllUserTopUp = function getAllUserTopUp(
+  server: Server,
+  query: string,
+  token?: string,
+) {
+  return supertestReq({
+    server,
+    token,
+    type: 'GET',
+    url: `/wallets/topup/users/all${query}`,
+  });
+};
+
+export const uploadTopUpProof = function uploadTopUpProof(
+  server: Server,
+  topUpId: number,
+  payload: {
+    files?: FilesType;
+  },
+  token?: string,
+) {
+  const { files } = payload;
+
+  return supertestReq({
+    server,
+    token,
+    type: 'POST',
+    url: `/wallets/topup/${topUpId}/image`,
+    payload: { files },
+  });
+};
+
+export const updateTopUpStatus = function updateTopUpStatus(
+  server: Server,
+  topUpId: number,
+  payload: Partial<UpdateTopUpStatusBody>,
+  token?: string,
+) {
+  return supertestReq({
+    server,
+    token,
+    type: 'PATCH',
+    url: `/wallets/topup/${topUpId}/status`,
+    payload: { obj: payload },
+  });
+};
+
+export const withdraw = function withdraw(
+  server: Server,
+  payload: Partial<WithdrawBody>,
+  token?: string,
+) {
+  return supertestReq({
+    server,
+    token,
+    type: 'POST',
+    url: `/wallets/withdraw`,
+    payload: {
+      obj: payload,
+    },
+  });
+};
+
+export const getWithdrawHistories = function getWithdrawHistories(
+  server: Server,
+  query: string,
+  token?: string,
+) {
+  return supertestReq({
+    server,
+    token,
+    type: 'GET',
+    url: `/wallets/withdraw/histories${query}`,
+  });
+};
+
+export const getWithdrawDetail = function getWithdrawDetail(
+  server: Server,
+  withdrawId: number,
+  token?: string,
+) {
+  return supertestReq({
+    server,
+    token,
+    type: 'GET',
+    url: `/wallets/withdraw/${withdrawId}`,
+  });
+};
+
+export const getAllUserWithdraw = function getAllUserWithdraw(
+  server: Server,
+  query: string,
+  token?: string,
+) {
+  return supertestReq({
+    server,
+    token,
+    type: 'GET',
+    url: `/wallets/withdraw/users/all${query}`,
+  });
+};
+
+export const updateWithdrawStatus = function updateWithdrawStatus(
+  server: Server,
+  withdrawId: number,
+  payload: Partial<UpdateWithdrawStatusBody>,
+  token?: string,
+) {
+  return supertestReq({
+    server,
+    token,
+    type: 'PATCH',
+    url: `/wallets/withdraw/${withdrawId}/status`,
+    payload: { obj: payload },
+  });
+};
+
 export const addItemToCart = function addItemToCart(
   server: Server,
   payload: Partial<AddToCartBody>,
@@ -1118,23 +1369,16 @@ export const deleteCartItem = function deleteCartItem(
   });
 };
 
-export const checkout = function checkout(
-  server: Server,
-  payload: Partial<CheckoutBody>,
-  token?: string,
-) {
+export const checkout = function checkout(server: Server, token?: string) {
   return supertestReq({
     server,
     token,
-    type: 'GET',
+    type: 'PATCH',
     url: '/carts/checkout',
-    payload: {
-      obj: payload,
-    },
   });
 };
 
-export const getUserProcessedTransactions = function getUserProcessedTransactions(
+export const getUserTransactions = function getUserTransactions(
   server: Server,
   query: string,
   token?: string,
@@ -1173,138 +1417,24 @@ export const finishTransaction = function finishTransaction(
   });
 };
 
-export const reviewTransaction = function reviewTransaction(
+export const reviewProduct = function reviewProduct(
   server: Server,
-  transactionId: number,
-  payload: Partial<ReviewTransactionBody>,
+  transactionProductId: number,
+  payload: Partial<ReviewProductBody>,
   token?: string,
 ) {
   return supertestReq({
     server,
     token,
     type: 'POST',
-    url: `/transactions/${transactionId}`,
+    url: `/transactions/${transactionProductId}`,
     payload: {
       obj: payload,
     },
   });
 };
 
-export const postBankUser = function postBankUser(
-  server: Server,
-  payload: Partial<PostBankUserBody>,
-  token?: string,
-) {
-  return supertestReq({
-    server,
-    token,
-    type: 'POST',
-    url: '/banks/users',
-    payload: {
-      obj: payload,
-    },
-  });
-};
-
-export const getBanks = function getBanks(server: Server, token?: string) {
-  return supertestReq({
-    server,
-    token,
-    type: 'GET',
-    url: '/banks',
-  });
-};
-
-export const getBankDetail = function getBankDetail(
-  server: Server,
-  bankId: number,
-  token?: string,
-) {
-  return supertestReq({
-    server,
-    token,
-    type: 'GET',
-    url: `/banks/${bankId}`,
-  });
-};
-
-export const getBankUsers = function getBankUsers(server: Server, token?: string) {
-  return supertestReq({
-    server,
-    token,
-    type: 'GET',
-    url: '/banks/users',
-  });
-};
-
-export const updateBankUser = function updateBankUser(
-  server: Server,
-  userBankId: number,
-  payload: Partial<UpdateBankUserBody>,
-  token?: string,
-) {
-  return supertestReq({
-    server,
-    token,
-    type: 'PATCH',
-    url: `/banks/users/${userBankId}`,
-    payload: {
-      obj: payload,
-    },
-  });
-};
-
-export const deleteBankUser = function deleteBankUser(
-  server: Server,
-  userBankId: number,
-  token?: string,
-) {
-  return supertestReq({
-    server,
-    token,
-    type: 'DELETE',
-    url: `/banks/users/${userBankId}`,
-  });
-};
-
-export const topUp = function topUp(server: Server, payload: Partial<TopUpBody>, token?: string) {
-  return supertestReq({
-    server,
-    token,
-    type: 'POST',
-    url: `/wallets/topup`,
-    payload: {
-      obj: payload,
-    },
-  });
-};
-
-export const withdraw = function withdraw(
-  server: Server,
-  payload: Partial<WithdrawBody>,
-  token?: string,
-) {
-  return supertestReq({
-    server,
-    token,
-    type: 'POST',
-    url: `/wallets/withdraw`,
-    payload: {
-      obj: payload,
-    },
-  });
-};
-
-export const getWallets = function getWallets(server: Server, token?: string) {
-  return supertestReq({
-    server,
-    token,
-    type: 'GET',
-    url: '/wallets',
-  });
-};
-
-export const getTopUpHistories = function getTopUpHistories(
+export const getReviewedProducts = function getReviewedProducts(
   server: Server,
   query: string,
   token?: string,
@@ -1313,121 +1443,7 @@ export const getTopUpHistories = function getTopUpHistories(
     server,
     token,
     type: 'GET',
-    url: `/wallets/topup/histories${query}`,
-  });
-};
-
-export const getWithdrawHistories = function getWithdrawHistories(
-  server: Server,
-  query: string,
-  token?: string,
-) {
-  return supertestReq({
-    server,
-    token,
-    type: 'GET',
-    url: `/wallets/withdraw/histories${query}`,
-  });
-};
-
-export const getTopUpDetail = function getTopUpDetail(
-  server: Server,
-  topUpId: number,
-  token?: string,
-) {
-  return supertestReq({
-    server,
-    token,
-    type: 'GET',
-    url: `/wallets/topup/${topUpId}`,
-  });
-};
-
-export const getWithdrawDetail = function getWithdrawDetail(
-  server: Server,
-  withdrawId: number,
-  token?: string,
-) {
-  return supertestReq({
-    server,
-    token,
-    type: 'GET',
-    url: `/wallets/withdraw/${withdrawId}`,
-  });
-};
-
-export const getAllUserTopUp = function getAllUserTopUp(
-  server: Server,
-  query: string,
-  token?: string,
-) {
-  return supertestReq({
-    server,
-    token,
-    type: 'GET',
-    url: `/wallets/topup/users/all${query}`,
-  });
-};
-
-export const getAllUserWithdraw = function getAllUserWithdraw(
-  server: Server,
-  query: string,
-  token?: string,
-) {
-  return supertestReq({
-    server,
-    token,
-    type: 'GET',
-    url: `/wallets/withdraw/users/all${query}`,
-  });
-};
-
-export const uploadTopUpProof = function uploadTopUpProof(
-  server: Server,
-  topUpId: number,
-  payload: {
-    files?: FilesType;
-  },
-  token?: string,
-) {
-  const { files } = payload;
-
-  return supertestReq({
-    server,
-    token,
-    type: 'POST',
-    url: `/wallets/topup/${topUpId}/image`,
-    payload: { files },
-  });
-};
-
-export const updateTopUpStatus = function updateTopUpStatus(
-  server: Server,
-  topUpId: number,
-  payload: Partial<UpdateTopUpStatusBody>,
-  token?: string,
-) {
-  return supertestReq({
-    server,
-    token,
-    type: 'PATCH',
-    url: `/wallets/topup/${topUpId}/status`,
-    payload: { obj: payload },
-  });
-};
-
-export const updateWithdrawStatus = function updateWithdrawStatus(
-  server: Server,
-  withdrawId: number,
-  payload: Partial<UpdateWithdrawStatusBody>,
-  token?: string,
-) {
-  return supertestReq({
-    server,
-    token,
-    type: 'PATCH',
-    url: `/wallets/withdraw/${withdrawId}/status`,
-    payload: { obj: payload },
+    url: `/transactions/reviewed${query}`,
   });
 };
 
@@ -1532,32 +1548,22 @@ export const addProductImage = async function addProductImage(userId: number) {
   return { productImageId: id };
 };
 
-export const createUserTransaction = async function createUserTransaction(merchantId: number) {
+export const addUserTransaction = async function addUserTransaction(merchantId: number) {
   const { userId } = await createUser();
-  const { id: transactionId } = await UserTransaction.create({
-    id_m_users: userId,
-    id_merchant: merchantId,
-    transaction_token: '213213213',
-    total_price: 0,
-    status: 0,
-  });
+  const { id: transactionId } = await createUserTransaction({ merchantId, userId, totalPrice: 0 });
+
   return { userId, transactionId };
 };
 
 export const createTransactionProduct = async function createTransactionProduct(
   merchantId: number,
 ) {
-  const { transactionId } = await createUserTransaction(merchantId);
+  const { transactionId } = await addUserTransaction(merchantId);
   const { productId } = await createMerchantProduct(merchantId);
 
-  await TransactionProduct.create({
-    id_u_user_transaction: transactionId,
-    id_m_products: productId,
-    transaction_token: 'wrwerwe',
-    qty: 1,
-    status: 0,
-    sub_total_price: 1,
-  });
+  await createTransactionProducts([
+    { productId, userTransactionId: transactionId, qty: 1, subTotalPrice: 1 },
+  ]);
 
   return { transactionId };
 };
@@ -1588,7 +1594,7 @@ export const addBankUser = async function addBankUser(userId: number) {
   return { userBankId };
 };
 
-export const createUserGetWallet = async function createUserGetWaller() {
+export const createUserGetWallet = async function createUserGetWallet() {
   const { token, userId } = await createUser();
   const wallets = await getUserWallets(userId);
 
@@ -1622,4 +1628,40 @@ export const addUserWithdraw = async function addUserWithdraw(
   });
 
   return { withdrawId: id };
+};
+
+export const addToCart = async function addToCart(userId: number) {
+  const { id: merchantId } = await createMerchantUser();
+  const { productId } = await createMerchantProduct(merchantId);
+  const { id: cartItemId } = await addCartItem(userId, {
+    merchant_id: merchantId,
+    product_id: productId,
+    qty: 1,
+  });
+
+  return { cartItemId, merchantId, productId };
+};
+
+export const addToCheckout = async function addToCheckout(userId: number) {
+  const { merchantId, productId } = await addToCart(userId);
+  const { id: transactionId } = await createUserTransaction({ userId, merchantId, totalPrice: 0 });
+
+  return { transactionId, productId };
+};
+
+export const endUserTransaction = async function endUserTransaction(userId: number) {
+  const { productId, transactionId } = await addToCheckout(userId);
+  const [{ id: transactionProductId }] = await createTransactionProducts([
+    { productId, userTransactionId: transactionId, qty: 1, subTotalPrice: 0 },
+  ]);
+
+  await updateUserTransaction(transactionId, userId);
+
+  return { transactionProductId };
+};
+
+export const makeProductReview = async function makeProductReview(userId: number) {
+  const { transactionProductId } = await endUserTransaction(userId);
+
+  await createProductReview(transactionProductId, { rating: 1, review: 'review' });
 };

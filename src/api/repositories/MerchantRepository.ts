@@ -28,7 +28,7 @@ type ProductCoverType = {
 
 type ProductImagesType = {
   productUtilId: number;
-  images: number;
+  images: string;
   [index: string]: unknown;
 };
 
@@ -400,7 +400,8 @@ export const getMerchantOrders: (
   query: CustModelType['SearchQuery'],
 ) => Promise<unknown> = function getMerchantOrders(merchantId, { status, ...query }) {
   let sqlQuery = `
-    SELECT *
+    SELECT 
+      *
     FROM v_user_transaction vut 
     WHERE vut.merchant_id= :merchantId
     `;
@@ -429,7 +430,8 @@ export const getMerchantProductsOrder: (
   transactionId: number,
 ) => Promise<unknown> = function getMerchantProductsOrder(merchantId, transactionId) {
   const sqlQuery = `
-    SELECT *
+    SELECT 
+      *
     FROM v_user_transaction_products vutp
     WHERE vutp.transaction_id = :transactionId
       AND vutp.merchant_id= :merchantId
@@ -451,7 +453,8 @@ export const getMerchantProductOrder: (
   transactionId,
 ) {
   const sqlQuery = `
-    SELECT *
+    SELECT 
+      *
     FROM v_user_transaction_products vutp
     WHERE vutp.transaction_id = :transactionId
       AND vutp.merchant_id= :merchantId

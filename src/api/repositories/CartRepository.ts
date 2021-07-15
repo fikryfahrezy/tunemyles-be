@@ -23,6 +23,10 @@ type UserWalletBalanceType = {
   [index: string]: unknown;
 };
 
+type CartTotalPriceType = {
+  totalPrice: string;
+};
+
 const { UserCart, UserTransaction, TransactionProduct, UserWallet } = initModels(sequelize);
 
 export const addCartItem: (
@@ -41,18 +45,18 @@ export const addCartItem: (
 };
 
 export const createUserTransaction: (data: {
-  priceTotal: number;
   userId: number;
   merchantId: number;
+  totalPrice: number;
 }) => Promise<ModelType['UserTransaction']> = function createUserTransaction({
-  priceTotal,
   userId,
   merchantId,
+  totalPrice,
 }) {
   const date = Date.now().toString();
 
   return UserTransaction.create({
-    total_price: priceTotal,
+    total_price: totalPrice,
     id_m_users: userId,
     id_merchant: merchantId,
     transaction_token: date,
@@ -91,15 +95,14 @@ export const updateCartItem: (
   { qty, status },
   cartItemId,
 ) {
-  const newStatus = status ?? 0;
   const where: { id_m_users: number; status: number; id?: number } = {
     id_m_users: userId,
-    status: newStatus,
+    status: 0,
   };
 
   if (cartItemId) where.id = cartItemId;
 
-  return UserCart.update({ qty }, { where });
+  return UserCart.update({ qty, status }, { where });
 };
 
 export const updateUserWallet: (
@@ -174,6 +177,24 @@ export const getUserCartItems: (
     type: QueryTypes.SELECT,
     raw: true,
     plain: false,
+    replacements: { userId },
+  });
+};
+
+export const getUserCartTotalPrice: (
+  userId: number,
+) => Promise<CartTotalPriceType | null> = function getUserCartTotalPrice(userId) {
+  const sqlQuery = `
+    SELECT
+      SUM(selling_price) AS totalPrice
+    FROM v_cart_active
+    WHERE buyer_id = :userId 
+  `;
+
+  return sequelize.query<CartTotalPriceType>(sqlQuery, {
+    type: QueryTypes.SELECT,
+    raw: true,
+    plain: true,
     replacements: { userId },
   });
 };

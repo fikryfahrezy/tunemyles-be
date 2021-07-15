@@ -1,5 +1,5 @@
 import type CustModelType from '../../types/model';
-import type { AddToCartBody, UpdateCartItemQtyBody, CheckoutBody } from '../../types/schema';
+import type { AddToCartBody, UpdateCartItemQtyBody } from '../../types/schema';
 import { ErrorResponse } from '../../utils/error-handler';
 import {
   addCartItem,
@@ -11,6 +11,7 @@ import {
   checkUserCartItems,
   getMerchantProduct,
   getUserCartItems,
+  getUserCartTotalPrice,
   getUserWalletBalance,
 } from '../../repositories/CartRepository';
 
@@ -55,25 +56,26 @@ export const removeCartItem: (
 
 export const cartCheckout: (
   userId: CustModelType['UserToken']['userId'],
-  data: CheckoutBody,
-) => Promise<void> = async function cartCheckout(userId, data) {
-  const { price_total: priceTotal } = data;
-  const [cartItems, userWallet] = await Promise.all([
+) => Promise<void> = async function cartCheckout(userId) {
+  const [cartItems, userWallet, cart] = await Promise.all([
     getUserCartItems(userId),
     getUserWalletBalance(userId),
+    getUserCartTotalPrice(userId),
   ]);
 
-  if (!userWallet) throw new ErrorResponse('something error', 400);
-  else if (cartItems.length <= 0) throw new ErrorResponse('there is no item to process', 400);
+  if (!userWallet) throw new ErrorResponse('something gone wrong', 400);
+  else if (cartItems.length <= 0 || !cart)
+    throw new ErrorResponse('there is no item to process', 400);
 
   const { id: walletId, balance } = userWallet;
+  const totalPrice = parseInt(cart.totalPrice, 10);
 
-  if (balance <= 0 || balance < priceTotal)
+  if (balance <= 0 || balance < totalPrice)
     throw new ErrorResponse('user balance is not sufficient', 400);
 
   const merchantId = cartItems[0].merchant_id;
-  const newBalance = balance - priceTotal;
-  const { id: userTransactionId } = await createUserTransaction({ priceTotal, merchantId, userId });
+  const newBalance = balance - totalPrice;
+  const { id: userTransactionId } = await createUserTransaction({ merchantId, userId, totalPrice });
 
   await Promise.all([
     createTransactionProducts(
@@ -84,7 +86,7 @@ export const cartCheckout: (
         subTotalPrice: sellingPrice,
       })),
     ),
-    updateCartItem(userId, { status: 1 }, merchantId),
+    updateCartItem(userId, { status: 1 }),
     updateUserWallet(walletId, { balance: newBalance }),
   ]);
 };

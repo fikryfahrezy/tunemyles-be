@@ -20,7 +20,7 @@ afterAll(async () => {
 });
 
 test('test server is live', async () => {
-  const { status, headers, body } = await supertest(server).get('/api/v2');
+  const { status, headers, body } = await supertest(server).get('/api/v1');
 
   expect(status).toBe(200);
   expect(headers['content-type']).toBe('application/json; charset=utf-8');

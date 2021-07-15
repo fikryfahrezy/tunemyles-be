@@ -2718,7 +2718,7 @@
 
 #### [# Add Item to Cart](#add-item-to-cart)
 
-**[POSTMAN] [JEST]** Success, Without Logo
+**[POSTMAN] [JEST]** Success
 
 - Status code should `201`
 - Header `Content-Type` should `application/json; charset=utf-8`
@@ -2824,7 +2824,7 @@
 
 **[POSTMAN] [JEST]** Success
 
-- Status code should `201`
+- Status code should `200`
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `true`
 
@@ -2844,7 +2844,7 @@
 
 ---
 
-#### [# Get User Processed Transactions](#get-user-processed-transactions)
+#### [# Get User Transactions](#get-user-processed-transactions)
 
 **[POSTMAN] [JEST]** Success, Without Query
 
@@ -2983,7 +2983,7 @@
 - Header `Content-Type` should `application/json; charset=utf-8`
 - Body should object with `success` property `false`
 
-#### [# Review Transaction](#review-transaction)
+#### [# Review Product](#review-transaction)
 
 **[POSTMAN] [JEST]** Success
 
@@ -2992,6 +2992,69 @@
 - Body should object with `success` property `true`
 
 **[POSTMAN] [JEST]** Fail, No Data Provided
+
+- Status code should `422`
+- Header `Content-Type` should `application/json; charset=utf-8`
+- Body should object with `success` property `false`
+
+**[POSTMAN] [JEST]** Fail, Wrong API Key
+
+- Status code should `403`
+- Header `Content-Type` should `application/json; charset=utf-8`
+- Body should object with `success` property `false`
+
+**[POSTMAN] [JEST]** Fail, API Key Not Given
+
+- Status code should `403`
+- Header `Content-Type` should `application/json; charset=utf-8`
+- Body should object with `success` property `false`
+
+#### [# Get Reviewed Products](#get-reviewed-products)
+
+**[POSTMAN] [JEST]** Success, Without Query
+
+- Status code should `200`
+- Header `Content-Type` should `application/json; charset=utf-8`
+- Body should object with `success` property `true`
+
+**[POSTMAN] [JEST]** Success, with Query `?limit=1`
+
+- Status code should `200`
+- Header `Content-Type` should `application/json; charset=utf-8`
+- Body should object with `success` property `true`
+- Property `data` on the body should have a `length of 1`
+
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=DESC&orderBy=created_at&search=&page=&limit=`
+
+- Status code should `200`
+- Header `Content-Type` should `application/json; charset=utf-8`
+- Body should object with `success` property `true`
+
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=DESC&orderBy=rating&search=&page=&limit=`
+
+- Status code should `200`
+- Header `Content-Type` should `application/json; charset=utf-8`
+- Body should object with `success` property `true`
+
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=ASC&orderBy=created_at&search=&page=&limit=`
+
+- Status code should `200`
+- Header `Content-Type` should `application/json; charset=utf-8`
+- Body should object with `success` property `true`
+
+**[POSTMAN] [JEST]** Success, with Query `?orderDirection=ASC&orderBy=rating&search=&page=&limit=`
+
+- Status code should `200`
+- Header `Content-Type` should `application/json; charset=utf-8`
+- Body should object with `success` property `true`
+
+**[POSTMAN] [JEST]** Fail, with Query `?orderDirection=DESCs&orderBy=created_at&search=&page=&limit=`
+
+- Status code should `422`
+- Header `Content-Type` should `application/json; charset=utf-8`
+- Body should object with `success` property `false`
+
+**[POSTMAN] [JEST]** Fail, with Query `?orderDirection=DESC&orderBy=created_ats&search=&page=&limit=`
 
 - Status code should `422`
 - Header `Content-Type` should `application/json; charset=utf-8`

@@ -15,22 +15,26 @@ export const requestBody = {
     required: ['qty', 'merchant_id', 'product_id'],
     type: 'object',
     properties: {
-      qty: { type: 'integer' },
-      merchant_id: { type: 'integer' },
-      product_id: { type: 'integer' },
+      qty: {
+        type: 'integer',
+      },
+      merchant_id: {
+        type: 'integer',
+      },
+      product_id: {
+        type: 'integer',
+      },
     },
     additionalProperties: false,
   },
   updateProductQty: {
     required: ['qty'],
     type: 'object',
-    properties: { qty: { type: 'integer' } },
-    additionalProperties: false,
-  },
-  checkout: {
-    required: ['price_total'],
-    type: 'object',
-    properties: { price_total: { type: 'integer' } },
+    properties: {
+      qty: {
+        type: 'integer',
+      },
+    },
     additionalProperties: false,
   },
 };

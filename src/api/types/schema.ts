@@ -222,11 +222,7 @@ export type UpdateCartItemQtyBody = {
   qty: number;
 };
 
-export type CheckoutBody = {
-  price_total: number;
-};
-
-export type ReviewTransactionBody = {
+export type ReviewProductBody = {
   rating: number;
   review: string;
 };

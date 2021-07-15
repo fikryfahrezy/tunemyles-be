@@ -4,19 +4,19 @@ import type {
   ApiKeyHeader,
   IdRequestParams,
   GetQuery,
-  ReviewTransactionBody,
+  ReviewProductBody,
 } from '../../types/schema';
 import { controllerWrapper, handlerWrapper } from '../../utils/serverfn-wrapper';
 import dbQuerying from '../../middlewares/db-querying';
 import schemaValidation from '../../middlewares/schema-validation';
 import { protect } from '../../middlewares/protect-route';
-import { requestHeaders, requestBody, requestParams, requestQuery } from './schemas';
+import { requestHeaders, requestBody, requestParams, requestQuery, responses } from './schemas';
 import {
-  getProcessedTransactions,
+  getUserTransactions,
   getTransactionDetail,
   finishTransaction,
-  reviewTransaction,
-  getReviewedTransactions,
+  reviewProduct,
+  getReviewedProducts,
 } from './controller';
 
 const routes = function routes(
@@ -36,7 +36,7 @@ const routes = function routes(
         headers: requestHeaders.private,
         querystring: requestQuery.getTransactions,
         response: {
-          200: { $ref: '#ApiResponse' },
+          200: responses.transactions,
           '4xx': { $ref: '#ApiResponse' },
           '5xx': { $ref: '#ApiResponse' },
         },
@@ -47,7 +47,7 @@ const routes = function routes(
         handlerWrapper(dbQuerying('USER_TRANSACTION')),
       ],
     },
-    controllerWrapper(getProcessedTransactions),
+    controllerWrapper(getUserTransactions),
   );
 
   fastify.get<Request<{ Headers: ApiKeyHeader; Params: IdRequestParams }>>(
@@ -58,7 +58,7 @@ const routes = function routes(
         headers: requestHeaders.private,
         params: requestParams.id,
         response: {
-          200: { $ref: '#ApiResponse' },
+          200: responses.transactionDetail,
           '4xx': { $ref: '#ApiResponse' },
           '5xx': { $ref: '#ApiResponse' },
         },
@@ -87,7 +87,7 @@ const routes = function routes(
   );
 
   fastify.post<
-    Request<{ Headers: ApiKeyHeader; Params: IdRequestParams; Body: ReviewTransactionBody }>
+    Request<{ Headers: ApiKeyHeader; Params: IdRequestParams; Body: ReviewProductBody }>
   >(
     '/:id',
     {
@@ -95,7 +95,7 @@ const routes = function routes(
       schema: {
         headers: requestHeaders.private,
         params: requestParams.id,
-        body: requestBody.reviewTransaction,
+        body: requestBody.reviewProduct,
         response: {
           200: { $ref: '#ApiResponse' },
           '4xx': { $ref: '#ApiResponse' },
@@ -104,7 +104,7 @@ const routes = function routes(
       },
       preHandler: [schemaValidation, handlerWrapper(protect('USER'))],
     },
-    controllerWrapper(reviewTransaction),
+    controllerWrapper(reviewProduct),
   );
 
   fastify.get<Request<{ Headers: ApiKeyHeader; Querystring: GetQuery }>>(
@@ -113,9 +113,9 @@ const routes = function routes(
       attachValidation: true,
       schema: {
         headers: requestHeaders.private,
-        querystring: requestQuery.getReviewedTransactions,
+        querystring: requestQuery.getReviewedProducts,
         response: {
-          200: { $ref: '#ApiResponse' },
+          200: responses.reviewedProducts,
           '4xx': { $ref: '#ApiResponse' },
           '5xx': { $ref: '#ApiResponse' },
         },
@@ -126,7 +126,7 @@ const routes = function routes(
         handlerWrapper(dbQuerying('REVIEWED_TRANSACTIONS')),
       ],
     },
-    controllerWrapper(getReviewedTransactions),
+    controllerWrapper(getReviewedProducts),
   );
 
   donePlugin();

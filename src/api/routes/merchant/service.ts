@@ -266,7 +266,7 @@ export const postProductImage: (
   ]);
 
   if (!product) throw new ErrorResponse('product not found', 404);
-  else if (productImg && productImg.images >= 4)
+  else if (productImg && parseInt(productImg.images, 10) >= 4)
     throw new ErrorResponse('reach maximum number of photos', 422);
 
   const img = image[0];

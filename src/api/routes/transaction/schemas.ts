@@ -29,7 +29,7 @@ export const requestQuery = {
       },
     },
   },
-  getReviewedTransactions: {
+  getReviewedProducts: {
     type: 'object',
     properties: {
       orderDirection: { $ref: '#OrderDirectionQuery' },
@@ -48,7 +48,7 @@ export const requestQuery = {
  * routes in Postman
  */
 export const requestBody = {
-  reviewTransaction: {
+  reviewProduct: {
     required: ['rating', 'review'],
     type: 'object',
     properties: {
@@ -75,7 +75,7 @@ export const responses = {
           data: {
             type: 'array',
             items: {
-              $ref: '#GetOrder',
+              $ref: '#TransactionResponse',
             },
           },
         },
@@ -95,7 +95,7 @@ export const responses = {
             type: 'object',
             allOf: [
               {
-                $ref: '#GetOrder',
+                $ref: '#TransactionResponse',
               },
               {
                 type: 'object',
@@ -103,12 +103,72 @@ export const responses = {
                   products: {
                     type: 'array',
                     items: {
-                      $ref: '#GetProductOrder',
+                      $ref: '#OrderResponse',
                     },
                   },
                 },
               },
             ],
+          },
+        },
+      },
+    ],
+  },
+  reviewedProducts: {
+    allOf: [
+      {
+        $ref: '#ApiResponse',
+      },
+      {
+        type: 'object',
+        properties: {
+          data: {
+            type: 'object',
+            properties: {
+              id: {
+                type: 'integer',
+              },
+              product_id: {
+                type: 'integer',
+              },
+              product_name: {
+                type: 'string',
+              },
+              selling_prince: {
+                type: 'integer',
+              },
+              cover_label: {
+                type: 'string',
+                nullable: true,
+              },
+              cover_url: {
+                type: 'string',
+                nullable: true,
+              },
+              merchant_id: {
+                type: 'integer',
+              },
+              market_id: {
+                type: 'integer',
+              },
+              market_name: {
+                type: 'string',
+              },
+              rating: {
+                type: 'integer',
+              },
+              review: {
+                type: 'string',
+              },
+              created_at: {
+                type: 'string',
+                format: 'date-time',
+              },
+              updated_at: {
+                type: 'string',
+                format: 'date-time',
+              },
+            },
           },
         },
       },

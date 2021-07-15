@@ -5,7 +5,6 @@ import type {
   IdRequestParams,
   AddToCartBody,
   UpdateCartItemQtyBody,
-  CheckoutBody,
 } from '../../types/schema';
 import {
   addToCart,
@@ -110,9 +109,10 @@ export const deleteCartItem: RequestHandler<
   });
 };
 
-export const checkout: RequestHandler<
-  Request<{ Headers: ApiKeyHeader; Body: CheckoutBody }>
-> = async function checkout(req, res): Promise<void> {
+export const checkout: RequestHandler<Request<{ Headers: ApiKeyHeader }>> = async function checkout(
+  _,
+  res,
+): Promise<void> {
   const userToken = this.requestContext.get<CustModelType['UserToken']>('usertoken');
 
   if (!userToken) {
@@ -121,10 +121,10 @@ export const checkout: RequestHandler<
     return;
   }
 
-  await cartCheckout(userToken.userId, req.body);
+  await cartCheckout(userToken.userId);
 
-  res.status(201).header('Content-Type', 'application/json; charset=utf-8').send({
-    code: 201,
+  res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
+    code: 200,
     success: true,
     message: 'success',
   });

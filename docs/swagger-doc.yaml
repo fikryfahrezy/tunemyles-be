@@ -26,7 +26,7 @@ tags:
   - name: masters
     description: Master Route
   - name: merchants
-    description: Merchant Route
+    description: Merchant Route//
   - name: products
     description: Product Route
   - name: banks
@@ -3199,18 +3199,12 @@ paths:
       security:
         - APIKeyHeader: []
   /carts/checkout:
-    post:
+    patch:
       tags:
         - carts
       summary: Cart Checkout (Route All Roles)
       description: Cart Checkout (Route All Roles)
       operationId: cartCheckout
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CheckoutBody'
-        required: true
       responses:
         '200':
           description: Request Success
@@ -3284,7 +3278,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetProcessedTransactionsResponse'
+                $ref: '#/components/schemas/GetUserTransactionsResponse'
         4XX:
           description: Request Error
           content:
@@ -3369,9 +3363,9 @@ paths:
     post:
       tags:
         - transactions
-      summary: Review Transaction (Route All Roles)
-      description: Review Transactions (Route All Roles)
-      operationId: reviewTransaction
+      summary: Review Product (Route All Roles)
+      description: Review Product (Route All Roles)
+      operationId: reviewProduct
       parameters:
         - name: id
           in: path
@@ -3382,7 +3376,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ReviewTransactionBody'
+              $ref: '#/components/schemas/ReviewProductBody'
         required: true
       responses:
         '200':
@@ -3410,9 +3404,9 @@ paths:
     get:
       tags:
         - transactions
-      summary: Get Reviewd Transactions (Route All Roles)
-      description: Get Reviewed Transactions (Route All Roles)
-      operationId: reviewedTransactions
+      summary: Get Reviewd Products (Route All Roles)
+      description: Get Reviewed Products (Route All Roles)
+      operationId: reviewedProducts
       parameters:
         - name: orderDirection
           in: query
@@ -3426,7 +3420,6 @@ paths:
               - enum:
                   - created_at
                   - rating
-                  - review
         - name: search
           in: query
           description: 'Available search review'
@@ -3446,7 +3439,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetReviewedTransactionsResponse'
+                $ref: '#/components/schemas/GetReviewedProductsResponse'
         4XX:
           description: Request Error
           content:
@@ -4198,46 +4191,7 @@ components:
             data:
               type: array
               items:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                  buyer_id:
-                    type: integer
-                  transaction_token:
-                    type: string
-                  total_price:
-                    type: integer
-                  status:
-                    type: integer
-                  full_name:
-                    type: string
-                  phone_number:
-                    type: string
-                  address:
-                    type: string
-                  profile_label:
-                    type: string
-                    nullable: true
-                  profile_url:
-                    type: string
-                    nullable: true
-                  merchant_id:
-                    type: integer
-                  market_id:
-                    type: integer
-                  market_name:
-                    type: string
-                  photo_label:
-                    type: string
-                  photo_url:
-                    type: string
-                  created_at:
-                    type: string
-                    format: date-time
-                  updated_at:
-                    type: string
-                    format: date-time
+                $ref: '#/components/schemas/TransactionResponse'
     GetMerchantOrderDetailResponse:
       type: object
       allOf:
@@ -4247,7 +4201,7 @@ components:
             data:
               type: array
               items:
-                $ref: '#/components/schemas/MerchantOrderResponse'
+                $ref: '#/components/schemas/OrderResponse'
     UpdateMerchantOrderStatusBody:
       type: object
       properties:
@@ -4260,7 +4214,7 @@ components:
         - type: object
           properties:
             data:
-              $ref: '#/components/schemas/MerchantOrderResponse'
+              $ref: '#/components/schemas/OrderResponse'
     GetMerchantListResponse:
       type: object
       allOf:
@@ -4692,14 +4646,7 @@ components:
       properties:
         qty:
           type: integer
-    CheckoutBody:
-      required:
-        - price_total
-      type: object
-      properties:
-        price_total:
-          type: integer
-    GetProcessedTransactionsResponse:
+    GetUserTransactionsResponse:
       type: object
       allOf:
         - $ref: '#/components/schemas/ApiResponse'
@@ -4708,7 +4655,7 @@ components:
             data:
               type: array
               items:
-                $ref: '#/components/schemas/GetOrder'
+                $ref: '#/components/schemas/TransactionResponse'
     GetTransactionDetailResponse:
       type: object
       allOf:
@@ -4718,14 +4665,14 @@ components:
             data:
               type: object
               allOf:
-                - $ref: '#/components/schemas/GetOrder'
+                - $ref: '#/components/schemas/TransactionResponse'
                 - type: object
                   properties:
                     products:
                       type: array
                       items:
-                        $ref: '#/components/schemas/GetProductOrder'
-    ReviewTransactionBody:
+                        $ref: '#/components/schemas/OrderResponse'
+    ReviewProductBody:
       required:
         - rating
         - review
@@ -4735,7 +4682,7 @@ components:
           type: integer
         review:
           type: string
-    GetReviewedTransactionsResponse:
+    GetReviewedProductsResponse:
       allOf:
         - $ref: '#/components/schemas/ApiResponse'
         - type: object
@@ -4745,17 +4692,21 @@ components:
               properties:
                 id:
                   type: integer
-                id_product:
+                product_id:
                   type: integer
                 product_name:
                   type: string
-                price_selling:
+                selling_prince:
                   type: integer
-                label:
+                cover_label:
                   type: string
-                uri:
+                  nullable: true
+                cover_url:
                   type: string
-                id_merchant:
+                  nullable: true
+                merchant_id:
+                  type: integer
+                market_id:
                   type: integer
                 market_name:
                   type: string
@@ -4860,7 +4811,7 @@ components:
         updated_at:
           type: string
           format: date-time
-    MerchantOrderResponse:
+    OrderResponse:
       type: object
       properties:
         id:
@@ -4897,14 +4848,12 @@ components:
         updated_at:
           type: string
           format: date-time
-    GetOrder:
+    TransactionResponse:
       type: object
       properties:
         id:
           type: integer
-        id_m_users:
-          type: integer
-        id_merchant:
+        buyer_id:
           type: integer
         transaction_token:
           type: string
@@ -4912,81 +4861,34 @@ components:
           type: integer
         status:
           type: integer
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
         full_name:
           type: string
         phone_number:
           type: string
         address:
           type: string
-        id_photo:
-          type: integer
-        uri:
+        profile_label:
           type: string
-        label:
+          nullable: true
+        profile_url:
           type: string
-        id_user_merchant:
+          nullable: true
+        merchant_id:
           type: integer
-        id_market_photo:
+        market_id:
           type: integer
         market_name:
           type: string
-        market_address:
+        photo_label:
           type: string
-        market_lat:
-          type: integer
-        market_lon:
-          type: integer
-        market_close_time:
+        photo_url:
           type: string
-        market_visivle:
-          type: integer
-        merchant_uri:
-          type: string
-        merchant_label:
-          type: string
-        cover_uri:
-          type: string
-    GetProductOrder:
-      type: object
-      properties:
-        id:
-          type: integer
-        id_u_user_transaction:
-          type: integer
-        id_m_products:
-          type: integer
-        qty:
-          type: integer
-        transaction_token:
-          type: string
-        sub_total_price:
-          type: integer
-        status:
-          type: integer
         created_at:
           type: string
           format: date-time
         updated_at:
           type: string
           format: date-time
-        product_name:
-          type: string
-        description:
-          type: string
-        id_cover:
-          type: integer
-        product_visible:
-          type: integer
-        cover_uri:
-          type: string
-        cover_label:
-          type: string
   securitySchemes:
     APIKeyHeader:
       type: apiKey

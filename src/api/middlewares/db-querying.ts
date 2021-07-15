@@ -50,7 +50,7 @@ const dbQuerying: (
         availableFields = ['balance_request'];
         break;
       case 'REVIEWED_TRANSACTIONS':
-        availableFields = ['rating', 'reviewed'];
+        availableFields = ['rating'];
         break;
       default:
         availableFields = [];

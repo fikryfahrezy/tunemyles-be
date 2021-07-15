@@ -22,7 +22,7 @@ afterAll(async () => {
 
 describe('Get Data', () => {
   test('Success', async () => {
-    const { status, headers, body } = await supertest(server).get('/api/v2/example');
+    const { status, headers, body } = await supertest(server).get('/api/v1/example');
 
     expect(status).toBe(200);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -32,7 +32,7 @@ describe('Get Data', () => {
 
 describe('Get Single Data', () => {
   test('Found Single Data', async () => {
-    const { status, headers, body } = await supertest(server).get('/api/v2/example/1');
+    const { status, headers, body } = await supertest(server).get('/api/v1/example/1');
 
     expect(status).toBe(200);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -40,7 +40,7 @@ describe('Get Single Data', () => {
   });
 
   test('Data Not Found', async () => {
-    const { status, headers, body } = await supertest(server).get('/api/v2/example/100');
+    const { status, headers, body } = await supertest(server).get('/api/v1/example/100');
 
     expect(status).toBe(404);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -51,7 +51,7 @@ describe('Get Single Data', () => {
 describe('Post Data', () => {
   test('Success', async () => {
     const { status, headers, body } = await supertest(server)
-      .post('/api/v2/example')
+      .post('/api/v1/example')
       .set('Content-Type', 'application/json')
       .send({ name: 'name' });
 
@@ -62,7 +62,7 @@ describe('Post Data', () => {
 
   test('Fail, Validation Fail', async () => {
     const { status, headers, body } = await supertest(server)
-      .post('/api/v2/example')
+      .post('/api/v1/example')
       .set('Content-Type', 'application/json')
       .send({});
 
@@ -77,7 +77,7 @@ describe('Post File', () => {
     const file = fs.createReadStream('./__test__/image-test.png');
 
     const { status, headers, body } = await supertest(server)
-      .post('/api/v2/example/file')
+      .post('/api/v1/example/file')
       .set('Content-Type', 'multipart/form-data')
       .attach('file', file);
 
@@ -90,7 +90,7 @@ describe('Post File', () => {
 describe('Get Private Data', () => {
   test('Success', async () => {
     const { status, headers, body } = await supertest(server)
-      .get('/api/v2/example/private')
+      .get('/api/v1/example/private')
       .set('authorization', '1');
 
     expect(status).toBe(200);
@@ -99,7 +99,7 @@ describe('Get Private Data', () => {
   });
 
   test('Fail, Header Authorization Not Given', async () => {
-    const { status, headers, body } = await supertest(server).get('/api/v2/example/private');
+    const { status, headers, body } = await supertest(server).get('/api/v1/example/private');
 
     expect(status).toBe(403);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -108,7 +108,7 @@ describe('Get Private Data', () => {
 
   test('Fail, Wrong Header Authorization', async () => {
     const { status, headers, body } = await supertest(server)
-      .get('/api/v2/example/private')
+      .get('/api/v1/example/private')
       .set('authorization', '2');
 
     expect(status).toBe(403);

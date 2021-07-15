@@ -4,17 +4,17 @@ import type {
   ApiKeyHeader,
   GetQuery,
   IdRequestParams,
-  ReviewTransactionBody,
+  ReviewProductBody,
 } from '../../types/schema';
 import {
-  processedTransactionData,
+  userTransactionData,
   transactionDetailData,
   completeTransaction,
-  addTransactionReview,
-  reviewedTransactionData,
+  addProductReview,
+  reviewedProductData,
 } from './service';
 
-export const getProcessedTransactions: RequestHandler<
+export const getUserTransactions: RequestHandler<
   Request<{ Headers: ApiKeyHeader; Querystring: GetQuery }>
 > = async function getUserProcessedTransactions(_, res): Promise<void> {
   const userToken = this.requestContext.get<CustModelType['UserToken']>('usertoken');
@@ -32,7 +32,7 @@ export const getProcessedTransactions: RequestHandler<
     return;
   }
 
-  const resData = await processedTransactionData(userToken.userId, query);
+  const resData = await userTransactionData(userToken.userId, query);
 
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
@@ -60,7 +60,7 @@ export const getTransactionDetail: RequestHandler<
     return;
   }
 
-  const resData = await transactionDetailData(userToken.userId, transactionId);
+  const resData = await transactionDetailData(transactionId, userToken.userId);
 
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
@@ -88,7 +88,7 @@ export const finishTransaction: RequestHandler<
     return;
   }
 
-  await completeTransaction(userToken.userId, transactionId);
+  await completeTransaction(transactionId, userToken.userId);
 
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,
@@ -97,13 +97,13 @@ export const finishTransaction: RequestHandler<
   });
 };
 
-export const reviewTransaction: RequestHandler<
-  Request<{ Headers: ApiKeyHeader; Params: IdRequestParams; Body: ReviewTransactionBody }>
+export const reviewProduct: RequestHandler<
+  Request<{ Headers: ApiKeyHeader; Params: IdRequestParams; Body: ReviewProductBody }>
 > = async function reviewTransaction(req, res): Promise<void> {
   const userToken = this.requestContext.get<CustModelType['UserToken']>('usertoken');
-  const transactionId = parseInt(req.params.id, 10) || -1;
+  const transactionProductId = parseInt(req.params.id, 10) || -1;
 
-  if (transactionId <= 0) {
+  if (transactionProductId <= 0) {
     res.notFound();
 
     return;
@@ -115,7 +115,7 @@ export const reviewTransaction: RequestHandler<
     return;
   }
 
-  await addTransactionReview(userToken.userId, transactionId, req.body);
+  await addProductReview(transactionProductId, userToken.userId, req.body);
 
   res.status(201).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 201,
@@ -124,7 +124,7 @@ export const reviewTransaction: RequestHandler<
   });
 };
 
-export const getReviewedTransactions: RequestHandler<
+export const getReviewedProducts: RequestHandler<
   Request<{ Headers: ApiKeyHeader; Querystring: GetQuery }>
 > = async function getReviewedTransactions(_, res) {
   const userToken = this.requestContext.get<CustModelType['UserToken']>('usertoken');
@@ -142,7 +142,7 @@ export const getReviewedTransactions: RequestHandler<
     return;
   }
 
-  const resData = await reviewedTransactionData(userToken.userId, query);
+  const resData = await reviewedProductData(userToken.userId, query);
 
   res.status(200).header('Content-Type', 'application/json; charset=utf-8').send({
     code: 200,

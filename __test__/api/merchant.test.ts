@@ -32,7 +32,7 @@ import {
   addCategory,
   bindProductCategory,
   addProductImage,
-  createUserTransaction,
+  addUserTransaction,
   createTransactionProduct,
 } from '../component';
 
@@ -951,7 +951,7 @@ describe('Get Merchant Orders', () => {
   test('Success, with Query `?limit=1`', async () => {
     const { id, token } = await createMerchantUser();
     const query = '?limit=1';
-    await Promise.all([createUserTransaction(id), createUserTransaction(id)]);
+    await Promise.all([addUserTransaction(id), addUserTransaction(id)]);
 
     const { status, headers, body } = await getMerchantOrders(server, query, token);
 

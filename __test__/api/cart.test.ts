@@ -8,6 +8,12 @@ import {
   updateCartItemQty,
   deleteCartItem,
   checkout,
+  registration,
+  createUser,
+  createMerchantUser,
+  createMerchantProduct,
+  createUserAddWallet,
+  addToCart,
 } from '../component';
 
 let server: Server = null;
@@ -26,18 +32,30 @@ afterAll(async () => {
 });
 
 describe('Add Item to Cart', () => {
+  const payload = {
+    merchant_id: 0,
+    product_id: 0,
+    qty: 1,
+  };
+
   test('Success', async () => {
-    const token = 'this.is.token';
+    const [{ token }, { id }] = await Promise.all([registration(), createMerchantUser()]);
+    const { productId } = await createMerchantProduct(id);
+    const newPayload = {
+      ...payload,
+      merchant_id: id,
+      product_id: productId,
+    };
 
-    const { status, headers, body } = await addItemToCart(server, {}, token);
+    const { status, headers, body } = await addItemToCart(server, newPayload, token);
 
-    expect(status).toBe(200);
+    expect(status).toBe(201);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
     expect(body.success).toBe(true);
   });
 
   test('Fail, No Data Provided', async () => {
-    const token = 'this.is.token';
+    const { token } = await registration();
 
     const { status, headers, body } = await addItemToCart(server, {}, token);
 
@@ -49,7 +67,7 @@ describe('Add Item to Cart', () => {
   test('Fail, Wrong API Key', async () => {
     const token = 'this-is-wrong-token';
 
-    const { status, headers, body } = await addItemToCart(server, {}, token);
+    const { status, headers, body } = await addItemToCart(server, payload, token);
 
     expect(status).toBe(403);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -57,7 +75,7 @@ describe('Add Item to Cart', () => {
   });
 
   test('Fail, API Key Not Given', async () => {
-    const { status, headers, body } = await addItemToCart(server, {});
+    const { status, headers, body } = await addItemToCart(server, payload);
 
     expect(status).toBe(403);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -67,7 +85,7 @@ describe('Add Item to Cart', () => {
 
 describe('Get Cart Items', () => {
   test('Success', async () => {
-    const token = 'this.is.token';
+    const { token } = await registration();
 
     const { status, headers, body } = await getCartItems(server, token);
 
@@ -96,11 +114,13 @@ describe('Get Cart Items', () => {
 });
 
 describe('Update Cart Item Qty', () => {
-  test('Success', async () => {
-    const token = 'this.is.token';
-    const cartItemId = 0;
+  const payload = { qty: 1 };
 
-    const { status, headers, body } = await updateCartItemQty(server, cartItemId, {}, token);
+  test('Success', async () => {
+    const { token, userId } = await createUser();
+    const { cartItemId } = await addToCart(userId);
+
+    const { status, headers, body } = await updateCartItemQty(server, cartItemId, payload, token);
 
     expect(status).toBe(200);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -108,10 +128,10 @@ describe('Update Cart Item Qty', () => {
   });
 
   test('Fail, Cart Item Not Found', async () => {
-    const token = 'this.is.token';
+    const { token } = await registration();
     const cartItemId = 0;
 
-    const { status, headers, body } = await updateCartItemQty(server, cartItemId, {}, token);
+    const { status, headers, body } = await updateCartItemQty(server, cartItemId, payload, token);
 
     expect(status).toBe(404);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -119,7 +139,7 @@ describe('Update Cart Item Qty', () => {
   });
 
   test('Fail, No `qty` Provided', async () => {
-    const token = 'this.is.token';
+    const { token } = await registration();
     const cartItemId = 0;
 
     const { status, headers, body } = await updateCartItemQty(server, cartItemId, {}, token);
@@ -133,7 +153,7 @@ describe('Update Cart Item Qty', () => {
     const token = 'this-is-wrong-token';
     const cartItemId = 0;
 
-    const { status, headers, body } = await updateCartItemQty(server, cartItemId, {}, token);
+    const { status, headers, body } = await updateCartItemQty(server, cartItemId, payload, token);
 
     expect(status).toBe(403);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -143,7 +163,7 @@ describe('Update Cart Item Qty', () => {
   test('Fail, API Key Not Given', async () => {
     const cartItemId = 0;
 
-    const { status, headers, body } = await updateCartItemQty(server, cartItemId, {});
+    const { status, headers, body } = await updateCartItemQty(server, cartItemId, payload);
 
     expect(status).toBe(403);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -153,8 +173,8 @@ describe('Update Cart Item Qty', () => {
 
 describe('Delete Cart Item', () => {
   test('Success', async () => {
-    const token = 'this.is.token';
-    const cartItemId = 0;
+    const { token, userId } = await createUser();
+    const { cartItemId } = await addToCart(userId);
 
     const { status, headers, body } = await deleteCartItem(server, cartItemId, token);
 
@@ -164,7 +184,7 @@ describe('Delete Cart Item', () => {
   });
 
   test('Fail, Cart Item Not Found', async () => {
-    const token = 'this.is.token';
+    const { token } = await registration();
     const cartItemId = 0;
 
     const { status, headers, body } = await deleteCartItem(server, cartItemId, token);
@@ -197,12 +217,13 @@ describe('Delete Cart Item', () => {
 });
 
 describe('Checkout', () => {
-  test('Fail, Cart Item Not Found', async () => {
-    const token = 'this.is.token';
+  test('Success', async () => {
+    const { token, userId } = await createUserAddWallet();
+    await addToCart(userId);
 
-    const { status, headers, body } = await checkout(server, {}, token);
+    const { status, headers, body } = await checkout(server, token);
 
-    expect(status).toBe(201);
+    expect(status).toBe(200);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
     expect(body.success).toBe(true);
   });
@@ -210,7 +231,7 @@ describe('Checkout', () => {
   test('Fail, Wrong API Key', async () => {
     const token = 'this-is-wrong-token';
 
-    const { status, headers, body } = await checkout(server, {}, token);
+    const { status, headers, body } = await checkout(server, token);
 
     expect(status).toBe(403);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');
@@ -218,7 +239,7 @@ describe('Checkout', () => {
   });
 
   test('Fail, API Key Not Given', async () => {
-    const { status, headers, body } = await checkout(server, {});
+    const { status, headers, body } = await checkout(server);
 
     expect(status).toBe(403);
     expect(headers['content-type']).toBe('application/json; charset=utf-8');

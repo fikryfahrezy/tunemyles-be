@@ -20,7 +20,7 @@ export const requestBody = {
       },
       phone_number: {
         type: 'string',
-        minLength: 5,
+        minLength: 10,
         maxLength: 14,
       },
       address: {
