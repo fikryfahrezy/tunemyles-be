@@ -1,13 +1,5 @@
 # tunemyles-be
 
-## [Description](#description)
-
-Tunemyles Back End. This application is `monolithic`. Built with functional paradigm.
-
-## [Design Pattern](#design-pattern)
-
-This application is designed with the implementation of the `TDD (Test-driven Development)` and `DDD (Domain-driven Design)`.
-
 ## [Folder Structure](#folder-tructure)
 
 ```
